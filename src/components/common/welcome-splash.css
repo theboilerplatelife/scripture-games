@@ -1,0 +1,132 @@
+/* ============================================================
+   WELCOME SPLASH — "Tap to Play" Initial Screen
+   ============================================================ */
+
+.splash-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(circle at center, #6fb1fc 0%, #3e84d6 50%, #20549c 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.splash-card {
+  position: relative;
+  background: #fdfaf1;
+  max-width: 480px;
+  width: 100%;
+  padding: 36px 28px 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: rotate(-1deg);
+  clip-path: polygon(1% 2%, 35% 0%, 75% 2%, 99% 0%, 100% 32%, 98% 70%, 100% 98%, 68% 100%, 30% 98%, 0% 100%, 1% 65%);
+  box-sizing: border-box;
+}
+
+.splash-buddy-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.splash-buddy-wrap {
+  animation: splashBounce 3s ease-in-out infinite;
+}
+
+.splash-buddy-wrap:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.splash-buddy-wrap:nth-child(3) {
+  animation-delay: 0.8s;
+}
+
+.splash-buddy-wrap:nth-child(4) {
+  animation-delay: 1.2s;
+}
+
+@keyframes splashBounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(2deg); }
+}
+
+.splash-title {
+  font-family: 'Schoolbell', cursive;
+  font-size: 46px;
+  line-height: 1;
+  color: #d94f30;
+  margin: 0 0 8px 0;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.08);
+}
+
+.splash-sub {
+  font-size: 19px;
+  color: #4a4238;
+  margin: 0 0 20px 0;
+  line-height: 1.35;
+}
+
+.splash-features {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.splash-chip {
+  background: rgba(217, 79, 48, 0.08);
+  border: 1px dashed #d94f30;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 14px;
+  color: #682717;
+  font-weight: 700;
+}
+
+.splash-start-btn {
+  background: linear-gradient(180deg, #52b788 0%, #2d6a4f 100%);
+  color: #ffffff;
+  border: 3px solid #1b4332;
+  border-radius: 50px;
+  font-family: 'Schoolbell', cursive;
+  font-size: 28px;
+  padding: 14px 44px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(45, 106, 79, 0.45), 0 4px 0 #1b4332;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 320px;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.splash-start-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 24px rgba(45, 106, 79, 0.55), 0 5px 0 #1b4332;
+}
+
+.splash-start-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 3px 8px rgba(45, 106, 79, 0.35), 0 1px 0 #1b4332;
+}
+
+.splash-audio-note {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #7d7265;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
