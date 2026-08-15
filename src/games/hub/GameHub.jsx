@@ -68,7 +68,7 @@ export function GameHub({
           </div>
           <h2 className="hub-game-title">Verse Builder</h2>
           <p className="hub-game-desc">
-            Piece God&rsquo;s words back together with hand-torn paper scraps, fun characters, and pencil handwriting!
+            Piece God&rsquo;s words back together with hand-torn paper scraps, character buddies, and pencil handwriting!
           </p>
           <div className="hub-game-meta">
             <span>15 Chapters • 120 Verses</span>
@@ -76,42 +76,102 @@ export function GameHub({
           </div>
         </button>
 
-        {/* Game 2: Bible Trivia (Teaser) */}
+        {/* Game 2: Who Am I? */}
         <div
           className="hub-game-card disabled"
-          style={{ transform: "rotate(1.5deg)" }}
+          style={{ transform: "rotate(1.2deg)" }}
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
-            <span className="hub-game-icon">💡</span>
+            <span className="hub-game-icon">🕵️‍♂️</span>
             <span className="hub-game-badge coming-soon">Coming Soon</span>
           </div>
-          <h2 className="hub-game-title">Bible Trivia Quest</h2>
+          <h2 className="hub-game-title">Who Am I?</h2>
           <p className="hub-game-desc">
-            Test your knowledge of Bible heroes, exciting miracles, and timeless wisdom!
+            Solve progressive scripture clues one at a time to uncover Bible heroes and unlock their full story!
           </p>
           <div className="hub-game-meta">
-            <span>Multiple Choice & Timed</span>
+            <span>Deduction & Clues</span>
             <span className="hub-play-btn">In Development</span>
           </div>
         </div>
 
-        {/* Game 3: Memory Match (Teaser) */}
+        {/* Game 3: Story Sequencer */}
         <div
           className="hub-game-card disabled"
-          style={{ transform: "rotate(-0.5deg)" }}
+          style={{ transform: "rotate(-0.8deg)" }}
+        >
+          <span className="vb-tape vb-tape-top" />
+          <div className="hub-card-header">
+            <span className="hub-game-icon">📜</span>
+            <span className="hub-game-badge coming-soon">Coming Soon</span>
+          </div>
+          <h2 className="hub-game-title">Story Sequencer</h2>
+          <p className="hub-game-desc">
+            Arrange narrative event cards into chronological order and check them against the biblical account.
+          </p>
+          <div className="hub-game-meta">
+            <span>Timelines & Stories</span>
+            <span className="hub-play-btn">In Development</span>
+          </div>
+        </div>
+
+        {/* Game 4: Sword Drill */}
+        <div
+          className="hub-game-card disabled"
+          style={{ transform: "rotate(0.9deg)" }}
+        >
+          <span className="vb-tape vb-tape-top" />
+          <div className="hub-card-header">
+            <span className="hub-game-icon">🗡️</span>
+            <span className="hub-game-badge coming-soon">Coming Soon</span>
+          </div>
+          <h2 className="hub-game-title">Sword Drill</h2>
+          <p className="hub-game-desc">
+            A digital version of the classic race to navigate Testaments, books, chapters, and verses!
+          </p>
+          <div className="hub-game-meta">
+            <span>Speed Navigation</span>
+            <span className="hub-play-btn">In Development</span>
+          </div>
+        </div>
+
+        {/* Game 5: Memory Match */}
+        <div
+          className="hub-game-card disabled"
+          style={{ transform: "rotate(-1.4deg)" }}
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
             <span className="hub-game-icon">🎴</span>
             <span className="hub-game-badge coming-soon">Coming Soon</span>
           </div>
-          <h2 className="hub-game-title">Scripture Match</h2>
+          <h2 className="hub-game-title">Memory Match</h2>
           <p className="hub-game-desc">
-            Flip over cards to match Bible characters, books of the Bible, and key verses.
+            Flip cards to match verse halves, famous speaker quotes, and biblical character symbols.
           </p>
           <div className="hub-game-meta">
-            <span>Card Memory Game</span>
+            <span>Card Match Pairs</span>
+            <span className="hub-play-btn">In Development</span>
+          </div>
+        </div>
+
+        {/* Game 6: Journey Maps */}
+        <div
+          className="hub-game-card disabled"
+          style={{ transform: "rotate(1.5deg)" }}
+        >
+          <span className="vb-tape vb-tape-top" />
+          <div className="hub-card-header">
+            <span className="hub-game-icon">🗺️</span>
+            <span className="hub-game-badge coming-soon">Coming Soon</span>
+          </div>
+          <h2 className="hub-game-title">Journey Maps</h2>
+          <p className="hub-game-desc">
+            Trace biblical journeys like the Exodus and Paul&rsquo;s travels across tactile vintage maps and journals!
+          </p>
+          <div className="hub-game-meta">
+            <span>Interactive Geography</span>
             <span className="hub-play-btn">In Development</span>
           </div>
         </div>

@@ -14,7 +14,7 @@
 
 .hub-topbar {
   width: 100%;
-  max-width: 680px;
+  max-width: 860px;
   display: flex;
   justify-content: flex-end;
   gap: 10px;
@@ -27,7 +27,7 @@
   padding: 24px 36px 18px;
   margin-top: 10px;
   text-align: center;
-  max-width: 520px;
+  max-width: 540px;
   width: 100%;
   box-sizing: border-box;
   transform: rotate(-1.5deg);
@@ -81,9 +81,9 @@
 
 .hub-games-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 20px;
-  max-width: 680px;
+  max-width: 860px;
   width: 100%;
   margin-top: 10px;
 }
@@ -116,9 +116,9 @@
 }
 
 .hub-game-card.disabled {
-  opacity: 0.6;
+  opacity: 0.7;
   cursor: default;
-  filter: grayscale(0.5);
+  filter: grayscale(0.25);
 }
 
 .hub-game-card.disabled:hover {
@@ -132,7 +132,7 @@
 }
 
 .hub-game-icon {
-  font-size: 38px;
+  font-size: 36px;
 }
 
 .hub-game-badge {
@@ -150,16 +150,17 @@
 
 .hub-game-title {
   font-family: 'Schoolbell', cursive;
-  font-size: 26px;
+  font-size: 25px;
   color: #2b2621;
   margin: 0;
 }
 
 .hub-game-desc {
-  font-size: 16px;
-  line-height: 1.25;
+  font-size: 15px;
+  line-height: 1.3;
   color: #5a5246;
   margin: 0;
+  flex-grow: 1;
 }
 
 .hub-game-meta {
@@ -169,12 +170,12 @@
   margin-top: 6px;
   padding-top: 8px;
   border-top: 1px dashed #d5c8b2;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .hub-play-btn {
   font-family: 'Schoolbell', cursive;
-  font-size: 16px;
+  font-size: 15px;
   color: #d94f30;
   font-weight: bold;
 }
