@@ -1,5 +1,5 @@
 /* ============================================================
-   BIBLE GAMES — 15 Chapters Database (8 Verses Per Chapter = 120 Total)
+   SCRIPTURE GAMES — 15 Chapters Database (8 Verses Per Chapter = 120 Total)
    Translations supported: ESV (Default), NET, NKJV, WEB
    Accurate wordings, no depictions of Jesus in avatars.
    ============================================================ */

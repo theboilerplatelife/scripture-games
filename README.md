@@ -1,30 +1,19 @@
-# Bible Games
+# Scripture Games
 
-A collection of interactive Bible games for kids built with React and Vite.
+A collection of interactive scripture games for kids built with React and Vite.
 
-## Games Included
+## Flagship Game: Verse Builder
+- **15 Progressive Chapters (120 Total Verses)**
+- **4 Bible Translations**: ESV (Default), NET, NKJV, WEB
+- **Pure Procedural Offline Audio Synthesizer**: Marimba, xylophone, tactile pencil scratching, broadband applause, and fanfare chords using Web Audio API.
+- **100% Deterministic Offline Storage**: LocalStorage with zero external database dependencies.
+- **No Cartoon Depictions of Jesus**: Faithful, respectful character avatars (David, Solomon, Paul, Esther, Ruth, etc.).
+- **100% Universal Test Coverage**: 35 automated tests verifying data integrity, theology invariants, Web Audio synthesis, and UI puzzle flows.
 
-- **Verse Builder** (`src/App.jsx` / `verse-builder.jsx`): A tactile paper-scraps verse ordering game featuring:
-  - Scripture text quoted word-for-word from the World English Bible (public domain)
-  - Friendly biblical character buddies
-  - Built-in Web Audio procedural music (Title theme & Verse gameplay theme)
-  - Celebratory victory brass horns and star chimes
-  - Interactive tactile sound effects and progress tracking
+## Development
 
-## Quick Start
-
-### 1. Install Dependencies
 ```bash
 npm install
-```
-
-### 2. Run Locally
-```bash
 npm run dev
-```
-Open `http://localhost:5173` in your browser.
-
-### 3. Build for Production
-```bash
-npm run build
+npm run check
 ```

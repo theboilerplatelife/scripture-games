@@ -35,7 +35,7 @@ export function GameHub({
 
       <div className="hub-hero">
         <span className="vb-tape vb-tape-top" />
-        <h1>Bible Games</h1>
+        <h1>Scripture Games</h1>
         <p className="hub-subtitle">Fun scripture adventures for curious minds!</p>
         <div className="hub-trans-pill">
           <span>📖 Active: <strong>{translation}</strong> translation</span>

@@ -22,7 +22,7 @@ describe("Gameplay & Full UI Flow Tests", () => {
       />
     );
 
-    expect(screen.getByText("Bible Games")).toBeTruthy();
+    expect(screen.getByText("Scripture Games")).toBeTruthy();
 
     const playBtn = screen.getByRole("button", { name: /Verse Builder/i });
     fireEvent.click(playBtn);

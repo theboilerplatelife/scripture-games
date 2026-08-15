@@ -1,78 +1,55 @@
-# Project Constitution — Bible Games
+# Project Constitution — Scripture Games
 
-This document defines the architectural principles, theological guidelines, and engineering rules that govern all code in this repository. Every change — feature, fix, or refactor — must conform to these rules. When in doubt, the constitution wins.
+This constitution establishes the foundational principles, invariants, and quality standards for **Scripture Games**. All current and future development must strictly adhere to these rules.
 
 ---
 
-## 1. Theological & Content Integrity
+## 1. Theological Integrity & Content Standards
 
-### Article 1.1: Scriptural Fidelity & Translation Accuracy
 1. **Word-for-Word Authenticity**: Bible verses presented in all games must strictly reflect authentic, accurate translations (ESV, NET, NKJV, WEB) without paraphrasing, omission, or unauthorized alterations.
-2. **Translation Support**: The application shall maintain support for major reputable translations, defaulting to the English Standard Version (ESV).
-3. **Punctuation & Splitting Integrity**: Word-scraps in puzzle games must preserve clean punctuation and proper nouns so verses read naturally upon assembly.
-
-### Article 1.2: Visual & Depiction Ethics
-1. **Reverence for Christ**: In honoring our Lord, the application shall **never generate or display visual/cartoon depictions of the person of Jesus Christ**. Avatars and illustrations are strictly reserved for prophets, apostles, and historical biblical figures (e.g., Paul, John, David, Moses, Ruth, Esther, Samuel).
-2. **Character Uniqueness**: Within any given chapter, each level (1–8) must feature a **unique biblical character icon** (0 duplicates per chapter) to celebrate the diversity of scripture heroes.
-3. **Encouraging Tone**: Player feedback must be uplifting, patient, and celebratory. No punitive sound effects or negative messaging upon incorrect attempts.
-
-### Article 1.3: Child-Safe & Family-First Experience
-1. **Zero Tracking & Privacy**: No personal data collection, zero third-party tracking beacons, zero advertising, and zero dark patterns.
-2. **100% Client-Side & Offline-First**: All core gameplay, procedural audio synthesis, and character graphics execute entirely in the browser without mandatory network requests or streaming assets.
+2. **Prohibition of Visual Depictions of Jesus**:
+   * **Absolute Prohibition**: There shall be **NO visual, illustrated, cartoon, or avatar depictions of Jesus Christ** anywhere in the application (including buddy icons, win cards, victory fanfares, or teasers).
+   * Visual avatars and characters are reserved strictly for biblical figures (e.g., David, Solomon, Moses, Paul, Peter, Esther, Ruth, etc.).
+   * In levels where Jesus speaks or is referenced (e.g., John 3:16, Matthew 28:19), the buddy avatar must be the human author/narrator (e.g., John, Matthew) or a symbolic item (e.g., scroll, harp, crown).
+3. **Thematic Appropriateness**: All verse selections, hints, and cheers must be uplifting, encouraging, child-friendly, and faithful to historic Christian orthodoxy.
 
 ---
 
-## 2. Layered Architecture
+## 2. Privacy & Offline-First Architecture
 
-The codebase follows a modular architecture separating data, presentation, game orchestration, and infrastructure:
-
-```
-┌─────────────────────────────────────┐
-│  Presentation Layer                 │  Scrapbook UI, Board, WinCards, Hub, SVG Avatars
-├─────────────────────────────────────┤
-│  Game Coordination Layer            │  App.jsx, VerseBuilder.jsx, screen navigation
-├─────────────────────────────────────┤
-│  Domain & Scripture Layer           │  chapters.js (120 verses), translations.js
-├─────────────────────────────────────┤
-│  Infrastructure & Audio Layer       │  SoundEngine.js (Web Audio API), localStorage
-└─────────────────────────────────────┘
-```
-
-### Layer Dependency Rules
-
-| Layer | May Import From | Lives In |
-|---|---|---|
-| **Presentation** | Domain, Game Coordination, Common Components | `src/components/`, `src/games/` |
-| **Game Coordination** | Domain, Infrastructure, Presentation | `src/App.jsx`, `src/games/verse-builder/` |
-| **Domain** | Self-contained (zero framework dependencies) | `src/data/` |
-| **Infrastructure** | Domain, Browser APIs (Web Audio, Storage) | `src/audio/` |
+1. **Zero Tracking / Zero Telemetry**: No third-party trackers, analytics, telemetry SDKs, or external advertising scripts shall be included.
+2. **Zero External Backend / Database Requirement**: The application must run 100% client-side in the browser. No login, sign-up, or cloud database is required.
+3. **Local Persistence**: Player progress, earned stars, active translation, and audio preferences must be stored exclusively in browser `localStorage`:
+   * `scripture_games_stars_v1`: `{ [levelKey: string]: number }`
+   * `scripture_games_translation_v1`: string (`"ESV"` | `"NET"` | `"NKJV"` | `"WEB"`)
+   * `scripture_games_audio_muted_v1`: boolean string
+   * `scripture_games_bgm_vol_v1`: number string (0..100)
+   * `scripture_games_sfx_vol_v1`: number string (0..100)
+4. **Data Isolation**: Any data migration or schema upgrade must maintain backwards compatibility and prevent data loss for existing players.
 
 ---
 
-## 3. Design System & Aesthetics
+## 3. Audio & Synthesis Standards
 
-1. **Tactile Scrapbook Charm**: All UI components adhere to the handcrafted paper-craft scrapbook aesthetic:
-   - Warm kraft paper background (`#c9a06b`, `#b88d57`)
-   - Torn paper scraps with slight randomized rotation and drop shadows
-   - Masking tape accents (`.vb-tape`)
-   - Handwritten typography (`Schoolbell`, `Patrick Hand`)
-2. **CSS Conventions**:
-   - Class names use the `.vb-*` prefix (Verse Builder namespace).
-   - Component styles are cohesive and avoid ad-hoc inline styles for core layouts.
-   - Interactive elements must include distinct hover, focus, and disabled states with smooth transitions (`0.15s ease`).
+1. **Offline Procedural Audio**: All sound effects (button clicks, paper tearing, pencil scratches, applause, victory fanfares) and background music must be synthesized in real-time via the browser's **Web Audio API**.
+2. **Zero External Audio Assets**: No remote MP3, WAV, OGG, or cloud TTS services may be downloaded at runtime. The app must work fully offline on an airplane or without internet.
+3. **Child-Friendly Synthesis**: Audio frequencies must remain pleasant, warm, and harmonic (e.g. pentatonic marimba plucks, acoustic triangle/sine tones, and broadband bandpass noise bursts for claps). Harsh square waves, dissonant buzzes, and high-frequency sinusoidal pings are prohibited.
+4. **Independent Volume Controls**: Users must have separate, persistent controls for Master Audio Mute, Background Music (BGM), and Sound Effects (SFX).
 
 ---
 
-## 4. Procedural Audio & Web Audio Framework
+## 4. UI, UX & Visual Aesthetics
 
-1. **Zero External Audio Files**: All music tracks and sound effects are generated procedurally in real time via the Web Audio API (`SoundEngine.js`).
-2. **BGM & SFX Gain Separation**:
-   - Master Music Bus (`masterGain`): Scaled to `bgmVol * 0.38` (Default: **25%**).
-   - Master Sound Effects Bus (`sfxGain`): Scaled to `sfxVol * 0.55` (Default: **50%**).
-3. **Acoustic Sound Quality**:
-   - Celebratory claps (`playLightApplause`): Broad-spectrum acoustic handclaps ($Q \le 0.85$), free of resonant whistling or electronic sine beeps.
-   - Word placement (`playPlaceScrap`): Melodic wooden marimba plucks layered with tactile graphite pencil sketching.
-4. **Master Mute & User Controls**: All audio respect the master mute toggle and continuous volume sliders, persisted in `localStorage`.
+1. **Rich Papercraft & Tactile Aesthetic**: All game interfaces must maintain a cohesive handmade scrapbook visual language:
+   * Torn-paper edges (`clip-path: polygon(...)`)
+   * Subtle washi-tape decals
+   * Soft, organic drop shadows and warm textured cardboards
+   * Gentle micro-animations (paper floating, pencil writing strokes, celebratory confetti)
+2. **No Placeholder Content**: No placeholder images, unstyled buttons, or generic default colors (e.g., browser-default red/blue). All components must use curated, harmonious color palettes.
+3. **Accessibility & Clarity**:
+   * Clear typography with high contrast (e.g. `'Schoolbell'`, `'Patrick Hand'`, system sans-serif fallbacks).
+   * All interactive buttons must have distinct `aria-label`s for screen readers.
+   * Responsive layout that scales gracefully on mobile phones, tablets, and desktop displays.
 
 ---
 
@@ -91,6 +68,3 @@ The codebase follows a modular architecture separating data, presentation, game 
 ## 6. Living Documentation
 
 `CLAUDE.md` and `CONSTITUTION.md` are living documents that must stay synchronized with the codebase.
-
-- Update `CLAUDE.md` whenever commands, file structures, or key conventions change.
-- Update `CONSTITUTION.md` whenever architectural rules, theological guidelines, or core standards are modified.

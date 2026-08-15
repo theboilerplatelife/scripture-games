@@ -24,7 +24,7 @@ describe("App Root & State Integration Tests", () => {
       };
 
       render(<App />);
-      expect(screen.getAllByText("Bible Games").length).toBeGreaterThan(0);
+      expect(screen.getAllByText("Scripture Games").length).toBeGreaterThan(0);
 
       const startBtn = screen.getByRole("button", { name: "Tap to Play and Start Game" });
       fireEvent.click(startBtn);
@@ -38,11 +38,11 @@ describe("App Root & State Integration Tests", () => {
   });
 
   test("loads from localStorage and updates settings", () => {
-    localStorage.setItem("bible_games_translation_v1", "NET");
-    localStorage.setItem("bible_games_audio_muted_v1", "true");
-    localStorage.setItem("bible_games_bgm_vol_v1", "30");
-    localStorage.setItem("bible_games_sfx_vol_v1", "70");
-    localStorage.setItem("bible_games_stars_v1", JSON.stringify({ "1-0": 3 }));
+    localStorage.setItem("scripture_games_translation_v1", "NET");
+    localStorage.setItem("scripture_games_audio_muted_v1", "true");
+    localStorage.setItem("scripture_games_bgm_vol_v1", "30");
+    localStorage.setItem("scripture_games_sfx_vol_v1", "70");
+    localStorage.setItem("scripture_games_stars_v1", JSON.stringify({ "1-0": 3 }));
 
     render(<App />);
 
@@ -66,7 +66,7 @@ describe("App Root & State Integration Tests", () => {
     // Switch translation to NKJV
     const nkjvBtn = screen.getByText("NKJV");
     fireEvent.click(nkjvBtn);
-    expect(localStorage.getItem("bible_games_translation_v1")).toBe("NKJV");
+    expect(localStorage.getItem("scripture_games_translation_v1")).toBe("NKJV");
 
     // Toggle Audio on and off
     const audioBtn = screen.getByText(/Audio/i);
@@ -83,7 +83,7 @@ describe("App Root & State Integration Tests", () => {
     window.confirm = () => true;
     const resetBtn = screen.getByText("Reset Stars");
     fireEvent.click(resetBtn);
-    expect(localStorage.getItem("bible_games_stars_v1")).toBeNull();
+    expect(localStorage.getItem("scripture_games_stars_v1")).toBeNull();
   });
 
   test("handleTestEnding awards stars and jumps to Chapter 15 Level 8", () => {
@@ -123,7 +123,7 @@ describe("App Root & State Integration Tests", () => {
     // Back to hub
     const backBtn = screen.getByLabelText("Back to Game Hub");
     fireEvent.click(backBtn);
-    expect(screen.getAllByText("Bible Games").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Scripture Games").length).toBeGreaterThan(0);
   });
 
   test("saving star progress updates state and localStorage", () => {

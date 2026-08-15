@@ -28,7 +28,7 @@ export function WelcomeSplash({ onStart, translation = "ESV" }) {
           </div>
         </div>
 
-        <h1 className="splash-title">Bible Games</h1>
+        <h1 className="splash-title">Scripture Games</h1>
         <p className="splash-sub">Fun scripture adventures for curious minds!</p>
 
         <div className="splash-features">

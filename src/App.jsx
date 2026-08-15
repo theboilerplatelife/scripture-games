@@ -6,11 +6,11 @@ import { VerseBuilder } from "./games/verse-builder/VerseBuilder.jsx";
 import { SettingsModal } from "./components/common/SettingsModal.jsx";
 import { WelcomeSplash } from "./components/common/WelcomeSplash.jsx";
 
-const STORAGE_STARS_KEY = "bible_games_stars_v1";
-const STORAGE_TRANS_KEY = "bible_games_translation_v1";
-const STORAGE_AUDIO_KEY = "bible_games_audio_muted_v1";
-const STORAGE_BGM_VOL_KEY = "bible_games_bgm_vol_v1";
-const STORAGE_SFX_VOL_KEY = "bible_games_sfx_vol_v1";
+const STORAGE_STARS_KEY = "scripture_games_stars_v1";
+const STORAGE_TRANS_KEY = "scripture_games_translation_v1";
+const STORAGE_AUDIO_KEY = "scripture_games_audio_muted_v1";
+const STORAGE_BGM_VOL_KEY = "scripture_games_bgm_vol_v1";
+const STORAGE_SFX_VOL_KEY = "scripture_games_sfx_vol_v1";
 
 export default function App() {
   // Global Navigation: "hub" | "verse-builder"

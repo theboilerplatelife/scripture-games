@@ -68,7 +68,7 @@ describe("Common Components Tests", () => {
     const handleStart = vi.fn();
     const { rerender } = render(<WelcomeSplash onStart={handleStart} translation="ESV" />);
 
-    expect(screen.getByText("Bible Games")).toBeTruthy();
+    expect(screen.getByText("Scripture Games")).toBeTruthy();
     expect(screen.getByText("Tap to Play")).toBeTruthy();
     expect(screen.getByText("📖 ESV")).toBeTruthy();
 
