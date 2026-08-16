@@ -8,7 +8,7 @@ export function MMWinCard({
   earnedStars,
   misses,
   isDeckComplete = false,
-  hasNextMode = false,
+  returnsToModes = false,
   onReplay,
   onNext,
   onBackToModes,
@@ -57,7 +57,7 @@ export function MMWinCard({
             Deck Select
           </button>
           <button className="vb-btn" onClick={onNext}>
-            {isDeckComplete ? "Complete Deck 🎉" : (hasNextMode ? "Next match →" : "Back to Modes ←")}
+            {isDeckComplete ? "Complete Deck 🎉" : (returnsToModes ? "Back to Modes ←" : "Next match →")}
           </button>
         </div>
       </div>

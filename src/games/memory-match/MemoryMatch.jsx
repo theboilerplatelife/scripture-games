@@ -163,7 +163,7 @@ export function MemoryMatch({
           earnedStars={lastResult.earned}
           misses={lastResult.misses}
           isDeckComplete={justCompletedDeck}
-          hasNextMode={hasNextMode}
+          returnsToModes={!justCompletedDeck && !hasNextMode && isDeckComplete}
           onReplay={dealNewBoard}
           onNext={handleNextFromWin}
           onBackToModes={() => setScreen("modes")}

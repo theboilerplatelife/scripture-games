@@ -108,7 +108,6 @@ describe("Memory Match screens", () => {
         modeIdx={0}
         earnedStars={3}
         misses={0}
-        hasNextMode={true}
         isDeckComplete={false}
         onReplay={onReplay}
         onNext={onNext}
@@ -133,7 +132,6 @@ describe("Memory Match screens", () => {
         modeIdx={2}
         earnedStars={2}
         misses={1}
-        hasNextMode={false}
         isDeckComplete={false}
         onReplay={onReplay}
         onNext={onNext}
@@ -141,6 +139,25 @@ describe("Memory Match screens", () => {
       />
     );
     expect(screen.getByText(/with 1 miss\./)).toBeTruthy();
+    // Deck not complete: the next action plays the unplayed mode, so it must
+    // not claim to go back to the mode list
+    expect(screen.getByText("Next match →")).toBeTruthy();
+
+    // Deck already complete at the last mode: now it really returns to modes
+    rerender(
+      <MMWinCard
+        deck={DECKS[0]}
+        modeIdx={2}
+        earnedStars={2}
+        misses={1}
+        isDeckComplete={false}
+        returnsToModes={true}
+        onReplay={onReplay}
+        onNext={onNext}
+        onBackToModes={onBackToModes}
+        onBackToDecks={onBackToDecks}
+      />
+    );
     expect(screen.getByText("Back to Modes ←")).toBeTruthy();
 
     // Deck completely solved (all modes have stars)
@@ -150,7 +167,6 @@ describe("Memory Match screens", () => {
         modeIdx={2}
         earnedStars={1}
         misses={9}
-        hasNextMode={false}
         isDeckComplete={true}
         onReplay={onReplay}
         onNext={onNext}
@@ -307,7 +323,7 @@ describe("MemoryMatch orchestrator", () => {
         initialScreen="win"
       />
     );
-    fireEvent.click(screen.getByText("Back to Modes ←"));
+    fireEvent.click(screen.getByText("Next match →"));
     expect(screen.getByText(/Hint Hunt/)).toBeTruthy(); // jumps to unplayed mode 0
     second.unmount();
   });
