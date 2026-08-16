@@ -30,7 +30,7 @@ npm run check          # Full gate: ESLint + 100% Test coverage enforcement + Vi
 
 * **Frontend Framework**: React 19 (Hooks-only, pure functional components)
 * **Build Tool**: Vite 6
-* **Styling**: Vanilla CSS with torn-paper clip paths and responsive layout
+* **Styling**: Vanilla CSS with torn-paper clip paths and responsive layout. The palette is defined once as CSS custom properties in the `:root` block of `globalCss` (`src/App.jsx`) — always use `var(--token)` for shared colors, and never define the same class in two stylesheets (see CONSTITUTION.md Article 4)
 * **Audio Engine**: Pure procedural Web Audio synthesizer (`SoundEngine.js`) — zero external MP3s or network dependencies
 * **Testing & Gates**: Vitest 4 + `@vitest/coverage-v8` + ESLint 9
 
