@@ -33,6 +33,8 @@ export function MemoryBoard({
   const [misses, setMisses] = useState(0);
   // A judged-wrong pair stays face-up (self-paced reading) until the next flip
   const [isMismatch, setIsMismatch] = useState(false);
+  // Board solved: stay on the revealed board until the child moves on
+  const [isDone, setIsDone] = useState(false);
   const lockRef = useRef(false); // blocks input while a pair is being judged
 
   function flipCard(card) {
@@ -66,8 +68,9 @@ export function MemoryBoard({
         setMatched(nowMatched);
         setFlipped([]);
         if (nowMatched.size === mode.pairs) {
-          // Board complete — brief beat before the win screen
-          setTimeout(() => onComplete(starsForMisses(misses, mode.pairs), misses), 600);
+          // Board complete — stay revealed so kids can study all the pairs;
+          // the banner button advances whenever they're ready
+          setIsDone(true);
         } else {
           lockRef.current = false;
         }
@@ -114,7 +117,19 @@ export function MemoryBoard({
         </div>
       </div>
 
-      <p className="mm-board-hint">{mode.blurb} — find all {mode.pairs} pairs!</p>
+      {isDone ? (
+        <div className="mm-board-done">
+          <span className="mm-board-done-text">🎉 All {mode.pairs} pairs found! Take a look…</span>
+          <button
+            className="vb-btn"
+            onClick={() => onComplete(starsForMisses(misses, mode.pairs), misses)}
+          >
+            See your stars →
+          </button>
+        </div>
+      ) : (
+        <p className="mm-board-hint">{mode.blurb} — find all {mode.pairs} pairs!</p>
+      )}
 
       <div className={`mm-grid mm-grid-${mode.id}`}>
         {cardDeck.map((card, i) => {

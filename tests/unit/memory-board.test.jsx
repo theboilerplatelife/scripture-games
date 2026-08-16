@@ -144,7 +144,7 @@ describe("MemoryBoard", () => {
       <MemoryBoard deck={deckObj} modeIdx={HALVES} translation="ESV" onBackToModes={vi.fn()} onComplete={onComplete} />
     );
     [0, 1, 2, 3].forEach((p) => matchPair(container, p));
-    act(() => vi.advanceTimersByTime(700));
+    fireEvent.click(screen.getByText("See your stars →"));
     expect(onComplete).toHaveBeenCalledWith(3, 0);
   });
 
@@ -158,7 +158,7 @@ describe("MemoryBoard", () => {
     );
     for (let i = 0; i < 4; i++) missOnce(two.container);
     [0, 1, 2, 3].forEach((p) => matchPair(two.container, p));
-    act(() => vi.advanceTimersByTime(700));
+    fireEvent.click(screen.getByText("See your stars →"));
     expect(starsForMisses(4, pairs)).toBe(2);
     expect(onComplete2).toHaveBeenCalledWith(2, 4);
     two.unmount();
@@ -170,7 +170,7 @@ describe("MemoryBoard", () => {
     );
     for (let i = 0; i < 9; i++) missOnce(one.container);
     [0, 1, 2, 3].forEach((p) => matchPair(one.container, p));
-    act(() => vi.advanceTimersByTime(700));
+    fireEvent.click(screen.getByText("See your stars →"));
     expect(onComplete1).toHaveBeenCalledWith(1, 9);
   });
 

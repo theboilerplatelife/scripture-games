@@ -341,7 +341,7 @@ describe("MemoryMatch orchestrator", () => {
         fireEvent.click(cards()[b]);
         act(() => vi.advanceTimersByTime(500));
       });
-      act(() => vi.advanceTimersByTime(700));
+      fireEvent.click(screen.getByText("See your stars →"));
     };
 
     // Replaying the LAST mode of a complete deck: no celebration, back to modes
@@ -403,7 +403,7 @@ describe("MemoryMatch orchestrator", () => {
         fireEvent.click(cards()[b]);
         act(() => vi.advanceTimersByTime(500));
       });
-      act(() => vi.advanceTimersByTime(700));
+      fireEvent.click(screen.getByText("See your stars →"));
     };
 
     // No prior star banked
