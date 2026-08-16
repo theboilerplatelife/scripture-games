@@ -214,4 +214,33 @@ describe("MemoryBoard", () => {
     expect(halves.container.querySelector(".mm-card-tag")).toBeNull();
     halves.unmount();
   });
+
+  test("PairIllustration renders each content-unique art theme cleanly", async () => {
+    const { PairIllustration } = await import("../../src/games/memory-match/PairIllustration.jsx");
+    const themes = [
+      "shepherd",
+      "lamp",
+      "creation",
+      "dove_peace",
+      "armor_shield",
+      "praise_harp",
+      "love_heart",
+      "wisdom_scroll",
+      "light_city",
+      "rainbow",
+      "fruit_vine",
+      "calm_waters",
+      "eagle_wings",
+      "gospel_world",
+      "hope_heaven",
+      "starry_sky",
+      "fallback_theme",
+    ];
+
+    themes.forEach((art) => {
+      const { container, unmount } = render(<PairIllustration art={art} />);
+      expect(container.querySelector("svg.mm-card-bg-ill")).toBeTruthy();
+      unmount();
+    });
+  });
 });

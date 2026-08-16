@@ -7,6 +7,7 @@ import {
   clipWords,
   splitHalves,
   starsForMisses,
+  getVerseArt,
   buildDeck,
 } from "../../src/games/memory-match/matchData.js";
 
@@ -47,6 +48,26 @@ describe("Memory Match deck building & scoring", () => {
     expect(starsForMisses(11, 5)).toBe(1);
   });
 
+  test("getVerseArt maps biblical themes to accurate artwork keys", () => {
+    expect(getVerseArt({ ref: "Psalm 23:1" })).toBe("shepherd");
+    expect(getVerseArt({ ref: "Psalm 119:105" })).toBe("lamp");
+    expect(getVerseArt({ ref: "Genesis 1:1" })).toBe("creation");
+    expect(getVerseArt({ ref: "1 Thessalonians 5:17" })).toBe("dove_peace");
+    expect(getVerseArt({ ref: "Ephesians 6:11" })).toBe("armor_shield");
+    expect(getVerseArt({ ref: "Psalm 100:1" })).toBe("praise_harp");
+    expect(getVerseArt({ ref: "1 John 4:19" })).toBe("love_heart");
+    expect(getVerseArt({ ref: "Proverbs 3:5" })).toBe("wisdom_scroll");
+    expect(getVerseArt({ ref: "Matthew 5:14" })).toBe("light_city");
+    expect(getVerseArt({ ref: "Psalm 136:1" })).toBe("rainbow");
+    expect(getVerseArt({ ref: "Galatians 5:22" })).toBe("fruit_vine");
+    expect(getVerseArt({ ref: "Psalm 4:8" })).toBe("calm_waters");
+    expect(getVerseArt({ ref: "Isaiah 40:31" })).toBe("eagle_wings");
+    expect(getVerseArt({ ref: "Matthew 28:19" })).toBe("gospel_world");
+    expect(getVerseArt({ ref: "Revelation 21:4" })).toBe("hope_heaven");
+    expect(getVerseArt({ ref: "Psalm 139:14" })).toBe("starry_sky");
+    expect(getVerseArt({})).toBe("creation");
+  });
+
   test("buildDeck produces a valid deterministic deck for every mode", () => {
     const deckObj = DECKS[0];
     MODES.forEach((mode, modeIdx) => {
@@ -58,6 +79,7 @@ describe("Memory Match deck building & scoring", () => {
       cardDeck.forEach((card) => {
         (byPair[card.pairId] ||= []).push(card.kind);
         expect(card.text).toBeTruthy();
+        expect(card.art).toBeTruthy();
       });
       expect(Object.keys(byPair).length).toBe(mode.pairs);
       Object.values(byPair).forEach((kinds) => {
@@ -79,9 +101,6 @@ describe("Memory Match deck building & scoring", () => {
   });
 
   test("no board ever shows identical card text from different pairs (any deck, mode, translation)", () => {
-    // Some verses are word-for-word alike across books (Psalm 136:1, Psalm
-    // 107:1, 1 Chronicles 16:34) — a board must never deal look-alike cards
-    // that refuse to match.
     DECKS.forEach((deckObj) => {
       MODES.forEach((mode, modeIdx) => {
         TRANSLATIONS.forEach((tr) => {
@@ -104,19 +123,23 @@ describe("Memory Match deck building & scoring", () => {
     });
   });
 
-  test("every deck and translation has enough splittable verses for halves mode", () => {
-    const halvesPairs = MODES[2].pairs; // 4 pairs
+  test("every board has 100% unique background artwork across different pairs", () => {
     DECKS.forEach((deckObj) => {
-      TRANSLATIONS.forEach((tr) => {
-        const eligible = deckObj.verses.filter(
-          (v) => getVerseText(v, tr.id).trim().split(/\s+/).length >= 4
-        );
-        expect(
-          eligible.length,
-          `Deck ${deckObj.id} has too few splittable verses in ${tr.id}`
-        ).toBeGreaterThanOrEqual(halvesPairs);
-        const cardDeck = buildDeck(deckObj, 2, tr.id);
-        expect(cardDeck.length).toBe(halvesPairs * 2);
+      MODES.forEach((mode, modeIdx) => {
+        TRANSLATIONS.forEach((tr) => {
+          [0, 1, 2].forEach((seed) => {
+            const cardDeck = buildDeck(deckObj, modeIdx, tr.id, seed);
+            const pairArts = {};
+            cardDeck.forEach((card) => {
+              pairArts[card.pairId] = card.art;
+            });
+            const uniqueArts = new Set(Object.values(pairArts));
+            expect(
+              uniqueArts.size,
+              `Deck ${deckObj.id} ${mode.id} ${tr.id} seed ${seed} has duplicate artwork across pairs: ${Object.values(pairArts).join(", ")}`
+            ).toBe(mode.pairs);
+          });
+        });
       });
     });
   });

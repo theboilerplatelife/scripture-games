@@ -179,9 +179,48 @@
 .mm-card-front {
   background: var(--paper-bright);
   transform: rotateY(180deg);
-  padding: 6px 8px;
+  padding: 3px;
+  overflow: hidden;
+}
+
+/* Background cartoon micro-illustration */
+.mm-card-bg-ill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.92;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.mm-card.matched .mm-card-bg-ill {
+  opacity: 1;
+}
+
+.mm-card.miss .mm-card-bg-ill {
+  opacity: 0.5;
+}
+
+/* Semi-opaque paper plate overlay so text is 100% crisp, bold, and high-contrast */
+.mm-card-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
   flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 253, 248, 0.78);
+  border-radius: 4px;
+  padding: 6px 8px;
+  box-sizing: border-box;
+}
+
+.mm-card.matched .mm-card-content {
+  background: rgba(255, 255, 255, 0.82);
 }
 
 .mm-card.matched .mm-card-front {
@@ -213,6 +252,7 @@
   top: 5px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 3;
   font-family: 'Schoolbell', cursive;
   font-size: 13px;
   line-height: 1;

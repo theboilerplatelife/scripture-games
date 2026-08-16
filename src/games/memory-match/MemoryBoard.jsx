@@ -2,6 +2,7 @@ import { useState, useMemo, useRef } from "react";
 import { audio } from "../../audio/SoundEngine.js";
 import { jitter } from "../../utils/random.js";
 import { MODES, buildDeck, starsForMisses } from "./matchData.js";
+import { PairIllustration } from "./PairIllustration.jsx";
 
 // Each found pair gets its own sticker color, cycling in match order
 const PAIR_COLORS = ["#d94f30", "#3e7cb1", "#5c8a3a", "#c98a1b", "#7b2cbf"];
@@ -159,12 +160,15 @@ export function MemoryBoard({
               <span className="mm-card-inner">
                 <span className="mm-card-back" aria-hidden="true">{mode.icon}</span>
                 <span className="mm-card-front">
-                  {tag && (
-                    <span className={`mm-card-tag mm-card-tag-${tag.cls}`} aria-hidden="true">
-                      {tag.label}
-                    </span>
-                  )}
-                  <span className="mm-card-text">{card.text}</span>
+                  <PairIllustration art={card.art} />
+                  <span className="mm-card-content">
+                    {tag && (
+                      <span className={`mm-card-tag mm-card-tag-${tag.cls}`} aria-hidden="true">
+                        {tag.label}
+                      </span>
+                    )}
+                    <span className="mm-card-text">{card.text}</span>
+                  </span>
                 </span>
               </span>
             </button>
