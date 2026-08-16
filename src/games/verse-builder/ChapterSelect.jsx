@@ -55,9 +55,10 @@ export function ChapterSelect({
               onOpenSettings();
             }}
             aria-label="Settings"
+            title="Settings (Translation & Audio)"
           >
             <span className="vb-tape vb-tape-mini" />
-            <span>⚙️ {translation}</span>
+            <span>⚙️ Settings</span>
           </button>
         </div>
       </div>
