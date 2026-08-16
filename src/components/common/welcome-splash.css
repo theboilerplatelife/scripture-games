@@ -1,12 +1,16 @@
 /* ============================================================
-   WELCOME SPLASH — "Tap to Play" Initial Screen
+   WELCOME SPLASH — the cover page of the scrapbook
    ============================================================ */
 
 .splash-overlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: radial-gradient(circle at center, #6fb1fc 0%, #3e84d6 50%, #20549c 100%);
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255,255,255,0.12), transparent 45%),
+    radial-gradient(circle at 80% 90%, rgba(0,0,0,0.10), transparent 45%),
+    repeating-linear-gradient(87deg, rgba(0,0,0,0.025) 0 3px, transparent 3px 9px),
+    var(--kraft);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,9 +24,8 @@
   max-width: 480px;
   width: 100%;
   padding: 36px 28px 30px;
-  border-radius: 12px;
   text-align: center;
-  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25), 0 3px 8px rgba(0, 0, 0, 0.12);
   transform: rotate(-1deg);
   clip-path: polygon(1% 2%, 35% 0%, 75% 2%, 99% 0%, 100% 32%, 98% 70%, 100% 98%, 68% 100%, 30% 98%, 0% 100%, 1% 65%);
   box-sizing: border-box;
@@ -57,13 +60,50 @@
   50% { transform: translateY(-6px) rotate(2deg); }
 }
 
+/* The title writes itself on, pencil sweeping across — the same
+   signature moment used when a word scrap lands on the notebook strip. */
 .splash-title {
+  position: relative;
+  display: inline-block;
   font-family: 'Schoolbell', cursive;
   font-size: 46px;
   line-height: 1;
   color: var(--vermilion);
   margin: 0 0 8px 0;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.08);
+}
+
+.splash-title-text {
+  display: inline-block;
+  animation: splash-write 1.1s cubic-bezier(0.25, 0.7, 0.25, 1) 0.2s backwards;
+}
+
+.splash-pencil {
+  position: absolute;
+  top: -30px;
+  left: 0;
+  width: 38px;
+  height: 38px;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+  animation: splash-pencil-sweep 1.2s cubic-bezier(0.25, 0.7, 0.25, 1) 0.15s forwards;
+  opacity: 0;
+}
+
+@keyframes splash-write {
+  0% { clip-path: inset(0 100% 0 0); opacity: 0.2; }
+  12% { clip-path: inset(0 92% 0 0); opacity: 1; }
+  50% { clip-path: inset(0 48% 0 0); }
+  90% { clip-path: inset(0 2% 0 0); }
+  100% { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+
+@keyframes splash-pencil-sweep {
+  0% { left: -14px; top: -34px; opacity: 0; transform: rotate(-28deg) scale(1.15); }
+  10% { left: -3px; top: -25px; opacity: 1; transform: rotate(-36deg) scale(1); }
+  42% { left: 45%; top: -23px; transform: rotate(-38deg) translateY(1px); }
+  82% { left: 95%; top: -24px; opacity: 1; transform: rotate(-37deg); }
+  100% { left: 112%; top: -40px; opacity: 0; transform: rotate(-14deg) scale(0.85); }
 }
 
 .splash-sub {
@@ -86,22 +126,23 @@
   border: 1px dashed var(--vermilion);
   border-radius: 20px;
   padding: 4px 12px;
-  font-size: 14px;
+  font-size: 15px;
   color: #682717;
-  font-weight: 700;
 }
 
+/* A big torn-paper scrap of a button, same material as every other action */
 .splash-start-btn {
-  background: linear-gradient(180deg, #52b788 0%, #2d6a4f 100%);
-  color: #ffffff;
-  border: 3px solid #1b4332;
-  border-radius: 50px;
+  position: relative;
+  background: var(--leaf);
+  color: var(--paper);
+  border: none;
   font-family: 'Schoolbell', cursive;
   font-size: 28px;
-  padding: 14px 44px;
+  padding: 14px 44px 12px;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(45, 106, 79, 0.45), 0 4px 0 #1b4332;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  clip-path: polygon(2% 10%, 50% 0%, 98% 8%, 100% 85%, 55% 100%, 0% 92%);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.22);
+  transition: transform 0.15s ease, background 0.15s ease;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -112,21 +153,33 @@
 }
 
 .splash-start-btn:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 10px 24px rgba(45, 106, 79, 0.55), 0 5px 0 #1b4332;
+  background: var(--leaf-bright);
+  transform: scale(1.03) rotate(-0.5deg);
 }
 
 .splash-start-btn:active {
-  transform: translateY(2px);
-  box-shadow: 0 3px 8px rgba(45, 106, 79, 0.35), 0 1px 0 #1b4332;
+  transform: scale(0.95);
 }
 
 .splash-audio-note {
   margin-top: 14px;
-  font-size: 13px;
-  color: #7d7265;
+  font-size: 14px;
+  color: #635b50;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-buddy-wrap,
+  .splash-title-text {
+    animation: none;
+  }
+  .splash-pencil {
+    display: none;
+  }
+  .splash-start-btn {
+    transition: none;
+  }
 }

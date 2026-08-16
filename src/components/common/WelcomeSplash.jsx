@@ -1,4 +1,5 @@
 import { Buddy } from "./Buddy.jsx";
+import { Pencil } from "./Pencil.jsx";
 import { audio } from "../../audio/SoundEngine.js";
 import "./welcome-splash.css";
 
@@ -28,7 +29,12 @@ export function WelcomeSplash({ onStart }) {
           </div>
         </div>
 
-        <h1 className="splash-title">Scripture Games</h1>
+        <h1 className="splash-title">
+          <span className="splash-title-text">Scripture Games</span>
+          <span className="splash-pencil" aria-hidden="true">
+            <Pencil size={38} />
+          </span>
+        </h1>
         <p className="splash-sub">Fun scripture adventures for curious minds!</p>
 
         <div className="splash-features">
