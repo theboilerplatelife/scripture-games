@@ -117,17 +117,7 @@ export function MemoryBoard({
         </div>
       </div>
 
-      {isDone ? (
-        <div className="mm-board-done">
-          <span className="mm-board-done-text">🎉 All {mode.pairs} pairs found! Take a look…</span>
-          <button
-            className="vb-btn"
-            onClick={() => onComplete(starsForMisses(misses, mode.pairs), misses)}
-          >
-            See your stars →
-          </button>
-        </div>
-      ) : (
+      {!isDone && (
         <p className="mm-board-hint">{mode.blurb} — find all {mode.pairs} pairs!</p>
       )}
 
@@ -181,6 +171,18 @@ export function MemoryBoard({
           );
         })}
       </div>
+
+      {isDone && (
+        <div className="mm-board-done">
+          <span className="mm-board-done-text">🎉 All {mode.pairs} pairs found! Take a look…</span>
+          <button
+            className="vb-btn"
+            onClick={() => onComplete(starsForMisses(misses, mode.pairs), misses)}
+          >
+            See your stars →
+          </button>
+        </div>
+      )}
     </div>
   );
 }
