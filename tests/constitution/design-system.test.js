@@ -59,6 +59,56 @@ describe("Constitution Gate: Design System (Article 4)", () => {
     });
   });
 
+  test("Article 4.3: text color pairs meet WCAG contrast ratios", () => {
+    const appCode = fs.readFileSync(path.join(ROOT, "src/App.jsx"), "utf8");
+    const tokens = {};
+    for (const m of appCode.matchAll(/(--[\w-]+):\s*(#[0-9a-fA-F]{6})/g)) tokens[m[1]] = m[2];
+
+    const luminance = (hex) => {
+      const channel = (c) => {
+        const v = c / 255;
+        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+      };
+      const n = parseInt(hex.slice(1), 16);
+      return (
+        0.2126 * channel((n >> 16) & 255) +
+        0.7152 * channel((n >> 8) & 255) +
+        0.0722 * channel(n & 255)
+      );
+    };
+    const ratio = (a, b) => {
+      const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+      return (hi + 0.05) / (lo + 0.05);
+    };
+    const t = (name) => {
+      expect(tokens[name], `token ${name} must exist`).toBeTruthy();
+      return tokens[name];
+    };
+
+    // Body/small text on cardstock: WCAG AA 4.5:1
+    const smallText = [
+      [t("--ink"), t("--paper")],
+      [t("--ink-soft"), t("--paper")],
+      [t("--vermilion-deep"), t("--paper")],
+      [t("--slate-deep"), t("--paper")],
+      ["#46702c", t("--paper")], // stamp/badge green
+      ["#635b50", t("--paper")], // muted notes
+    ];
+    smallText.forEach(([fg, bg]) => {
+      expect(ratio(fg, bg), `${fg} on ${bg} must reach 4.5:1`).toBeGreaterThanOrEqual(4.5);
+    });
+
+    // Display/large text (Schoolbell titles, 20px+ buttons): WCAG AA 3:1
+    const largeText = [
+      [t("--vermilion"), t("--paper")],
+      [t("--slate"), t("--paper")],
+      [t("--paper"), t("--leaf")], // button text on leaf green
+    ];
+    largeText.forEach(([fg, bg]) => {
+      expect(ratio(fg, bg), `${fg} on ${bg} must reach 3:1`).toBeGreaterThanOrEqual(3);
+    });
+  });
+
   test("Article 4.5: minimum text size is 13px", () => {
     cssSources().forEach(({ name, css }) => {
       for (const m of css.matchAll(/font-size:\s*(\d+(?:\.\d+)?)px/g)) {

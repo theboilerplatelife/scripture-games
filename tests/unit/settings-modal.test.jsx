@@ -3,6 +3,25 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { SettingsModal } from "../../src/components/common/SettingsModal.jsx";
 
 describe("SettingsModal Component Tests", () => {
+  test("Escape closes the dialog; other keys do not", () => {
+    const onClose = vi.fn();
+    render(
+      <SettingsModal
+        isOpen={true}
+        onClose={onClose}
+        translation="ESV"
+        onSelectTranslation={vi.fn()}
+        musicOn={true}
+        onToggleMusic={vi.fn()}
+        onResetProgress={vi.fn()}
+      />
+    );
+    fireEvent.keyDown(document, { key: "a" });
+    expect(onClose).not.toHaveBeenCalled();
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
   test("returns null when isOpen is false", () => {
     const { container } = render(<SettingsModal isOpen={false} />);
     expect(container.firstChild).toBeNull();

@@ -135,10 +135,6 @@ export default function App() {
     };
   }, []);
 
-  const handleUserInteract = () => {
-    audio.init();
-  };
-
   const handleToggleMusic = () => {
     setMusicOn((prev) => !prev);
   };
@@ -146,7 +142,7 @@ export default function App() {
   const [hasStarted, setHasStarted] = useState(false);
 
   return (
-    <div className="vb-root" onClick={handleUserInteract}>
+    <div className="vb-root">
       <style>{globalCss}</style>
 
       {/* Screen 0: Tap to Play Welcome Screen */}

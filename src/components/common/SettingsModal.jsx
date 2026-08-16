@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { TRANSLATIONS } from "../../data/translations.js";
 import { audio } from "../../audio/SoundEngine.js";
 
@@ -14,15 +15,34 @@ export function SettingsModal({
   onChangeSfxVol,
   onResetProgress,
 }) {
+  // Keyboard users close with Escape (backdrop click stays as a
+  // pointer-only convenience)
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- pointer-only backdrop dismiss; keyboard users have Escape and the Close button
     <div className="vb-modal-backdrop" onClick={onClose}>
-      <div className="vb-modal-card" onClick={(e) => e.stopPropagation()}>
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- stops backdrop dismissal when clicking inside the dialog */}
+      <div
+        className="vb-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="vb-settings-title"
+        onClick={(e) => e.stopPropagation()}
+      >
         <span className="vb-tape vb-tape-top" />
         
         <div className="vb-modal-header">
-          <h2 className="vb-modal-title">⚙️ Game Settings</h2>
+          <h2 className="vb-modal-title" id="vb-settings-title">⚙️ Game Settings</h2>
           <button className="vb-modal-close" onClick={onClose} aria-label="Close Settings">✕</button>
         </div>
 
@@ -85,6 +105,7 @@ export function SettingsModal({
               max="100"
               value={bgmVol}
               disabled={!musicOn}
+              aria-label="Background music volume"
               className="vb-range-slider"
               onChange={(e) => {
                 audio.init();
@@ -105,6 +126,7 @@ export function SettingsModal({
               max="100"
               value={sfxVol}
               disabled={!musicOn}
+              aria-label="Sound effects volume"
               className="vb-range-slider"
               onChange={(e) => {
                 audio.init();
