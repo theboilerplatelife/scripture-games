@@ -17,6 +17,7 @@ function cssSources() {
   const files = [
     "src/games/hub/hub.css",
     "src/games/verse-builder/verse-builder.css",
+    "src/games/memory-match/memory-match.css",
     "src/components/common/welcome-splash.css",
   ];
   return [
