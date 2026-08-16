@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { audio } from "./audio/SoundEngine.js";
+import { audio, DEFAULT_BGM_VOL, DEFAULT_SFX_VOL } from "./audio/SoundEngine.js";
 import { DEFAULT_TRANSLATION } from "./data/translations.js";
 import { GameHub } from "./games/hub/GameHub.jsx";
 import { VerseBuilder } from "./games/verse-builder/VerseBuilder.jsx";
@@ -38,18 +38,18 @@ export default function App() {
   const [bgmVol, setBgmVol] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_BGM_VOL_KEY);
-      return saved !== null ? Number(saved) : 25;
+      return saved !== null ? Number(saved) : DEFAULT_BGM_VOL;
     } catch {
-      return 25;
+      return DEFAULT_BGM_VOL;
     }
   });
 
   const [sfxVol, setSfxVol] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_SFX_VOL_KEY);
-      return saved !== null ? Number(saved) : 50;
+      return saved !== null ? Number(saved) : DEFAULT_SFX_VOL;
     } catch {
-      return 50;
+      return DEFAULT_SFX_VOL;
     }
   });
 
@@ -214,7 +214,21 @@ export default function App() {
    GLOBAL STYLES & SCRAPBOOK DESIGN SYSTEM
    ============================================================ */
 const globalCss = `
-@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Schoolbell&display=swap');
+/* Self-hosted fonts (SIL OFL) — Constitution Article 2.5: zero external runtime dependencies */
+@font-face {
+  font-family: 'Patrick Hand';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/patrick-hand-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Schoolbell';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/schoolbell-latin.woff2') format('woff2');
+}
 
 *, *::before, *::after {
   box-sizing: border-box;

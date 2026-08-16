@@ -16,7 +16,7 @@ A child-friendly suite of Christian educational web games built with **React 19*
 npm run dev            # Start local development server (Vite on port 5173)
 npm run lint           # Run ESLint across all source and test files
 npm run lint:fix       # Automatically fix lint issues
-npm run build          # Type/bundle check + Vite build → dist/
+npm run build          # Vite production build → dist/
 npm run preview        # Preview production build locally
 npm test               # Run all unit and constitutional test suites (Vitest)
 npm run test:watch     # Run tests in interactive watch mode
@@ -38,7 +38,7 @@ npm run check          # Full gate: ESLint + 100% Test coverage enforcement + Vi
 
 ## 4. Constitutional Invariants & Compliance
 
-All code changes must conform to [CONSTITUTION.md](file:///Users/uberx/workspace/bible-games/CONSTITUTION.md). Key rules:
+All code changes must conform to [CONSTITUTION.md](CONSTITUTION.md). Key rules:
 
 * **Scripture Invariance**: Verses in `src/data/chapters.js` must accurately match official text across ESV, NET, NKJV, and WEB.
 * **Depiction Rule**: Absolute prohibition against cartoon or visual avatars of Jesus Christ.
@@ -51,4 +51,17 @@ All code changes must conform to [CONSTITUTION.md](file:///Users/uberx/workspace
   - SFX Volume: `scripture_games_sfx_vol_v1`
 * **Test Coverage Standard**: Strict 100% coverage on all metrics (statements, branches, functions, lines) enforced via `npm run check`.
 
-Read [CONSTITUTION.md](file:///Users/uberx/workspace/bible-games/CONSTITUTION.md) before making architectural decisions.
+Read [CONSTITUTION.md](CONSTITUTION.md) before making architectural decisions.
+
+---
+
+## 5. Test Layout
+
+* `tests/unit/` — behavioral unit tests for components, gameplay, audio engine, and app orchestration.
+* `tests/constitution/` — self-enforcing checks of [CONSTITUTION.md](CONSTITUTION.md) invariants (content structure, storage keys, offline audio, external-dependency bans). These tests encode constitutional articles by number; **never delete or weaken one to make a change pass** — if an invariant must change, amend CONSTITUTION.md first and keep the two in sync.
+
+---
+
+## 6. Deployment
+
+Hosted on **Netlify** (see `netlify.toml`). The deploy build command is `npm run check`, so every deploy re-runs the full quality gate (ESLint, 100% coverage, constitutional tests, Vite build). Security headers, including a strict same-origin Content-Security-Policy, are set in `netlify.toml`. A GitHub Actions workflow (`.github/workflows/check.yml`) runs the same gate on every push and pull request.

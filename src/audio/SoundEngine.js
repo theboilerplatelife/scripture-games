@@ -185,6 +185,10 @@ export const MEMORY_TITLE_SONG = {
   ],
 };
 
+// Constitution Article 3.5: default volume levels (0..100 scale, as shown on the settings sliders)
+export const DEFAULT_BGM_VOL = 25;
+export const DEFAULT_SFX_VOL = 50;
+
 export class SoundEngine {
   constructor() {
     this.ctx = null;
@@ -195,8 +199,8 @@ export class SoundEngine {
     this.stepIndex = 0;
     this.timerId = null;
     this.muted = false;
-    this.bgmVol = 0.25;
-    this.sfxVol = 0.50;
+    this.bgmVol = DEFAULT_BGM_VOL / 100;
+    this.sfxVol = DEFAULT_SFX_VOL / 100;
     this.isBackgrounded = false;
     this.listenersAttached = false;
     this.bindVisibilityListeners();

@@ -1,0 +1,17 @@
+{
+  "name": "Scripture Games",
+  "short_name": "Scripture",
+  "description": "Child-friendly Bible verse games — 120 key verses across 15 chapters in 4 translations.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#c9a06b",
+  "theme_color": "#c9a06b",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

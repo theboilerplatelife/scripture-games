@@ -5,7 +5,7 @@ import { CHAPTERS } from "../../src/data/chapters.js";
 import { TRANSLATIONS } from "../../src/data/translations.js";
 
 describe("Constitution Gate: Theological & Content Integrity (Article 1)", () => {
-  test("Article 1.1: Must contain exactly 15 chapters with 8 verses each (120 total)", () => {
+  test("Article 1.4: Must contain exactly 15 chapters with 8 verses each (120 total)", () => {
     expect(CHAPTERS.length).toBe(15);
     
     let totalVerses = 0;
@@ -16,7 +16,7 @@ describe("Constitution Gate: Theological & Content Integrity (Article 1)", () =>
     expect(totalVerses).toBe(120);
   });
 
-  test("Article 1.1: Every verse must provide valid non-empty text for all 4 translations (ESV, NET, NKJV, WEB)", () => {
+  test("Article 1.4: Every verse must provide valid non-empty text for all 4 translations (ESV, NET, NKJV, WEB)", () => {
     const requiredTranslations = ["ESV", "NET", "NKJV", "WEB"];
     
     CHAPTERS.forEach((chapter) => {
@@ -59,7 +59,7 @@ describe("Constitution Gate: Theological & Content Integrity (Article 1)", () =>
     });
   });
 
-  test("Article 1.2: Every level in a chapter must feature a unique character icon (0 duplicates per chapter)", () => {
+  test("Article 1.4: Every level in a chapter must feature a unique character icon (0 duplicates per chapter)", () => {
     CHAPTERS.forEach((chapter) => {
       const seen = new Set();
       const duplicates = [];
@@ -75,7 +75,7 @@ describe("Constitution Gate: Theological & Content Integrity (Article 1)", () =>
     });
   });
 
-  test("Article 1.2: All character keys must be defined in Buddy.jsx config", () => {
+  test("Article 1.4: All character keys must be defined in Buddy.jsx config", () => {
     const buddyPath = path.resolve(process.cwd(), "src/components/common/Buddy.jsx");
     const buddyCode = fs.readFileSync(buddyPath, "utf8");
     

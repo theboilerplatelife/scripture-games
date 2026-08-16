@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#c9a06b"/>
+  <!-- torn-paper card -->
+  <polygon points="88,120 210,104 330,116 428,106 420,196 430,300 418,398 300,410 180,398 84,408 96,280" fill="#fdfaf1"/>
+  <!-- washi tape -->
+  <rect x="216" y="84" width="88" height="30" rx="4" fill="#fae49e" opacity="0.85" transform="rotate(-4 260 99)"/>
+  <!-- open book -->
+  <path d="M256 200 C 220 178, 160 178, 132 194 L132 330 C 160 314, 220 314, 256 336 C 292 314, 352 314, 380 330 L380 194 C 352 178, 292 178, 256 200 Z" fill="#5c8a3a"/>
+  <path d="M256 214 C 226 196, 176 196, 152 208 L152 316 C 176 304, 226 304, 256 322 Z" fill="#fffef8"/>
+  <path d="M256 214 C 286 196, 336 196, 360 208 L360 316 C 336 304, 286 304, 256 322 Z" fill="#fffef8"/>
+  <line x1="256" y1="214" x2="256" y2="322" stroke="#d5c8b2" stroke-width="6"/>
+  <!-- text lines -->
+  <g stroke="#b08d57" stroke-width="8" stroke-linecap="round">
+    <line x1="172" y1="234" x2="236" y2="230"/>
+    <line x1="172" y1="258" x2="236" y2="254"/>
+    <line x1="172" y1="282" x2="224" y2="278"/>
+    <line x1="276" y1="230" x2="340" y2="234"/>
+    <line x1="276" y1="254" x2="340" y2="258"/>
+    <line x1="288" y1="278" x2="340" y2="282"/>
+  </g>
+  <!-- star -->
+  <path d="M256 96 l10 22 24 3-17 17 4 24-21-11-21 11 4-24-17-17 24-3 z" fill="#d94f30"/>
+</svg>
