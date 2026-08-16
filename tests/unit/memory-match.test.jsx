@@ -45,6 +45,34 @@ describe("Memory Match screens", () => {
     );
     expect(screen.getByLabelText(/Memory Match Deck 2: (?!Locked)/).disabled).toBe(false);
     expect(screen.getByText(/3 of 72 memory stars collected/)).toBeTruthy();
+
+    // No stamp until every mode of the deck has a star
+    expect(screen.queryByText("✓ Complete")).toBeNull();
+
+    // All three modes starred → Complete stamp and accessible "(completed)"
+    rerender(
+      <MMChapterSelect
+        stars={{ "mm-1-0": 1, "mm-1-1": 2, "mm-1-2": 3 }}
+        translation="ESV"
+        onSelectChapter={onSelectChapter}
+        onBackToHub={onBackToHub}
+        onOpenSettings={onOpenSettings}
+      />
+    );
+    expect(screen.getByText("✓ Complete")).toBeTruthy();
+    expect(screen.getByLabelText(/Memory Match Deck 1: .*\(completed\)/)).toBeTruthy();
+
+    // A flawless 9/9 deck upgrades to the Perfect stamp
+    rerender(
+      <MMChapterSelect
+        stars={{ "mm-1-0": 3, "mm-1-1": 3, "mm-1-2": 3 }}
+        translation="ESV"
+        onSelectChapter={onSelectChapter}
+        onBackToHub={onBackToHub}
+        onOpenSettings={onOpenSettings}
+      />
+    );
+    expect(screen.getByText("★ Perfect!")).toBeTruthy();
   });
 
   test("ModeSelect: renders 3 modes with stars and handles selection/back", () => {

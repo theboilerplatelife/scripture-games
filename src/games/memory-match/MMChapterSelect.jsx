@@ -71,6 +71,11 @@ export function MMChapterSelect({
         {DECKS.map((deckObj, idx) => {
           const unlocked = isDeckUnlocked(idx);
           const deckStars = getDeckStars(deckObj.id);
+          const isComplete = MODES.every((_, m) => {
+            const v = stars[`mm-${deckObj.id}-${m}`];
+            return typeof v === "number" && v > 0;
+          });
+          const isPerfect = deckStars === MODES.length * 3;
 
           return (
             <button
@@ -86,9 +91,14 @@ export function MMChapterSelect({
                 audio.playButtonClick();
                 onSelectChapter(deckObj.id);
               }}
-              aria-label={`Memory Match Deck ${deckObj.id}: ${unlocked ? deckObj.title : "Locked"}`}
+              aria-label={`Memory Match Deck ${deckObj.id}: ${unlocked ? deckObj.title : "Locked"}${isComplete ? " (completed)" : ""}`}
             >
               <span className="vb-tape vb-tape-top" />
+              {isComplete && (
+                <span className={`mm-deck-stamp ${isPerfect ? "perfect" : ""}`} aria-hidden="true">
+                  {isPerfect ? "★ Perfect!" : "✓ Complete"}
+                </span>
+              )}
               <div className="vb-chapter-header">
                 <span className="vb-chapter-num">Deck {deckObj.id}</span>
                 <span className="vb-chapter-stars">⭐ {deckStars}/{MODES.length * 3}</span>

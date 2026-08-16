@@ -60,10 +60,18 @@ describe("MemoryBoard", () => {
     expect(cards[a].className).toContain("matched");
     expect(cards[b].className).toContain("matched");
     expect(cards[a].disabled).toBe(true);
-    // Matched pairs are stamped with a visible badge and announced as matched
-    expect(cards[a].querySelector(".mm-card-match-badge")).toBeTruthy();
-    expect(cards[b].querySelector(".mm-card-match-badge")).toBeTruthy();
+    // Matched pairs get a numbered sticker (match order) on both cards
+    expect(cards[a].querySelector(".mm-card-match-badge").textContent).toBe("1");
+    expect(cards[b].querySelector(".mm-card-match-badge").textContent).toBe("1");
     expect(cards[a].getAttribute("aria-label")).toBe(`Card ${a + 1}: ${cardDeck[a].text} (matched)`);
+
+    // The second found pair is stickered "2" on both its cards
+    const [c, d] = cardIndexesOfPair(1);
+    fireEvent.click(cards[c]);
+    fireEvent.click(cards[d]);
+    act(() => vi.advanceTimersByTime(500));
+    expect(cards[c].querySelector(".mm-card-match-badge").textContent).toBe("2");
+    expect(cards[d].querySelector(".mm-card-match-badge").textContent).toBe("2");
     // Clicking a matched card is a no-op
     fireEvent.click(cards[a]);
     expect(cards[a].className).toContain("matched");

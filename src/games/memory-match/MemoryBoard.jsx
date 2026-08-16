@@ -3,6 +3,9 @@ import { audio } from "../../audio/SoundEngine.js";
 import { jitter } from "../../utils/random.js";
 import { MODES, buildDeck, starsForMisses } from "./matchData.js";
 
+// Each found pair gets its own sticker color, cycling in match order
+const PAIR_COLORS = ["#d94f30", "#3e7cb1", "#5c8a3a", "#c98a1b", "#7b2cbf"];
+
 export function MemoryBoard({
   deck: deckObj,
   modeIdx,
@@ -96,6 +99,8 @@ export function MemoryBoard({
         {cardDeck.map((card, i) => {
           const isMatched = matched.has(card.pairId);
           const isRevealed = isMatched || flipped.includes(card.key);
+          // Position of this pair in match order (Set preserves insertion order)
+          const matchNum = isMatched ? [...matched].indexOf(card.pairId) + 1 : 0;
           return (
             <button
               key={card.key}
@@ -112,7 +117,13 @@ export function MemoryBoard({
               }
             >
               {isMatched && (
-                <span className="mm-card-match-badge" aria-hidden="true">✓</span>
+                <span
+                  className="mm-card-match-badge"
+                  style={{ background: PAIR_COLORS[(matchNum - 1) % PAIR_COLORS.length] }}
+                  aria-hidden="true"
+                >
+                  {matchNum}
+                </span>
               )}
               <span className="mm-card-inner">
                 <span className="mm-card-back" aria-hidden="true">{mode.icon}</span>
