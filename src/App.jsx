@@ -240,6 +240,7 @@ const globalCss = `
   --leaf: #5c8a3a;         /* leaf green: success & go */
   --leaf-bright: #689e42;
   --slate: #3e7cb1;        /* pencil blue: references & counts */
+  --slate-deep: #2f6394;   /* slate at small-text contrast */
   --ink: #2b2621;          /* heavy pencil ink */
   --ink-soft: #4a4238;     /* body ink */
   --sand: #d5c8b2;         /* dashed rules & borders */
@@ -248,6 +249,31 @@ const globalCss = `
 
 *, *::before, *::after {
   box-sizing: border-box;
+}
+
+/* ---- Keyboard focus: a dashed marker ring, on theme with the notebook ---- */
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px dashed var(--vermilion);
+  outline-offset: 3px;
+}
+
+/* Clip-path clips outlines, so torn-paper controls get a vermilion halo
+   that follows their torn edge instead. */
+.vb-btn:focus-visible,
+.vb-back:focus-visible,
+.vb-music-toggle:focus-visible,
+.hub-game-card:focus-visible,
+.vb-chapter-card:focus-visible,
+.vb-level-card:focus-visible,
+.splash-start-btn:focus-visible {
+  outline: none;
+  filter:
+    drop-shadow(2px 0 0 var(--vermilion))
+    drop-shadow(-2px 0 0 var(--vermilion))
+    drop-shadow(0 2px 0 var(--vermilion))
+    drop-shadow(0 -2px 0 var(--vermilion));
 }
 
 body {
@@ -460,7 +486,7 @@ body {
   border: none;
   font-size: 20px;
   cursor: pointer;
-  color: #7a7065;
+  color: #635b50;
   padding: 4px 8px;
 }
 .vb-settings-section {
@@ -510,29 +536,26 @@ body {
 .vb-trans-tag {
   font-family: 'Schoolbell', cursive;
   font-size: 18px;
-  font-weight: bold;
   color: var(--ink);
 }
 .vb-trans-badge {
-  font-size: 12px;
-  color: var(--leaf);
+  font-size: 13px;
+  color: #46702c;
 }
 .vb-trans-name {
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 15px;
   color: var(--ink-soft);
   margin-top: 2px;
 }
 .vb-trans-tagline {
-  font-size: 12px;
-  color: #7a7065;
+  font-size: 13px;
+  color: #635b50;
   margin-top: 2px;
 }
 .vb-trans-check {
   display: inline-block;
-  font-size: 12px;
-  color: var(--leaf);
-  font-weight: bold;
+  font-size: 13px;
+  color: #46702c;
   margin-top: 4px;
 }
 .vb-setting-row {
@@ -638,7 +661,6 @@ body {
   font-family: 'Schoolbell', cursive;
   font-size: 16px;
   color: var(--vermilion);
-  font-weight: bold;
 }
 .vb-range-slider {
   -webkit-appearance: none;

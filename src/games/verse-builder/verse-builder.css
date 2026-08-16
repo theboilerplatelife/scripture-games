@@ -88,7 +88,7 @@
 .vb-chapter-num {
   font-family: 'Schoolbell', cursive;
   font-size: 16px;
-  color: var(--slate);
+  color: var(--slate-deep);
 }
 
 .vb-chapter-stars {
@@ -248,8 +248,8 @@
 }
 
 .vb-ref-trans-badge {
-  font-size: 13px;
-  color: var(--slate);
+  font-size: 14px;
+  color: var(--slate-deep);
   font-family: 'Patrick Hand', cursive;
 }
 

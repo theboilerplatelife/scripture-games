@@ -147,7 +147,7 @@
 }
 
 .hub-game-badge.coming-soon {
-  background: #7c766e;
+  background: #6b655d;
 }
 
 .hub-game-title {
@@ -180,15 +180,8 @@
   border: 1px dashed rgba(74, 66, 56, 0.25);
   border-radius: 12px;
   padding: 2px 8px;
-  font-size: 12px;
+  font-size: 14px;
   color: #5a5246;
-  font-weight: 600;
-}
-
-.hub-pill.highlight {
-  background: rgba(217, 79, 48, 0.09);
-  border-color: var(--vermilion);
-  color: var(--vermilion-deep);
 }
 
 .hub-game-meta {
@@ -211,6 +204,6 @@
 .hub-dev-note {
   font-family: 'Schoolbell', cursive;
   font-size: 15px;
-  color: #7c766e;
+  color: #635b50;
 }
 
