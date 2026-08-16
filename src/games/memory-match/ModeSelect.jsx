@@ -4,14 +4,14 @@ import { jitter } from "../../utils/random.js";
 import { MODES } from "./matchData.js";
 
 export function ModeSelect({
-  chapter,
+  deck: deckObj,
   stars,
   translation,
   onSelectMode,
-  onBackToChapters,
+  onBackToDecks,
 }) {
-  const getModeStars = (modeIdx) => stars[`mm-${chapter.id}-${modeIdx}`] || 0;
-  const chapterTotal = MODES.reduce((acc, _, m) => acc + getModeStars(m), 0);
+  const getModeStars = (modeIdx) => stars[`mm-${deckObj.id}-${modeIdx}`] || 0;
+  const deckTotal = MODES.reduce((acc, _, m) => acc + getModeStars(m), 0);
 
   return (
     <div className="vb-levels-container">
@@ -21,10 +21,10 @@ export function ModeSelect({
             className="vb-back"
             onClick={() => {
               audio.playButtonClick();
-              onBackToChapters();
+              onBackToDecks();
             }}
-            aria-label="Back to Chapters"
-            title="Back to Chapter Select"
+            aria-label="Back to Scripture Decks"
+            title="Back to Deck Select"
           >
             ←
           </button>
@@ -33,19 +33,19 @@ export function ModeSelect({
         <div className="vb-topbar-center">
           <div className="vb-ref-chip">
             <span className="vb-tape vb-tape-top" />
-            {chapter.icon} Ch. {chapter.id}: {chapter.title}
+            {deckObj.icon} Deck {deckObj.id}: {deckObj.title}
           </div>
         </div>
 
         <div className="vb-topbar-right">
           <div className="vb-stars-pill">
-            ⭐ {chapterTotal} / {MODES.length * 3}
+            ⭐ {deckTotal} / {MODES.length * 3}
           </div>
         </div>
       </div>
 
       <p className="vb-note" style={{ marginTop: "14px" }}>
-        {chapter.subtitle} &bull; <strong>{translation}</strong>
+        {deckObj.subtitle} &bull; <strong>{translation}</strong>
       </p>
 
       <div className="mm-modes-grid">
@@ -55,7 +55,7 @@ export function ModeSelect({
             <button
               key={mode.id}
               className="mm-mode-card"
-              style={{ "--rot": `${jitter(chapter.id * 4 + modeIdx, 2, -2, 2)}deg` }}
+              style={{ "--rot": `${jitter(deckObj.id * 4 + modeIdx, 2, -2, 2)}deg` }}
               onClick={() => {
                 audio.playButtonClick();
                 onSelectMode(modeIdx);

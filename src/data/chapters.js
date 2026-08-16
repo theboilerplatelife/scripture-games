@@ -40,8 +40,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 56:3",
-        "character": "david",
-        "name": "David",
+        "character": "caleb",
+        "name": "Caleb",
         "hint": "David sang this when he felt scared.",
         "cheer": "When you feel afraid, you can trust God too!",
         "text": {
@@ -66,8 +66,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 23:1",
-        "character": "samuel",
-        "name": "Samuel",
+        "character": "david",
+        "name": "David",
         "hint": "David took care of sheep and knew God cares for us!",
         "cheer": "The LORD gives you everything you truly need.",
         "text": {

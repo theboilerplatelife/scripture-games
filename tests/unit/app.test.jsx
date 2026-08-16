@@ -117,7 +117,7 @@ describe("App Root & State Integration Tests", () => {
 
     // Open Memory Match
     fireEvent.click(screen.getByRole("button", { name: /Memory Match/i }));
-    expect(screen.getByText("Pick a chapter and flip the cards to find pairs!")).toBeTruthy();
+    expect(screen.getByText("Pick a scripture deck and flip cards to find pairs!")).toBeTruthy();
 
     // Open settings from inside Memory Match
     fireEvent.click(screen.getByLabelText("Settings"));

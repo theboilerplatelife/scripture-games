@@ -1,7 +1,7 @@
 import { describe, test, expect } from "vitest";
-import { CHAPTERS } from "../../src/data/chapters.js";
 import { TRANSLATIONS } from "../../src/data/translations.js";
 import {
+  DECKS,
   MODES,
   getVerseText,
   clipWords,
@@ -41,23 +41,22 @@ describe("Memory Match deck building & scoring", () => {
     expect(starsForMisses(4, 4)).toBe(2);
     expect(starsForMisses(8, 4)).toBe(2);
     expect(starsForMisses(9, 4)).toBe(1);
-    // 8 pairs: 3★ ≤6 misses
-    expect(starsForMisses(6, 8)).toBe(3);
-    expect(starsForMisses(7, 8)).toBe(2);
-    expect(starsForMisses(17, 8)).toBe(1);
+    // 5 pairs: 3★ ≤4 misses
+    expect(starsForMisses(4, 5)).toBe(3);
+    expect(starsForMisses(5, 5)).toBe(2);
+    expect(starsForMisses(11, 5)).toBe(1);
   });
 
   test("buildDeck produces a valid deterministic deck for every mode", () => {
-    const chapter = CHAPTERS[0];
+    const deckObj = DECKS[0];
     MODES.forEach((mode, modeIdx) => {
-      const deck = buildDeck(chapter, modeIdx, "ESV");
-      expect(deck.length).toBe(mode.pairs * 2);
+      const cardDeck = buildDeck(deckObj, modeIdx, "ESV");
+      expect(cardDeck.length).toBe(mode.pairs * 2);
 
       // Every pairId appears exactly twice, with two distinct kinds
       const byPair = {};
-      deck.forEach((card) => {
+      cardDeck.forEach((card) => {
         (byPair[card.pairId] ||= []).push(card.kind);
-        expect(card.character).toBeTruthy();
         expect(card.text).toBeTruthy();
       });
       expect(Object.keys(byPair).length).toBe(mode.pairs);
@@ -67,34 +66,26 @@ describe("Memory Match deck building & scoring", () => {
       });
 
       // Unique card keys
-      expect(new Set(deck.map((c) => c.key)).size).toBe(deck.length);
+      expect(new Set(cardDeck.map((c) => c.key)).size).toBe(cardDeck.length);
 
       // Deterministic: same inputs, same deck
-      expect(buildDeck(chapter, modeIdx, "ESV")).toEqual(deck);
+      expect(buildDeck(deckObj, modeIdx, "ESV")).toEqual(cardDeck);
     });
   });
 
-  test("buddies mode uses distinct characters (unique per chapter by constitution)", () => {
-    CHAPTERS.forEach((chapter) => {
-      const deck = buildDeck(chapter, 0, "ESV");
-      const buddies = deck.filter((c) => c.kind === "buddy");
-      expect(new Set(buddies.map((c) => c.character)).size).toBe(buddies.length);
-    });
-  });
-
-  test("every chapter and translation has enough splittable verses for halves mode", () => {
-    const halvesPairs = MODES[3].pairs;
-    CHAPTERS.forEach((chapter) => {
+  test("every deck and translation has enough splittable verses for halves mode", () => {
+    const halvesPairs = MODES[2].pairs; // 4 pairs
+    DECKS.forEach((deckObj) => {
       TRANSLATIONS.forEach((tr) => {
-        const eligible = chapter.verses.filter(
+        const eligible = deckObj.verses.filter(
           (v) => getVerseText(v, tr.id).trim().split(/\s+/).length >= 4
         );
         expect(
           eligible.length,
-          `Chapter ${chapter.id} has too few splittable verses in ${tr.id}`
+          `Deck ${deckObj.id} has too few splittable verses in ${tr.id}`
         ).toBeGreaterThanOrEqual(halvesPairs);
-        const deck = buildDeck(chapter, 3, tr.id);
-        expect(deck.length).toBe(halvesPairs * 2);
+        const cardDeck = buildDeck(deckObj, 2, tr.id);
+        expect(cardDeck.length).toBe(halvesPairs * 2);
       });
     });
   });

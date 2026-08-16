@@ -99,13 +99,12 @@
   width: 100%;
 }
 
-.mm-grid-buddies { grid-template-columns: repeat(4, 1fr); }
-.mm-grid-quotes  { grid-template-columns: repeat(4, 1fr); }
+.mm-grid-hints   { grid-template-columns: repeat(2, 1fr); }
 .mm-grid-refs    { grid-template-columns: repeat(2, 1fr); }
 .mm-grid-halves  { grid-template-columns: repeat(2, 1fr); }
 
 @media (max-width: 420px) {
-  .mm-grid-buddies, .mm-grid-quotes { grid-template-columns: repeat(3, 1fr); }
+  .mm-grid-hints, .mm-grid-refs, .mm-grid-halves { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* A card is a little kraft envelope that flips to a paper scrap */
@@ -118,11 +117,12 @@
   font-family: inherit;
   color: inherit;
   perspective: 700px;
-  min-height: 84px;
+  min-height: 90px;
   transform: rotate(var(--rot, 0deg));
   transition: transform 0.15s ease;
 }
 
+.mm-grid-hints .mm-card,
 .mm-grid-refs .mm-card,
 .mm-grid-halves .mm-card {
   min-height: 96px;

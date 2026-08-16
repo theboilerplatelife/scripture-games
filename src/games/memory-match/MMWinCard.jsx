@@ -3,11 +3,12 @@ import { Confetti } from "../../components/common/Confetti.jsx";
 import { MODES } from "./matchData.js";
 
 export function MMWinCard({
-  chapter,
+  deck: deckObj,
   modeIdx,
   earnedStars,
   misses,
-  hasNextMode,
+  isDeckComplete = false,
+  hasNextMode = false,
   onReplay,
   onNext,
   onBackToModes,
@@ -41,7 +42,7 @@ export function MMWinCard({
 
         <p className="vb-win-verse">All {mode.pairs} pairs found!</p>
         <p className="vb-win-ref">
-          {mode.title} — {chapter.icon} Chapter {chapter.id}
+          {mode.title} — {deckObj.icon} Deck {deckObj.id}: {deckObj.title}
         </p>
         <p className="vb-win-cheer">
           {misses === 0 ? "Perfect memory — not a single miss!" : `You got there with ${misses} ${misses === 1 ? "miss" : "misses"}. Great sticking with it!`}
@@ -52,7 +53,7 @@ export function MMWinCard({
             Match again 🔄
           </button>
           <button className="vb-btn" onClick={onNext}>
-            {hasNextMode ? "Next match →" : "Complete Chapter 🎉"}
+            {isDeckComplete ? "Complete Deck 🎉" : (hasNextMode ? "Next match →" : "Deck Modes ←")}
           </button>
         </div>
       </div>

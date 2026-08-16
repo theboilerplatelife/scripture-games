@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { audio } from "../../audio/SoundEngine.js";
 import { CHAPTERS } from "../../data/chapters.js";
+import { DECKS, MODES } from "../memory-match/matchData.js";
 import { GameIcon } from "./GameIcon.jsx";
 import "./hub.css";
 
@@ -16,7 +17,7 @@ export function GameHub({
 
   // Per-game star pools share one storage object; Memory Match keys are "mm-" prefixed
   const vbMaxStars = CHAPTERS.length * 8 * 3; // 360
-  const mmMaxStars = CHAPTERS.length * 4 * 3; // 180
+  const mmMaxStars = DECKS.length * MODES.length * 3; // 72
   const sumStars = (entries) => entries.reduce((acc, [, v]) => acc + (typeof v === "number" ? v : 0), 0);
   const starEntries = Object.entries(allStars);
   const vbStars = sumStars(starEntries.filter(([k]) => !k.startsWith("mm-")));
@@ -177,13 +178,13 @@ export function GameHub({
           <div className="hub-card-pills">
             <span className="hub-pill highlight">⭐ {mmStars} / {mmMaxStars} Stars</span>
             <span className="hub-pill">🧠 Card Pairs</span>
-            <span className="hub-pill">📚 15 Chapters</span>
+            <span className="hub-pill">🎴 8 Themed Decks</span>
           </div>
           <p className="hub-game-desc">
-            Flip kraft-paper cards to match buddy faces, speakers, references, and torn verse halves!
+            Flip kraft-paper cards to match hint clues, scripture references, and torn verse halves!
           </p>
           <div className="hub-game-meta">
-            <span>60 Boards Across 4 Match Modes</span>
+            <span>24 Boards Across 3 Match Modes</span>
             <span className="hub-play-btn">Play Now →</span>
           </div>
         </button>

@@ -1,12 +1,12 @@
 import { Confetti } from "../../components/common/Confetti.jsx";
 
 export function MMChapterDoneCard({
-  chapter,
+  deck: deckObj,
   isAllGameDone,
   totalStars,
   maxStars,
-  onNextChapter,
-  onBackToChapters,
+  onNextChapter, // onNextDeck
+  onBackToChapters, // onBackToDecks
   onBackToHub,
 }) {
   return (
@@ -16,13 +16,13 @@ export function MMChapterDoneCard({
         <span className="vb-tape vb-tape-top" />
 
         <div style={{ fontSize: "56px", margin: "4px 0" }}>
-          {isAllGameDone ? "🏆" : chapter.icon}
+          {isAllGameDone ? "🏆" : deckObj.icon}
         </div>
 
         <h2 style={{ fontSize: "32px", margin: "6px 0 10px", fontFamily: "'Schoolbell', cursive", color: "var(--vermilion)" }}>
           {isAllGameDone
-            ? "You Matched All 15 Chapters!"
-            : `Chapter ${chapter.id} Matched!`}
+            ? "You Matched All 8 Decks!"
+            : `Deck ${deckObj.id} Matched!`}
         </h2>
 
         <p className="vb-win-cheer" style={{ fontSize: "18px", padding: "10px 18px", lineHeight: "1.4" }}>
@@ -34,7 +34,7 @@ export function MMChapterDoneCard({
             </>
           ) : (
             <>
-              You found every pair in <strong>{chapter.title}</strong>!
+              You found every pair in <strong>{deckObj.title}</strong>!
               <br />
               What a memory — keep it up!
             </>
@@ -44,11 +44,11 @@ export function MMChapterDoneCard({
         <div className="vb-win-btns">
           {!isAllGameDone && onNextChapter && (
             <button className="vb-btn" onClick={onNextChapter}>
-              Next Chapter →
+              Next Deck →
             </button>
           )}
           <button className="vb-btn ghost" onClick={onBackToChapters}>
-            Chapter Select
+            Deck Select
           </button>
           <button className="vb-btn" onClick={onBackToHub}>
             Game Hub 🏠

@@ -1,12 +1,11 @@
 import { describe, test, expect, vi } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
-import { buildDeck } from "../../src/games/memory-match/matchData.js";
+import { buildDeck, DECKS } from "../../src/games/memory-match/matchData.js";
 import { MemoryMatch } from "../../src/games/memory-match/MemoryMatch.jsx";
 import { MMChapterSelect } from "../../src/games/memory-match/MMChapterSelect.jsx";
 import { ModeSelect } from "../../src/games/memory-match/ModeSelect.jsx";
 import { MMWinCard } from "../../src/games/memory-match/MMWinCard.jsx";
 import { MMChapterDoneCard } from "../../src/games/memory-match/MMChapterDoneCard.jsx";
-import { CHAPTERS } from "../../src/data/chapters.js";
 
 describe("Memory Match screens", () => {
   test("MMChapterSelect: unlock logic, totals, back and settings", () => {
@@ -24,17 +23,17 @@ describe("Memory Match screens", () => {
       />
     );
 
-    // Chapter 1 open, chapter 2 locked
-    fireEvent.click(screen.getByLabelText(/Memory Match Chapter 1:/));
+    // Deck 1 open, Deck 2 locked
+    fireEvent.click(screen.getByLabelText(/Memory Match Deck 1:/));
     expect(onSelectChapter).toHaveBeenCalledWith(1);
-    expect(screen.getByLabelText("Memory Match Chapter 2: Locked").disabled).toBe(true);
+    expect(screen.getByLabelText("Memory Match Deck 2: Locked").disabled).toBe(true);
 
     fireEvent.click(screen.getByLabelText("Back to Game Hub"));
     expect(onBackToHub).toHaveBeenCalled();
     fireEvent.click(screen.getByLabelText("Settings"));
     expect(onOpenSettings).toHaveBeenCalled();
 
-    // A star in chapter 1 unlocks chapter 2; non-numeric and foreign keys ignored in totals
+    // A star in Deck 1 unlocks Deck 2; non-numeric and foreign keys ignored in totals
     rerender(
       <MMChapterSelect
         stars={{ "mm-1-2": 3, "mm-1-0": "bad", "1-0": 3 }}
@@ -44,29 +43,29 @@ describe("Memory Match screens", () => {
         onOpenSettings={onOpenSettings}
       />
     );
-    expect(screen.getByLabelText(/Memory Match Chapter 2: (?!Locked)/).disabled).toBe(false);
-    expect(screen.getByText(/3 of 180 memory stars collected/)).toBeTruthy();
+    expect(screen.getByLabelText(/Memory Match Deck 2: (?!Locked)/).disabled).toBe(false);
+    expect(screen.getByText(/3 of 72 memory stars collected/)).toBeTruthy();
   });
 
-  test("ModeSelect: renders 4 modes with stars and handles selection/back", () => {
+  test("ModeSelect: renders 3 modes with stars and handles selection/back", () => {
     const onSelectMode = vi.fn();
-    const onBackToChapters = vi.fn();
+    const onBackToDecks = vi.fn();
 
     render(
       <ModeSelect
-        chapter={CHAPTERS[0]}
+        deck={DECKS[0]}
         stars={{ "mm-1-0": 2 }}
         translation="NET"
         onSelectMode={onSelectMode}
-        onBackToChapters={onBackToChapters}
+        onBackToDecks={onBackToDecks}
       />
     );
 
-    expect(screen.getByText("⭐ 2 / 12")).toBeTruthy();
-    fireEvent.click(screen.getByLabelText("Play Who Said It?"));
+    expect(screen.getByText("⭐ 2 / 9")).toBeTruthy();
+    fireEvent.click(screen.getByLabelText("Play Verse Finder"));
     expect(onSelectMode).toHaveBeenCalledWith(1);
-    fireEvent.click(screen.getByLabelText("Back to Chapters"));
-    expect(onBackToChapters).toHaveBeenCalled();
+    fireEvent.click(screen.getByLabelText("Back to Scripture Decks"));
+    expect(onBackToDecks).toHaveBeenCalled();
   });
 
   test("MMWinCard: perfect and with-misses copy, all buttons", () => {
@@ -76,11 +75,12 @@ describe("Memory Match screens", () => {
 
     const { rerender } = render(
       <MMWinCard
-        chapter={CHAPTERS[0]}
+        deck={DECKS[0]}
         modeIdx={0}
         earnedStars={3}
         misses={0}
         hasNextMode={true}
+        isDeckComplete={false}
         onReplay={onReplay}
         onNext={onNext}
         onBackToModes={onBackToModes}
@@ -94,34 +94,39 @@ describe("Memory Match screens", () => {
     fireEvent.click(screen.getByLabelText("Back to Match Modes"));
     expect(onBackToModes).toHaveBeenCalled();
 
+    // Mode 2 with 1 miss, not complete yet
     rerender(
       <MMWinCard
-        chapter={CHAPTERS[0]}
-        modeIdx={3}
+        deck={DECKS[0]}
+        modeIdx={2}
         earnedStars={2}
         misses={1}
         hasNextMode={false}
+        isDeckComplete={false}
         onReplay={onReplay}
         onNext={onNext}
         onBackToModes={onBackToModes}
       />
     );
     expect(screen.getByText(/with 1 miss\./)).toBeTruthy();
-    expect(screen.getByText("Complete Chapter 🎉")).toBeTruthy();
+    expect(screen.getByText("Deck Modes ←")).toBeTruthy();
 
+    // Deck completely solved (all modes have stars)
     rerender(
       <MMWinCard
-        chapter={CHAPTERS[0]}
-        modeIdx={3}
+        deck={DECKS[0]}
+        modeIdx={2}
         earnedStars={1}
         misses={9}
         hasNextMode={false}
+        isDeckComplete={true}
         onReplay={onReplay}
         onNext={onNext}
         onBackToModes={onBackToModes}
       />
     );
     expect(screen.getByText(/with 9 misses\./)).toBeTruthy();
+    expect(screen.getByText("Complete Deck 🎉")).toBeTruthy();
   });
 
   test("MMChapterDoneCard: mid-game and finale variants", () => {
@@ -131,41 +136,41 @@ describe("Memory Match screens", () => {
 
     const { rerender } = render(
       <MMChapterDoneCard
-        chapter={CHAPTERS[0]}
+        deck={DECKS[0]}
         isAllGameDone={false}
         totalStars={12}
-        maxStars={180}
+        maxStars={72}
         onNextChapter={onNextChapter}
         onBackToChapters={onBackToChapters}
         onBackToHub={onBackToHub}
       />
     );
-    expect(screen.getByText("Chapter 1 Matched!")).toBeTruthy();
-    fireEvent.click(screen.getByText("Next Chapter →"));
+    expect(screen.getByText("Deck 1 Matched!")).toBeTruthy();
+    fireEvent.click(screen.getByText("Next Deck →"));
     expect(onNextChapter).toHaveBeenCalled();
-    fireEvent.click(screen.getByText("Chapter Select"));
+    fireEvent.click(screen.getByText("Deck Select"));
     expect(onBackToChapters).toHaveBeenCalled();
     fireEvent.click(screen.getByText("Game Hub 🏠"));
     expect(onBackToHub).toHaveBeenCalled();
 
     rerender(
       <MMChapterDoneCard
-        chapter={CHAPTERS[14]}
+        deck={DECKS[7]}
         isAllGameDone={true}
-        totalStars={180}
-        maxStars={180}
+        totalStars={72}
+        maxStars={72}
         onNextChapter={onNextChapter}
         onBackToChapters={onBackToChapters}
         onBackToHub={onBackToHub}
       />
     );
-    expect(screen.getByText("You Matched All 15 Chapters!")).toBeTruthy();
-    expect(screen.queryByText("Next Chapter →")).toBeNull();
+    expect(screen.getByText("You Matched All 8 Decks!")).toBeTruthy();
+    expect(screen.queryByText("Next Deck →")).toBeNull();
   });
 });
 
 describe("MemoryMatch orchestrator", () => {
-  test("navigates chapters → modes → play and back", () => {
+  test("navigates decks → modes → play and back", () => {
     render(
       <MemoryMatch
         stars={{}}
@@ -176,24 +181,24 @@ describe("MemoryMatch orchestrator", () => {
       />
     );
 
-    fireEvent.click(screen.getByLabelText(/Memory Match Chapter 1:/));
-    fireEvent.click(screen.getByLabelText("Play Buddy Faces"));
+    fireEvent.click(screen.getByLabelText(/Memory Match Deck 1:/));
+    fireEvent.click(screen.getByLabelText("Play Hint Hunt"));
     expect(screen.getByLabelText("Back to Match Modes")).toBeTruthy();
     fireEvent.click(screen.getByLabelText("Back to Match Modes"));
-    fireEvent.click(screen.getByLabelText("Back to Chapters"));
+    fireEvent.click(screen.getByLabelText("Back to Scripture Decks"));
     expect(screen.getByText("Memory Match")).toBeTruthy();
   });
 
-  test("win screen: replay, next mode, and chapter-done after the last mode", () => {
+  test("win screen: replay, next mode, and deck modes", () => {
     render(
       <MemoryMatch
-        stars={{ "mm-1-3": 2 }}
+        stars={{ "mm-1-2": 2 }}
         onSaveStar={vi.fn()}
         translation="ESV"
         onBackToHub={vi.fn()}
         onOpenSettings={vi.fn()}
         initialChapterId={1}
-        initialModeIdx={2}
+        initialModeIdx={1}
         initialScreen="win"
       />
     );
@@ -219,10 +224,10 @@ describe("MemoryMatch orchestrator", () => {
       />
     );
     fireEvent.click(screen.getByLabelText("Back to Match Modes"));
-    expect(screen.getByLabelText("Play Buddy Faces")).toBeTruthy();
+    expect(screen.getByLabelText("Play Hint Hunt")).toBeTruthy();
   });
 
-  test("next from win advances mode; after mode 3 it completes the chapter", () => {
+  test("next from win advances mode or jumps to unplayed mode", () => {
     const { unmount } = render(
       <MemoryMatch
         stars={{}}
@@ -236,35 +241,53 @@ describe("MemoryMatch orchestrator", () => {
       />
     );
     fireEvent.click(screen.getByText("Next match →"));
-    expect(screen.getByText(/Who Said It\?/)).toBeTruthy(); // now playing mode 1
+    expect(screen.getByText(/Verse Finder/)).toBeTruthy(); // now playing mode 1
     unmount();
 
-    // Last mode → chapter-done → next chapter
-    render(
+    // If on mode 2 but mode 0 is unplayed, next jumps to mode 0
+    const second = render(
       <MemoryMatch
-        stars={{}}
+        stars={{ "mm-1-1": 3 }}
         onSaveStar={vi.fn()}
         translation="ESV"
         onBackToHub={vi.fn()}
         onOpenSettings={vi.fn()}
         initialChapterId={1}
-        initialModeIdx={3}
+        initialModeIdx={2}
         initialScreen="win"
       />
     );
-    fireEvent.click(screen.getByText("Complete Chapter 🎉"));
-    expect(screen.getByText("Chapter 1 Matched!")).toBeTruthy();
-    fireEvent.click(screen.getByText("Next Chapter →"));
-    expect(screen.getByText(/Ch\. 2:/)).toBeTruthy();
+    fireEvent.click(screen.getByText("Deck Modes ←"));
+    expect(screen.getByText(/Hint Hunt/)).toBeTruthy(); // jumps to unplayed mode 0
+    second.unmount();
+  });
+
+  test("all modes solved in a deck triggers complete deck and next deck", () => {
+    render(
+      <MemoryMatch
+        stars={{ "mm-1-0": 3, "mm-1-1": 3 }}
+        onSaveStar={vi.fn()}
+        translation="ESV"
+        onBackToHub={vi.fn()}
+        onOpenSettings={vi.fn()}
+        initialChapterId={1}
+        initialModeIdx={2}
+        initialScreen="win"
+      />
+    );
+    fireEvent.click(screen.getByText("Complete Deck 🎉"));
+    expect(screen.getByText("Deck 1 Matched!")).toBeTruthy();
+    fireEvent.click(screen.getByText("Next Deck →"));
+    expect(screen.getByText(/Deck 2:/)).toBeTruthy();
   });
 
   test("completing a board saves a namespaced star and shows the fresh result", () => {
     vi.useFakeTimers();
-    const deck = buildDeck(CHAPTERS[0], 3, "ESV");
+    const cardDeck = buildDeck(DECKS[0], 2, "ESV");
     const completeBoard = (container) => {
       const cards = () => container.querySelectorAll(".mm-card");
       [0, 1, 2, 3].forEach((pairId) => {
-        const [a, b] = deck
+        const [a, b] = cardDeck
           .map((c, i) => ({ c, i }))
           .filter(({ c }) => c.pairId === pairId)
           .map(({ i }) => i);
@@ -285,12 +308,12 @@ describe("MemoryMatch orchestrator", () => {
         onBackToHub={vi.fn()}
         onOpenSettings={vi.fn()}
         initialChapterId={1}
-        initialModeIdx={3}
+        initialModeIdx={2}
         initialScreen="play"
       />
     );
     completeBoard(first.container);
-    expect(onSaveStar).toHaveBeenCalledWith("mm-1-3", 3);
+    expect(onSaveStar).toHaveBeenCalledWith("mm-1-2", 3);
     expect(screen.getByText(/Perfect memory/)).toBeTruthy();
     first.unmount();
 
@@ -298,39 +321,39 @@ describe("MemoryMatch orchestrator", () => {
     const onSaveStar2 = vi.fn();
     const second = render(
       <MemoryMatch
-        stars={{ "mm-1-3": 1 }}
+        stars={{ "mm-1-2": 1 }}
         onSaveStar={onSaveStar2}
         translation="ESV"
         onBackToHub={vi.fn()}
         onOpenSettings={vi.fn()}
         initialChapterId={1}
-        initialModeIdx={3}
+        initialModeIdx={2}
         initialScreen="play"
       />
     );
     completeBoard(second.container);
-    expect(onSaveStar2).toHaveBeenCalledWith("mm-1-3", 3);
+    expect(onSaveStar2).toHaveBeenCalledWith("mm-1-2", 3);
     second.unmount();
     vi.useRealTimers();
   });
 
-  test("finale: completing chapter 15's last mode shows the all-done card; hub return works", () => {
+  test("finale: completing Deck 8 shows the all-done card; hub return works", () => {
     const onBackToHub = vi.fn();
     render(
       <MemoryMatch
-        stars={{ "1-0": 3, "mm-15-0": "corrupt" }}
+        stars={{ "1-0": 3, "mm-8-0": 3, "mm-8-1": 3, "mm-8-2": "corrupt" }}
         onSaveStar={vi.fn()}
         translation="ESV"
         onBackToHub={onBackToHub}
         onOpenSettings={vi.fn()}
-        initialChapterId={15}
-        initialModeIdx={3}
+        initialChapterId={8}
+        initialModeIdx={2}
         initialScreen="win"
       />
     );
-    fireEvent.click(screen.getByText("Complete Chapter 🎉"));
-    expect(screen.getByText("You Matched All 15 Chapters!")).toBeTruthy();
-    fireEvent.click(screen.getByText("Chapter Select"));
+    fireEvent.click(screen.getByText("Complete Deck 🎉"));
+    expect(screen.getByText("You Matched All 8 Decks!")).toBeTruthy();
+    fireEvent.click(screen.getByText("Deck Select"));
     expect(screen.getByText("Memory Match")).toBeTruthy();
     fireEvent.click(screen.getByLabelText("Back to Game Hub"));
     expect(onBackToHub).toHaveBeenCalled();

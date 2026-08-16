@@ -1,17 +1,16 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { MemoryBoard } from "../../src/games/memory-match/MemoryBoard.jsx";
-import { buildDeck, MODES, starsForMisses } from "../../src/games/memory-match/matchData.js";
-import { CHAPTERS } from "../../src/data/chapters.js";
+import { buildDeck, MODES, DECKS, starsForMisses } from "../../src/games/memory-match/matchData.js";
 
-const chapter = CHAPTERS[0];
-const HALVES = 3; // smallest board: 4 pairs / 8 cards
+const deckObj = DECKS[0];
+const HALVES = 2; // Torn Verses: 4 pairs / 8 cards
 
 // The deck is deterministic, so tests can precompute the layout
-const deck = buildDeck(chapter, HALVES, "ESV");
+const cardDeck = buildDeck(deckObj, HALVES, "ESV");
 
 function cardIndexesOfPair(pairId) {
-  return deck
+  return cardDeck
     .map((c, i) => ({ c, i }))
     .filter(({ c }) => c.pairId === pairId)
     .map(({ i }) => i);
@@ -44,7 +43,7 @@ describe("MemoryBoard", () => {
 
   test("flips cards, matches a pair, and keeps it revealed and disabled", () => {
     const { container } = render(
-      <MemoryBoard chapter={chapter} modeIdx={HALVES} translation="ESV" onBackToModes={vi.fn()} onComplete={vi.fn()} />
+      <MemoryBoard deck={deckObj} modeIdx={HALVES} translation="ESV" onBackToModes={vi.fn()} onComplete={vi.fn()} />
     );
 
     const [a, b] = cardIndexesOfPair(0);
@@ -52,7 +51,7 @@ describe("MemoryBoard", () => {
 
     expect(cards[a].getAttribute("aria-label")).toBe(`Card ${a + 1}: hidden`);
     fireEvent.click(cards[a]);
-    expect(cards[a].getAttribute("aria-label")).toBe(`Card ${a + 1}: ${deck[a].text}`);
+    expect(cards[a].getAttribute("aria-label")).toBe(`Card ${a + 1}: ${cardDeck[a].text}`);
     expect(cards[a].className).toContain("flipped");
 
     fireEvent.click(cards[b]);
@@ -68,7 +67,7 @@ describe("MemoryBoard", () => {
 
   test("a non-matching pair flips back and counts a miss", () => {
     const { container } = render(
-      <MemoryBoard chapter={chapter} modeIdx={HALVES} translation="ESV" onBackToModes={vi.fn()} onComplete={vi.fn()} />
+      <MemoryBoard deck={deckObj} modeIdx={HALVES} translation="ESV" onBackToModes={vi.fn()} onComplete={vi.fn()} />
     );
 
     const [a] = cardIndexesOfPair(0);
@@ -91,7 +90,7 @@ describe("MemoryBoard", () => {
 
   test("re-clicking the single flipped card is a no-op", () => {
     const { container } = render(
-      <MemoryBoard chapter={chapter} modeIdx={HALVES} translation="ESV" onBackToModes={vi.fn()} onComplete={vi.fn()} />
+      <MemoryBoard deck={deckObj} modeIdx={HALVES} translation="ESV" onBackToModes={vi.fn()} onComplete={vi.fn()} />
     );
     const [a] = cardIndexesOfPair(0);
     const cards = getCards(container);
@@ -104,7 +103,7 @@ describe("MemoryBoard", () => {
   test("completing the board reports 3 stars on a flawless run", () => {
     const onComplete = vi.fn();
     const { container } = render(
-      <MemoryBoard chapter={chapter} modeIdx={HALVES} translation="ESV" onBackToModes={vi.fn()} onComplete={onComplete} />
+      <MemoryBoard deck={deckObj} modeIdx={HALVES} translation="ESV" onBackToModes={vi.fn()} onComplete={onComplete} />
     );
     [0, 1, 2, 3].forEach((p) => matchPair(container, p));
     act(() => vi.advanceTimersByTime(700));
@@ -117,7 +116,7 @@ describe("MemoryBoard", () => {
     // 4 misses on a 4-pair board → 2 stars
     const onComplete2 = vi.fn();
     const two = render(
-      <MemoryBoard chapter={chapter} modeIdx={HALVES} translation="ESV" onBackToModes={vi.fn()} onComplete={onComplete2} />
+      <MemoryBoard deck={deckObj} modeIdx={HALVES} translation="ESV" onBackToModes={vi.fn()} onComplete={onComplete2} />
     );
     for (let i = 0; i < 4; i++) missOnce(two.container);
     [0, 1, 2, 3].forEach((p) => matchPair(two.container, p));
@@ -129,7 +128,7 @@ describe("MemoryBoard", () => {
     // 9 misses → 1 star
     const onComplete1 = vi.fn();
     const one = render(
-      <MemoryBoard chapter={chapter} modeIdx={HALVES} translation="ESV" onBackToModes={vi.fn()} onComplete={onComplete1} />
+      <MemoryBoard deck={deckObj} modeIdx={HALVES} translation="ESV" onBackToModes={vi.fn()} onComplete={onComplete1} />
     );
     for (let i = 0; i < 9; i++) missOnce(one.container);
     [0, 1, 2, 3].forEach((p) => matchPair(one.container, p));
@@ -137,14 +136,13 @@ describe("MemoryBoard", () => {
     expect(onComplete1).toHaveBeenCalledWith(1, 9);
   });
 
-  test("renders buddy avatars in buddies mode and fires the back callback", () => {
+  test("renders Hint Hunt mode and fires the back callback", () => {
     const onBackToModes = vi.fn();
     const { container } = render(
-      <MemoryBoard chapter={chapter} modeIdx={0} translation="ESV" onBackToModes={onBackToModes} onComplete={vi.fn()} />
+      <MemoryBoard deck={deckObj} modeIdx={0} translation="ESV" onBackToModes={onBackToModes} onComplete={vi.fn()} />
     );
-    // 16 cards, half carry Buddy SVG faces
-    expect(getCards(container).length).toBe(16);
-    expect(container.querySelectorAll(".mm-card-front svg").length).toBe(8);
+    // 10 cards (5 pairs)
+    expect(getCards(container).length).toBe(10);
 
     fireEvent.click(screen.getByLabelText("Back to Match Modes"));
     expect(onBackToModes).toHaveBeenCalled();

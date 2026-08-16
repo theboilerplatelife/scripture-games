@@ -1,18 +1,119 @@
 /* ============================================================
    MEMORY MATCH — Deck building & scoring (pure helpers)
-   Levels are derived at runtime from the shared CHAPTERS data;
-   all randomness is seeded so boards are deterministic per
-   chapter + mode (and therefore testable).
+   Independent Themed Scripture Decks with 3 clean match modes:
+   1. Hint Hunt (🔍 Clue ↔ Verse)
+   2. Verse Finder (📖 Reference ↔ Verse)
+   3. Torn Verses (✂️ Half 1 ↔ Half 2)
    ============================================================ */
 import { shuffle } from "../../utils/random.js";
+import { CHAPTERS } from "../../data/chapters.js";
 
-// The four match modes. `pairs` balances card size against text length:
-// face cards can be small, verse-text cards need room to stay readable.
+// The three high-integrity scripture match modes:
 export const MODES = [
-  { id: "buddies", title: "Buddy Faces", icon: "🙂", pairs: 8, blurb: "Match each face to its name" },
-  { id: "quotes", title: "Who Said It?", icon: "💬", pairs: 6, blurb: "Match each speaker to their words" },
+  { id: "hints", title: "Hint Hunt", icon: "🔍", pairs: 5, blurb: "Match each clue to its verse" },
   { id: "refs", title: "Verse Finder", icon: "📖", pairs: 5, blurb: "Match each reference to its verse" },
   { id: "halves", title: "Torn Verses", icon: "✂️", pairs: 4, blurb: "Match the two halves of each verse" },
+];
+
+// Helper to grab all verses from a chapter by id
+const chVerses = (id) => CHAPTERS[id - 1].verses;
+
+// 8 Themed Scripture Decks for Memory Match:
+export const DECKS = [
+  {
+    id: 1,
+    title: "Little Seeds",
+    subtitle: "Simple, foundational truths to start your journey",
+    icon: "🌱",
+    color: "#e88b6a",
+    verses: [
+      ...chVerses(1).slice(0, 8),
+      chVerses(2)[0], // Psalm 119:105
+      chVerses(2)[1], // Philippians 4:4
+    ],
+  },
+  {
+    id: 2,
+    title: "Creation & Wonder",
+    subtitle: "The heavens, the earth, and all living things",
+    icon: "🌍",
+    color: "#5c8a3a",
+    verses: [
+      ...chVerses(4).slice(0, 8),
+      chVerses(1)[7], // Genesis 1:1
+      chVerses(2)[0], // Psalm 119:105
+    ],
+  },
+  {
+    id: 3,
+    title: "Joy & Praise",
+    subtitle: "Singing, thanksgiving, and gladness in God",
+    icon: "🎶",
+    color: "#d94f30",
+    verses: [
+      ...chVerses(3).slice(0, 8),
+      chVerses(2)[4], // Psalm 136:1
+      chVerses(2)[6], // Psalm 107:1
+    ],
+  },
+  {
+    id: 4,
+    title: "The Good Shepherd",
+    subtitle: "Resting in the loving care of our Shepherd",
+    icon: "🐑",
+    color: "#8a6bbf",
+    verses: [
+      ...chVerses(6).slice(0, 8),
+      chVerses(1)[4], // Psalm 23:1
+      chVerses(11)[6], // Psalm 4:8
+    ],
+  },
+  {
+    id: 5,
+    title: "Courage & The Armor",
+    subtitle: "Standing tall, brave, and strong in the Lord",
+    icon: "🦁",
+    color: "#b08d57",
+    verses: [
+      ...chVerses(7).slice(0, 8),
+      ...chVerses(12).slice(0, 4),
+    ],
+  },
+  {
+    id: 6,
+    title: "Wisdom & Kindness",
+    subtitle: "Gentle words, guarding your heart, and loving others",
+    icon: "💎",
+    color: "#3a86ff",
+    verses: [
+      ...chVerses(5).slice(0, 5),
+      ...chVerses(10).slice(0, 5),
+    ],
+  },
+  {
+    id: 7,
+    title: "Prayer & Peace",
+    subtitle: "Casting all your worries onto the Lord in prayer",
+    icon: "🕊️",
+    color: "#588157",
+    verses: [
+      ...chVerses(11).slice(0, 8),
+      chVerses(1)[0], // 1 Thessalonians 5:17
+      chVerses(2)[7], // Philippians 4:13
+    ],
+  },
+  {
+    id: 8,
+    title: "Hope & Eternal Life",
+    subtitle: "God's love for the world and eternal promises",
+    icon: "👑",
+    color: "#e63946",
+    verses: [
+      ...chVerses(13).slice(0, 4),
+      ...chVerses(14).slice(0, 2),
+      ...chVerses(15).slice(0, 6),
+    ],
+  },
 ];
 
 export function getVerseText(verse, translation) {
@@ -42,12 +143,12 @@ export function starsForMisses(misses, pairCount) {
   return 1;
 }
 
-// Build the shuffled card deck for one chapter + mode + translation.
-// Cards: { key, pairId, kind, character, text }
-export function buildDeck(chapter, modeIdx, translation) {
+// Build the shuffled card deck for one deck + mode + translation.
+// Cards: { key, pairId, kind, ref, text }
+export function buildDeck(deckObj, modeIdx, translation) {
   const mode = MODES[modeIdx];
 
-  let candidates = chapter.verses;
+  let candidates = deckObj.verses;
   if (mode.id === "halves") {
     // A verse must have enough words to tear in two.
     candidates = candidates.filter(
@@ -55,26 +156,23 @@ export function buildDeck(chapter, modeIdx, translation) {
     );
   }
 
-  const picked = shuffle(candidates, chapter.id * 101 + modeIdx * 17 + 5).slice(0, mode.pairs);
+  const picked = shuffle(candidates, deckObj.id * 101 + modeIdx * 17 + 5).slice(0, mode.pairs);
 
   const cards = [];
   picked.forEach((verse, pairId) => {
     const text = getVerseText(verse, translation);
-    if (mode.id === "buddies") {
-      cards.push({ pairId, kind: "buddy", character: verse.character, text: verse.name });
-      cards.push({ pairId, kind: "name", character: verse.character, text: verse.name });
-    } else if (mode.id === "quotes") {
-      cards.push({ pairId, kind: "speaker", character: verse.character, text: verse.name });
-      cards.push({ pairId, kind: "quote", character: verse.character, text: clipWords(text, 8) });
+    if (mode.id === "hints") {
+      cards.push({ pairId, kind: "hint", ref: verse.ref, text: verse.hint });
+      cards.push({ pairId, kind: "verse", ref: verse.ref, text: clipWords(text, 10) });
     } else if (mode.id === "refs") {
-      cards.push({ pairId, kind: "ref", character: verse.character, text: verse.ref });
-      cards.push({ pairId, kind: "verse", character: verse.character, text: clipWords(text, 12) });
+      cards.push({ pairId, kind: "ref", ref: verse.ref, text: verse.ref });
+      cards.push({ pairId, kind: "verse", ref: verse.ref, text: clipWords(text, 10) });
     } else {
       const [firstHalf, secondHalf] = splitHalves(text);
-      cards.push({ pairId, kind: "half1", character: verse.character, text: firstHalf });
-      cards.push({ pairId, kind: "half2", character: verse.character, text: secondHalf });
+      cards.push({ pairId, kind: "half1", ref: verse.ref, text: firstHalf });
+      cards.push({ pairId, kind: "half2", ref: verse.ref, text: secondHalf });
     }
   });
 
-  return shuffle(cards, chapter.id * 100 + modeIdx).map((card, i) => ({ ...card, key: `c${i}` }));
+  return shuffle(cards, deckObj.id * 100 + modeIdx).map((card, i) => ({ ...card, key: `c${i}` }));
 }

@@ -1,31 +1,30 @@
 import { audio } from "../../audio/SoundEngine.js";
-import { CHAPTERS } from "../../data/chapters.js";
 import { jitter } from "../../utils/random.js";
-import { MODES } from "./matchData.js";
+import { DECKS, MODES } from "./matchData.js";
 
 export function MMChapterSelect({
-  onSelectChapter,
+  onSelectChapter, // or onSelectDeck
   onBackToHub,
   onOpenSettings,
-  stars, // shared stars object; Memory Match keys are "mm-{chapId}-{modeIdx}"
+  stars, // shared stars object; Memory Match keys are "mm-{deckId}-{modeIdx}"
   translation,
 }) {
-  const getChapterStars = (chapId) =>
+  const getDeckStars = (deckId) =>
     MODES.reduce((acc, _, m) => {
-      const v = stars[`mm-${chapId}-${m}`];
+      const v = stars[`mm-${deckId}-${m}`];
       return acc + (typeof v === "number" ? v : 0);
     }, 0);
 
-  const isChapterUnlocked = (idx) => {
+  const isDeckUnlocked = (idx) => {
     if (idx === 0) return true;
-    return getChapterStars(CHAPTERS[idx - 1].id) > 0;
+    return getDeckStars(DECKS[idx - 1].id) > 0;
   };
 
   const totalEarned = Object.entries(stars).reduce(
     (a, [k, v]) => a + (k.startsWith("mm-") && typeof v === "number" ? v : 0),
     0
   );
-  const maxStars = CHAPTERS.length * MODES.length * 3; // 180
+  const maxStars = DECKS.length * MODES.length * 3; // 72
 
   return (
     <div className="vb-chapters-container">
@@ -61,43 +60,47 @@ export function MMChapterSelect({
       <div className="vb-title-card">
         <span className="vb-tape vb-tape-top" />
         <h1>Memory Match</h1>
-        <p className="vb-sub">Pick a chapter and flip the cards to find pairs!</p>
+        <p className="vb-sub">Pick a scripture deck and flip cards to find pairs!</p>
       </div>
 
       <p className="vb-note">
-        15 chapters &bull; 4 match modes each &bull; Verses in <strong>{translation}</strong>
+        8 Scripture Decks &bull; 3 match modes each &bull; Verses in <strong>{translation}</strong>
       </p>
 
       <div className="vb-chapters-grid">
-        {CHAPTERS.map((chap, idx) => {
-          const unlocked = isChapterUnlocked(idx);
-          const chapStars = getChapterStars(chap.id);
+        {DECKS.map((deckObj, idx) => {
+          const unlocked = isDeckUnlocked(idx);
+          const deckStars = getDeckStars(deckObj.id);
 
           return (
             <button
-              key={chap.id}
+              key={deckObj.id}
               className={`vb-chapter-card ${unlocked ? "" : "locked"}`}
-              style={{ "--rot": `${jitter(chap.id + 50, 1, -2, 2)}deg`, "--chap": chap.color, "--chap-tape": `${chap.color}8c` }}
+              style={{
+                "--rot": `${jitter(deckObj.id + 50, 1, -2, 2)}deg`,
+                "--chap": deckObj.color,
+                "--chap-tape": `${deckObj.color}8c`,
+              }}
               disabled={!unlocked}
               onClick={() => {
                 audio.playButtonClick();
-                onSelectChapter(chap.id);
+                onSelectChapter(deckObj.id);
               }}
-              aria-label={`Memory Match Chapter ${chap.id}: ${unlocked ? chap.title : "Locked"}`}
+              aria-label={`Memory Match Deck ${deckObj.id}: ${unlocked ? deckObj.title : "Locked"}`}
             >
               <span className="vb-tape vb-tape-top" />
               <div className="vb-chapter-header">
-                <span className="vb-chapter-num">Chapter {chap.id}</span>
-                <span className="vb-chapter-stars">⭐ {chapStars}/{MODES.length * 3}</span>
+                <span className="vb-chapter-num">Deck {deckObj.id}</span>
+                <span className="vb-chapter-stars">⭐ {deckStars}/{MODES.length * 3}</span>
               </div>
               <h2 className="vb-chapter-title">
-                {chap.icon} {unlocked ? chap.title : "Locked Chapter"}
+                {deckObj.icon} {unlocked ? deckObj.title : "Locked Deck"}
               </h2>
               <p className="vb-chapter-sub">
-                {unlocked ? chap.subtitle : "Earn at least 1 star in the previous chapter to unlock."}
+                {unlocked ? deckObj.subtitle : "Earn at least 1 star in the previous deck to unlock."}
               </p>
               <div className="vb-chapter-meta">
-                <span>4 Match Modes</span>
+                <span>3 Match Modes</span>
                 <span>{unlocked ? "Play →" : "🔒 Locked"}</span>
               </div>
             </button>

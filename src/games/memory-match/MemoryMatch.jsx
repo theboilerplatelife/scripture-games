@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { audio } from "../../audio/SoundEngine.js";
-import { CHAPTERS } from "../../data/chapters.js";
-import { MODES } from "./matchData.js";
+import { DECKS, MODES } from "./matchData.js";
 import { MMChapterSelect } from "./MMChapterSelect.jsx";
 import { ModeSelect } from "./ModeSelect.jsx";
 import { MemoryBoard } from "./MemoryBoard.jsx";
@@ -10,7 +9,7 @@ import { MMChapterDoneCard } from "./MMChapterDoneCard.jsx";
 import "./memory-match.css";
 
 export function MemoryMatch({
-  stars, // shared stars object; this game's keys are "mm-{chapId}-{modeIdx}"
+  stars, // shared stars object; Memory Match keys are "mm-{deckId}-{modeIdx}"
   onSaveStar,
   translation,
   onBackToHub,
@@ -23,15 +22,14 @@ export function MemoryMatch({
   const [screen, setScreen] = useState(initialScreen);
   const [selectedChapterId, setSelectedChapterId] = useState(initialChapterId);
   const [selectedModeIdx, setSelectedModeIdx] = useState(initialModeIdx);
-  // Star count from the just-finished board (win screen shows the fresh
-  // result, not the previously banked best)
+  // Star count from the just-finished board
   const [lastResult, setLastResult] = useState({ earned: 0, misses: 0 });
 
-  const currentChapter = CHAPTERS[selectedChapterId - 1];
+  const currentDeck = DECKS[selectedChapterId - 1];
   const starKey = `mm-${selectedChapterId}-${selectedModeIdx}`;
 
   useEffect(() => {
-    // One music-box track for the whole game (already mapped in SoundEngine)
+    // One music-box track for the whole game
     audio.setTrack("memory");
   }, []);
 
@@ -40,8 +38,8 @@ export function MemoryMatch({
     onBackToHub();
   }
 
-  function handleSelectChapter(chapId) {
-    setSelectedChapterId(chapId);
+  function handleSelectChapter(deckId) {
+    setSelectedChapterId(deckId);
     setScreen("modes");
   }
 
@@ -57,18 +55,34 @@ export function MemoryMatch({
     setScreen("win");
   }
 
+  // Check if all modes in current deck are completed (> 0 stars)
+  const isDeckComplete = MODES.every((_, m) => {
+    if (m === selectedModeIdx) return true; // current mode was just completed
+    const v = stars[`mm-${selectedChapterId}-${m}`];
+    return typeof v === "number" && v > 0;
+  });
+
+  const hasNextMode = selectedModeIdx + 1 < MODES.length;
+
   function handleNextFromWin() {
     audio.playButtonClick();
-    if (selectedModeIdx + 1 < MODES.length) {
-      setSelectedModeIdx((prev) => prev + 1);
-      setScreen("play");
-    } else {
-      if (selectedChapterId === CHAPTERS.length) {
+    if (isDeckComplete) {
+      if (selectedChapterId === DECKS.length) {
         audio.playAllDoneFanfare();
       } else {
         audio.playChapterFanfare();
       }
       setScreen("chapter-done");
+    } else if (hasNextMode) {
+      setSelectedModeIdx((prev) => prev + 1);
+      setScreen("play");
+    } else {
+      // Jump to the unplayed mode
+      const nextUnplayed = MODES.findIndex(
+        (_, m) => !(stars[`mm-${selectedChapterId}-${m}`] > 0)
+      );
+      setSelectedModeIdx(nextUnplayed);
+      setScreen("play");
     }
   }
 
@@ -79,7 +93,7 @@ export function MemoryMatch({
     setScreen("modes");
   }
 
-  const maxStars = CHAPTERS.length * MODES.length * 3; // 180
+  const maxStars = DECKS.length * MODES.length * 3; // 72
   const totalEarned = Object.entries(stars).reduce(
     (a, [k, v]) => a + (k.startsWith("mm-") && typeof v === "number" ? v : 0),
     0
@@ -99,18 +113,18 @@ export function MemoryMatch({
 
       {screen === "modes" && (
         <ModeSelect
-          chapter={currentChapter}
+          deck={currentDeck}
           stars={stars}
           translation={translation}
           onSelectMode={handleSelectMode}
-          onBackToChapters={() => setScreen("chapters")}
+          onBackToDecks={() => setScreen("chapters")}
         />
       )}
 
       {screen === "play" && (
         <MemoryBoard
           key={`${selectedChapterId}-${selectedModeIdx}-${translation}`}
-          chapter={currentChapter}
+          deck={currentDeck}
           modeIdx={selectedModeIdx}
           translation={translation}
           onBackToModes={() => setScreen("modes")}
@@ -120,11 +134,12 @@ export function MemoryMatch({
 
       {screen === "win" && (
         <MMWinCard
-          chapter={currentChapter}
+          deck={currentDeck}
           modeIdx={selectedModeIdx}
           earnedStars={lastResult.earned}
           misses={lastResult.misses}
-          hasNextMode={selectedModeIdx + 1 < MODES.length}
+          isDeckComplete={isDeckComplete}
+          hasNextMode={hasNextMode}
           onReplay={() => setScreen("play")}
           onNext={handleNextFromWin}
           onBackToModes={() => setScreen("modes")}
@@ -133,8 +148,8 @@ export function MemoryMatch({
 
       {screen === "chapter-done" && (
         <MMChapterDoneCard
-          chapter={currentChapter}
-          isAllGameDone={selectedChapterId === CHAPTERS.length}
+          deck={currentDeck}
+          isAllGameDone={selectedChapterId === DECKS.length}
           totalStars={totalEarned}
           maxStars={maxStars}
           onNextChapter={handleNextChapter}
