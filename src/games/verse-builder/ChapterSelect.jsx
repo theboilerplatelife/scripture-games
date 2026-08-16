@@ -83,7 +83,7 @@ export function ChapterSelect({
             <button
               key={chap.id}
               className={`vb-chapter-card ${unlocked ? "" : "locked"}`}
-              style={{ transform: `rotate(${jitter(chap.id, 1, -2, 2)}deg)` }}
+              style={{ "--rot": `${jitter(chap.id, 1, -2, 2)}deg` }}
               disabled={!unlocked}
               onClick={() => {
                 audio.playButtonClick();

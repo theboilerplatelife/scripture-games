@@ -16,7 +16,7 @@
 
 .splash-card {
   position: relative;
-  background: #fdfaf1;
+  background: var(--paper);
   max-width: 480px;
   width: 100%;
   padding: 36px 28px 30px;
@@ -61,14 +61,14 @@
   font-family: 'Schoolbell', cursive;
   font-size: 46px;
   line-height: 1;
-  color: #d94f30;
+  color: var(--vermilion);
   margin: 0 0 8px 0;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.08);
 }
 
 .splash-sub {
   font-size: 19px;
-  color: #4a4238;
+  color: var(--ink-soft);
   margin: 0 0 20px 0;
   line-height: 1.35;
 }
@@ -83,7 +83,7 @@
 
 .splash-chip {
   background: rgba(217, 79, 48, 0.08);
-  border: 1px dashed #d94f30;
+  border: 1px dashed var(--vermilion);
   border-radius: 20px;
   padding: 4px 12px;
   font-size: 14px;

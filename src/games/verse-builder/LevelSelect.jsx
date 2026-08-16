@@ -63,7 +63,7 @@ export function LevelSelect({
             <button
               key={v.ref}
               className={`vb-level-card ${unlocked ? "" : "locked"}`}
-              style={{ transform: `rotate(${jitter(chapter.id * 10 + i, 3, -3, 3)}deg)` }}
+              style={{ "--rot": `${jitter(chapter.id * 10 + i, 3, -3, 3)}deg` }}
               disabled={!unlocked}
               onClick={() => {
                 audio.playButtonClick();

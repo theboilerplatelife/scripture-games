@@ -59,7 +59,7 @@ export function GameHub({
             audio.playButtonClick();
             onSelectGame("verse-builder");
           }}
-          style={{ transform: "rotate(-1deg)" }}
+          style={{ "--rot": "-1deg" }}
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
@@ -84,7 +84,7 @@ export function GameHub({
         {/* Game 2: Who Am I? */}
         <div
           className="hub-game-card disabled"
-          style={{ transform: "rotate(1.2deg)" }}
+          style={{ "--rot": "1.2deg" }}
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
@@ -108,7 +108,7 @@ export function GameHub({
         {/* Game 3: Story Sequencer */}
         <div
           className="hub-game-card disabled"
-          style={{ transform: "rotate(-0.8deg)" }}
+          style={{ "--rot": "-0.8deg" }}
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
@@ -132,7 +132,7 @@ export function GameHub({
         {/* Game 4: Sword Drill */}
         <div
           className="hub-game-card disabled"
-          style={{ transform: "rotate(0.9deg)" }}
+          style={{ "--rot": "0.9deg" }}
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
@@ -156,7 +156,7 @@ export function GameHub({
         {/* Game 5: Memory Match */}
         <div
           className="hub-game-card disabled"
-          style={{ transform: "rotate(-1.4deg)" }}
+          style={{ "--rot": "-1.4deg" }}
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
@@ -180,7 +180,7 @@ export function GameHub({
         {/* Game 6: Journey Maps */}
         <div
           className="hub-game-card disabled"
-          style={{ transform: "rotate(1.5deg)" }}
+          style={{ "--rot": "1.5deg" }}
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">

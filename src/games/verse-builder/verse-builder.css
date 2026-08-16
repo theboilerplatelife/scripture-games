@@ -13,31 +13,6 @@
   box-sizing: border-box;
 }
 
-/* Washi tape styling */
-.vb-tape {
-  position: absolute;
-  background: rgba(255, 235, 175, 0.75);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-  pointer-events: none;
-  z-index: 5;
-}
-
-.vb-tape-top {
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%) rotate(-1deg);
-  width: 72px;
-  height: 18px;
-}
-
-.vb-tape-mini {
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%) rotate(2deg);
-  width: 38px;
-  height: 12px;
-}
-
 /* Header & Top Bar Navigation */
 .vb-header-row {
   width: 100%;
@@ -54,65 +29,6 @@
   align-items: center;
 }
 
-.vb-back {
-  position: relative;
-  background: #fdfaf1;
-  border: none;
-  font-family: 'Schoolbell', cursive;
-  font-size: 24px;
-  padding: 6px 14px 4px;
-  cursor: pointer;
-  clip-path: polygon(0% 10%, 100% 0%, 95% 90%, 5% 100%);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-  transition: transform 0.12s ease;
-  color: #2b2621;
-}
-
-.vb-back:active {
-  transform: scale(0.92);
-}
-
-.vb-music-toggle {
-  position: relative;
-  background: #fdfaf1;
-  border: none;
-  font-family: 'Schoolbell', cursive;
-  font-size: 15px;
-  padding: 6px 12px;
-  cursor: pointer;
-  clip-path: polygon(2% 0%, 98% 5%, 100% 95%, 0% 100%);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-  color: #2b2621;
-}
-
-/* Common Buttons */
-.vb-btn {
-  position: relative;
-  background: #d94f30;
-  color: #fff;
-  border: none;
-  font-family: 'Schoolbell', cursive;
-  font-size: 20px;
-  padding: 10px 22px;
-  cursor: pointer;
-  clip-path: polygon(1% 5%, 99% 0%, 98% 95%, 2% 100%);
-  box-shadow: 0 4px 10px rgba(217, 79, 48, 0.35);
-  transition: transform 0.12s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.vb-btn:active {
-  transform: scale(0.94);
-}
-
-.vb-btn.ghost {
-  background: #fdfaf1;
-  color: #2b2621;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
-}
-
 /* ---- Chapter Selection Screen ---- */
 .vb-chapters-container {
   width: 100%;
@@ -120,41 +36,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.vb-title-card {
-  position: relative;
-  background: #fdfaf1;
-  padding: 20px 30px 16px;
-  margin-top: 4px;
-  text-align: center;
-  max-width: 480px;
-  width: 100%;
-  box-sizing: border-box;
-  transform: rotate(-1deg);
-  clip-path: polygon(1% 3%, 35% 0%, 70% 2%, 99% 0.5%, 100% 35%, 98.5% 70%, 100% 97%, 65% 100%, 30% 98%, 0% 100%, 1.5% 55%);
-  box-shadow: 0 5px 14px rgba(0,0,0,0.15);
-}
-
-.vb-title-card h1 {
-  font-family: 'Schoolbell', cursive;
-  font-size: 44px;
-  line-height: 1;
-  margin: 0;
-  color: #d94f30;
-}
-
-.vb-title-card .vb-sub {
-  font-size: 18px;
-  margin: 8px 0 0;
-  color: #4a4238;
-}
-
-.vb-note {
-  margin: 14px 0 10px;
-  font-size: 15px;
-  opacity: 0.8;
-  text-align: center;
 }
 
 .vb-chapters-grid {
@@ -167,7 +48,7 @@
 
 .vb-chapter-card {
   position: relative;
-  background: #fdfaf1;
+  background: var(--paper);
   border: none;
   padding: 16px 18px;
   text-align: left;
@@ -180,15 +61,16 @@
   gap: 4px;
   font-family: inherit;
   color: inherit;
+  transform: rotate(var(--rot, 0deg));
 }
 
 .vb-chapter-card:hover:not(.locked) {
-  transform: scale(1.02) rotate(0deg) !important;
+  transform: scale(1.02) rotate(0deg);
   box-shadow: 0 6px 14px rgba(0,0,0,0.2);
 }
 
 .vb-chapter-card:active:not(.locked) {
-  transform: scale(0.97) !important;
+  transform: scale(0.97);
 }
 
 .vb-chapter-card.locked {
@@ -206,7 +88,7 @@
 .vb-chapter-num {
   font-family: 'Schoolbell', cursive;
   font-size: 16px;
-  color: #3e7cb1;
+  color: var(--slate);
 }
 
 .vb-chapter-stars {
@@ -216,7 +98,7 @@
 .vb-chapter-title {
   font-family: 'Schoolbell', cursive;
   font-size: 24px;
-  color: #2b2621;
+  color: var(--ink);
   margin: 2px 0 0;
 }
 
@@ -233,18 +115,8 @@
   align-items: center;
   margin-top: 6px;
   padding-top: 6px;
-  border-top: 1px dashed #d5c8b2;
+  border-top: 1px dashed var(--sand);
   font-size: 13px;
-}
-
-.vb-total {
-  margin-top: 24px;
-  font-family: 'Schoolbell', cursive;
-  font-size: 20px;
-  color: #3e7cb1;
-  background: rgba(253, 250, 241, 0.8);
-  padding: 6px 18px;
-  border-radius: 20px;
 }
 
 /* ---- Level Selection Screen ---- */
@@ -272,7 +144,7 @@
 
 .vb-level-card {
   position: relative;
-  background: #fdfaf1;
+  background: var(--paper);
   border: none;
   padding: 16px 8px 10px;
   font-family: inherit;
@@ -285,10 +157,11 @@
   align-items: center;
   gap: 3px;
   transition: transform 0.15s ease;
+  transform: rotate(var(--rot, 0deg));
 }
 
 .vb-level-card:active:not(.locked) {
-  transform: scale(0.96) !important;
+  transform: scale(0.96);
 }
 
 .vb-level-card.locked {
@@ -303,7 +176,7 @@
   left: 10px;
   font-family: 'Schoolbell', cursive;
   font-size: 20px;
-  color: #3e7cb1;
+  color: var(--slate);
 }
 
 .vb-level-ref {
@@ -362,7 +235,7 @@
 
 .vb-ref-chip {
   position: relative;
-  background: #fdfaf1;
+  background: var(--paper);
   padding: 8px 18px 6px;
   font-family: 'Schoolbell', cursive;
   font-size: 20px;
@@ -376,7 +249,7 @@
 
 .vb-ref-trans-badge {
   font-size: 13px;
-  color: #3e7cb1;
+  color: var(--slate);
   font-family: 'Patrick Hand', cursive;
 }
 
@@ -402,7 +275,7 @@
 }
 
 .vb-clear-btn {
-  background: #fdfaf1;
+  background: var(--paper);
   border: 1.5px dashed #b9ac95;
   border-radius: 8px;
   font-family: 'Schoolbell', cursive;
@@ -442,7 +315,7 @@
 
 .vb-bubble {
   position: relative;
-  background: #fdfaf1;
+  background: var(--paper);
   padding: 8px 14px;
   font-size: 16px;
   border-radius: 12px;
@@ -456,14 +329,14 @@
   left: -8px;
   bottom: 10px;
   border: 7px solid transparent;
-  border-right-color: #fdfaf1;
+  border-right-color: var(--paper);
 }
 
 /* Notebook lined strip */
 .vb-strip {
   background:
-    repeating-linear-gradient(#fdfaf1 0 34px, #aac4e0 34px 35px),
-    #fdfaf1;
+    repeating-linear-gradient(var(--paper) 0 34px, #aac4e0 34px 35px),
+    var(--paper);
   clip-path: polygon(0.5% 2%, 25% 0%, 75% 1.5%, 99.5% 0.5%, 100% 40%, 99% 98%, 70% 100%, 30% 98.5%, 0% 100%, 1% 50%);
   box-shadow: 0 4px 10px rgba(0,0,0,0.18);
   padding: 16px 12px;
@@ -504,7 +377,7 @@
 .vb-slot.shake .vb-scrap {
   animation: vb-shake 1.4s ease-in-out;
   background: #fbd6ce !important;
-  color: #a33520 !important;
+  color: var(--vermilion-deep) !important;
   box-shadow: 0 0 0 2px rgba(217, 79, 48, 0.45);
 }
 
@@ -518,7 +391,7 @@
 .vb-scrap {
   position: relative;
   display: inline-block;
-  background: #fffef8;
+  background: var(--paper-bright);
   padding: 8px 13px;
   font-size: 20px;
   line-height: 1;
@@ -646,7 +519,7 @@
 
 .vb-win-card {
   position: relative;
-  background: #fdfaf1;
+  background: var(--paper);
   width: 100%;
   padding: 26px 22px 24px;
   text-align: center;
@@ -672,13 +545,13 @@
   font-size: 22px;
   line-height: 1.35;
   margin: 6px 4px;
-  color: #2b2621;
+  color: var(--ink);
 }
 
 .vb-win-ref {
   font-family: 'Schoolbell', cursive;
   font-size: 18px;
-  color: #3e7cb1;
+  color: var(--slate);
   margin: 2px 0 12px;
 }
 
@@ -731,7 +604,7 @@
 
 /* Stars Pill in LevelSelect Topbar */
 .vb-stars-pill {
-  background: #fdfaf1;
+  background: var(--paper);
   font-family: 'Schoolbell', cursive;
   font-size: 16px;
   color: #8c6d1f;

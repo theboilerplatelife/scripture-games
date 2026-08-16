@@ -230,6 +230,22 @@ const globalCss = `
   src: url('/fonts/schoolbell-latin.woff2') format('woff2');
 }
 
+/* ---- Design Tokens: the single source for the scrapbook palette ---- */
+:root {
+  --paper: #fdfaf1;        /* cream cardstock */
+  --paper-bright: #fffef8; /* fresh scrap highlight */
+  --kraft: #c9a06b;        /* kraft-paper desk */
+  --vermilion: #d94f30;    /* marker red: titles & primary actions */
+  --vermilion-deep: #a33520;
+  --leaf: #5c8a3a;         /* leaf green: success & go */
+  --leaf-bright: #689e42;
+  --slate: #3e7cb1;        /* pencil blue: references & counts */
+  --ink: #2b2621;          /* heavy pencil ink */
+  --ink-soft: #4a4238;     /* body ink */
+  --sand: #d5c8b2;         /* dashed rules & borders */
+  --tape: rgba(250, 228, 158, 0.75); /* washi tape */
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -237,7 +253,7 @@ const globalCss = `
 body {
   margin: 0;
   padding: 0;
-  background: #c9a06b;
+  background: var(--kraft);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -245,12 +261,12 @@ body {
 .vb-root {
   min-height: 100vh;
   font-family: 'Patrick Hand', 'Comic Sans MS', cursive;
-  color: #4a4238;
+  color: var(--ink-soft);
   background:
     radial-gradient(circle at 20% 10%, rgba(255,255,255,0.10), transparent 40%),
     radial-gradient(circle at 80% 90%, rgba(0,0,0,0.08), transparent 40%),
     repeating-linear-gradient(87deg, rgba(0,0,0,0.025) 0 3px, transparent 3px 9px),
-    #c9a06b;
+    var(--kraft);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -262,7 +278,7 @@ body {
 /* ---- Washi Tape Decor ---- */
 .vb-tape {
   position: absolute;
-  background: rgba(250, 228, 158, 0.65);
+  background: var(--tape);
   box-shadow: 0 1px 2px rgba(0,0,0,0.12);
   transform: rotate(-3deg);
   pointer-events: none;
@@ -285,11 +301,11 @@ body {
 
 /* ---- Buttons & Controls ---- */
 .vb-music-toggle {
-  background: #fdfaf1;
+  background: var(--paper);
   border: none;
   font-family: 'Schoolbell', cursive;
   font-size: 15px;
-  color: #4a4238;
+  color: var(--ink-soft);
   cursor: pointer;
   padding: 7px 14px 6px;
   display: inline-flex;
@@ -303,21 +319,21 @@ body {
 }
 .vb-music-toggle:hover {
   transform: rotate(0deg) scale(1.04);
-  background: #fffef8;
+  background: var(--paper-bright);
 }
 .vb-music-toggle:active {
   transform: scale(0.95);
 }
 
 .vb-back {
-  background: #fdfaf1;
+  background: var(--paper);
   border: none;
   font-size: 22px;
   font-family: inherit;
   width: 42px;
   height: 42px;
   cursor: pointer;
-  color: #4a4238;
+  color: var(--ink-soft);
   clip-path: polygon(8% 2%, 95% 0%, 100% 90%, 4% 100%);
   box-shadow: 0 2px 5px rgba(0,0,0,0.15);
   display: flex;
@@ -335,8 +351,8 @@ body {
 .vb-btn {
   font-family: 'Schoolbell', cursive;
   font-size: 20px;
-  color: #fdfaf1;
-  background: #5c8a3a;
+  color: var(--paper);
+  background: var(--leaf);
   border: none;
   padding: 10px 22px 8px;
   cursor: pointer;
@@ -345,7 +361,7 @@ body {
   transition: transform 0.12s ease, background 0.15s ease;
 }
 .vb-btn:hover {
-  background: #689e42;
+  background: var(--leaf-bright);
   transform: scale(1.03);
 }
 .vb-btn.ghost {
@@ -361,7 +377,7 @@ body {
 /* ---- Title Card & Shared Text ---- */
 .vb-title-card {
   position: relative;
-  background: #fdfaf1;
+  background: var(--paper);
   padding: 22px 34px 16px;
   margin-top: 10px;
   transform: rotate(-1.5deg);
@@ -376,7 +392,7 @@ body {
   font-size: 46px;
   line-height: 0.95;
   margin: 0;
-  color: #d94f30;
+  color: var(--vermilion);
   text-shadow: 1px 1px 0 rgba(0,0,0,0.08);
 }
 .vb-sub {
@@ -415,7 +431,7 @@ body {
 }
 .vb-modal-card {
   position: relative;
-  background: #fdfaf1;
+  background: var(--paper);
   width: 100%;
   max-width: 500px;
   max-height: 90vh;
@@ -429,14 +445,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px dashed #d5c8b2;
+  border-bottom: 2px dashed var(--sand);
   padding-bottom: 8px;
   margin-bottom: 14px;
 }
 .vb-modal-title {
   font-family: 'Schoolbell', cursive;
   font-size: 26px;
-  color: #d94f30;
+  color: var(--vermilion);
   margin: 0;
 }
 .vb-modal-close {
@@ -453,7 +469,7 @@ body {
 .vb-settings-heading {
   font-family: 'Schoolbell', cursive;
   font-size: 19px;
-  color: #2b2621;
+  color: var(--ink);
   margin: 0 0 4px;
 }
 .vb-settings-desc {
@@ -467,8 +483,8 @@ body {
   gap: 10px;
 }
 .vb-trans-card {
-  background: #fffef8;
-  border: 1.5px solid #d5c8b2;
+  background: var(--paper-bright);
+  border: 1.5px solid var(--sand);
   padding: 10px 12px;
   text-align: left;
   cursor: pointer;
@@ -479,10 +495,10 @@ body {
 }
 .vb-trans-card:hover {
   background: #f8f4e6;
-  border-color: #d94f30;
+  border-color: var(--vermilion);
 }
 .vb-trans-card.active {
-  border-color: #5c8a3a;
+  border-color: var(--leaf);
   background: #f2f7ee;
   box-shadow: 0 0 0 2px rgba(92, 138, 58, 0.35);
 }
@@ -495,16 +511,16 @@ body {
   font-family: 'Schoolbell', cursive;
   font-size: 18px;
   font-weight: bold;
-  color: #2b2621;
+  color: var(--ink);
 }
 .vb-trans-badge {
   font-size: 12px;
-  color: #5c8a3a;
+  color: var(--leaf);
 }
 .vb-trans-name {
   font-size: 14px;
   font-weight: bold;
-  color: #4a4238;
+  color: var(--ink-soft);
   margin-top: 2px;
 }
 .vb-trans-tagline {
@@ -515,7 +531,7 @@ body {
 .vb-trans-check {
   display: inline-block;
   font-size: 12px;
-  color: #5c8a3a;
+  color: var(--leaf);
   font-weight: bold;
   margin-top: 4px;
 }
@@ -530,11 +546,11 @@ body {
   font-family: 'Schoolbell', cursive;
   font-size: 15px;
   padding: 6px 14px;
-  border: 1px solid #d5c8b2;
+  border: 1px solid var(--sand);
   border-radius: 20px;
   cursor: pointer;
-  background: #5c8a3a;
-  color: #fdfaf1;
+  background: var(--leaf);
+  color: var(--paper);
   transition: all 0.15s ease;
 }
 .vb-toggle-switch.off {
@@ -544,15 +560,15 @@ body {
   display: flex;
   justify-content: flex-end;
   margin-top: 14px;
-  border-top: 1px dashed #d5c8b2;
+  border-top: 1px dashed var(--sand);
   padding-top: 12px;
 }
 .vb-reset-btn {
   font-family: 'Schoolbell', cursive;
   font-size: 14px;
-  color: #a33520;
+  color: var(--vermilion-deep);
   background: #fbe5e0;
-  border: 1px dashed #d94f30;
+  border: 1px dashed var(--vermilion);
   padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
@@ -567,7 +583,7 @@ body {
   font-size: 16px;
   color: #2b593f;
   background: #e5f4e3;
-  border: 1.5px dashed #5c8a3a;
+  border: 1.5px dashed var(--leaf);
   padding: 6px 16px;
   border-radius: 8px;
   cursor: pointer;
@@ -621,7 +637,7 @@ body {
 .vb-slider-val {
   font-family: 'Schoolbell', cursive;
   font-size: 16px;
-  color: #d94f30;
+  color: var(--vermilion);
   font-weight: bold;
 }
 .vb-range-slider {
@@ -642,22 +658,22 @@ body {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #5c8a3a;
-  border: 2px solid #fdfaf1;
+  background: var(--leaf);
+  border: 2px solid var(--paper);
   box-shadow: 0 2px 5px rgba(0,0,0,0.25);
   cursor: pointer;
   transition: transform 0.1s ease, background 0.15s ease;
 }
 .vb-range-slider::-webkit-slider-thumb:hover {
   transform: scale(1.15);
-  background: #689e42;
+  background: var(--leaf-bright);
 }
 .vb-range-slider::-moz-range-thumb {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #5c8a3a;
-  border: 2px solid #fdfaf1;
+  background: var(--leaf);
+  border: 2px solid var(--paper);
   box-shadow: 0 2px 5px rgba(0,0,0,0.25);
   cursor: pointer;
 }

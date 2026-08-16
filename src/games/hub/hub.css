@@ -23,7 +23,7 @@
 
 .hub-hero {
   position: relative;
-  background: #fdfaf1;
+  background: var(--paper);
   padding: 24px 36px 18px;
   margin-top: 10px;
   text-align: center;
@@ -40,14 +40,14 @@
   font-size: 50px;
   line-height: 0.95;
   margin: 0;
-  color: #d94f30;
+  color: var(--vermilion);
   text-shadow: 1px 1px 0 rgba(0,0,0,0.08);
 }
 
 .hub-hero .hub-subtitle {
   font-size: 20px;
   margin: 10px 0 0;
-  color: #4a4238;
+  color: var(--ink-soft);
 }
 
 .hub-trans-pill {
@@ -56,11 +56,11 @@
   gap: 6px;
   margin-top: 12px;
   background: rgba(217, 79, 48, 0.1);
-  border: 1px dashed #d94f30;
+  border: 1px dashed var(--vermilion);
   padding: 3px 12px;
   border-radius: 12px;
   font-size: 14px;
-  color: #a33520;
+  color: var(--vermilion-deep);
 }
 
 .hub-stats-bar {
@@ -90,7 +90,7 @@
 
 .hub-game-card {
   position: relative;
-  background: #fdfaf1;
+  background: var(--paper);
   border: none;
   border-radius: 0;
   padding: 22px 20px 18px;
@@ -104,15 +104,16 @@
   gap: 8px;
   color: inherit;
   font-family: inherit;
+  transform: rotate(var(--rot, 0deg));
 }
 
 .hub-game-card:hover {
-  transform: scale(1.02) rotate(0deg) !important;
+  transform: scale(1.02) rotate(0deg);
   box-shadow: 0 8px 18px rgba(0,0,0,0.22);
 }
 
 .hub-game-card:active {
-  transform: scale(0.97) !important;
+  transform: scale(0.97);
 }
 
 .hub-game-card.disabled {
@@ -122,7 +123,8 @@
 }
 
 .hub-game-card.disabled:hover {
-  transform: none !important;
+  transform: rotate(var(--rot, 0deg));
+  box-shadow: 0 5px 12px rgba(0,0,0,0.16);
 }
 
 .hub-card-header {
@@ -136,8 +138,8 @@
 }
 
 .hub-game-badge {
-  background: #5c8a3a;
-  color: #fdfaf1;
+  background: var(--leaf);
+  color: var(--paper);
   font-family: 'Schoolbell', cursive;
   font-size: 13px;
   padding: 3px 9px;
@@ -151,7 +153,7 @@
 .hub-game-title {
   font-family: 'Schoolbell', cursive;
   font-size: 25px;
-  color: #2b2621;
+  color: var(--ink);
   margin: 0;
 }
 
@@ -185,8 +187,8 @@
 
 .hub-pill.highlight {
   background: rgba(217, 79, 48, 0.09);
-  border-color: #d94f30;
-  color: #a33520;
+  border-color: var(--vermilion);
+  color: var(--vermilion-deep);
 }
 
 .hub-game-meta {
@@ -195,14 +197,14 @@
   align-items: center;
   margin-top: 6px;
   padding-top: 8px;
-  border-top: 1px dashed #d5c8b2;
+  border-top: 1px dashed var(--sand);
   font-size: 13px;
 }
 
 .hub-play-btn {
   font-family: 'Schoolbell', cursive;
   font-size: 15px;
-  color: #d94f30;
+  color: var(--vermilion);
   font-weight: bold;
 }
 
