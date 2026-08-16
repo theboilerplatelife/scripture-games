@@ -14,25 +14,19 @@ export function VerseBuilder({
   translation,
   onBackToHub,
   onOpenSettings,
-  jumpToVerse,
-  onClearJump,
+  initialChapterId = 1,
+  initialLevelIdx = 0,
+  initialScreen = "chapters",
 }) {
   // Screen state: "chapters" | "levels" | "play" | "win" | "chapter-done"
-  const [screen, setScreen] = useState(() => (jumpToVerse ? "play" : "chapters"));
-  const [selectedChapterId, setSelectedChapterId] = useState(() => (jumpToVerse ? jumpToVerse.chapterId : 1));
-  const [selectedLevelIdx, setSelectedLevelIdx] = useState(() => (jumpToVerse ? jumpToVerse.levelIdx : 0));
+  const [screen, setScreen] = useState(initialScreen);
+  const [selectedChapterId, setSelectedChapterId] = useState(initialChapterId);
+  const [selectedLevelIdx, setSelectedLevelIdx] = useState(initialLevelIdx);
 
   const currentChapter = CHAPTERS[selectedChapterId - 1];
   const currentVerse = currentChapter.verses[selectedLevelIdx];
   const starKey = `${selectedChapterId}-${selectedLevelIdx}`;
   const currentEarnedStars = stars[starKey] || 0;
-
-  // Consume jumpToVerse once received
-  useEffect(() => {
-    if (jumpToVerse && onClearJump) {
-      onClearJump();
-    }
-  }, [jumpToVerse, onClearJump]);
 
   function handleGoToHub() {
     setScreen("chapters");

@@ -191,7 +191,9 @@ describe("Verse Builder Gameplay Flow Tests", () => {
         translation="ESV"
         onBackToHub={handleBackToHub}
         onOpenSettings={handleOpenSettings}
-        jumpToVerse={{ chapterId: 1, levelIdx: 7 }}
+        initialChapterId={1}
+        initialLevelIdx={7}
+        initialScreen="play"
       />
     );
 
@@ -251,7 +253,9 @@ describe("Verse Builder Gameplay Flow Tests", () => {
         translation="ESV"
         onBackToHub={handleBackToHub}
         onOpenSettings={handleOpenSettings}
-        jumpToVerse={{ chapterId: 15, levelIdx: 7 }}
+        initialChapterId={15}
+        initialLevelIdx={7}
+        initialScreen="play"
       />
     );
 
@@ -293,7 +297,9 @@ describe("Verse Builder Gameplay Flow Tests", () => {
         translation="ESV"
         onBackToHub={handleBackToHub}
         onOpenSettings={handleOpenSettings}
-        jumpToVerse={{ chapterId: 1, levelIdx: 0 }}
+        initialChapterId={1}
+        initialLevelIdx={0}
+        initialScreen="play"
       />
     );
 
@@ -344,7 +350,9 @@ describe("Verse Builder Gameplay Flow Tests", () => {
         translation="ESV"
         onBackToHub={handleBackToHub}
         onOpenSettings={handleOpenSettings}
-        jumpToVerse={{ chapterId: 1, levelIdx: 0 }}
+        initialChapterId={1}
+        initialLevelIdx={0}
+        initialScreen="play"
       />
     );
 

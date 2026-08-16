@@ -78,7 +78,6 @@ export default function App() {
 
   const handleResetProgress = () => {
     setStars({});
-    setJumpToVerse(null);
     setResetCount((c) => c + 1);
     try {
       localStorage.removeItem(STORAGE_STARS_KEY);
@@ -144,28 +143,6 @@ export default function App() {
   };
 
   const [hasStarted, setHasStarted] = useState(false);
-  const [jumpToVerse, setJumpToVerse] = useState(null);
-
-  const handleTestEnding = () => {
-    // 1. Award 3 stars to all chapters 1..14 and levels 0..6 of chapter 15
-    const nextStars = { ...stars };
-    for (let c = 1; c <= 14; c++) {
-      for (let l = 0; l < 8; l++) {
-        nextStars[`${c}-${l}`] = 3;
-      }
-    }
-    for (let l = 0; l < 7; l++) {
-      nextStars[`15-${l}`] = 3;
-    }
-    setStars(nextStars);
-    try {
-      localStorage.setItem(STORAGE_STARS_KEY, JSON.stringify(nextStars));
-    } catch {}
-
-    // 2. Open verse-builder at Chapter 15 Level 8 (John 3:16)
-    setActiveGame("verse-builder");
-    setJumpToVerse({ chapterId: 15, levelIdx: 7, timestamp: Date.now() });
-  };
 
   return (
     <div className="vb-root" onClick={handleUserInteract}>
@@ -185,7 +162,6 @@ export default function App() {
           {activeGame === "hub" && (
             <GameHub
               onSelectGame={(gameId) => {
-                setJumpToVerse(null);
                 setActiveGame(gameId);
               }}
               onOpenSettings={() => {
@@ -205,15 +181,12 @@ export default function App() {
               onSaveStar={handleSaveStar}
               translation={translation}
               onBackToHub={() => {
-                setJumpToVerse(null);
                 setActiveGame("hub");
               }}
               onOpenSettings={() => {
                 audio.playSettingsChime();
                 setIsSettingsOpen(true);
               }}
-              jumpToVerse={jumpToVerse}
-              onClearJump={() => setJumpToVerse(null)}
             />
           )}
         </>
@@ -232,7 +205,6 @@ export default function App() {
         sfxVol={sfxVol}
         onChangeSfxVol={setSfxVol}
         onResetProgress={handleResetProgress}
-        onTestEnding={handleTestEnding}
       />
     </div>
   );
@@ -370,26 +342,6 @@ body {
 }
 .vb-btn:active {
   transform: scale(0.95);
-}
-
-/* ---- Dev QA Test Button inside Settings ---- */
-.vb-dev-jump-btn {
-  font-family: 'Schoolbell', cursive;
-  font-size: 15px;
-  color: #a34328;
-  background: #fef1df;
-  border: 1.5px dashed #d94f30;
-  padding: 7px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-.vb-dev-jump-btn:hover {
-  background: #fde5c7;
-  transform: scale(1.03);
-}
-.vb-dev-jump-btn:active {
-  transform: scale(0.96);
 }
 
 /* ---- Title Card & Shared Text ---- */

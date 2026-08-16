@@ -13,7 +13,6 @@ export function SettingsModal({
   sfxVol = 50,
   onChangeSfxVol,
   onResetProgress,
-  onTestEnding,
 }) {
   if (!isOpen) return null;
 
@@ -114,26 +113,6 @@ export function SettingsModal({
             />
           </div>
         </div>
-
-        {/* Developer / Testing Tools Section */}
-        {onTestEnding && (
-          <div className="vb-settings-section">
-            <h3 className="vb-settings-heading">🧪 Testing & QA Tools</h3>
-            <div className="vb-setting-row">
-              <span className="vb-setting-note">Pre-solve all chapters up to the final verse (John 3:16):</span>
-              <button
-                className="vb-dev-jump-btn"
-                onClick={() => {
-                  audio.playButtonClick();
-                  onTestEnding();
-                  onClose();
-                }}
-              >
-                ⚡ Jump to Ch.15 Ending
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* Reset Progress Section */}
         {onResetProgress && (

@@ -86,23 +86,6 @@ describe("App Root & State Integration Tests", () => {
     expect(localStorage.getItem("scripture_games_stars_v1")).toBeNull();
   });
 
-  test("handleTestEnding awards stars and jumps to Chapter 15 Level 8", () => {
-    render(<App />);
-
-    // Dismiss welcome splash
-    fireEvent.click(screen.getByRole("button", { name: "Tap to Play and Start Game" }));
-
-    // Open settings and trigger test ending
-    const settingsBtn = screen.getByLabelText("Open Game Settings");
-    fireEvent.click(settingsBtn);
-
-    const testEndingBtn = screen.getByText("⚡ Jump to Ch.15 Ending");
-    fireEvent.click(testEndingBtn);
-
-    // Should now be on PlayBoard for John 3:16
-    expect(screen.getByText("John 3:16")).toBeTruthy();
-  });
-
   test("navigates to VerseBuilder and returns back to Hub", () => {
     render(<App />);
 

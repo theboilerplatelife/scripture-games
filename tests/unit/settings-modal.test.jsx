@@ -66,12 +66,6 @@ describe("SettingsModal Component Tests", () => {
     fireEvent.click(resetBtn);
     expect(handleResetProgress).toHaveBeenCalled();
 
-    // Test ending jump button
-    const testEndingBtn = screen.getByText("⚡ Jump to Ch.15 Ending");
-    fireEvent.click(testEndingBtn);
-    expect(handleTestEnding).toHaveBeenCalled();
-    expect(handleClose).toHaveBeenCalled();
-
     // 2. Rerender with audio MUTED and optional props omitted
     rerender(
       <SettingsModal
