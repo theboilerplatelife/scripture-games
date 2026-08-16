@@ -143,6 +143,28 @@ export function starsForMisses(misses, pairCount) {
   return 1;
 }
 
+// The two card faces a verse shows in a given mode
+function cardFaces(verse, mode, translation) {
+  const text = getVerseText(verse, translation);
+  if (mode.id === "hints") {
+    return [
+      { kind: "hint", text: verse.hint },
+      { kind: "verse", text: clipWords(text, 10) },
+    ];
+  }
+  if (mode.id === "refs") {
+    return [
+      { kind: "ref", text: verse.ref },
+      { kind: "verse", text: clipWords(text, 10) },
+    ];
+  }
+  const [firstHalf, secondHalf] = splitHalves(text);
+  return [
+    { kind: "half1", text: firstHalf },
+    { kind: "half2", text: secondHalf },
+  ];
+}
+
 // Build the shuffled card deck for one deck + mode + translation.
 // Cards: { key, pairId, kind, ref, text }
 export function buildDeck(deckObj, modeIdx, translation) {
@@ -156,22 +178,23 @@ export function buildDeck(deckObj, modeIdx, translation) {
     );
   }
 
-  const picked = shuffle(candidates, deckObj.id * 101 + modeIdx * 17 + 5).slice(0, mode.pairs);
+  // Skip candidates whose card faces read identically to an already-picked
+  // pair (some verses are word-for-word alike across books, e.g. Psalm 136:1
+  // and Psalm 107:1) — two look-alike cards that refuse to match is unfair.
+  const shuffled = shuffle(candidates, deckObj.id * 101 + modeIdx * 17 + 5);
+  const picked = [];
+  const usedTexts = new Set();
+  shuffled.forEach((verse) => {
+    if (picked.length === mode.pairs) return;
+    const faces = cardFaces(verse, mode, translation);
+    if (faces.some((face) => usedTexts.has(face.text))) return;
+    faces.forEach((face) => usedTexts.add(face.text));
+    picked.push({ verse, faces });
+  });
 
   const cards = [];
-  picked.forEach((verse, pairId) => {
-    const text = getVerseText(verse, translation);
-    if (mode.id === "hints") {
-      cards.push({ pairId, kind: "hint", ref: verse.ref, text: verse.hint });
-      cards.push({ pairId, kind: "verse", ref: verse.ref, text: clipWords(text, 10) });
-    } else if (mode.id === "refs") {
-      cards.push({ pairId, kind: "ref", ref: verse.ref, text: verse.ref });
-      cards.push({ pairId, kind: "verse", ref: verse.ref, text: clipWords(text, 10) });
-    } else {
-      const [firstHalf, secondHalf] = splitHalves(text);
-      cards.push({ pairId, kind: "half1", ref: verse.ref, text: firstHalf });
-      cards.push({ pairId, kind: "half2", ref: verse.ref, text: secondHalf });
-    }
+  picked.forEach(({ verse, faces }, pairId) => {
+    faces.forEach((face) => cards.push({ pairId, kind: face.kind, ref: verse.ref, text: face.text }));
   });
 
   return shuffle(cards, deckObj.id * 100 + modeIdx).map((card, i) => ({ ...card, key: `c${i}` }));

@@ -103,10 +103,6 @@
 .mm-grid-refs    { grid-template-columns: repeat(2, 1fr); }
 .mm-grid-halves  { grid-template-columns: repeat(2, 1fr); }
 
-@media (max-width: 420px) {
-  .mm-grid-hints, .mm-grid-refs, .mm-grid-halves { grid-template-columns: repeat(2, 1fr); }
-}
-
 /* A card is a little kraft envelope that flips to a paper scrap */
 .mm-card {
   position: relative;
@@ -187,11 +183,6 @@
   text-align: center;
   color: var(--ink);
   overflow-wrap: break-word;
-}
-
-.mm-grid-buddies .mm-card-text {
-  font-family: 'Schoolbell', cursive;
-  font-size: 17px;
 }
 
 /* ---- Win Card ---- */

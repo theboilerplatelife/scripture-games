@@ -73,6 +73,32 @@ describe("Memory Match deck building & scoring", () => {
     });
   });
 
+  test("no board ever shows identical card text from different pairs (any deck, mode, translation)", () => {
+    // Some verses are word-for-word alike across books (Psalm 136:1, Psalm
+    // 107:1, 1 Chronicles 16:34) — a board must never deal look-alike cards
+    // that refuse to match.
+    DECKS.forEach((deckObj) => {
+      MODES.forEach((mode, modeIdx) => {
+        TRANSLATIONS.forEach((tr) => {
+          const cardDeck = buildDeck(deckObj, modeIdx, tr.id);
+          expect(
+            cardDeck.length,
+            `Deck ${deckObj.id} ${mode.id} ${tr.id} came up short after collision filtering`
+          ).toBe(mode.pairs * 2);
+
+          const textToPair = {};
+          cardDeck.forEach((card) => {
+            expect(
+              textToPair[card.text] === undefined || textToPair[card.text] === card.pairId,
+              `Deck ${deckObj.id} ${mode.id} ${tr.id} deals ambiguous card "${card.text}"`
+            ).toBe(true);
+            textToPair[card.text] = card.pairId;
+          });
+        });
+      });
+    });
+  });
+
   test("every deck and translation has enough splittable verses for halves mode", () => {
     const halvesPairs = MODES[2].pairs; // 4 pairs
     DECKS.forEach((deckObj) => {
