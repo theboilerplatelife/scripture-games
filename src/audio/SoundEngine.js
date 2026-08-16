@@ -10,11 +10,12 @@ export const NOTES = {
   C6: 1046.50, D6: 1174.66, E6: 1318.51, F6: 1396.91, G6: 1567.98, A6: 1760.00, B6: 1975.53, C7: 2093.00,
 };
 
-// 1. Main Hub Theme: Warm, welcoming, grand acoustic kalimba & harp groove (100 BPM)
+// 1. Main Hub Theme: Warm, welcoming, grand acoustic kalimba & harp groove (100 BPM - 64 steps)
 export const MAIN_HUB_SONG = {
   bpm: 100,
-  steps: 32,
+  steps: 64,
   melody: [
+    // Phrase 1 (0-31)
     { s: 0, n: "G4", d: 1.5, v: 0.35 },
     { s: 2, n: "E4", d: 1.5, v: 0.30 },
     { s: 4, n: "G4", d: 1.5, v: 0.35 },
@@ -30,8 +31,26 @@ export const MAIN_HUB_SONG = {
     { s: 24, n: "G4", d: 1.5, v: 0.35 },
     { s: 26, n: "E4", d: 1.5, v: 0.30 },
     { s: 28, n: "D4", d: 3.0, v: 0.32 },
+
+    // Phrase 2 Variation & Resolution (32-63)
+    { s: 32, n: "E5", d: 1.5, v: 0.38 },
+    { s: 34, n: "D5", d: 1.0, v: 0.32 },
+    { s: 36, n: "C5", d: 1.5, v: 0.35 },
+    { s: 38, n: "G4", d: 2.0, v: 0.35 },
+    { s: 40, n: "A4", d: 1.5, v: 0.35 },
+    { s: 42, n: "C5", d: 1.5, v: 0.38 },
+    { s: 44, n: "E5", d: 3.0, v: 0.40 },
+
+    { s: 48, n: "D5", d: 1.5, v: 0.35 },
+    { s: 50, n: "B4", d: 1.5, v: 0.32 },
+    { s: 52, n: "G4", d: 1.5, v: 0.35 },
+    { s: 54, n: "A4", d: 2.0, v: 0.36 },
+    { s: 56, n: "B4", d: 1.5, v: 0.35 },
+    { s: 58, n: "D5", d: 1.5, v: 0.36 },
+    { s: 60, n: "C5", d: 3.5, v: 0.42 },
   ],
   bass: [
+    // Phrase 1 (0-31)
     { s: 0, n: "C3", d: 3.5, v: 0.22 },
     { s: 4, n: "E3", d: 3.5, v: 0.18 },
     { s: 8, n: "G3", d: 3.5, v: 0.20 },
@@ -40,14 +59,25 @@ export const MAIN_HUB_SONG = {
     { s: 20, n: "A3", d: 3.5, v: 0.18 },
     { s: 24, n: "C3", d: 3.5, v: 0.22 },
     { s: 28, n: "G3", d: 3.5, v: 0.20 },
+
+    // Phrase 2 (32-63)
+    { s: 32, n: "C3", d: 3.5, v: 0.22 },
+    { s: 36, n: "G3", d: 3.5, v: 0.20 },
+    { s: 40, n: "F3", d: 3.5, v: 0.22 },
+    { s: 44, n: "A3", d: 3.5, v: 0.20 },
+    { s: 48, n: "G3", d: 3.5, v: 0.22 },
+    { s: 52, n: "E3", d: 3.5, v: 0.18 },
+    { s: 56, n: "G3", d: 3.5, v: 0.22 },
+    { s: 60, n: "C3", d: 3.5, v: 0.24 },
   ],
 };
 
-// 2. Verse Builder Title Theme: Gentle, tactile paper-craft chime & woodblock (92 BPM)
+// 2. Verse Builder Title Theme: Gentle, tactile paper-craft chime & woodblock (92 BPM - 64 steps)
 export const VERSE_BUILDER_TITLE_SONG = {
   bpm: 92,
-  steps: 32,
+  steps: 64,
   melody: [
+    // Phrase 1 (0-31)
     { s: 0, n: "C5", d: 1.2, v: 0.32 },
     { s: 2, n: "D5", d: 1.0, v: 0.30 },
     { s: 4, n: "E5", d: 1.8, v: 0.35 },
@@ -63,8 +93,26 @@ export const VERSE_BUILDER_TITLE_SONG = {
     { s: 24, n: "G5", d: 1.5, v: 0.32 },
     { s: 27, n: "E5", d: 1.2, v: 0.30 },
     { s: 28, n: "C5", d: 3.0, v: 0.35 },
+
+    // Phrase 2 Variation (32-63)
+    { s: 32, n: "E5", d: 1.2, v: 0.34 },
+    { s: 34, n: "G5", d: 1.0, v: 0.35 },
+    { s: 36, n: "A5", d: 1.8, v: 0.38 },
+    { s: 39, n: "C6", d: 1.0, v: 0.36 },
+    { s: 40, n: "G5", d: 1.5, v: 0.34 },
+    { s: 43, n: "E5", d: 1.2, v: 0.30 },
+    { s: 44, n: "D5", d: 2.5, v: 0.32 },
+
+    { s: 48, n: "F5", d: 1.2, v: 0.32 },
+    { s: 50, n: "A5", d: 1.0, v: 0.34 },
+    { s: 52, n: "G5", d: 1.8, v: 0.36 },
+    { s: 55, n: "E5", d: 1.0, v: 0.32 },
+    { s: 56, n: "D5", d: 1.5, v: 0.30 },
+    { s: 59, n: "B4", d: 1.2, v: 0.28 },
+    { s: 60, n: "C5", d: 3.5, v: 0.36 },
   ],
   bass: [
+    // Phrase 1 (0-31)
     { s: 0, n: "C3", d: 3.5, v: 0.20 },
     { s: 4, n: "G3", d: 3.5, v: 0.18 },
     { s: 8, n: "A3", d: 3.5, v: 0.18 },
@@ -73,14 +121,25 @@ export const VERSE_BUILDER_TITLE_SONG = {
     { s: 20, n: "C3", d: 3.5, v: 0.18 },
     { s: 24, n: "G3", d: 3.5, v: 0.18 },
     { s: 28, n: "C3", d: 3.5, v: 0.22 },
+
+    // Phrase 2 (32-63)
+    { s: 32, n: "A3", d: 3.5, v: 0.20 },
+    { s: 36, n: "F3", d: 3.5, v: 0.20 },
+    { s: 40, n: "C3", d: 3.5, v: 0.18 },
+    { s: 44, n: "G3", d: 3.5, v: 0.20 },
+    { s: 48, n: "F3", d: 3.5, v: 0.20 },
+    { s: 52, n: "C3", d: 3.5, v: 0.18 },
+    { s: 56, n: "G3", d: 3.5, v: 0.20 },
+    { s: 60, n: "C3", d: 3.5, v: 0.22 },
   ],
 };
 
-// 3. Verse Builder Gameplay Theme: Cheerful, rhythmic marimba & acoustic pluck (114 BPM)
+// 3. Verse Builder Gameplay Theme: Cheerful, rhythmic marimba & acoustic pluck (114 BPM - 64 steps)
 export const VERSE_BUILDER_PLAY_SONG = {
   bpm: 114,
-  steps: 32,
+  steps: 64,
   melody: [
+    // Phrase 1 (0-31)
     { s: 0, n: "E5", d: 0.8, v: 0.30 },
     { s: 1, n: "G5", d: 0.8, v: 0.35 },
     { s: 2, n: "A5", d: 1.2, v: 0.38 },
@@ -98,8 +157,28 @@ export const VERSE_BUILDER_PLAY_SONG = {
     { s: 24, n: "E5", d: 0.8, v: 0.30 },
     { s: 26, n: "D5", d: 0.8, v: 0.30 },
     { s: 28, n: "C5", d: 2.5, v: 0.36 },
+
+    // Phrase 2 Variation & Uplift (32-63)
+    { s: 32, n: "G5", d: 0.8, v: 0.34 },
+    { s: 33, n: "A5", d: 0.8, v: 0.36 },
+    { s: 34, n: "C6", d: 1.2, v: 0.40 },
+    { s: 36, n: "D6", d: 0.8, v: 0.38 },
+    { s: 38, n: "C6", d: 1.5, v: 0.35 },
+    { s: 40, n: "A5", d: 0.8, v: 0.32 },
+    { s: 42, n: "G5", d: 0.8, v: 0.32 },
+    { s: 44, n: "E5", d: 2.0, v: 0.35 },
+
+    { s: 48, n: "A5", d: 0.8, v: 0.34 },
+    { s: 49, n: "G5", d: 0.8, v: 0.32 },
+    { s: 50, n: "E5", d: 1.2, v: 0.34 },
+    { s: 52, n: "D5", d: 0.8, v: 0.30 },
+    { s: 54, n: "C5", d: 1.5, v: 0.32 },
+    { s: 56, n: "D5", d: 0.8, v: 0.32 },
+    { s: 58, n: "E5", d: 0.8, v: 0.34 },
+    { s: 60, n: "C5", d: 2.5, v: 0.38 },
   ],
   bass: [
+    // Phrase 1 (0-31)
     { s: 0, n: "C4", d: 0.9, v: 0.22 },
     { s: 2, n: "G3", d: 0.9, v: 0.18 },
     { s: 4, n: "C4", d: 0.9, v: 0.22 },
@@ -116,14 +195,33 @@ export const VERSE_BUILDER_PLAY_SONG = {
     { s: 26, n: "D3", d: 0.9, v: 0.18 },
     { s: 28, n: "G3", d: 0.9, v: 0.22 },
     { s: 30, n: "B3", d: 0.9, v: 0.18 },
+
+    // Phrase 2 (32-63)
+    { s: 32, n: "A3", d: 0.9, v: 0.22 },
+    { s: 34, n: "E3", d: 0.9, v: 0.18 },
+    { s: 36, n: "A3", d: 0.9, v: 0.22 },
+    { s: 38, n: "E3", d: 0.9, v: 0.18 },
+    { s: 40, n: "F3", d: 0.9, v: 0.22 },
+    { s: 42, n: "C3", d: 0.9, v: 0.18 },
+    { s: 44, n: "F3", d: 0.9, v: 0.22 },
+    { s: 46, n: "C3", d: 0.9, v: 0.18 },
+    { s: 48, n: "D3", d: 0.9, v: 0.20 },
+    { s: 50, n: "A3", d: 0.9, v: 0.18 },
+    { s: 52, n: "D3", d: 0.9, v: 0.20 },
+    { s: 54, n: "F3", d: 0.9, v: 0.18 },
+    { s: 56, n: "G3", d: 0.9, v: 0.22 },
+    { s: 58, n: "D3", d: 0.9, v: 0.18 },
+    { s: 60, n: "C3", d: 0.9, v: 0.24 },
+    { s: 62, n: "G3", d: 0.9, v: 0.18 },
   ],
 };
 
-// 4. Trivia Game Title Theme: Inquisitive, upbeat staccato melody (122 BPM)
+// 4. Trivia Game Title Theme: Inquisitive, upbeat staccato melody (122 BPM - 64 steps)
 export const TRIVIA_TITLE_SONG = {
   bpm: 122,
-  steps: 32,
+  steps: 64,
   melody: [
+    // Phrase 1 (0-31)
     { s: 0, n: "D5", d: 0.6, v: 0.34 },
     { s: 2, n: "F5", d: 0.6, v: 0.34 },
     { s: 4, n: "A5", d: 1.0, v: 0.38 },
@@ -139,8 +237,26 @@ export const TRIVIA_TITLE_SONG = {
     { s: 24, n: "F5", d: 0.6, v: 0.32 },
     { s: 26, n: "E5", d: 0.6, v: 0.30 },
     { s: 28, n: "D5", d: 2.0, v: 0.36 },
+
+    // Phrase 2 Variation (32-63)
+    { s: 32, n: "F5", d: 0.6, v: 0.35 },
+    { s: 34, n: "A5", d: 0.6, v: 0.36 },
+    { s: 36, n: "C6", d: 1.0, v: 0.40 },
+    { s: 38, n: "B5", d: 0.6, v: 0.35 },
+    { s: 40, n: "A5", d: 0.6, v: 0.32 },
+    { s: 42, n: "G5", d: 0.6, v: 0.32 },
+    { s: 44, n: "F5", d: 1.8, v: 0.36 },
+
+    { s: 48, n: "G5", d: 0.6, v: 0.34 },
+    { s: 50, n: "A5", d: 0.6, v: 0.36 },
+    { s: 52, n: "F5", d: 1.0, v: 0.34 },
+    { s: 54, n: "E5", d: 0.6, v: 0.32 },
+    { s: 56, n: "D5", d: 0.6, v: 0.34 },
+    { s: 58, n: "C5", d: 0.6, v: 0.30 },
+    { s: 60, n: "D5", d: 2.2, v: 0.38 },
   ],
   bass: [
+    // Phrase 1 (0-31)
     { s: 0, n: "D3", d: 1.8, v: 0.22 },
     { s: 4, n: "A3", d: 1.8, v: 0.20 },
     { s: 8, n: "D3", d: 1.8, v: 0.22 },
@@ -149,14 +265,25 @@ export const TRIVIA_TITLE_SONG = {
     { s: 20, n: "B3", d: 1.8, v: 0.20 },
     { s: 24, n: "A3", d: 1.8, v: 0.22 },
     { s: 28, n: "D3", d: 1.8, v: 0.24 },
+
+    // Phrase 2 (32-63)
+    { s: 32, n: "F3", d: 1.8, v: 0.22 },
+    { s: 36, n: "C3", d: 1.8, v: 0.20 },
+    { s: 40, n: "F3", d: 1.8, v: 0.22 },
+    { s: 44, n: "A3", d: 1.8, v: 0.20 },
+    { s: 48, n: "G3", d: 1.8, v: 0.22 },
+    { s: 52, n: "A3", d: 1.8, v: 0.20 },
+    { s: 56, n: "A3", d: 1.8, v: 0.22 },
+    { s: 60, n: "D3", d: 1.8, v: 0.24 },
   ],
 };
 
-// 5. Memory Match Game Title Theme: Whimsical music-box & glockenspiel (88 BPM)
+// 5. Memory Match Game Title Theme: Whimsical music-box & glockenspiel (88 BPM - 64 steps)
 export const MEMORY_TITLE_SONG = {
   bpm: 88,
-  steps: 32,
+  steps: 64,
   melody: [
+    // Phrase 1 (0-31)
     { s: 0, n: "G5", d: 1.2, v: 0.35 },
     { s: 2, n: "B5", d: 1.0, v: 0.32 },
     { s: 4, n: "D6", d: 1.8, v: 0.38 },
@@ -172,8 +299,26 @@ export const MEMORY_TITLE_SONG = {
     { s: 24, n: "F5", d: 1.2, v: 0.30 },
     { s: 26, n: "D5", d: 1.0, v: 0.28 },
     { s: 28, n: "G5", d: 3.0, v: 0.35 },
+
+    // Phrase 2 Variation & Resolution (32-63)
+    { s: 32, n: "B5", d: 1.2, v: 0.36 },
+    { s: 34, n: "D6", d: 1.0, v: 0.38 },
+    { s: 36, n: "E6", d: 1.8, v: 0.40 },
+    { s: 39, n: "D6", d: 1.0, v: 0.34 },
+    { s: 40, n: "B5", d: 1.2, v: 0.34 },
+    { s: 42, n: "G5", d: 1.0, v: 0.32 },
+    { s: 44, n: "A5", d: 2.5, v: 0.35 },
+
+    { s: 48, n: "C6", d: 1.2, v: 0.34 },
+    { s: 50, n: "B5", d: 1.0, v: 0.32 },
+    { s: 52, n: "A5", d: 1.8, v: 0.34 },
+    { s: 55, n: "G5", d: 1.0, v: 0.32 },
+    { s: 56, n: "E5", d: 1.2, v: 0.30 },
+    { s: 58, n: "A5", d: 1.0, v: 0.32 },
+    { s: 60, n: "G5", d: 3.5, v: 0.38 },
   ],
   bass: [
+    // Phrase 1 (0-31)
     { s: 0, n: "G3", d: 3.5, v: 0.18 },
     { s: 4, n: "D3", d: 3.5, v: 0.16 },
     { s: 8, n: "C3", d: 3.5, v: 0.18 },
@@ -182,6 +327,16 @@ export const MEMORY_TITLE_SONG = {
     { s: 20, n: "E3", d: 3.5, v: 0.16 },
     { s: 24, n: "D3", d: 3.5, v: 0.18 },
     { s: 28, n: "G3", d: 3.5, v: 0.20 },
+
+    // Phrase 2 (32-63)
+    { s: 32, n: "E3", d: 3.5, v: 0.18 },
+    { s: 36, n: "C3", d: 3.5, v: 0.18 },
+    { s: 40, n: "G3", d: 3.5, v: 0.18 },
+    { s: 44, n: "D3", d: 3.5, v: 0.20 },
+    { s: 48, n: "C3", d: 3.5, v: 0.18 },
+    { s: 52, n: "D3", d: 3.5, v: 0.18 },
+    { s: 56, n: "C3", d: 3.5, v: 0.18 },
+    { s: 60, n: "G3", d: 3.5, v: 0.22 },
   ],
 };
 
