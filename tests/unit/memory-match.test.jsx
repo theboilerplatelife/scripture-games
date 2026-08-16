@@ -309,6 +309,67 @@ describe("MemoryMatch orchestrator", () => {
     expect(screen.getByText(/Deck 2:/)).toBeTruthy();
   });
 
+  test("replaying a board in an already-completed deck never re-celebrates completion", () => {
+    vi.useFakeTimers();
+    const allStarred = { "mm-1-0": 2, "mm-1-1": 2, "mm-1-2": 2 };
+    const completeBoardFor = (container, modeIdx) => {
+      const cardDeck = buildDeck(DECKS[0], modeIdx, "ESV");
+      const cards = () => container.querySelectorAll(".mm-card");
+      const pairIds = [...new Set(cardDeck.map((c) => c.pairId))];
+      pairIds.forEach((pairId) => {
+        const [a, b] = cardDeck
+          .map((c, i) => ({ c, i }))
+          .filter(({ c }) => c.pairId === pairId)
+          .map(({ i }) => i);
+        fireEvent.click(cards()[a]);
+        fireEvent.click(cards()[b]);
+        act(() => vi.advanceTimersByTime(500));
+      });
+      act(() => vi.advanceTimersByTime(700));
+    };
+
+    // Replaying the LAST mode of a complete deck: no celebration, back to modes
+    const last = render(
+      <MemoryMatch
+        stars={allStarred}
+        onSaveStar={vi.fn()}
+        translation="ESV"
+        onBackToHub={vi.fn()}
+        onOpenSettings={vi.fn()}
+        initialChapterId={1}
+        initialModeIdx={2}
+        initialScreen="play"
+        initialSeed={0}
+      />
+    );
+    completeBoardFor(last.container, 2);
+    expect(screen.queryByText("Complete Deck 🎉")).toBeNull();
+    fireEvent.click(screen.getByText("Deck Modes ←"));
+    expect(screen.getByText(/Hint Hunt/)).toBeTruthy(); // mode select screen
+    last.unmount();
+
+    // Replaying an EARLIER mode of a complete deck: plain "Next match" flow
+    const earlier = render(
+      <MemoryMatch
+        stars={allStarred}
+        onSaveStar={vi.fn()}
+        translation="ESV"
+        onBackToHub={vi.fn()}
+        onOpenSettings={vi.fn()}
+        initialChapterId={1}
+        initialModeIdx={0}
+        initialScreen="play"
+        initialSeed={0}
+      />
+    );
+    completeBoardFor(earlier.container, 0);
+    expect(screen.queryByText("Complete Deck 🎉")).toBeNull();
+    fireEvent.click(screen.getByText("Next match →"));
+    expect(screen.getByText(/Verse Finder/)).toBeTruthy(); // now playing mode 1
+    earlier.unmount();
+    vi.useRealTimers();
+  });
+
   test("completing a board saves a namespaced star and shows the fresh result", () => {
     vi.useFakeTimers();
     const cardDeck = buildDeck(DECKS[0], 2, "ESV");
