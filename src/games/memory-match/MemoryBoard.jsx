@@ -4,10 +4,6 @@ import { jitter } from "../../utils/random.js";
 import { MODES, buildDeck, starsForMisses } from "./matchData.js";
 import { PairIllustration } from "./PairIllustration.jsx";
 
-// Faces that show the same scene as a small corner stamp instead of a
-// full background (the "answer" side of each pair)
-const ART_BADGE_KINDS = new Set(["verse", "half2"]);
-
 // Each found pair gets its own sticker color, cycling in match order
 const PAIR_COLORS = ["#d94f30", "#3e7cb1", "#5c8a3a", "#c98a1b", "#7b2cbf"];
 
@@ -164,13 +160,11 @@ export function MemoryBoard({
               <span className="mm-card-inner">
                 <span className="mm-card-back" aria-hidden="true">{mode.icon}</span>
                 <span className="mm-card-front">
-                  {/* Full scene on the prompt face; a small corner stamp on the
-                      answer face, so the art hints at the pairing without
-                      giving it away before the text is read */}
-                  <span className={ART_BADGE_KINDS.has(card.kind) ? "mm-card-art-badge" : "mm-card-art-full"}>
-                    <PairIllustration art={card.art} />
-                  </span>
-                  <span className="mm-card-content">
+                  {/* Both cards of a pair carry the same full scene; the text
+                      sits on a taped paper caption strip in the calm mid-band */}
+                  <PairIllustration art={card.art} />
+                  <span className="mm-card-caption">
+                    <span className="mm-caption-tape" aria-hidden="true" />
                     {tag && (
                       <span className={`mm-card-tag mm-card-tag-${tag.cls}`} aria-hidden="true">
                         {tag.label}
