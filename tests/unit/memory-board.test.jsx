@@ -77,7 +77,7 @@ describe("MemoryBoard", () => {
     expect(cards[a].className).toContain("matched");
   });
 
-  test("a non-matching pair flips back and counts a miss", () => {
+  test("a wrong pair lingers face-up for reading and clears on the next flip", () => {
     const { container } = render(
       <MemoryBoard deck={deckObj} modeIdx={HALVES} translation="ESV" onBackToModes={vi.fn()} onComplete={vi.fn()} />
     );
@@ -89,15 +89,41 @@ describe("MemoryBoard", () => {
     fireEvent.click(cards[a]);
     fireEvent.click(cards[b]);
 
-    // Input is locked while the pair is showing
+    // Input is locked while the pair is being judged
     const [c] = cardIndexesOfPair(2);
     fireEvent.click(cards[c]);
     expect(cards[c].className).not.toContain("flipped");
 
-    act(() => vi.advanceTimersByTime(1000));
+    act(() => vi.advanceTimersByTime(600));
+    // The wrong pair STAYS face-up, marked and announced as not a match
+    expect(screen.getByText("oops ×1")).toBeTruthy();
+    expect(cards[a].className).toContain("miss");
+    expect(cards[b].className).toContain("miss");
+    expect(cards[a].getAttribute("aria-label")).toContain("(not a match)");
+
+    // The next flip dismisses the stale pair and starts a fresh attempt
+    fireEvent.click(cards[c]);
     expect(cards[a].className).not.toContain("flipped");
     expect(cards[b].className).not.toContain("flipped");
-    expect(screen.getByText("oops ×1")).toBeTruthy();
+    expect(cards[c].className).toContain("flipped");
+    expect(cards[c].className).not.toContain("miss");
+  });
+
+  test("tapping a card of the lingering wrong pair keeps that card up as the new first pick", () => {
+    const { container } = render(
+      <MemoryBoard deck={deckObj} modeIdx={HALVES} translation="ESV" onBackToModes={vi.fn()} onComplete={vi.fn()} />
+    );
+    const [a] = cardIndexesOfPair(0);
+    const [b] = cardIndexesOfPair(1);
+    const cards = getCards(container);
+
+    fireEvent.click(cards[a]);
+    fireEvent.click(cards[b]);
+    act(() => vi.advanceTimersByTime(600));
+
+    fireEvent.click(cards[b]);
+    expect(cards[b].className).toContain("flipped");
+    expect(cards[a].className).not.toContain("flipped");
   });
 
   test("re-clicking the single flipped card is a no-op", () => {

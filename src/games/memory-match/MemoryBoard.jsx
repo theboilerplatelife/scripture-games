@@ -31,10 +31,23 @@ export function MemoryBoard({
   const [flipped, setFlipped] = useState([]); // up to 2 card keys under evaluation
   const [matched, setMatched] = useState(() => new Set()); // pairIds locked in
   const [misses, setMisses] = useState(0);
+  // A judged-wrong pair stays face-up (self-paced reading) until the next flip
+  const [isMismatch, setIsMismatch] = useState(false);
   const lockRef = useRef(false); // blocks input while a pair is being judged
 
   function flipCard(card) {
-    if (lockRef.current || flipped.includes(card.key) || matched.has(card.pairId)) return;
+    if (lockRef.current || matched.has(card.pairId)) return;
+
+    // A lingering wrong pair turns down the moment the next attempt starts —
+    // tapping one of its own cards keeps that card up as the new first pick
+    if (isMismatch) {
+      setIsMismatch(false);
+      setFlipped([card.key]);
+      audio.playPlaceScrap(0);
+      return;
+    }
+
+    if (flipped.includes(card.key)) return;
 
     audio.playPlaceScrap(flipped.length);
     const next = [...flipped, card.key];
@@ -60,13 +73,13 @@ export function MemoryBoard({
         }
       }, 450);
     } else {
-      // Let kids see both cards before they flip back
+      // Mark the pair wrong but leave it face-up: kids read at their own pace
       setTimeout(() => {
         audio.playWrongAnswer();
         setMisses((m) => m + 1);
-        setFlipped([]);
+        setIsMismatch(true);
         lockRef.current = false;
-      }, 900);
+      }, 500);
     }
   }
 
@@ -107,6 +120,7 @@ export function MemoryBoard({
         {cardDeck.map((card, i) => {
           const isMatched = matched.has(card.pairId);
           const isRevealed = isMatched || flipped.includes(card.key);
+          const isMissed = isMismatch && flipped.includes(card.key);
           // Position of this pair in match order (Set preserves insertion order)
           const matchNum = isMatched ? [...matched].indexOf(card.pairId) + 1 : 0;
           const tag = KIND_TAGS[card.kind];
@@ -114,16 +128,18 @@ export function MemoryBoard({
           return (
             <button
               key={card.key}
-              className={`mm-card ${isRevealed ? "flipped" : ""} ${isMatched ? "matched" : ""}`}
+              className={`mm-card ${isRevealed ? "flipped" : ""} ${isMatched ? "matched" : ""} ${isMissed ? "miss" : ""}`}
               style={{ "--rot": `${jitter(deckObj.id * 20 + modeIdx, i, -2.5, 2.5)}deg` }}
               onClick={() => flipCard(card)}
               disabled={isMatched}
               aria-label={
                 isMatched
                   ? `Card ${i + 1}: ${spokenTag}${card.text} (matched)`
-                  : isRevealed
-                    ? `Card ${i + 1}: ${spokenTag}${card.text}`
-                    : `Card ${i + 1}: hidden`
+                  : isMissed
+                    ? `Card ${i + 1}: ${spokenTag}${card.text} (not a match)`
+                    : isRevealed
+                      ? `Card ${i + 1}: ${spokenTag}${card.text}`
+                      : `Card ${i + 1}: hidden`
               }
             >
               {isMatched && (
