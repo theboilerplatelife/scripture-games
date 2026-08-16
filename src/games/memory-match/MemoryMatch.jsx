@@ -8,6 +8,10 @@ import { MMWinCard } from "./MMWinCard.jsx";
 import { MMChapterDoneCard } from "./MMChapterDoneCard.jsx";
 import "./memory-match.css";
 
+function randomBoardSeed() {
+  return Math.floor(Math.random() * 1_000_000);
+}
+
 export function MemoryMatch({
   stars, // shared stars object; Memory Match keys are "mm-{deckId}-{modeIdx}"
   onSaveStar,
@@ -17,6 +21,7 @@ export function MemoryMatch({
   initialChapterId = 1,
   initialModeIdx = 0,
   initialScreen = "chapters",
+  initialSeed = null, // tests pin the deal; players get a fresh one per board
 }) {
   // Screen state: "chapters" | "modes" | "play" | "win" | "chapter-done"
   const [screen, setScreen] = useState(initialScreen);
@@ -24,6 +29,8 @@ export function MemoryMatch({
   const [selectedModeIdx, setSelectedModeIdx] = useState(initialModeIdx);
   // Star count from the just-finished board
   const [lastResult, setLastResult] = useState({ earned: 0, misses: 0 });
+  // A fresh seed per board entry so replays deal different cards
+  const [playSeed, setPlaySeed] = useState(() => initialSeed ?? randomBoardSeed());
 
   const currentDeck = DECKS[selectedChapterId - 1];
   const starKey = `mm-${selectedChapterId}-${selectedModeIdx}`;
@@ -43,9 +50,14 @@ export function MemoryMatch({
     setScreen("modes");
   }
 
+  function dealNewBoard() {
+    setPlaySeed(randomBoardSeed());
+    setScreen("play");
+  }
+
   function handleSelectMode(modeIdx) {
     setSelectedModeIdx(modeIdx);
-    setScreen("play");
+    dealNewBoard();
   }
 
   function handleCompleteBoard(earned, misses) {
@@ -75,14 +87,14 @@ export function MemoryMatch({
       setScreen("chapter-done");
     } else if (hasNextMode) {
       setSelectedModeIdx((prev) => prev + 1);
-      setScreen("play");
+      dealNewBoard();
     } else {
       // Jump to the unplayed mode
       const nextUnplayed = MODES.findIndex(
         (_, m) => !(stars[`mm-${selectedChapterId}-${m}`] > 0)
       );
       setSelectedModeIdx(nextUnplayed);
-      setScreen("play");
+      dealNewBoard();
     }
   }
 
@@ -123,10 +135,11 @@ export function MemoryMatch({
 
       {screen === "play" && (
         <MemoryBoard
-          key={`${selectedChapterId}-${selectedModeIdx}-${translation}`}
+          key={`${selectedChapterId}-${selectedModeIdx}-${translation}-${playSeed}`}
           deck={currentDeck}
           modeIdx={selectedModeIdx}
           translation={translation}
+          seed={playSeed}
           onBackToModes={() => setScreen("modes")}
           onComplete={handleCompleteBoard}
         />
@@ -140,7 +153,7 @@ export function MemoryMatch({
           misses={lastResult.misses}
           isDeckComplete={isDeckComplete}
           hasNextMode={hasNextMode}
-          onReplay={() => setScreen("play")}
+          onReplay={dealNewBoard}
           onNext={handleNextFromWin}
           onBackToModes={() => setScreen("modes")}
         />

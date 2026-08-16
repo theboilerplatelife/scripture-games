@@ -7,13 +7,14 @@ export function MemoryBoard({
   deck: deckObj,
   modeIdx,
   translation,
+  seed = 0, // varies the deal per play
   onBackToModes,
   onComplete, // (earnedStars, misses)
 }) {
   const mode = MODES[modeIdx];
   const cardDeck = useMemo(
-    () => buildDeck(deckObj, modeIdx, translation),
-    [deckObj, modeIdx, translation]
+    () => buildDeck(deckObj, modeIdx, translation, seed),
+    [deckObj, modeIdx, translation, seed]
   );
 
   const [flipped, setFlipped] = useState([]); // up to 2 card keys under evaluation
@@ -102,8 +103,17 @@ export function MemoryBoard({
               style={{ "--rot": `${jitter(deckObj.id * 20 + modeIdx, i, -2.5, 2.5)}deg` }}
               onClick={() => flipCard(card)}
               disabled={isMatched}
-              aria-label={isRevealed ? `Card ${i + 1}: ${card.text}` : `Card ${i + 1}: hidden`}
+              aria-label={
+                isMatched
+                  ? `Card ${i + 1}: ${card.text} (matched)`
+                  : isRevealed
+                    ? `Card ${i + 1}: ${card.text}`
+                    : `Card ${i + 1}: hidden`
+              }
             >
+              {isMatched && (
+                <span className="mm-card-match-badge" aria-hidden="true">✓</span>
+              )}
               <span className="mm-card-inner">
                 <span className="mm-card-back" aria-hidden="true">{mode.icon}</span>
                 <span className="mm-card-front">

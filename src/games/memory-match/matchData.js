@@ -166,8 +166,10 @@ function cardFaces(verse, mode, translation) {
 }
 
 // Build the shuffled card deck for one deck + mode + translation.
+// `seed` varies the verse pick and layout per play (0 = the base deal,
+// used as the deterministic default in tests).
 // Cards: { key, pairId, kind, ref, text }
-export function buildDeck(deckObj, modeIdx, translation) {
+export function buildDeck(deckObj, modeIdx, translation, seed = 0) {
   const mode = MODES[modeIdx];
 
   let candidates = deckObj.verses;
@@ -181,7 +183,7 @@ export function buildDeck(deckObj, modeIdx, translation) {
   // Skip candidates whose card faces read identically to an already-picked
   // pair (some verses are word-for-word alike across books, e.g. Psalm 136:1
   // and Psalm 107:1) — two look-alike cards that refuse to match is unfair.
-  const shuffled = shuffle(candidates, deckObj.id * 101 + modeIdx * 17 + 5);
+  const shuffled = shuffle(candidates, deckObj.id * 101 + modeIdx * 17 + 5 + seed);
   const picked = [];
   const usedTexts = new Set();
   shuffled.forEach((verse) => {
@@ -197,5 +199,5 @@ export function buildDeck(deckObj, modeIdx, translation) {
     faces.forEach((face) => cards.push({ pairId, kind: face.kind, ref: verse.ref, text: face.text }));
   });
 
-  return shuffle(cards, deckObj.id * 100 + modeIdx).map((card, i) => ({ ...card, key: `c${i}` }));
+  return shuffle(cards, deckObj.id * 100 + modeIdx + seed * 7).map((card, i) => ({ ...card, key: `c${i}` }));
 }

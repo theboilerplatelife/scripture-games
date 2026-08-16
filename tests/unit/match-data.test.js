@@ -70,6 +70,11 @@ describe("Memory Match deck building & scoring", () => {
 
       // Deterministic: same inputs, same deck
       expect(buildDeck(deckObj, modeIdx, "ESV")).toEqual(cardDeck);
+
+      // A different play seed deals a different arrangement of valid cards
+      const reshuffled = buildDeck(deckObj, modeIdx, "ESV", 1);
+      expect(reshuffled.length).toBe(mode.pairs * 2);
+      expect(reshuffled.map((c) => c.text)).not.toEqual(cardDeck.map((c) => c.text));
     });
   });
 

@@ -60,6 +60,10 @@ describe("MemoryBoard", () => {
     expect(cards[a].className).toContain("matched");
     expect(cards[b].className).toContain("matched");
     expect(cards[a].disabled).toBe(true);
+    // Matched pairs are stamped with a visible badge and announced as matched
+    expect(cards[a].querySelector(".mm-card-match-badge")).toBeTruthy();
+    expect(cards[b].querySelector(".mm-card-match-badge")).toBeTruthy();
+    expect(cards[a].getAttribute("aria-label")).toBe(`Card ${a + 1}: ${cardDeck[a].text} (matched)`);
     // Clicking a matched card is a no-op
     fireEvent.click(cards[a]);
     expect(cards[a].className).toContain("matched");

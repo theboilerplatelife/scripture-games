@@ -310,6 +310,7 @@ describe("MemoryMatch orchestrator", () => {
         initialChapterId={1}
         initialModeIdx={2}
         initialScreen="play"
+        initialSeed={0}
       />
     );
     completeBoard(first.container);
@@ -329,6 +330,7 @@ describe("MemoryMatch orchestrator", () => {
         initialChapterId={1}
         initialModeIdx={2}
         initialScreen="play"
+        initialSeed={0}
       />
     );
     completeBoard(second.container);
