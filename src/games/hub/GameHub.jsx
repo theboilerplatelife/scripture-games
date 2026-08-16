@@ -44,7 +44,7 @@ export function GameHub({
 
       <div className="hub-stats-bar">
         <div className="hub-stat-chip">
-          🎮 <strong>6 Scripture Games</strong>
+          ✂️ <strong>1 game ready</strong> · 5 on the way
         </div>
         <div className="hub-stat-chip">
           ⭐ <strong>{earnedStarsCount}</strong> / {totalPossibleStars} Total Stars Earned
@@ -68,7 +68,6 @@ export function GameHub({
           </div>
           <h2 className="hub-game-title">Verse Builder</h2>
           <div className="hub-card-pills">
-            <span className="hub-pill highlight">⭐ {earnedStarsCount} / {totalPossibleStars} Stars</span>
             <span className="hub-pill">📚 15 Chapters</span>
             <span className="hub-pill">🧩 Word Puzzle</span>
           </div>
@@ -101,7 +100,7 @@ export function GameHub({
           </p>
           <div className="hub-game-meta">
             <span>Character Mysteries</span>
-            <span className="hub-play-btn">In Development</span>
+            <span className="hub-dev-note">In Development</span>
           </div>
         </div>
 
@@ -125,7 +124,7 @@ export function GameHub({
           </p>
           <div className="hub-game-meta">
             <span>Chronological Order</span>
-            <span className="hub-play-btn">In Development</span>
+            <span className="hub-dev-note">In Development</span>
           </div>
         </div>
 
@@ -149,7 +148,7 @@ export function GameHub({
           </p>
           <div className="hub-game-meta">
             <span>Scripture Navigation</span>
-            <span className="hub-play-btn">In Development</span>
+            <span className="hub-dev-note">In Development</span>
           </div>
         </div>
 
@@ -173,7 +172,7 @@ export function GameHub({
           </p>
           <div className="hub-game-meta">
             <span>Visual Memory</span>
-            <span className="hub-play-btn">In Development</span>
+            <span className="hub-dev-note">In Development</span>
           </div>
         </div>
 
@@ -197,7 +196,7 @@ export function GameHub({
           </p>
           <div className="hub-game-meta">
             <span>Biblical Geography</span>
-            <span className="hub-play-btn">In Development</span>
+            <span className="hub-dev-note">In Development</span>
           </div>
         </div>
       </div>

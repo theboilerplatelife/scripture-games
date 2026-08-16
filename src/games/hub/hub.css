@@ -203,8 +203,14 @@
 
 .hub-play-btn {
   font-family: 'Schoolbell', cursive;
-  font-size: 15px;
+  font-size: 16px;
   color: var(--vermilion);
-  font-weight: bold;
+}
+
+/* Muted status on unreleased cards — must not read as a call to action */
+.hub-dev-note {
+  font-family: 'Schoolbell', cursive;
+  font-size: 15px;
+  color: #7c766e;
 }
 
