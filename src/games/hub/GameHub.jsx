@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { audio } from "../../audio/SoundEngine.js";
 import { CHAPTERS } from "../../data/chapters.js";
+import { GameIcon } from "./GameIcon.jsx";
 import "./hub.css";
 
 export function GameHub({
@@ -63,7 +64,7 @@ export function GameHub({
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
-            <span className="hub-game-icon">✂️</span>
+            <span className="hub-game-icon"><GameIcon kind="scissors" /></span>
             <span className="hub-game-badge">Ready to Play</span>
           </div>
           <h2 className="hub-game-title">Verse Builder</h2>
@@ -87,7 +88,7 @@ export function GameHub({
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
-            <span className="hub-game-icon">🕵️‍♂️</span>
+            <span className="hub-game-icon"><GameIcon kind="magnifier" /></span>
             <span className="hub-game-badge coming-soon">Coming Soon</span>
           </div>
           <h2 className="hub-game-title">Who Am I?</h2>
@@ -111,7 +112,7 @@ export function GameHub({
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
-            <span className="hub-game-icon">📜</span>
+            <span className="hub-game-icon"><GameIcon kind="scroll" /></span>
             <span className="hub-game-badge coming-soon">Coming Soon</span>
           </div>
           <h2 className="hub-game-title">Story Sequencer</h2>
@@ -135,7 +136,7 @@ export function GameHub({
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
-            <span className="hub-game-icon">🗡️</span>
+            <span className="hub-game-icon"><GameIcon kind="bible" /></span>
             <span className="hub-game-badge coming-soon">Coming Soon</span>
           </div>
           <h2 className="hub-game-title">Sword Drill</h2>
@@ -159,7 +160,7 @@ export function GameHub({
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
-            <span className="hub-game-icon">🎴</span>
+            <span className="hub-game-icon"><GameIcon kind="cards" /></span>
             <span className="hub-game-badge coming-soon">Coming Soon</span>
           </div>
           <h2 className="hub-game-title">Memory Match</h2>
@@ -183,7 +184,7 @@ export function GameHub({
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
-            <span className="hub-game-icon">🗺️</span>
+            <span className="hub-game-icon"><GameIcon kind="map" /></span>
             <span className="hub-game-badge coming-soon">Coming Soon</span>
           </div>
           <h2 className="hub-game-title">Journey Maps</h2>

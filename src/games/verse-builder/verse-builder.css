@@ -62,6 +62,12 @@
   font-family: inherit;
   color: inherit;
   transform: rotate(var(--rot, 0deg));
+  border-left: 6px solid var(--chap, transparent);
+}
+
+/* Each chapter's washi tape takes on that chapter's color */
+.vb-chapter-card .vb-tape {
+  background: var(--chap-tape, var(--tape));
 }
 
 .vb-chapter-card:hover:not(.locked) {

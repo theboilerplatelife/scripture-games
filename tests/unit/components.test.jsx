@@ -6,6 +6,7 @@ import { Confetti } from "../../src/components/common/Confetti.jsx";
 import { Pencil } from "../../src/components/common/Pencil.jsx";
 import { WelcomeSplash } from "../../src/components/common/WelcomeSplash.jsx";
 import { GameHub } from "../../src/games/hub/GameHub.jsx";
+import { GameIcon } from "../../src/games/hub/GameIcon.jsx";
 
 describe("Common Components Tests", () => {
   test("Buddy renders every hair style and accessory variant", () => {
@@ -42,6 +43,16 @@ describe("Common Components Tests", () => {
     // 7. Default size prop
     const { container: defaultSize } = render(<Buddy who="ruth" />);
     expect(defaultSize.querySelector("svg")).toBeTruthy();
+  });
+
+  test("GameIcon renders every doodle kind and falls back to scissors for unknown kinds", () => {
+    ["scissors", "magnifier", "scroll", "bible", "cards", "map"].forEach((kind) => {
+      const { container } = render(<GameIcon kind={kind} />);
+      expect(container.querySelector("svg.hub-game-icon-svg")).toBeTruthy();
+    });
+
+    const { container: fallback } = render(<GameIcon kind="unknown_kind" size={24} />);
+    expect(fallback.querySelector("svg.hub-game-icon-svg")).toBeTruthy();
   });
 
   test("Star renders filled and empty states with default size", () => {
