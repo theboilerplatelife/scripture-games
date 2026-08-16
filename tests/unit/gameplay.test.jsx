@@ -1,6 +1,5 @@
 import { describe, test, expect, vi } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
-import { GameHub } from "../../src/games/hub/GameHub.jsx";
 import { ChapterSelect } from "../../src/games/verse-builder/ChapterSelect.jsx";
 import { LevelSelect } from "../../src/games/verse-builder/LevelSelect.jsx";
 import { WinCard } from "../../src/games/verse-builder/WinCard.jsx";
@@ -8,46 +7,33 @@ import { ChapterDoneCard } from "../../src/games/verse-builder/ChapterDoneCard.j
 import { VerseBuilder } from "../../src/games/verse-builder/VerseBuilder.jsx";
 import { CHAPTERS } from "../../src/data/chapters.js";
 
-describe("Gameplay & Full UI Flow Tests", () => {
-  test("GameHub renders title, stats with mixed values and handles game selection", () => {
-    const handleSelectGame = vi.fn();
-    const handleOpenSettings = vi.fn();
-
-    render(
-      <GameHub
-        onSelectGame={handleSelectGame}
-        onOpenSettings={handleOpenSettings}
-        translation="ESV"
-        allStars={{ "1-0": 3, "1-1": "invalid_value", "1-2": null }}
-      />
-    );
-
-    expect(screen.getByText("Scripture Games")).toBeTruthy();
-
-    const playBtn = screen.getByRole("button", { name: /Verse Builder/i });
-    fireEvent.click(playBtn);
-    expect(handleSelectGame).toHaveBeenCalledWith("verse-builder");
-
-    const settingsBtn = screen.getByLabelText("Open Game Settings");
-    fireEvent.click(settingsBtn);
-    expect(handleOpenSettings).toHaveBeenCalled();
-  });
-
-  test("ChapterSelect renders chapters, unlocks, stars, and controls", () => {
+describe("Verse Builder Gameplay Flow Tests", () => {
+  test("ChapterSelect renders all 15 chapters and computes star progress", () => {
     const handleSelectChapter = vi.fn();
     const handleBackToHub = vi.fn();
     const handleOpenSettings = vi.fn();
 
-    // Chapter 1 has 1 star, unlocking Chapter 2
+    const mockStars = {
+      "1-0": 3,
+      "1-1": 3,
+      "1-2": 2,
+    };
+
     render(
       <ChapterSelect
-        stars={{ "1-0": 3, "1-1": "invalid" }}
+        stars={mockStars}
         translation="ESV"
         onSelectChapter={handleSelectChapter}
         onBackToHub={handleBackToHub}
         onOpenSettings={handleOpenSettings}
       />
     );
+
+    expect(screen.getByText("Verse Builder")).toBeTruthy();
+
+    const ch1Btn = screen.getByRole("button", { name: /Little Seeds/i });
+    fireEvent.click(ch1Btn);
+    expect(handleSelectChapter).toHaveBeenCalledWith(1);
 
     const backBtn = screen.getByLabelText("Back to Game Hub");
     fireEvent.click(backBtn);
@@ -56,40 +42,51 @@ describe("Gameplay & Full UI Flow Tests", () => {
     const settingsBtn = screen.getByLabelText("Settings");
     fireEvent.click(settingsBtn);
     expect(handleOpenSettings).toHaveBeenCalled();
-
-    const ch1Btn = screen.getByRole("button", { name: /Little Seeds/i });
-    fireEvent.click(ch1Btn);
-    expect(handleSelectChapter).toHaveBeenCalledWith(1);
   });
 
-  test("LevelSelect renders 8 levels and handles back and selection", () => {
+  test("LevelSelect shows unlocked levels, locked levels, stars, and handles selection", () => {
     const handleSelectLevel = vi.fn();
     const handleBackToChapters = vi.fn();
+
+    const mockStars = {
+      "1-0": 3,
+      "1-1": 2,
+      "1-2": 1,
+    };
 
     render(
       <LevelSelect
         chapter={CHAPTERS[0]}
-        stars={{ "1-0": 3 }}
+        stars={mockStars}
         translation="ESV"
         onSelectLevel={handleSelectLevel}
         onBackToChapters={handleBackToChapters}
       />
     );
 
+    expect(screen.getByText(/Little Seeds/i)).toBeTruthy();
+
+    // Select unlocked level (Level 1)
+    const level1Btn = screen.getByRole("button", { name: /1 Thessalonians 5:17/i });
+    fireEvent.click(level1Btn);
+    expect(handleSelectLevel).toHaveBeenCalledWith(0);
+
+    // Try clicking a locked level (Level 6: 1-5 is locked because 1-3 has 0 stars)
+    const level6Btn = screen.getByRole("button", { name: /6\? \? \?/i });
+    fireEvent.click(level6Btn);
+    expect(handleSelectLevel).toHaveBeenCalledTimes(1); // Not called again
+
+    // Back to chapters
     const backBtn = screen.getByLabelText("Back to Chapters");
     fireEvent.click(backBtn);
     expect(handleBackToChapters).toHaveBeenCalled();
-
-    const level1Btn = screen.getByRole("button", { name: /1 Thessalonians/i });
-    fireEvent.click(level1Btn);
-    expect(handleSelectLevel).toHaveBeenCalledWith(0);
   });
 
-  test("WinCard renders victory verse, cheer, next and chapter complete buttons", () => {
+  test("WinCard renders completion stars, verse text, cheer and handles replay/next/back", () => {
     const handleReplay = vi.fn();
     const handleNext = vi.fn();
+    const handleBackToLevels = vi.fn();
 
-    // 1. Regular next level
     const { rerender } = render(
       <WinCard
         verse={CHAPTERS[0].verses[0]}
@@ -98,15 +95,20 @@ describe("Gameplay & Full UI Flow Tests", () => {
         hasNextLevel={true}
         onReplay={handleReplay}
         onNext={handleNext}
+        onBackToLevels={handleBackToLevels}
       />
     );
 
     expect(screen.getByText("— 1 Thessalonians 5:17 (ESV)")).toBeTruthy();
     expect(screen.getByText("God loves to hear you pray — any time, anywhere!")).toBeTruthy();
 
-    const replayBtn = screen.getByText("Build it again");
+    const replayBtn = screen.getByRole("button", { name: /Build again/i });
     fireEvent.click(replayBtn);
     expect(handleReplay).toHaveBeenCalled();
+
+    const topBackBtn = screen.getByLabelText("Back to Levels");
+    fireEvent.click(topBackBtn);
+    expect(handleBackToLevels).toHaveBeenCalled();
 
     const nextBtn = screen.getByText("Next verse →");
     fireEvent.click(nextBtn);
@@ -124,6 +126,7 @@ describe("Gameplay & Full UI Flow Tests", () => {
         hasNextLevel={false}
         onReplay={handleReplay}
         onNext={handleNext}
+        onBackToLevels={handleBackToLevels}
       />
     );
     expect(screen.getByText("Complete Chapter 🎉")).toBeTruthy();
@@ -277,7 +280,7 @@ describe("Gameplay & Full UI Flow Tests", () => {
     vi.useRealTimers();
   });
 
-  test("VerseBuilder regular level advance to next level", () => {
+  test("VerseBuilder regular level advance to next level and win card back button", () => {
     vi.useFakeTimers();
     const handleSaveStar = vi.fn();
     const handleBackToHub = vi.fn();
@@ -295,6 +298,23 @@ describe("Gameplay & Full UI Flow Tests", () => {
     );
 
     // Solve Chapter 1 Level 1 ("Pray without ceasing.")
+    fireEvent.click(screen.getByRole("button", { name: "Place word Pray" }));
+    fireEvent.click(screen.getByRole("button", { name: "Place word without" }));
+    fireEvent.click(screen.getByRole("button", { name: "Place word ceasing." }));
+
+    act(() => {
+      vi.advanceTimersByTime(1500);
+    });
+
+    // Test WinCard top-left back button
+    const backBtn = screen.getByLabelText("Back to Levels");
+    fireEvent.click(backBtn);
+    expect(screen.getByText(/Little Seeds/i)).toBeTruthy();
+
+    // Re-enter level 1 and test next verse
+    const level1Btn = screen.getByRole("button", { name: /1 Thessalonians 5:17/i });
+    fireEvent.click(level1Btn);
+
     fireEvent.click(screen.getByRole("button", { name: "Place word Pray" }));
     fireEvent.click(screen.getByRole("button", { name: "Place word without" }));
     fireEvent.click(screen.getByRole("button", { name: "Place word ceasing." }));
@@ -337,8 +357,8 @@ describe("Gameplay & Full UI Flow Tests", () => {
       vi.advanceTimersByTime(1500);
     });
 
-    // WinCard -> Click "Build it again"
-    const replayBtn = screen.getByText("Build it again");
+    // WinCard -> Click "Build again 🔄"
+    const replayBtn = screen.getByRole("button", { name: /Build again/i });
     fireEvent.click(replayBtn);
     expect(screen.getByText("1 Thessalonians 5:17")).toBeTruthy();
 

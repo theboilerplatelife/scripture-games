@@ -22,25 +22,31 @@ export function LevelSelect({
   return (
     <div className="vb-levels-container">
       <div className="vb-topbar" style={{ width: "100%", maxWidth: "560px" }}>
-        <button
-          className="vb-back"
-          onClick={() => {
-            audio.playButtonClick();
-            onBackToChapters();
-          }}
-          aria-label="Back to Chapters"
-          title="Back to Chapter Select"
-        >
-          ←
-        </button>
-
-        <div className="vb-ref-chip">
-          <span className="vb-tape vb-tape-top" />
-          {chapter.icon} Ch. {chapter.id}: {chapter.title}
+        <div className="vb-topbar-left">
+          <button
+            className="vb-back"
+            onClick={() => {
+              audio.playButtonClick();
+              onBackToChapters();
+            }}
+            aria-label="Back to Chapters"
+            title="Back to Chapter Select"
+          >
+            ←
+          </button>
         </div>
 
-        <div className="vb-ref-chip" style={{ fontSize: "16px", padding: "6px 12px" }}>
-          ⭐ {chapterTotalStars} / {chapter.verses.length * 3}
+        <div className="vb-topbar-center">
+          <div className="vb-ref-chip">
+            <span className="vb-tape vb-tape-top" />
+            {chapter.icon} Ch. {chapter.id}: {chapter.title}
+          </div>
+        </div>
+
+        <div className="vb-topbar-right">
+          <div className="vb-stars-pill">
+            ⭐ {chapterTotalStars} / {chapter.verses.length * 3}
+          </div>
         </div>
       </div>
 

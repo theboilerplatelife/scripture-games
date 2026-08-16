@@ -57,12 +57,17 @@ export function PlayBoard({
   }
 
   function removeTile(slotIdx) {
-    if (checkingRef.current) return;
     if (slots[slotIdx] === null) return;
 
     const next = [...slots];
     next[slotIdx] = null;
     setSlots(next);
+    audio.playRemoveScrap();
+  }
+
+  function handleClearAll() {
+    setSlots(Array(words.length).fill(null));
+    setShakeIds([]);
     audio.playRemoveScrap();
   }
 
@@ -85,9 +90,9 @@ export function PlayBoard({
       setShakeIds(wrong);
       setMistakes((m) => m + 1);
 
-      // Extended 1.6s oops feedback so kids see the wrong words before clearing
+      // Extended 1.6s oops feedback: clear ONLY the wrong words, keeping correct words in place
       setTimeout(() => {
-        setSlots(Array(words.length).fill(null));
+        setSlots((cur) => cur.map((id) => (wrong.includes(id) ? null : id)));
         setShakeIds([]);
         checkingRef.current = false;
       }, 1600);
@@ -96,27 +101,33 @@ export function PlayBoard({
 
   return (
     <div className="vb-play-container">
-      {/* Top action bar */}
+      {/* Balanced 3-part topbar */}
       <div className="vb-topbar">
-        <button
-          className="vb-back"
-          onClick={() => {
-            audio.playButtonClick();
-            onBackToLevels();
-          }}
-          aria-label="Back to Levels"
-        >
-          ←
-        </button>
-
-        <div className="vb-ref-chip">
-          <span className="vb-tape vb-tape-top" />
-          <span>{verse.ref}</span>
-          <span className="vb-ref-trans-badge">({translation})</span>
+        <div className="vb-topbar-left">
+          <button
+            className="vb-back"
+            onClick={() => {
+              audio.playButtonClick();
+              onBackToLevels();
+            }}
+            aria-label="Back to Levels"
+          >
+            ←
+          </button>
         </div>
 
-        <div className={`vb-mist ${mistakes === 0 ? "hidden" : ""}`} title="tries">
-          {mistakes > 0 ? `oops ×${mistakes}` : ""}
+        <div className="vb-topbar-center">
+          <div className="vb-ref-chip">
+            <span className="vb-tape vb-tape-top" />
+            <span>{verse.ref}</span>
+            <span className="vb-ref-trans-badge">({translation})</span>
+          </div>
+        </div>
+
+        <div className="vb-topbar-right">
+          <div className={`vb-mist ${mistakes === 0 ? "hidden" : ""}`} title="tries">
+            {mistakes > 0 ? `oops ×${mistakes}` : ""}
+          </div>
         </div>
       </div>
 
@@ -166,8 +177,20 @@ export function PlayBoard({
         })}
       </div>
 
-      {/* Word scraps pile */}
-      <div className="vb-pile-label">✂️ word scraps — tap in order to place</div>
+      {/* Word scraps pile header with Clear button */}
+      <div className="vb-pile-header">
+        <span className="vb-pile-label">✂️ word scraps — tap in order to place</span>
+        <button
+          className="vb-clear-btn"
+          onClick={handleClearAll}
+          disabled={placed.size === 0}
+          aria-label="Clear all placed words"
+          title="Return all placed words back to the pile"
+        >
+          🔄 Clear
+        </button>
+      </div>
+
       <div className="vb-pile">
         {pile.map((id) => {
           const tile = tiles[id];

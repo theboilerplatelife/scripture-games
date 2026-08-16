@@ -9,6 +9,7 @@ export function WinCard({
   hasNextLevel,
   onReplay,
   onNext,
+  onBackToLevels,
 }) {
   const verseText = verse.text[translation] || verse.text.ESV || verse.text.WEB;
 
@@ -18,6 +19,17 @@ export function WinCard({
       <div className="vb-win-card">
         <span className="vb-tape vb-tape-top" />
         
+        <div className="vb-win-topbar">
+          <button
+            className="vb-back"
+            onClick={onBackToLevels}
+            aria-label="Back to Levels"
+            title="Back to Verse List"
+          >
+            ←
+          </button>
+        </div>
+
         <div className="vb-win-buddy">
           <Buddy who={verse.character} size={84} />
         </div>
@@ -34,7 +46,7 @@ export function WinCard({
 
         <div className="vb-win-btns">
           <button className="vb-btn ghost" onClick={onReplay}>
-            Build it again
+            Build again 🔄
           </button>
           <button className="vb-btn" onClick={onNext}>
             {hasNextLevel ? "Next verse →" : "Complete Chapter 🎉"}

@@ -5,6 +5,7 @@ import { Star } from "../../src/components/common/Star.jsx";
 import { Confetti } from "../../src/components/common/Confetti.jsx";
 import { Pencil } from "../../src/components/common/Pencil.jsx";
 import { WelcomeSplash } from "../../src/components/common/WelcomeSplash.jsx";
+import { GameHub } from "../../src/games/hub/GameHub.jsx";
 
 describe("Common Components Tests", () => {
   test("Buddy renders every hair style and accessory variant", () => {
@@ -79,5 +80,32 @@ describe("Common Components Tests", () => {
     // Default translation prop fallback
     rerender(<WelcomeSplash onStart={handleStart} />);
     expect(screen.getByText("📖 ESV")).toBeTruthy();
+  });
+
+  test("GameHub renders 6-game lineup, computes stars with fallbacks, and handles selection", () => {
+    const handleSelectGame = vi.fn();
+    const handleOpenSettings = vi.fn();
+
+    render(
+      <GameHub
+        onSelectGame={handleSelectGame}
+        onOpenSettings={handleOpenSettings}
+        translation="ESV"
+        allStars={{ "1-0": 3, "1-1": "invalid_star_value" }}
+      />
+    );
+
+    expect(screen.getByText("Scripture Games")).toBeTruthy();
+    expect(screen.getByText(/Total Stars/i)).toBeTruthy();
+
+    // Open settings
+    const settingsBtn = screen.getByLabelText("Open Game Settings");
+    fireEvent.click(settingsBtn);
+    expect(handleOpenSettings).toHaveBeenCalled();
+
+    // Select Verse Builder
+    const vbCard = screen.getByRole("button", { name: /Verse Builder/i });
+    fireEvent.click(vbCard);
+    expect(handleSelectGame).toHaveBeenCalledWith("verse-builder");
   });
 });

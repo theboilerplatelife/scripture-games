@@ -136,6 +136,7 @@ export function VerseBuilder({
           hasNextLevel={selectedLevelIdx + 1 < currentChapter.verses.length}
           onReplay={() => setScreen("play")}
           onNext={handleNextFromWin}
+          onBackToLevels={() => setScreen("levels")}
         />
       )}
 

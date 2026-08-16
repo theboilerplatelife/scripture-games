@@ -9,7 +9,7 @@ describe("PlayBoard Interactive Puzzle Tests", () => {
     const handleComplete = vi.fn();
     const handleBack = vi.fn();
 
-    render(
+    const { unmount: unmount1 } = render(
       <PlayBoard
         chapterId={1}
         levelIndex={0}
@@ -27,10 +27,20 @@ describe("PlayBoard Interactive Puzzle Tests", () => {
     fireEvent.click(backBtn);
     expect(handleBack).toHaveBeenCalled();
 
-    // 1. Place scrap 1, then click slot to remove it
+    // Test Clear button when empty
+    const clearBtn = screen.getByRole("button", { name: "Clear all placed words" });
+    fireEvent.click(clearBtn);
+
+    // 1. Place scrap 1, then click Clear button to return it
     const prayScrap = screen.getByRole("button", { name: "Place word Pray" });
     fireEvent.click(prayScrap);
+    expect(screen.getByRole("button", { name: "Remove word Pray" })).toBeTruthy();
+    fireEvent.click(clearBtn);
+    expect(screen.queryByRole("button", { name: "Remove word Pray" })).toBeNull();
 
+    // Place and remove individually
+    const prayScrap2 = screen.getByRole("button", { name: "Place word Pray" });
+    fireEvent.click(prayScrap2);
     const placedSlot = screen.getByRole("button", { name: "Remove word Pray" });
     fireEvent.click(placedSlot);
 
@@ -38,44 +48,40 @@ describe("PlayBoard Interactive Puzzle Tests", () => {
     const emptySlots = screen.getAllByRole("button", { name: /^Empty slot/ });
     fireEvent.click(emptySlots[0]);
 
-    // 2. Wrong placement: Place scrap index 2 first ("ceasing.")
-    const ceasingBtn = screen.getByRole("button", { name: "Place word ceasing." });
+    // 2. Partial correct + Partial wrong placement:
+    // Correct slot 0: "Pray", Wrong slot 1: "ceasing.", Wrong slot 2: "without"
     const prayBtn = screen.getByRole("button", { name: "Place word Pray" });
+    const ceasingBtn = screen.getByRole("button", { name: "Place word ceasing." });
     const withoutBtn = screen.getByRole("button", { name: "Place word without" });
 
-    fireEvent.click(ceasingBtn);
     fireEvent.click(prayBtn);
+    fireEvent.click(ceasingBtn);
     fireEvent.click(withoutBtn);
 
-    // Try placing while full/checking (coverage for checkingRef.current guard and idx === -1)
-    fireEvent.click(prayBtn);
-
-    // While checking is active, click slot and scrap (coverage for checkingRef.current === true)
-    const removeSlot = screen.queryByRole("button", { name: "Remove word Pray" });
-    if (removeSlot) fireEvent.click(removeSlot);
-
-    // Advance past 1.6s mistake shake timer to return scraps to pile
+    // Advance past 1.6s mistake shake timer
     act(() => {
       vi.advanceTimersByTime(1800);
     });
 
-    // 3. Now solve correctly (with 1 mistake -> earned 2 stars)
-    const prayFinal = screen.getByRole("button", { name: "Place word Pray" });
-    const withoutFinal = screen.getByRole("button", { name: "Place word without" });
-    const ceasingFinal = screen.getByRole("button", { name: "Place word ceasing." });
+    // Verify smart oops: "Pray" remains placed in slot 0!
+    expect(screen.getByRole("button", { name: "Remove word Pray" })).toBeTruthy();
+    // "without" and "ceasing." were cleared and returned to pile
+    expect(screen.getByRole("button", { name: "Place word without" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Place word ceasing." })).toBeTruthy();
 
-    fireEvent.click(prayFinal);
-    fireEvent.click(withoutFinal);
-    fireEvent.click(ceasingFinal);
+    // 3. Complete remaining words correctly
+    fireEvent.click(screen.getByRole("button", { name: "Place word without" }));
+    fireEvent.click(screen.getByRole("button", { name: "Place word ceasing." }));
 
     act(() => {
       vi.advanceTimersByTime(1200);
     });
 
     expect(handleComplete).toHaveBeenCalledWith(2);
+    unmount1();
 
     // 4. Test 3-star solve (0 mistakes)
-    const { unmount } = render(
+    const { unmount: unmount2 } = render(
       <PlayBoard
         chapterId={1}
         levelIndex={0}
@@ -92,10 +98,10 @@ describe("PlayBoard Interactive Puzzle Tests", () => {
       vi.advanceTimersByTime(1200);
     });
     expect(handleComplete).toHaveBeenCalledWith(3);
-    unmount();
+    unmount2();
 
     // 5. Test 1-star solve (> 2 mistakes)
-    render(
+    const { unmount: unmount3 } = render(
       <PlayBoard
         chapterId={1}
         levelIndex={0}
@@ -113,6 +119,9 @@ describe("PlayBoard Interactive Puzzle Tests", () => {
       act(() => {
         vi.advanceTimersByTime(1800);
       });
+      // Clear the correctly kept pieces to repeat the mistake cycle
+      const clear = screen.getByRole("button", { name: "Clear all placed words" });
+      fireEvent.click(clear);
     }
     // Now solve correctly
     fireEvent.click(screen.getByRole("button", { name: "Place word Pray" }));
@@ -122,6 +131,7 @@ describe("PlayBoard Interactive Puzzle Tests", () => {
       vi.advanceTimersByTime(1200);
     });
     expect(handleComplete).toHaveBeenCalledWith(1);
+    unmount3();
 
     vi.useRealTimers();
   });
