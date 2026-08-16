@@ -53,7 +53,7 @@ export function MMWinCard({
             Match again 🔄
           </button>
           <button className="vb-btn" onClick={onNext}>
-            {isDeckComplete ? "Complete Deck 🎉" : (hasNextMode ? "Next match →" : "Deck Modes ←")}
+            {isDeckComplete ? "Complete Deck 🎉" : (hasNextMode ? "Next match →" : "Back to Modes ←")}
           </button>
         </div>
       </div>

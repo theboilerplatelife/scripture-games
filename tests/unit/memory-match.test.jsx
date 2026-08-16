@@ -137,7 +137,7 @@ describe("Memory Match screens", () => {
       />
     );
     expect(screen.getByText(/with 1 miss\./)).toBeTruthy();
-    expect(screen.getByText("Deck Modes ←")).toBeTruthy();
+    expect(screen.getByText("Back to Modes ←")).toBeTruthy();
 
     // Deck completely solved (all modes have stars)
     rerender(
@@ -285,7 +285,7 @@ describe("MemoryMatch orchestrator", () => {
         initialScreen="win"
       />
     );
-    fireEvent.click(screen.getByText("Deck Modes ←"));
+    fireEvent.click(screen.getByText("Back to Modes ←"));
     expect(screen.getByText(/Hint Hunt/)).toBeTruthy(); // jumps to unplayed mode 0
     second.unmount();
   });
@@ -344,7 +344,7 @@ describe("MemoryMatch orchestrator", () => {
     );
     completeBoardFor(last.container, 2);
     expect(screen.queryByText("Complete Deck 🎉")).toBeNull();
-    fireEvent.click(screen.getByText("Deck Modes ←"));
+    fireEvent.click(screen.getByText("Back to Modes ←"));
     expect(screen.getByText(/Hint Hunt/)).toBeTruthy(); // mode select screen
     last.unmount();
 
