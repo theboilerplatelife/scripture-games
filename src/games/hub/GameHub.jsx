@@ -44,10 +44,10 @@ export function GameHub({
 
       <div className="hub-stats-bar">
         <div className="hub-stat-chip">
-          ⭐ <strong>{earnedStarsCount}</strong> / {totalPossibleStars} Total Stars
+          🎮 <strong>6 Scripture Games</strong>
         </div>
         <div className="hub-stat-chip">
-          📚 <strong>15 Chapters</strong> Available
+          ⭐ <strong>{earnedStarsCount}</strong> / {totalPossibleStars} Total Stars Earned
         </div>
       </div>
 
@@ -67,11 +67,16 @@ export function GameHub({
             <span className="hub-game-badge">Ready to Play</span>
           </div>
           <h2 className="hub-game-title">Verse Builder</h2>
+          <div className="hub-card-pills">
+            <span className="hub-pill highlight">⭐ {earnedStarsCount} / {totalPossibleStars} Stars</span>
+            <span className="hub-pill">📚 15 Chapters</span>
+            <span className="hub-pill">🧩 Word Puzzle</span>
+          </div>
           <p className="hub-game-desc">
             Piece God&rsquo;s words back together with hand-torn paper scraps, character buddies, and pencil handwriting!
           </p>
           <div className="hub-game-meta">
-            <span>15 Chapters • 120 Verses</span>
+            <span>120 Verses Across 4 Translations</span>
             <span className="hub-play-btn">Play Now →</span>
           </div>
         </button>
@@ -87,11 +92,15 @@ export function GameHub({
             <span className="hub-game-badge coming-soon">Coming Soon</span>
           </div>
           <h2 className="hub-game-title">Who Am I?</h2>
+          <div className="hub-card-pills">
+            <span className="hub-pill">🔍 Clue Deduction</span>
+            <span className="hub-pill">👑 Bible Heroes</span>
+          </div>
           <p className="hub-game-desc">
             Solve progressive scripture clues one at a time to uncover Bible heroes and unlock their full story!
           </p>
           <div className="hub-game-meta">
-            <span>Deduction & Clues</span>
+            <span>Character Mysteries</span>
             <span className="hub-play-btn">In Development</span>
           </div>
         </div>
@@ -107,11 +116,15 @@ export function GameHub({
             <span className="hub-game-badge coming-soon">Coming Soon</span>
           </div>
           <h2 className="hub-game-title">Story Sequencer</h2>
+          <div className="hub-card-pills">
+            <span className="hub-pill">⏳ Timelines</span>
+            <span className="hub-pill">📖 Scripture Stories</span>
+          </div>
           <p className="hub-game-desc">
             Arrange narrative event cards into chronological order and check them against the biblical account.
           </p>
           <div className="hub-game-meta">
-            <span>Timelines & Stories</span>
+            <span>Chronological Order</span>
             <span className="hub-play-btn">In Development</span>
           </div>
         </div>
@@ -127,11 +140,15 @@ export function GameHub({
             <span className="hub-game-badge coming-soon">Coming Soon</span>
           </div>
           <h2 className="hub-game-title">Sword Drill</h2>
+          <div className="hub-card-pills">
+            <span className="hub-pill">⚡ Speed Race</span>
+            <span className="hub-pill">🎯 Books & Verses</span>
+          </div>
           <p className="hub-game-desc">
             A digital version of the classic race to navigate Testaments, books, chapters, and verses!
           </p>
           <div className="hub-game-meta">
-            <span>Speed Navigation</span>
+            <span>Scripture Navigation</span>
             <span className="hub-play-btn">In Development</span>
           </div>
         </div>
@@ -147,11 +164,15 @@ export function GameHub({
             <span className="hub-game-badge coming-soon">Coming Soon</span>
           </div>
           <h2 className="hub-game-title">Memory Match</h2>
+          <div className="hub-card-pills">
+            <span className="hub-pill">🧠 Card Pairs</span>
+            <span className="hub-pill">🕊️ Character Symbols</span>
+          </div>
           <p className="hub-game-desc">
             Flip cards to match verse halves, famous speaker quotes, and biblical character symbols.
           </p>
           <div className="hub-game-meta">
-            <span>Card Match Pairs</span>
+            <span>Visual Memory</span>
             <span className="hub-play-btn">In Development</span>
           </div>
         </div>
@@ -167,11 +188,15 @@ export function GameHub({
             <span className="hub-game-badge coming-soon">Coming Soon</span>
           </div>
           <h2 className="hub-game-title">Journey Maps</h2>
+          <div className="hub-card-pills">
+            <span className="hub-pill">🧭 Interactive Maps</span>
+            <span className="hub-pill">⛵ Biblical Travels</span>
+          </div>
           <p className="hub-game-desc">
             Trace biblical journeys like the Exodus and Paul&rsquo;s travels across tactile vintage maps and journals!
           </p>
           <div className="hub-game-meta">
-            <span>Interactive Geography</span>
+            <span>Biblical Geography</span>
             <span className="hub-play-btn">In Development</span>
           </div>
         </div>
