@@ -3,6 +3,7 @@ import { audio, DEFAULT_BGM_VOL, DEFAULT_SFX_VOL } from "./audio/SoundEngine.js"
 import { DEFAULT_TRANSLATION } from "./data/translations.js";
 import { GameHub } from "./games/hub/GameHub.jsx";
 import { VerseBuilder } from "./games/verse-builder/VerseBuilder.jsx";
+import { MemoryMatch } from "./games/memory-match/MemoryMatch.jsx";
 import { SettingsModal } from "./components/common/SettingsModal.jsx";
 import { WelcomeSplash } from "./components/common/WelcomeSplash.jsx";
 
@@ -189,6 +190,23 @@ export default function App() {
               }}
             />
           )}
+
+          {/* Screen 3: Memory Match Game */}
+          {activeGame === "memory-match" && (
+            <MemoryMatch
+              key={`mm-${resetCount}`}
+              stars={stars}
+              onSaveStar={handleSaveStar}
+              translation={translation}
+              onBackToHub={() => {
+                setActiveGame("hub");
+              }}
+              onOpenSettings={() => {
+                audio.playSettingsChime();
+                setIsSettingsOpen(true);
+              }}
+            />
+          )}
         </>
       )}
 
@@ -267,6 +285,8 @@ input:focus-visible,
 .hub-game-card:focus-visible,
 .vb-chapter-card:focus-visible,
 .vb-level-card:focus-visible,
+.mm-card:focus-visible,
+.mm-mode-card:focus-visible,
 .splash-start-btn:focus-visible {
   outline: none;
   filter:

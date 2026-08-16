@@ -92,7 +92,7 @@ describe("Common Components Tests", () => {
     expect(handleStart).toHaveBeenCalled();
   });
 
-  test("GameHub renders 6-game lineup, computes stars with fallbacks, and handles selection", () => {
+  test("GameHub renders 6-game lineup, splits per-game stars, and handles selection", () => {
     const handleSelectGame = vi.fn();
     const handleOpenSettings = vi.fn();
 
@@ -101,21 +101,29 @@ describe("Common Components Tests", () => {
         onSelectGame={handleSelectGame}
         onOpenSettings={handleOpenSettings}
         translation="ESV"
-        allStars={{ "1-0": 3, "1-1": "invalid_star_value" }}
+        allStars={{ "1-0": 3, "1-1": "invalid_star_value", "mm-1-0": 2 }}
       />
     );
 
     expect(screen.getByText("Scripture Games")).toBeTruthy();
+    expect(screen.getByText(/2 games ready/)).toBeTruthy();
     expect(screen.getByText(/Total Stars/i)).toBeTruthy();
+
+    // Per-game star pills are prefix-filtered from the shared stars map
+    expect(screen.getByText("⭐ 3 / 360 Stars")).toBeTruthy();
+    expect(screen.getByText("⭐ 2 / 180 Stars")).toBeTruthy();
+    // Hub chip shows the combined figure
+    expect(screen.getByText("5")).toBeTruthy();
 
     // Open settings
     const settingsBtn = screen.getByLabelText("Open Game Settings");
     fireEvent.click(settingsBtn);
     expect(handleOpenSettings).toHaveBeenCalled();
 
-    // Select Verse Builder
-    const vbCard = screen.getByRole("button", { name: /Verse Builder/i });
-    fireEvent.click(vbCard);
+    // Select each live game
+    fireEvent.click(screen.getByRole("button", { name: /Verse Builder/i }));
     expect(handleSelectGame).toHaveBeenCalledWith("verse-builder");
+    fireEvent.click(screen.getByRole("button", { name: /Memory Match/i }));
+    expect(handleSelectGame).toHaveBeenCalledWith("memory-match");
   });
 });

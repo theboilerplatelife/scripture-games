@@ -14,8 +14,13 @@ export function GameHub({
     audio.setTrack("hub");
   }, []);
 
-  const totalPossibleStars = CHAPTERS.length * 8 * 3; // 15 chapters * 8 verses * 3 stars = 360
-  const earnedStarsCount = Object.values(allStars).reduce((acc, curr) => acc + (typeof curr === "number" ? curr : 0), 0);
+  // Per-game star pools share one storage object; Memory Match keys are "mm-" prefixed
+  const vbMaxStars = CHAPTERS.length * 8 * 3; // 360
+  const mmMaxStars = CHAPTERS.length * 4 * 3; // 180
+  const sumStars = (entries) => entries.reduce((acc, [, v]) => acc + (typeof v === "number" ? v : 0), 0);
+  const starEntries = Object.entries(allStars);
+  const vbStars = sumStars(starEntries.filter(([k]) => !k.startsWith("mm-")));
+  const mmStars = sumStars(starEntries.filter(([k]) => k.startsWith("mm-")));
 
   return (
     <div className="hub-root">
@@ -45,10 +50,10 @@ export function GameHub({
 
       <div className="hub-stats-bar">
         <div className="hub-stat-chip">
-          ✂️ <strong>1 game ready</strong> · 5 on the way
+          ✂️ <strong>2 games ready</strong> · 4 on the way
         </div>
         <div className="hub-stat-chip">
-          ⭐ <strong>{earnedStarsCount}</strong> / {totalPossibleStars} Total Stars Earned
+          ⭐ <strong>{vbStars + mmStars}</strong> / {vbMaxStars + mmMaxStars} Total Stars Earned
         </div>
       </div>
 
@@ -69,7 +74,7 @@ export function GameHub({
           </div>
           <h2 className="hub-game-title">Verse Builder</h2>
           <div className="hub-card-pills">
-            <span className="hub-pill highlight">⭐ {earnedStarsCount} / {totalPossibleStars} Stars</span>
+            <span className="hub-pill highlight">⭐ {vbStars} / {vbMaxStars} Stars</span>
             <span className="hub-pill">📚 15 Chapters</span>
             <span className="hub-pill">🧩 Word Puzzle</span>
           </div>
@@ -155,28 +160,33 @@ export function GameHub({
         </div>
 
         {/* Game 5: Memory Match */}
-        <div
-          className="hub-game-card disabled"
+        <button
+          className="hub-game-card"
+          onClick={() => {
+            audio.playButtonClick();
+            onSelectGame("memory-match");
+          }}
           style={{ "--rot": "-1.4deg" }}
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
             <span className="hub-game-icon"><GameIcon kind="cards" /></span>
-            <span className="hub-game-badge coming-soon">Coming Soon</span>
+            <span className="hub-game-badge">Ready to Play</span>
           </div>
           <h2 className="hub-game-title">Memory Match</h2>
           <div className="hub-card-pills">
+            <span className="hub-pill highlight">⭐ {mmStars} / {mmMaxStars} Stars</span>
             <span className="hub-pill">🧠 Card Pairs</span>
-            <span className="hub-pill">🕊️ Character Symbols</span>
+            <span className="hub-pill">📚 15 Chapters</span>
           </div>
           <p className="hub-game-desc">
-            Flip cards to match verse halves, famous speaker quotes, and biblical character symbols.
+            Flip kraft-paper cards to match buddy faces, speakers, references, and torn verse halves!
           </p>
           <div className="hub-game-meta">
-            <span>Visual Memory</span>
-            <span className="hub-dev-note">In Development</span>
+            <span>60 Boards Across 4 Match Modes</span>
+            <span className="hub-play-btn">Play Now →</span>
           </div>
-        </div>
+        </button>
 
         {/* Game 6: Journey Maps */}
         <div

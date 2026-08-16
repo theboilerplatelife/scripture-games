@@ -44,7 +44,7 @@ All code changes must conform to [CONSTITUTION.md](CONSTITUTION.md). Key rules:
 * **Depiction Rule**: Absolute prohibition against cartoon or visual avatars of Jesus Christ.
 * **Audio Rule**: 100% synthesized Web Audio for all sound effects and background music.
 * **Offline Storage Rule**: Pure client-side `localStorage`:
-  - Stars Progress: `scripture_games_stars_v1`
+  - Stars Progress: `scripture_games_stars_v1` — one flat map shared by all games: Verse Builder keys are `"{chapterId}-{levelIdx}"`, Memory Match keys are `"mm-{chapterId}-{modeIdx}"`. New games must namespace their keys; totals are computed by prefix-filtering.
   - Active Translation: `scripture_games_translation_v1`
   - Audio Mute: `scripture_games_audio_muted_v1`
   - BGM Volume: `scripture_games_bgm_vol_v1`

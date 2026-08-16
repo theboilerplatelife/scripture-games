@@ -29,7 +29,10 @@ export function ChapterSelect({
     return count;
   };
 
-  const totalEarnedStars = Object.values(stars).reduce((a, b) => a + (typeof b === "number" ? b : 0), 0);
+  const totalEarnedStars = Object.entries(stars).reduce(
+    (a, [k, v]) => a + (!k.startsWith("mm-") && typeof v === "number" ? v : 0),
+    0
+  );
   const maxPossibleStars = CHAPTERS.length * 8 * 3; // 360
 
   return (

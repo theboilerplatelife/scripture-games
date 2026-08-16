@@ -82,7 +82,11 @@ export function VerseBuilder({
   }
 
   const totalPossibleStars = CHAPTERS.length * 8 * 3;
-  const totalEarnedStars = Object.values(stars).reduce((a, b) => a + (typeof b === "number" ? b : 0), 0);
+  // Exclude other games' namespaced keys (e.g. Memory Match "mm-") from VB totals
+  const totalEarnedStars = Object.entries(stars).reduce(
+    (a, [k, v]) => a + (!k.startsWith("mm-") && typeof v === "number" ? v : 0),
+    0
+  );
 
   return (
     <div className="vb-wrapper">
