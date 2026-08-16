@@ -5,7 +5,8 @@ import { MMChapterSelect } from "./MMChapterSelect.jsx";
 import { ModeSelect } from "./ModeSelect.jsx";
 import { MemoryBoard } from "./MemoryBoard.jsx";
 import { MMWinCard } from "./MMWinCard.jsx";
-import { MMChapterDoneCard } from "./MMChapterDoneCard.jsx";
+import { CompletionCard } from "../../components/common/CompletionCard.jsx";
+import { isStarred, starValue, sumStars, nextUnfinished } from "../../utils/stars.js";
 import "./memory-match.css";
 
 function randomBoardSeed() {
@@ -62,23 +63,20 @@ export function MemoryMatch({
     dealNewBoard();
   }
 
+  const isModeStarred = (m) => isStarred(stars, `mm-${selectedChapterId}-${m}`);
+
   function handleCompleteBoard(earned, misses) {
-    const wasAlreadyComplete = MODES.every((_, m) => {
-      const v = stars[`mm-${selectedChapterId}-${m}`];
-      return typeof v === "number" && v > 0;
-    });
-    onSaveStar(starKey, Math.max(stars[starKey] || 0, earned));
-    setLastResult({ earned, misses, prevBest: stars[starKey] || 0, wasAlreadyComplete });
+    const wasAlreadyComplete = MODES.every((_, m) => isModeStarred(m));
+    const prevBest = starValue(stars, starKey);
+    onSaveStar(starKey, Math.max(prevBest, earned));
+    setLastResult({ earned, misses, prevBest, wasAlreadyComplete });
     audio.playLightApplause();
     setScreen("win");
   }
 
-  // Check if all modes in current deck are completed (> 0 stars)
-  const isDeckComplete = MODES.every((_, m) => {
-    if (m === selectedModeIdx) return true; // current mode was just completed
-    const v = stars[`mm-${selectedChapterId}-${m}`];
-    return typeof v === "number" && v > 0;
-  });
+  // Complete counting the mode just won (the stars prop may not have the
+  // fresh save yet at render time)
+  const isDeckComplete = MODES.every((_, m) => m === selectedModeIdx || isModeStarred(m));
 
   // Celebrate only the win that completed the deck, not later replays
   const justCompletedDeck = isDeckComplete && !lastResult.wasAlreadyComplete;
@@ -97,12 +95,7 @@ export function MemoryMatch({
       setScreen("modes");
     } else {
       // Nearest mode still missing a star, scanning forward with wraparound
-      // (skips modes that are already done, e.g. mode 2 starred but mode 0 not)
-      const nextUnplayed = MODES.map((_, m) => (selectedModeIdx + 1 + m) % MODES.length).find((m) => {
-        const v = stars[`mm-${selectedChapterId}-${m}`];
-        return !(typeof v === "number" && v > 0);
-      });
-      setSelectedModeIdx(nextUnplayed);
+      setSelectedModeIdx(nextUnfinished(MODES.length, selectedModeIdx, isModeStarred));
       dealNewBoard();
     }
   }
@@ -115,10 +108,7 @@ export function MemoryMatch({
   }
 
   const maxStars = DECKS.length * MODES.length * 3; // 72
-  const totalEarned = Object.entries(stars).reduce(
-    (a, [k, v]) => a + (k.startsWith("mm-") && typeof v === "number" ? v : 0),
-    0
-  );
+  const totalEarned = sumStars(stars, { prefix: "mm-" });
 
   return (
     <div className="vb-wrapper">
@@ -172,13 +162,32 @@ export function MemoryMatch({
       )}
 
       {screen === "chapter-done" && (
-        <MMChapterDoneCard
-          deck={currentDeck}
-          isAllGameDone={selectedChapterId === DECKS.length}
-          totalStars={totalEarned}
-          maxStars={maxStars}
-          onNextChapter={handleNextChapter}
-          onBackToChapters={() => setScreen("chapters")}
+        <CompletionCard
+          icon={selectedChapterId === DECKS.length ? "🏆" : currentDeck.icon}
+          title={
+            selectedChapterId === DECKS.length
+              ? `You Matched All ${DECKS.length} Decks!`
+              : `Deck ${selectedChapterId} Matched!`
+          }
+          cheer={
+            selectedChapterId === DECKS.length ? (
+              <>
+                ⭐ <strong>{totalEarned} of {maxStars} Memory Stars Collected!</strong>
+                <br />
+                &ldquo;I will remember the deeds of the LORD.&rdquo; (Psalm 77:11)
+              </>
+            ) : (
+              <>
+                You found every pair in <strong>{currentDeck.title}</strong>!
+                <br />
+                What a memory — keep it up!
+              </>
+            )
+          }
+          nextLabel="Next Deck →"
+          onNext={selectedChapterId === DECKS.length ? null : handleNextChapter}
+          selectLabel="Deck Select"
+          onSelect={() => setScreen("chapters")}
           onBackToHub={handleGoToHub}
         />
       )}

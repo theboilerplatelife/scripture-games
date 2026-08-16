@@ -3,7 +3,6 @@ import { render, screen, fireEvent, act } from "@testing-library/react";
 import { ChapterSelect } from "../../src/games/verse-builder/ChapterSelect.jsx";
 import { LevelSelect } from "../../src/games/verse-builder/LevelSelect.jsx";
 import { WinCard } from "../../src/games/verse-builder/WinCard.jsx";
-import { ChapterDoneCard } from "../../src/games/verse-builder/ChapterDoneCard.jsx";
 import { VerseBuilder } from "../../src/games/verse-builder/VerseBuilder.jsx";
 import { CHAPTERS } from "../../src/data/chapters.js";
 
@@ -151,51 +150,6 @@ describe("Verse Builder Gameplay Flow Tests", () => {
       />
     );
     expect(screen.getByText("Complete Chapter 🎉")).toBeTruthy();
-  });
-
-  test("ChapterDoneCard renders chapter completion and handles next/back", () => {
-    const handleNextChapter = vi.fn();
-    const handleBackToChapters = vi.fn();
-    const handleBackToHub = vi.fn();
-
-    const { rerender } = render(
-      <ChapterDoneCard
-        chapter={CHAPTERS[0]}
-        isAllGameDone={false}
-        totalStars={24}
-        maxStars={360}
-        onNextChapter={handleNextChapter}
-        onBackToChapters={handleBackToChapters}
-        onBackToHub={handleBackToHub}
-      />
-    );
-
-    expect(screen.getByText("Chapter 1 Complete!")).toBeTruthy();
-    const nextChBtn = screen.getByText("Next Chapter →");
-    fireEvent.click(nextChBtn);
-    expect(handleNextChapter).toHaveBeenCalled();
-
-    const chSelectBtn = screen.getByText("Chapter Select");
-    fireEvent.click(chSelectBtn);
-    expect(handleBackToChapters).toHaveBeenCalled();
-
-    const hubBtn = screen.getByText(/Game Hub/i);
-    fireEvent.click(hubBtn);
-    expect(handleBackToHub).toHaveBeenCalled();
-
-    // Rerender as all game completed (Chapter 15 finale)
-    rerender(
-      <ChapterDoneCard
-        chapter={CHAPTERS[14]}
-        isAllGameDone={true}
-        totalStars={360}
-        maxStars={360}
-        onNextChapter={null}
-        onBackToChapters={handleBackToChapters}
-        onBackToHub={handleBackToHub}
-      />
-    );
-    expect(screen.getByText("You Built All 15 Chapters!")).toBeTruthy();
   });
 
   test("VerseBuilder full multi-screen navigation and chapter completion", () => {

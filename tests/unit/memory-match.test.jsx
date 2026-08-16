@@ -5,7 +5,6 @@ import { MemoryMatch } from "../../src/games/memory-match/MemoryMatch.jsx";
 import { MMChapterSelect } from "../../src/games/memory-match/MMChapterSelect.jsx";
 import { ModeSelect } from "../../src/games/memory-match/ModeSelect.jsx";
 import { MMWinCard } from "../../src/games/memory-match/MMWinCard.jsx";
-import { MMChapterDoneCard } from "../../src/games/memory-match/MMChapterDoneCard.jsx";
 
 describe("Memory Match screens", () => {
   test("MMChapterSelect: unlock logic, totals, back and settings", () => {
@@ -175,45 +174,6 @@ describe("Memory Match screens", () => {
     );
     expect(screen.getByText(/with 9 misses\./)).toBeTruthy();
     expect(screen.getByText("Complete Deck 🎉")).toBeTruthy();
-  });
-
-  test("MMChapterDoneCard: mid-game and finale variants", () => {
-    const onNextChapter = vi.fn();
-    const onBackToChapters = vi.fn();
-    const onBackToHub = vi.fn();
-
-    const { rerender } = render(
-      <MMChapterDoneCard
-        deck={DECKS[0]}
-        isAllGameDone={false}
-        totalStars={12}
-        maxStars={72}
-        onNextChapter={onNextChapter}
-        onBackToChapters={onBackToChapters}
-        onBackToHub={onBackToHub}
-      />
-    );
-    expect(screen.getByText("Deck 1 Matched!")).toBeTruthy();
-    fireEvent.click(screen.getByText("Next Deck →"));
-    expect(onNextChapter).toHaveBeenCalled();
-    fireEvent.click(screen.getByText("Deck Select"));
-    expect(onBackToChapters).toHaveBeenCalled();
-    fireEvent.click(screen.getByText("Game Hub 🏠"));
-    expect(onBackToHub).toHaveBeenCalled();
-
-    rerender(
-      <MMChapterDoneCard
-        deck={DECKS[7]}
-        isAllGameDone={true}
-        totalStars={72}
-        maxStars={72}
-        onNextChapter={onNextChapter}
-        onBackToChapters={onBackToChapters}
-        onBackToHub={onBackToHub}
-      />
-    );
-    expect(screen.getByText("You Matched All 8 Decks!")).toBeTruthy();
-    expect(screen.queryByText("Next Deck →")).toBeNull();
   });
 });
 

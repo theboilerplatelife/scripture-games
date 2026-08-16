@@ -2,6 +2,7 @@ import { audio } from "../../audio/SoundEngine.js";
 import { Star } from "../../components/common/Star.jsx";
 import { jitter } from "../../utils/random.js";
 import { MODES } from "./matchData.js";
+import { starValue } from "../../utils/stars.js";
 
 export function ModeSelect({
   deck: deckObj,
@@ -10,7 +11,7 @@ export function ModeSelect({
   onSelectMode,
   onBackToDecks,
 }) {
-  const getModeStars = (modeIdx) => stars[`mm-${deckObj.id}-${modeIdx}`] || 0;
+  const getModeStars = (modeIdx) => starValue(stars, `mm-${deckObj.id}-${modeIdx}`);
   const deckTotal = MODES.reduce((acc, _, m) => acc + getModeStars(m), 0);
 
   return (

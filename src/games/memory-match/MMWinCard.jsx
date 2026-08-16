@@ -1,5 +1,5 @@
-import { Star } from "../../components/common/Star.jsx";
 import { Confetti } from "../../components/common/Confetti.jsx";
+import { WinStars, BestLine } from "../../components/common/WinParts.jsx";
 import { MODES } from "./matchData.js";
 
 export function MMWinCard({
@@ -37,17 +37,8 @@ export function MMWinCard({
 
         <div className="mm-win-icon" aria-hidden="true">{mode.icon}</div>
 
-        <div className="vb-win-stars">
-          {[1, 2, 3].map((n) => (
-            <Star key={n} filled={earnedStars >= n} size={34} />
-          ))}
-        </div>
-
-        {bestStars > 0 && (
-          <p className="vb-win-best">
-            {isNewBest ? "🎉 New best!" : `Best: ${"⭐".repeat(bestStars)}`}
-          </p>
-        )}
+        <WinStars earned={earnedStars} />
+        <BestLine best={bestStars} isNew={isNewBest} />
 
         <p className="vb-win-verse">All {mode.pairs} pairs found!</p>
         <p className="vb-win-ref">

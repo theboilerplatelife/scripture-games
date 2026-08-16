@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { audio } from "../../audio/SoundEngine.js";
 import { CHAPTERS } from "../../data/chapters.js";
 import { DECKS, MODES } from "../memory-match/matchData.js";
+import { sumStars } from "../../utils/stars.js";
 import { GameIcon } from "./GameIcon.jsx";
 import "./hub.css";
 
@@ -18,10 +19,8 @@ export function GameHub({
   // Per-game star pools share one storage object; Memory Match keys are "mm-" prefixed
   const vbMaxStars = CHAPTERS.length * 8 * 3; // 360
   const mmMaxStars = DECKS.length * MODES.length * 3; // 72
-  const sumStars = (entries) => entries.reduce((acc, [, v]) => acc + (typeof v === "number" ? v : 0), 0);
-  const starEntries = Object.entries(allStars);
-  const vbStars = sumStars(starEntries.filter(([k]) => !k.startsWith("mm-")));
-  const mmStars = sumStars(starEntries.filter(([k]) => k.startsWith("mm-")));
+  const vbStars = sumStars(allStars, { excludePrefix: "mm-" });
+  const mmStars = sumStars(allStars, { prefix: "mm-" });
 
   return (
     <div className="hub-root">

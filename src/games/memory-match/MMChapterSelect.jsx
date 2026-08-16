@@ -1,6 +1,8 @@
 import { audio } from "../../audio/SoundEngine.js";
 import { jitter } from "../../utils/random.js";
 import { DECKS, MODES } from "./matchData.js";
+import { isStarred, groupStars, sumStars } from "../../utils/stars.js";
+import { CompletionStamp } from "../../components/common/CompletionStamp.jsx";
 
 export function MMChapterSelect({
   onSelectChapter, // or onSelectDeck
@@ -9,21 +11,15 @@ export function MMChapterSelect({
   stars, // shared stars object; Memory Match keys are "mm-{deckId}-{modeIdx}"
   translation,
 }) {
-  const getDeckStars = (deckId) =>
-    MODES.reduce((acc, _, m) => {
-      const v = stars[`mm-${deckId}-${m}`];
-      return acc + (typeof v === "number" ? v : 0);
-    }, 0);
+  const deckKeys = (deckId) => MODES.map((_, m) => `mm-${deckId}-${m}`);
+  const getDeckStars = (deckId) => groupStars(stars, deckKeys(deckId));
 
   const isDeckUnlocked = (idx) => {
     if (idx === 0) return true;
     return getDeckStars(DECKS[idx - 1].id) > 0;
   };
 
-  const totalEarned = Object.entries(stars).reduce(
-    (a, [k, v]) => a + (k.startsWith("mm-") && typeof v === "number" ? v : 0),
-    0
-  );
+  const totalEarned = sumStars(stars, { prefix: "mm-" });
   const maxStars = DECKS.length * MODES.length * 3; // 72
 
   return (
@@ -71,10 +67,7 @@ export function MMChapterSelect({
         {DECKS.map((deckObj, idx) => {
           const unlocked = isDeckUnlocked(idx);
           const deckStars = getDeckStars(deckObj.id);
-          const isComplete = MODES.every((_, m) => {
-            const v = stars[`mm-${deckObj.id}-${m}`];
-            return typeof v === "number" && v > 0;
-          });
+          const isComplete = deckKeys(deckObj.id).every((k) => isStarred(stars, k));
           const isPerfect = deckStars === MODES.length * 3;
 
           return (
@@ -94,11 +87,7 @@ export function MMChapterSelect({
               aria-label={`Memory Match Deck ${deckObj.id}: ${unlocked ? deckObj.title : "Locked"}${isComplete ? " (completed)" : ""}`}
             >
               <span className="vb-tape vb-tape-top" />
-              {isComplete && (
-                <span className={`vb-stamp ${isPerfect ? "perfect" : ""}`} aria-hidden="true">
-                  {isPerfect ? "★ Perfect!" : "✓ Complete"}
-                </span>
-              )}
+              <CompletionStamp complete={isComplete} perfect={isPerfect} />
               <div className="vb-chapter-header">
                 <span className="vb-chapter-num">Deck {deckObj.id}</span>
                 <span className="vb-chapter-stars">⭐ {deckStars}/{MODES.length * 3}</span>

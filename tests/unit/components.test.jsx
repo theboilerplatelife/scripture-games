@@ -7,6 +7,8 @@ import { Pencil } from "../../src/components/common/Pencil.jsx";
 import { WelcomeSplash } from "../../src/components/common/WelcomeSplash.jsx";
 import { GameHub } from "../../src/games/hub/GameHub.jsx";
 import { GameIcon } from "../../src/games/hub/GameIcon.jsx";
+import { CompletionCard } from "../../src/components/common/CompletionCard.jsx";
+import { CompletionStamp } from "../../src/components/common/CompletionStamp.jsx";
 
 describe("Common Components Tests", () => {
   test("Buddy renders every hair style and accessory variant", () => {
@@ -53,6 +55,56 @@ describe("Common Components Tests", () => {
 
     const { container: fallback } = render(<GameIcon kind="unknown_kind" size={24} />);
     expect(fallback.querySelector("svg.hub-game-icon-svg")).toBeTruthy();
+  });
+
+  test("CompletionCard wires its buttons and hides Next on the finale", () => {
+    const onNext = vi.fn();
+    const onSelect = vi.fn();
+    const onBackToHub = vi.fn();
+
+    const { rerender } = render(
+      <CompletionCard
+        icon="🌱"
+        title="Chapter 1 Complete!"
+        cheer="Great job!"
+        nextLabel="Next Chapter →"
+        onNext={onNext}
+        selectLabel="Chapter Select"
+        onSelect={onSelect}
+        onBackToHub={onBackToHub}
+      />
+    );
+    fireEvent.click(screen.getByText("Next Chapter →"));
+    expect(onNext).toHaveBeenCalled();
+    fireEvent.click(screen.getByText("Chapter Select"));
+    expect(onSelect).toHaveBeenCalled();
+    fireEvent.click(screen.getByText("Game Hub 🏠"));
+    expect(onBackToHub).toHaveBeenCalled();
+
+    rerender(
+      <CompletionCard
+        icon="👑"
+        title="All Done!"
+        cheer="Amazing!"
+        nextLabel="Next Chapter →"
+        onNext={null}
+        selectLabel="Chapter Select"
+        onSelect={onSelect}
+        onBackToHub={onBackToHub}
+      />
+    );
+    expect(screen.queryByText("Next Chapter →")).toBeNull();
+  });
+
+  test("CompletionStamp renders nothing, Complete, or Perfect", () => {
+    const { container: hidden } = render(<CompletionStamp complete={false} perfect={false} />);
+    expect(hidden.querySelector(".vb-stamp")).toBeNull();
+
+    render(<CompletionStamp complete={true} perfect={false} />);
+    expect(screen.getByText("✓ Complete")).toBeTruthy();
+
+    render(<CompletionStamp complete={true} perfect={true} />);
+    expect(screen.getByText("★ Perfect!")).toBeTruthy();
   });
 
   test("Star renders filled and empty states with default size", () => {

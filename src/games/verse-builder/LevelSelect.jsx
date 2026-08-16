@@ -2,6 +2,7 @@ import { audio } from "../../audio/SoundEngine.js";
 import { Buddy } from "../../components/common/Buddy.jsx";
 import { Star } from "../../components/common/Star.jsx";
 import { jitter } from "../../utils/random.js";
+import { starValue } from "../../utils/stars.js";
 
 export function LevelSelect({
   chapter,
@@ -10,7 +11,7 @@ export function LevelSelect({
   stars, // { "chapId-lvlIdx": number }
   translation,
 }) {
-  const getLevelStars = (lvlIdx) => stars[`${chapter.id}-${lvlIdx}`] || 0;
+  const getLevelStars = (lvlIdx) => starValue(stars, `${chapter.id}-${lvlIdx}`);
 
   const isLevelUnlocked = (lvlIdx) => {
     if (lvlIdx === 0) return true;

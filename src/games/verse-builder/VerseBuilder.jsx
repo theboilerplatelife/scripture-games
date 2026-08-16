@@ -5,7 +5,8 @@ import { ChapterSelect } from "./ChapterSelect.jsx";
 import { LevelSelect } from "./LevelSelect.jsx";
 import { PlayBoard } from "./PlayBoard.jsx";
 import { WinCard } from "./WinCard.jsx";
-import { ChapterDoneCard } from "./ChapterDoneCard.jsx";
+import { CompletionCard } from "../../components/common/CompletionCard.jsx";
+import { isStarred, sumStars, nextUnfinished } from "../../utils/stars.js";
 import "./verse-builder.css";
 
 export function VerseBuilder({
@@ -58,10 +59,7 @@ export function VerseBuilder({
     setScreen("play");
   }
 
-  const isVerseStarred = (i) => {
-    const v = stars[`${selectedChapterId}-${i}`];
-    return typeof v === "number" && v > 0;
-  };
+  const isVerseStarred = (i) => isStarred(stars, `${selectedChapterId}-${i}`);
 
   function handleCompleteVerse(earned) {
     setWasChapterComplete(currentChapter.verses.every((_, i) => isVerseStarred(i)));
@@ -94,11 +92,9 @@ export function VerseBuilder({
     } else {
       // Nearest verse still missing a star, scanning forward with wraparound
       // (a replay of an early verse must not walk through finished ones)
-      const count = currentChapter.verses.length;
-      const nextUnstarred = currentChapter.verses
-        .map((_, k) => (selectedLevelIdx + 1 + k) % count)
-        .find((i) => i !== selectedLevelIdx && !isVerseStarred(i));
-      setSelectedLevelIdx(nextUnstarred);
+      setSelectedLevelIdx(
+        nextUnfinished(currentChapter.verses.length, selectedLevelIdx, isVerseStarred)
+      );
       setScreen("play");
     }
   }
@@ -112,10 +108,7 @@ export function VerseBuilder({
 
   const totalPossibleStars = CHAPTERS.length * 8 * 3;
   // Exclude other games' namespaced keys (e.g. Memory Match "mm-") from VB totals
-  const totalEarnedStars = Object.entries(stars).reduce(
-    (a, [k, v]) => a + (!k.startsWith("mm-") && typeof v === "number" ? v : 0),
-    0
-  );
+  const totalEarnedStars = sumStars(stars, { excludePrefix: "mm-" });
 
   return (
     <div className="vb-wrapper">
@@ -173,13 +166,32 @@ export function VerseBuilder({
 
       {/* Screen 5: Chapter Complete / Grand Finale */}
       {screen === "chapter-done" && (
-        <ChapterDoneCard
-          chapter={currentChapter}
-          isAllGameDone={selectedChapterId === 15}
-          totalStars={totalEarnedStars}
-          maxStars={totalPossibleStars}
-          onNextChapter={handleNextChapter}
-          onBackToChapters={() => setScreen("chapters")}
+        <CompletionCard
+          icon={selectedChapterId === 15 ? "👑" : currentChapter.icon}
+          title={
+            selectedChapterId === 15
+              ? "You Built All 15 Chapters!"
+              : `Chapter ${selectedChapterId} Complete!`
+          }
+          cheer={
+            selectedChapterId === 15 ? (
+              <>
+                ⭐ <strong>{totalEarnedStars} of {totalPossibleStars} Stars Collected!</strong>
+                <br />
+                &ldquo;I have hidden your word in my heart that I might not sin against you.&rdquo; (Psalm 119:11)
+              </>
+            ) : (
+              <>
+                Fantastic job completing <strong>{currentChapter.title}</strong>!
+                <br />
+                Keep hiding God&rsquo;s word in your heart!
+              </>
+            )
+          }
+          nextLabel="Next Chapter →"
+          onNext={selectedChapterId === 15 ? null : handleNextChapter}
+          selectLabel="Chapter Select"
+          onSelect={() => setScreen("chapters")}
           onBackToHub={handleGoToHub}
         />
       )}

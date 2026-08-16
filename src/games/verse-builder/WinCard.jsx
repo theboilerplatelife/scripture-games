@@ -1,6 +1,6 @@
 import { Buddy } from "../../components/common/Buddy.jsx";
-import { Star } from "../../components/common/Star.jsx";
 import { Confetti } from "../../components/common/Confetti.jsx";
+import { WinStars, BestLine } from "../../components/common/WinParts.jsx";
 
 export function WinCard({
   verse,
@@ -38,17 +38,8 @@ export function WinCard({
           <Buddy who={verse.character} size={84} />
         </div>
 
-        <div className="vb-win-stars">
-          {[1, 2, 3].map((n) => (
-            <Star key={n} filled={earnedStars >= n} size={34} />
-          ))}
-        </div>
-
-        {bestStars > 0 && (
-          <p className="vb-win-best">
-            {isNewBest ? "🎉 New best!" : `Best: ${"⭐".repeat(bestStars)}`}
-          </p>
-        )}
+        <WinStars earned={earnedStars} />
+        <BestLine best={bestStars} isNew={isNewBest} />
 
         <p className="vb-win-verse">&ldquo;{verseText}&rdquo;</p>
         <p className="vb-win-ref">— {verse.ref} ({translation})</p>

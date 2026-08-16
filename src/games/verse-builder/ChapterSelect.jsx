@@ -1,6 +1,8 @@
 import { audio } from "../../audio/SoundEngine.js";
 import { CHAPTERS } from "../../data/chapters.js";
 import { jitter } from "../../utils/random.js";
+import { isStarred, groupStars, sumStars } from "../../utils/stars.js";
+import { CompletionStamp } from "../../components/common/CompletionStamp.jsx";
 
 export function ChapterSelect({
   onSelectChapter,
@@ -11,28 +13,17 @@ export function ChapterSelect({
 }) {
   // Chapter unlock logic: Chapter 1 is always unlocked.
   // Subsequent chapters unlocked if previous chapter has >= 1 star or if any level in that chapter is played.
+  const chapterKeys = (chap) => chap.verses.map((_, l) => `${chap.id}-${l}`);
+
   const isChapterUnlocked = (idx) => {
     if (idx === 0) return true;
-    const prevChap = CHAPTERS[idx - 1];
-    // Check if at least 1 star earned in prev chapter
-    for (let l = 0; l < prevChap.verses.length; l++) {
-      if (stars[`${prevChap.id}-${l}`]) return true;
-    }
-    return false;
+    // At least 1 star earned anywhere in the previous chapter
+    return chapterKeys(CHAPTERS[idx - 1]).some((k) => isStarred(stars, k));
   };
 
-  const getChapterStars = (chap) => {
-    let count = 0;
-    for (let l = 0; l < chap.verses.length; l++) {
-      count += stars[`${chap.id}-${l}`] || 0;
-    }
-    return count;
-  };
+  const getChapterStars = (chap) => groupStars(stars, chapterKeys(chap));
 
-  const totalEarnedStars = Object.entries(stars).reduce(
-    (a, [k, v]) => a + (!k.startsWith("mm-") && typeof v === "number" ? v : 0),
-    0
-  );
+  const totalEarnedStars = sumStars(stars, { excludePrefix: "mm-" });
   const maxPossibleStars = CHAPTERS.length * 8 * 3; // 360
 
   return (
@@ -81,10 +72,7 @@ export function ChapterSelect({
           const unlocked = isChapterUnlocked(idx);
           const chapStars = getChapterStars(chap);
           const maxChapStars = chap.verses.length * 3; // 24
-          const isComplete = chap.verses.every((_, l) => {
-            const v = stars[`${chap.id}-${l}`];
-            return typeof v === "number" && v > 0;
-          });
+          const isComplete = chapterKeys(chap).every((k) => isStarred(stars, k));
           const isPerfect = chapStars === maxChapStars;
 
           return (
@@ -99,11 +87,7 @@ export function ChapterSelect({
               }}
             >
               <span className="vb-tape vb-tape-top" />
-              {isComplete && (
-                <span className={`vb-stamp ${isPerfect ? "perfect" : ""}`} aria-hidden="true">
-                  {isPerfect ? "★ Perfect!" : "✓ Complete"}
-                </span>
-              )}
+              <CompletionStamp complete={isComplete} perfect={isPerfect} />
               <div className="vb-chapter-header">
                 <span className="vb-chapter-num">Chapter {chap.id}</span>
                 <span className="vb-chapter-stars">⭐ {chapStars}/{maxChapStars}</span>
