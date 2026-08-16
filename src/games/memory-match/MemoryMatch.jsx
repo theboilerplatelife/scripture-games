@@ -30,7 +30,7 @@ export function MemoryMatch({
   // Result of the just-finished board, including whether the deck was
   // already complete BEFORE this board (replays to improve a star count
   // must not re-trigger the deck-completion celebration)
-  const [lastResult, setLastResult] = useState({ earned: 0, misses: 0, wasAlreadyComplete: false });
+  const [lastResult, setLastResult] = useState({ earned: 0, misses: 0, prevBest: 0, wasAlreadyComplete: false });
   // A fresh seed per board entry so replays deal different cards
   const [playSeed, setPlaySeed] = useState(() => initialSeed ?? randomBoardSeed());
 
@@ -68,7 +68,7 @@ export function MemoryMatch({
       return typeof v === "number" && v > 0;
     });
     onSaveStar(starKey, Math.max(stars[starKey] || 0, earned));
-    setLastResult({ earned, misses, wasAlreadyComplete });
+    setLastResult({ earned, misses, prevBest: stars[starKey] || 0, wasAlreadyComplete });
     audio.playLightApplause();
     setScreen("win");
   }
@@ -159,6 +159,8 @@ export function MemoryMatch({
           deck={currentDeck}
           modeIdx={selectedModeIdx}
           earnedStars={lastResult.earned}
+          bestStars={Math.max(lastResult.prevBest, lastResult.earned)}
+          isNewBest={lastResult.earned > lastResult.prevBest}
           misses={lastResult.misses}
           isDeckComplete={justCompletedDeck}
           returnsToModes={!justCompletedDeck && isDeckComplete}

@@ -367,7 +367,7 @@ describe("MemoryMatch orchestrator", () => {
 
   test("replaying a board in an already-completed deck never re-celebrates completion", () => {
     vi.useFakeTimers();
-    const allStarred = { "mm-1-0": 2, "mm-1-1": 2, "mm-1-2": 2 };
+    const allStarred = { "mm-1-0": 3, "mm-1-1": 3, "mm-1-2": 3 };
     const completeBoardFor = (container, modeIdx) => {
       const cardDeck = buildDeck(DECKS[0], modeIdx, "ESV");
       const cards = () => container.querySelectorAll(".mm-card");
@@ -400,6 +400,8 @@ describe("MemoryMatch orchestrator", () => {
     );
     completeBoardFor(last.container, 2);
     expect(screen.queryByText("Complete Deck 🎉")).toBeNull();
+    expect(screen.getByText("Best: ⭐⭐⭐")).toBeTruthy(); // tied, not a new best
+    expect(screen.queryByText("🎉 New best!")).toBeNull();
     fireEvent.click(screen.getByText("Back to Modes ←"));
     expect(screen.getByText(/Hint Hunt/)).toBeTruthy(); // mode select screen
     last.unmount();
@@ -462,6 +464,7 @@ describe("MemoryMatch orchestrator", () => {
     completeBoard(first.container);
     expect(onSaveStar).toHaveBeenCalledWith("mm-1-2", 3);
     expect(screen.getByText(/Perfect memory/)).toBeTruthy();
+    expect(screen.getByText("🎉 New best!")).toBeTruthy();
     first.unmount();
 
     // A banked star is never lowered (Math.max path with existing value)

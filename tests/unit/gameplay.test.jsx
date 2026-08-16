@@ -289,8 +289,69 @@ describe("Verse Builder Gameplay Flow Tests", () => {
 
     // Win card offers navigation, not a repeat celebration
     expect(screen.queryByText("Complete Chapter 🎉")).toBeNull();
+    expect(screen.getByText("🎉 New best!")).toBeTruthy(); // banked 2, earned 3
+    expect(screen.getByText("Verse List ←")).toBeTruthy();
+    fireEvent.click(screen.getByText("Chapter Select"));
+    expect(screen.getByText("Verse Builder")).toBeTruthy();
+    vi.useRealTimers();
+  });
+
+  test("Verse List from a replay win in a complete chapter returns to level select", () => {
+    vi.useFakeTimers();
+    const allStarred = Object.fromEntries([0, 1, 2, 3, 4, 5, 6, 7].map((l) => [`1-${l}`, 2]));
+    render(
+      <VerseBuilder
+        stars={allStarred}
+        onSaveStar={vi.fn()}
+        translation="ESV"
+        onBackToHub={vi.fn()}
+        onOpenSettings={vi.fn()}
+        initialChapterId={1}
+        initialLevelIdx={0}
+        initialScreen="play"
+      />
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Place word Pray" }));
+    fireEvent.click(screen.getByRole("button", { name: "Place word without" }));
+    fireEvent.click(screen.getByRole("button", { name: "Place word ceasing." }));
+    act(() => {
+      vi.advanceTimersByTime(1500);
+    });
     fireEvent.click(screen.getByText("Verse List ←"));
     expect(screen.getByText(/Ch\. 1: Little Seeds/)).toBeTruthy();
+    vi.useRealTimers();
+  });
+
+  test("next verse skips starred verses and win card shows the personal best", () => {
+    vi.useFakeTimers();
+    render(
+      <VerseBuilder
+        stars={{ "1-0": 3, "1-1": 2, "1-2": 1 }}
+        onSaveStar={vi.fn()}
+        translation="ESV"
+        onBackToHub={vi.fn()}
+        onOpenSettings={vi.fn()}
+        initialChapterId={1}
+        initialLevelIdx={0}
+        initialScreen="play"
+      />
+    );
+
+    // Replay verse 1 (already 3-starred) flawlessly
+    fireEvent.click(screen.getByRole("button", { name: "Place word Pray" }));
+    fireEvent.click(screen.getByRole("button", { name: "Place word without" }));
+    fireEvent.click(screen.getByRole("button", { name: "Place word ceasing." }));
+    act(() => {
+      vi.advanceTimersByTime(1500);
+    });
+
+    // Fresh run tied the banked best — no "new best" claim
+    expect(screen.getByText("Best: ⭐⭐⭐")).toBeTruthy();
+    expect(screen.queryByText("🎉 New best!")).toBeNull();
+
+    // Next verse jumps past the starred verses 2 and 3 to the frontier (verse 4)
+    fireEvent.click(screen.getByText("Next verse →"));
+    expect(screen.getByText("Psalm 118:24")).toBeTruthy();
     vi.useRealTimers();
   });
 
@@ -302,7 +363,7 @@ describe("Verse Builder Gameplay Flow Tests", () => {
 
     render(
       <VerseBuilder
-        stars={{ "1-0": 3, "1-1": "invalid" }}
+        stars={{ "15-0": 1, "15-1": 1, "15-2": 1, "15-3": 1, "15-4": 1, "15-5": 1, "15-6": 1, "1-1": "invalid" }}
         onSaveStar={handleSaveStar}
         translation="ESV"
         onBackToHub={handleBackToHub}

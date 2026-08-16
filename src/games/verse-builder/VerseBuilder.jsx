@@ -25,6 +25,9 @@ export function VerseBuilder({
   // Whether the chapter was already complete (every verse ≥1 star) BEFORE the
   // latest win — replaying the last verse must not re-celebrate the chapter
   const [wasChapterComplete, setWasChapterComplete] = useState(false);
+  // The just-finished run and the best banked before it, so the win card can
+  // show the fresh result honestly alongside the personal best
+  const [lastResult, setLastResult] = useState({ earned: 0, prevBest: 0 });
 
   const currentChapter = CHAPTERS[selectedChapterId - 1];
   const currentVerse = currentChapter.verses[selectedLevelIdx];
@@ -55,24 +58,29 @@ export function VerseBuilder({
     setScreen("play");
   }
 
+  const isVerseStarred = (i) => {
+    const v = stars[`${selectedChapterId}-${i}`];
+    return typeof v === "number" && v > 0;
+  };
+
   function handleCompleteVerse(earned) {
-    setWasChapterComplete(
-      currentChapter.verses.every((_, i) => {
-        const v = stars[`${selectedChapterId}-${i}`];
-        return typeof v === "number" && v > 0;
-      })
-    );
+    setWasChapterComplete(currentChapter.verses.every((_, i) => isVerseStarred(i)));
+    setLastResult({ earned, prevBest: currentEarnedStars || 0 });
     onSaveStar(starKey, Math.max(currentEarnedStars, earned));
     audio.playLightApplause();
     setScreen("win");
   }
 
+  // Complete counting the verse just won (the stars prop may not have the
+  // fresh save yet at render time)
+  const isChapterComplete = currentChapter.verses.every(
+    (_, i) => i === selectedLevelIdx || isVerseStarred(i)
+  );
+  const justCompletedChapter = isChapterComplete && !wasChapterComplete;
+
   function handleNextFromWin() {
     audio.playButtonClick();
-    if (selectedLevelIdx + 1 < currentChapter.verses.length) {
-      setSelectedLevelIdx((prev) => prev + 1);
-      setScreen("play");
-    } else if (!wasChapterComplete) {
+    if (justCompletedChapter) {
       // This win completed all 8 verses in the chapter!
       if (selectedChapterId === 15) {
         audio.playAllDoneFanfare();
@@ -80,9 +88,18 @@ export function VerseBuilder({
         audio.playChapterFanfare();
       }
       setScreen("chapter-done");
-    } else {
-      // Replay of the last verse in an already-complete chapter
+    } else if (isChapterComplete) {
+      // Replay in an already-complete chapter
       setScreen("levels");
+    } else {
+      // Nearest verse still missing a star, scanning forward with wraparound
+      // (a replay of an early verse must not walk through finished ones)
+      const count = currentChapter.verses.length;
+      const nextUnstarred = currentChapter.verses
+        .map((_, k) => (selectedLevelIdx + 1 + k) % count)
+        .find((i) => i !== selectedLevelIdx && !isVerseStarred(i));
+      setSelectedLevelIdx(nextUnstarred);
+      setScreen("play");
     }
   }
 
@@ -141,13 +158,16 @@ export function VerseBuilder({
       {screen === "win" && (
         <WinCard
           verse={currentVerse}
-          earnedStars={currentEarnedStars || 3}
+          earnedStars={lastResult.earned}
+          bestStars={Math.max(lastResult.prevBest, lastResult.earned)}
+          isNewBest={lastResult.earned > lastResult.prevBest}
           translation={translation}
-          hasNextLevel={selectedLevelIdx + 1 < currentChapter.verses.length}
+          hasNextLevel={!isChapterComplete}
           alreadyCompleted={wasChapterComplete}
           onReplay={() => setScreen("play")}
           onNext={handleNextFromWin}
           onBackToLevels={() => setScreen("levels")}
+          onBackToChapters={() => setScreen("chapters")}
         />
       )}
 

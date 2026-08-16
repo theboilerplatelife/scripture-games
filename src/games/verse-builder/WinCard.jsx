@@ -5,12 +5,15 @@ import { Confetti } from "../../components/common/Confetti.jsx";
 export function WinCard({
   verse,
   earnedStars,
+  bestStars = 0,
+  isNewBest = false,
   translation,
   hasNextLevel,
   alreadyCompleted = false,
   onReplay,
   onNext,
   onBackToLevels,
+  onBackToChapters,
 }) {
   const verseText = verse.text[translation] || verse.text.ESV || verse.text.WEB;
 
@@ -41,6 +44,12 @@ export function WinCard({
           ))}
         </div>
 
+        {bestStars > 0 && (
+          <p className="vb-win-best">
+            {isNewBest ? "🎉 New best!" : `Best: ${"⭐".repeat(bestStars)}`}
+          </p>
+        )}
+
         <p className="vb-win-verse">&ldquo;{verseText}&rdquo;</p>
         <p className="vb-win-ref">— {verse.ref} ({translation})</p>
         <p className="vb-win-cheer">{verse.cheer}</p>
@@ -49,6 +58,11 @@ export function WinCard({
           <button className="vb-btn ghost" onClick={onReplay}>
             Build again 🔄
           </button>
+          {onBackToChapters && (
+            <button className="vb-btn ghost" onClick={onBackToChapters}>
+              Chapter Select
+            </button>
+          )}
           <button className="vb-btn" onClick={onNext}>
             {hasNextLevel ? "Next verse →" : alreadyCompleted ? "Verse List ←" : "Complete Chapter 🎉"}
           </button>

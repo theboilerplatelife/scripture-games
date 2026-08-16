@@ -6,6 +6,8 @@ export function MMWinCard({
   deck: deckObj,
   modeIdx,
   earnedStars,
+  bestStars = 0,
+  isNewBest = false,
   misses,
   isDeckComplete = false,
   returnsToModes = false,
@@ -40,6 +42,12 @@ export function MMWinCard({
             <Star key={n} filled={earnedStars >= n} size={34} />
           ))}
         </div>
+
+        {bestStars > 0 && (
+          <p className="vb-win-best">
+            {isNewBest ? "🎉 New best!" : `Best: ${"⭐".repeat(bestStars)}`}
+          </p>
+        )}
 
         <p className="vb-win-verse">All {mode.pairs} pairs found!</p>
         <p className="vb-win-ref">

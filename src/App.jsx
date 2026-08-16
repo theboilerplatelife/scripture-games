@@ -724,6 +724,14 @@ body {
   cursor: not-allowed;
 }
 
+/* ---- Personal best line on win cards ---- */
+.vb-win-best {
+  font-family: 'Schoolbell', cursive;
+  font-size: 15px;
+  color: var(--slate-deep);
+  margin: -2px 0 10px;
+}
+
 /* ---- Completion Stamp (shared by chapter & deck select cards) ---- */
 .vb-stamp {
   position: absolute;
