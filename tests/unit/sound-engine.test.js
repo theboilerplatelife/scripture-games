@@ -55,6 +55,11 @@ class MockAudioContext {
   }
   resume() {
     this.state = "running";
+    return Promise.resolve();
+  }
+  suspend() {
+    this.state = "suspended";
+    return Promise.resolve();
   }
 }
 
@@ -185,6 +190,61 @@ describe("SoundEngine Comprehensive Unit Tests", () => {
     // Stop playback
     engine.setTrack(null);
     expect(engine.isPlaying).toBe(false);
+
+    vi.useRealTimers();
+  });
+
+  test("handles page visibility and mobile app switching gracefully", () => {
+    vi.useFakeTimers();
+    const engine = new SoundEngine();
+    engine.init();
+    expect(engine.ctx.state).toBe("running");
+
+    engine.setTrack("hub");
+
+    // 1. App switching / tab hidden (visibilitychange to hidden)
+    Object.defineProperty(document, "hidden", { value: true, configurable: true });
+    document.dispatchEvent(new Event("visibilitychange"));
+    expect(engine.isBackgrounded).toBe(true);
+    expect(engine.ctx.state).toBe("suspended");
+
+    // Sequencer advances without playing notes while backgrounded
+    vi.advanceTimersByTime(1000);
+
+    // Calling init while backgrounded does not resume context
+    engine.init();
+    expect(engine.ctx.state).toBe("suspended");
+
+    // 2. Returning to app (pageshow / visibilitychange to visible)
+    Object.defineProperty(document, "hidden", { value: false, configurable: true });
+    window.dispatchEvent(new Event("pageshow"));
+    expect(engine.isBackgrounded).toBe(false);
+    expect(engine.ctx.state).toBe("running");
+
+    // 3. Pagehide event (e.g. mobile Safari app switch)
+    window.dispatchEvent(new Event("pagehide"));
+    expect(engine.isBackgrounded).toBe(true);
+    expect(engine.ctx.state).toBe("suspended");
+
+    // 4. If muted, returning does not resume context
+    engine.setMuted(true);
+    engine.handleVisibility(false);
+    expect(engine.ctx.state).toBe("suspended");
+
+    // 5. If suspend or resume throws, it is caught safely
+    const faultyEngine = new SoundEngine();
+    faultyEngine.ctx = {
+      state: "running",
+      suspend: () => {
+        throw new Error("suspend failed");
+      },
+      resume: () => {
+        throw new Error("resume failed");
+      },
+    };
+    expect(() => faultyEngine.handleVisibility(true)).not.toThrow();
+    faultyEngine.ctx.state = "suspended";
+    expect(() => faultyEngine.handleVisibility(false)).not.toThrow();
 
     vi.useRealTimers();
   });

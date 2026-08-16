@@ -197,9 +197,45 @@ export class SoundEngine {
     this.muted = false;
     this.bgmVol = 0.25;
     this.sfxVol = 0.50;
+    this.isBackgrounded = false;
+    this.listenersAttached = false;
+    this.bindVisibilityListeners();
+  }
+
+  bindVisibilityListeners() {
+    if (typeof document !== "undefined" && typeof window !== "undefined" && !this.listenersAttached) {
+      this.listenersAttached = true;
+      document.addEventListener("visibilitychange", () => {
+        this.handleVisibility(document.hidden);
+      });
+      window.addEventListener("pagehide", () => {
+        this.handleVisibility(true);
+      });
+      window.addEventListener("pageshow", () => {
+        this.handleVisibility(false);
+      });
+    }
+  }
+
+  handleVisibility(hidden) {
+    this.isBackgrounded = Boolean(hidden);
+    if (this.isBackgrounded) {
+      if (this.ctx && this.ctx.state === "running") {
+        try {
+          this.ctx.suspend();
+        } catch (_) {}
+      }
+    } else {
+      if (this.ctx && this.ctx.state === "suspended" && !this.muted) {
+        try {
+          this.ctx.resume();
+        } catch (_) {}
+      }
+    }
   }
 
   init() {
+    this.bindVisibilityListeners();
     if (!this.ctx && typeof window !== "undefined") {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (AudioCtx) {
@@ -215,7 +251,7 @@ export class SoundEngine {
         this.sfxGain.connect(this.ctx.destination);
       }
     }
-    if (this.ctx && this.ctx.state === "suspended") {
+    if (this.ctx && this.ctx.state === "suspended" && !this.isBackgrounded) {
       this.ctx.resume();
     }
   }
@@ -671,7 +707,7 @@ export class SoundEngine {
 
     this.isPlaying = true;
     this.timerId = setInterval(() => {
-      if (this.muted || !this.ctx || this.ctx.state !== "running") {
+      if (this.muted || this.isBackgrounded || !this.ctx || this.ctx.state !== "running") {
         this.stepIndex = (this.stepIndex + 1) % song.steps;
         return;
       }
