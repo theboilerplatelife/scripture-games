@@ -22,6 +22,9 @@ export function VerseBuilder({
   const [screen, setScreen] = useState(initialScreen);
   const [selectedChapterId, setSelectedChapterId] = useState(initialChapterId);
   const [selectedLevelIdx, setSelectedLevelIdx] = useState(initialLevelIdx);
+  // Whether the chapter was already complete (every verse ≥1 star) BEFORE the
+  // latest win — replaying the last verse must not re-celebrate the chapter
+  const [wasChapterComplete, setWasChapterComplete] = useState(false);
 
   const currentChapter = CHAPTERS[selectedChapterId - 1];
   const currentVerse = currentChapter.verses[selectedLevelIdx];
@@ -53,6 +56,12 @@ export function VerseBuilder({
   }
 
   function handleCompleteVerse(earned) {
+    setWasChapterComplete(
+      currentChapter.verses.every((_, i) => {
+        const v = stars[`${selectedChapterId}-${i}`];
+        return typeof v === "number" && v > 0;
+      })
+    );
     onSaveStar(starKey, Math.max(currentEarnedStars, earned));
     audio.playLightApplause();
     setScreen("win");
@@ -63,14 +72,17 @@ export function VerseBuilder({
     if (selectedLevelIdx + 1 < currentChapter.verses.length) {
       setSelectedLevelIdx((prev) => prev + 1);
       setScreen("play");
-    } else {
-      // Completed all 8 verses in this chapter!
+    } else if (!wasChapterComplete) {
+      // This win completed all 8 verses in the chapter!
       if (selectedChapterId === 15) {
         audio.playAllDoneFanfare();
       } else {
         audio.playChapterFanfare();
       }
       setScreen("chapter-done");
+    } else {
+      // Replay of the last verse in an already-complete chapter
+      setScreen("levels");
     }
   }
 
@@ -132,6 +144,7 @@ export function VerseBuilder({
           earnedStars={currentEarnedStars || 3}
           translation={translation}
           hasNextLevel={selectedLevelIdx + 1 < currentChapter.verses.length}
+          alreadyCompleted={wasChapterComplete}
           onReplay={() => setScreen("play")}
           onNext={handleNextFromWin}
           onBackToLevels={() => setScreen("levels")}

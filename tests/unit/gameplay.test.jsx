@@ -44,6 +44,27 @@ describe("Verse Builder Gameplay Flow Tests", () => {
     expect(handleOpenSettings).toHaveBeenCalled();
   });
 
+  test("ChapterSelect stamps completed and perfect chapters", () => {
+    const noop = vi.fn();
+    const complete = { "1-0": 1, "1-1": 1, "1-2": 2, "1-3": 1, "1-4": 3, "1-5": 1, "1-6": 1, "1-7": 1, "2-0": "bad" };
+
+    const { rerender } = render(
+      <ChapterSelect stars={{ "1-0": 3 }} translation="ESV" onSelectChapter={noop} onBackToHub={noop} onOpenSettings={noop} />
+    );
+    expect(screen.queryByText("✓ Complete")).toBeNull();
+
+    rerender(
+      <ChapterSelect stars={complete} translation="ESV" onSelectChapter={noop} onBackToHub={noop} onOpenSettings={noop} />
+    );
+    expect(screen.getByText("✓ Complete")).toBeTruthy();
+
+    const perfect = Object.fromEntries([0, 1, 2, 3, 4, 5, 6, 7].map((l) => [`1-${l}`, 3]));
+    rerender(
+      <ChapterSelect stars={perfect} translation="ESV" onSelectChapter={noop} onBackToHub={noop} onOpenSettings={noop} />
+    );
+    expect(screen.getByText("★ Perfect!")).toBeTruthy();
+  });
+
   test("LevelSelect shows unlocked levels, locked levels, stars, and handles selection", () => {
     const handleSelectLevel = vi.fn();
     const handleBackToChapters = vi.fn();
@@ -237,6 +258,39 @@ describe("Verse Builder Gameplay Flow Tests", () => {
     // Now in Chapter 2 Level Select
     expect(screen.getByText(/First Steps/i)).toBeTruthy();
 
+    vi.useRealTimers();
+  });
+
+  test("replaying the last verse of a completed chapter never re-celebrates", () => {
+    vi.useFakeTimers();
+    const allStarred = Object.fromEntries([0, 1, 2, 3, 4, 5, 6, 7].map((l) => [`1-${l}`, 2]));
+
+    render(
+      <VerseBuilder
+        stars={allStarred}
+        onSaveStar={vi.fn()}
+        translation="ESV"
+        onBackToHub={vi.fn()}
+        onOpenSettings={vi.fn()}
+        initialChapterId={1}
+        initialLevelIdx={7}
+        initialScreen="play"
+      />
+    );
+
+    const ch1v8Words = CHAPTERS[0].verses[7].text.ESV.trim().split(/\s+/);
+    ch1v8Words.forEach((w) => {
+      const matchBtns = screen.getAllByRole("button", { name: new RegExp(`^Place word ${w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`) });
+      fireEvent.click(matchBtns[0]);
+    });
+    act(() => {
+      vi.advanceTimersByTime(1500);
+    });
+
+    // Win card offers navigation, not a repeat celebration
+    expect(screen.queryByText("Complete Chapter 🎉")).toBeNull();
+    fireEvent.click(screen.getByText("Verse List ←"));
+    expect(screen.getByText(/Ch\. 1: Little Seeds/)).toBeTruthy();
     vi.useRealTimers();
   });
 

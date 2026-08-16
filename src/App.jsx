@@ -724,6 +724,29 @@ body {
   cursor: not-allowed;
 }
 
+/* ---- Completion Stamp (shared by chapter & deck select cards) ---- */
+.vb-stamp {
+  position: absolute;
+  top: 34px;
+  right: 8px;
+  z-index: 3;
+  font-family: 'Schoolbell', cursive;
+  font-size: 13px;
+  color: #46702c;
+  border: 2px dashed var(--leaf);
+  border-radius: 6px;
+  padding: 2px 8px;
+  transform: rotate(6deg);
+  background: rgba(242, 247, 238, 0.92);
+  pointer-events: none;
+}
+
+.vb-stamp.perfect {
+  color: #a06f0f;
+  border-color: #c98a1b;
+  background: rgba(255, 244, 214, 0.94);
+}
+
 /* ---- Confetti ---- */
 .vb-confetti {
   position: fixed;

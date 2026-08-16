@@ -81,6 +81,11 @@ export function ChapterSelect({
           const unlocked = isChapterUnlocked(idx);
           const chapStars = getChapterStars(chap);
           const maxChapStars = chap.verses.length * 3; // 24
+          const isComplete = chap.verses.every((_, l) => {
+            const v = stars[`${chap.id}-${l}`];
+            return typeof v === "number" && v > 0;
+          });
+          const isPerfect = chapStars === maxChapStars;
 
           return (
             <button
@@ -94,6 +99,11 @@ export function ChapterSelect({
               }}
             >
               <span className="vb-tape vb-tape-top" />
+              {isComplete && (
+                <span className={`vb-stamp ${isPerfect ? "perfect" : ""}`} aria-hidden="true">
+                  {isPerfect ? "★ Perfect!" : "✓ Complete"}
+                </span>
+              )}
               <div className="vb-chapter-header">
                 <span className="vb-chapter-num">Chapter {chap.id}</span>
                 <span className="vb-chapter-stars">⭐ {chapStars}/{maxChapStars}</span>

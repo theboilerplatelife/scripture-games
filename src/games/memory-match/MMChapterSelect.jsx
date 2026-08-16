@@ -95,7 +95,7 @@ export function MMChapterSelect({
             >
               <span className="vb-tape vb-tape-top" />
               {isComplete && (
-                <span className={`mm-deck-stamp ${isPerfect ? "perfect" : ""}`} aria-hidden="true">
+                <span className={`vb-stamp ${isPerfect ? "perfect" : ""}`} aria-hidden="true">
                   {isPerfect ? "★ Perfect!" : "✓ Complete"}
                 </span>
               )}

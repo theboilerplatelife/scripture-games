@@ -7,6 +7,7 @@ export function WinCard({
   earnedStars,
   translation,
   hasNextLevel,
+  alreadyCompleted = false,
   onReplay,
   onNext,
   onBackToLevels,
@@ -49,7 +50,7 @@ export function WinCard({
             Build again 🔄
           </button>
           <button className="vb-btn" onClick={onNext}>
-            {hasNextLevel ? "Next verse →" : "Complete Chapter 🎉"}
+            {hasNextLevel ? "Next verse →" : alreadyCompleted ? "Verse List ←" : "Complete Chapter 🎉"}
           </button>
         </div>
       </div>
