@@ -167,6 +167,7 @@ export function MemoryMatch({
           onReplay={dealNewBoard}
           onNext={handleNextFromWin}
           onBackToModes={() => setScreen("modes")}
+          onBackToDecks={() => setScreen("chapters")}
         />
       )}
 

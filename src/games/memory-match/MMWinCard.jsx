@@ -12,6 +12,7 @@ export function MMWinCard({
   onReplay,
   onNext,
   onBackToModes,
+  onBackToDecks,
 }) {
   const mode = MODES[modeIdx];
 
@@ -51,6 +52,9 @@ export function MMWinCard({
         <div className="vb-win-btns">
           <button className="vb-btn ghost" onClick={onReplay}>
             Match again 🔄
+          </button>
+          <button className="vb-btn ghost" onClick={onBackToDecks}>
+            Deck Select
           </button>
           <button className="vb-btn" onClick={onNext}>
             {isDeckComplete ? "Complete Deck 🎉" : (hasNextMode ? "Next match →" : "Back to Modes ←")}

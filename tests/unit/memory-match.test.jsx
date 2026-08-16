@@ -100,6 +100,7 @@ describe("Memory Match screens", () => {
     const onReplay = vi.fn();
     const onNext = vi.fn();
     const onBackToModes = vi.fn();
+    const onBackToDecks = vi.fn();
 
     const { rerender } = render(
       <MMWinCard
@@ -112,11 +113,14 @@ describe("Memory Match screens", () => {
         onReplay={onReplay}
         onNext={onNext}
         onBackToModes={onBackToModes}
+        onBackToDecks={onBackToDecks}
       />
     );
     expect(screen.getByText(/Perfect memory/)).toBeTruthy();
     fireEvent.click(screen.getByText("Match again 🔄"));
     expect(onReplay).toHaveBeenCalled();
+    fireEvent.click(screen.getByText("Deck Select"));
+    expect(onBackToDecks).toHaveBeenCalled();
     fireEvent.click(screen.getByText("Next match →"));
     expect(onNext).toHaveBeenCalled();
     fireEvent.click(screen.getByLabelText("Back to Match Modes"));
@@ -236,6 +240,24 @@ describe("MemoryMatch orchestrator", () => {
     expect(screen.getByText(/find all 5 pairs/)).toBeTruthy();
     fireEvent.click(screen.getByLabelText("Back to Match Modes"));
     expect(screen.getByLabelText("Play Torn Verses")).toBeTruthy();
+  });
+
+  test("win card's Deck Select shortcut goes straight to the deck list", () => {
+    render(
+      <MemoryMatch
+        stars={{}}
+        onSaveStar={vi.fn()}
+        translation="ESV"
+        onBackToHub={vi.fn()}
+        onOpenSettings={vi.fn()}
+        initialChapterId={1}
+        initialModeIdx={0}
+        initialScreen="win"
+      />
+    );
+    fireEvent.click(screen.getByText("Deck Select"));
+    expect(screen.getByText("Memory Match")).toBeTruthy();
+    expect(screen.getByLabelText(/Memory Match Deck 1:/)).toBeTruthy();
   });
 
   test("win card's own back button returns to mode select", () => {
