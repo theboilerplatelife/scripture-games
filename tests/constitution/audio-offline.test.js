@@ -16,9 +16,9 @@ describe("Constitution Gate: Audio & Synthesis Standards (Article 3)", () => {
     expect(soundEngineCode.includes("AudioContext")).toBe(true);
   });
 
-  test("Article 3.5: default volume levels are 25% BGM and 50% SFX", () => {
-    expect(DEFAULT_BGM_VOL).toBe(25);
-    expect(DEFAULT_SFX_VOL).toBe(50);
+  test("Article 3.5: default volume levels are 50% BGM and 75% SFX", () => {
+    expect(DEFAULT_BGM_VOL).toBe(50);
+    expect(DEFAULT_SFX_VOL).toBe(75);
 
     // A freshly constructed engine must honor the constitutional defaults (0..1 gain scale)
     const engine = new SoundEngine();

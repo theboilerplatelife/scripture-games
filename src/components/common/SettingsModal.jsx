@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { TRANSLATIONS } from "../../data/translations.js";
-import { audio } from "../../audio/SoundEngine.js";
+import { audio, DEFAULT_BGM_VOL, DEFAULT_SFX_VOL } from "../../audio/SoundEngine.js";
 
 export function SettingsModal({
   isOpen,
@@ -9,9 +9,9 @@ export function SettingsModal({
   onSelectTranslation,
   musicOn,
   onToggleMusic,
-  bgmVol = 25,
+  bgmVol = DEFAULT_BGM_VOL,
   onChangeBgmVol,
-  sfxVol = 50,
+  sfxVol = DEFAULT_SFX_VOL,
   onChangeSfxVol,
   onResetProgress,
 }) {

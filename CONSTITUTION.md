@@ -40,7 +40,7 @@ Rules are organized into numbered **Articles**. Automated checks in `tests/const
 2. **Zero External Audio Assets**: No remote MP3, WAV, OGG, or cloud TTS services may be downloaded at runtime. The app must work fully offline on an airplane or without internet.
 3. **Child-Friendly Synthesis**: Audio frequencies must remain pleasant, warm, and harmonic (e.g. pentatonic marimba plucks, acoustic triangle/sine tones, and broadband bandpass noise bursts for claps). Harsh square waves, dissonant buzzes, and high-frequency sinusoidal pings are prohibited.
 4. **Independent Volume Controls**: Users must have separate, persistent controls for Master Audio Mute, Background Music (BGM), and Sound Effects (SFX).
-5. **Default Volume Levels**: For a gentle first-run experience, defaults are **BGM 25%** and **SFX 50%** (exported as `DEFAULT_BGM_VOL` / `DEFAULT_SFX_VOL` in `SoundEngine.js`).
+5. **Default Volume Levels**: For a gentle first-run experience, defaults are **BGM 50%** and **SFX 75%** (exported as `DEFAULT_BGM_VOL` / `DEFAULT_SFX_VOL` in `SoundEngine.js`).
 
 ---
 

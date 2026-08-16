@@ -341,8 +341,8 @@ export const MEMORY_TITLE_SONG = {
 };
 
 // Constitution Article 3.5: default volume levels (0..100 scale, as shown on the settings sliders)
-export const DEFAULT_BGM_VOL = 25;
-export const DEFAULT_SFX_VOL = 50;
+export const DEFAULT_BGM_VOL = 50;
+export const DEFAULT_SFX_VOL = 75;
 
 export class SoundEngine {
   constructor() {
