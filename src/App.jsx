@@ -178,7 +178,6 @@ export default function App() {
             audio.init();
             setHasStarted(true);
           }}
-          translation={translation}
         />
       ) : (
         <>

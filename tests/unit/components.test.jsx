@@ -67,19 +67,18 @@ describe("Common Components Tests", () => {
 
   test("WelcomeSplash renders title, avatars, and triggers onStart", () => {
     const handleStart = vi.fn();
-    const { rerender } = render(<WelcomeSplash onStart={handleStart} translation="ESV" />);
+    render(<WelcomeSplash onStart={handleStart} />);
 
     expect(screen.getByText("Scripture Games")).toBeTruthy();
     expect(screen.getByText("Tap to Play")).toBeTruthy();
-    expect(screen.getByText("📖 ESV")).toBeTruthy();
+    expect(screen.getByText("✂️ Verse Puzzles & Games")).toBeTruthy();
+    expect(screen.getByText("📖 Multiple Bible Translations")).toBeTruthy();
+    expect(screen.getByText("🛡️ 100% Safe & Offline")).toBeTruthy();
+    expect(screen.getByText("🎵 Fun Acoustic Audio")).toBeTruthy();
 
     const playBtn = screen.getByRole("button", { name: "Tap to Play and Start Game" });
     fireEvent.click(playBtn);
     expect(handleStart).toHaveBeenCalled();
-
-    // Default translation prop fallback
-    rerender(<WelcomeSplash onStart={handleStart} />);
-    expect(screen.getByText("📖 ESV")).toBeTruthy();
   });
 
   test("GameHub renders 6-game lineup, computes stars with fallbacks, and handles selection", () => {

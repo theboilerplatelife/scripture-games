@@ -2,7 +2,7 @@ import { Buddy } from "./Buddy.jsx";
 import { audio } from "../../audio/SoundEngine.js";
 import "./welcome-splash.css";
 
-export function WelcomeSplash({ onStart, translation = "ESV" }) {
+export function WelcomeSplash({ onStart }) {
   const handleStart = () => {
     audio.playButtonClick();
     onStart();
@@ -32,9 +32,10 @@ export function WelcomeSplash({ onStart, translation = "ESV" }) {
         <p className="splash-sub">Fun scripture adventures for curious minds!</p>
 
         <div className="splash-features">
-          <span className="splash-chip">✂️ Verse Builder</span>
-          <span className="splash-chip">⭐ 15 Chapters</span>
-          <span className="splash-chip">📖 {translation}</span>
+          <span className="splash-chip">✂️ Verse Puzzles & Games</span>
+          <span className="splash-chip">📖 Multiple Bible Translations</span>
+          <span className="splash-chip">🛡️ 100% Safe & Offline</span>
+          <span className="splash-chip">🎵 Fun Acoustic Audio</span>
         </div>
 
         <button
