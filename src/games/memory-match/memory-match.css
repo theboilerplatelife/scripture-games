@@ -130,7 +130,7 @@
   font-family: inherit;
   color: inherit;
   perspective: 700px;
-  min-height: 100px;
+  min-height: 108px;
   transform: rotate(var(--rot, 0deg));
   transition: transform 0.15s ease;
 }
@@ -138,7 +138,7 @@
 .mm-grid-hints .mm-card,
 .mm-grid-refs .mm-card,
 .mm-grid-halves .mm-card {
-  min-height: 112px;
+  min-height: 120px;
 }
 
 .mm-card:active:not(:disabled) {
@@ -294,7 +294,7 @@
 
 /* Leave room for the tag above the card text in the tagged modes */
 .mm-card-text {
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.2;
   text-align: center;
   color: var(--ink);
