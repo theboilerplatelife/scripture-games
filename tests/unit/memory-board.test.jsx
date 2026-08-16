@@ -243,4 +243,13 @@ describe("MemoryBoard", () => {
       unmount();
     });
   });
+
+  test("prompt faces carry the full scene; answer faces get a corner stamp", () => {
+    const { container } = render(
+      <MemoryBoard deck={deckObj} modeIdx={0} translation="ESV" onBackToModes={vi.fn()} onComplete={vi.fn()} />
+    );
+    // 5 pairs: one full-art prompt card and one badge-art answer card each
+    expect(container.querySelectorAll(".mm-card-art-full").length).toBe(5);
+    expect(container.querySelectorAll(".mm-card-art-badge").length).toBe(5);
+  });
 });

@@ -238,6 +238,27 @@ const ALL_THEMES = [
   "fruit_vine", "calm_waters", "eagle_wings", "gospel_world", "hope_heaven", "starry_sky"
 ];
 
+// When a deck leans heavily on one theme, overflow pairs borrow a
+// thematically-adjacent scene instead of an arbitrary unused one
+const RELATED_THEMES = {
+  shepherd: ["calm_waters", "creation", "eagle_wings"],
+  lamp: ["light_city", "starry_sky", "wisdom_scroll"],
+  creation: ["starry_sky", "rainbow", "eagle_wings"],
+  dove_peace: ["calm_waters", "rainbow", "starry_sky"],
+  armor_shield: ["eagle_wings", "light_city", "shepherd"],
+  praise_harp: ["rainbow", "light_city", "creation"],
+  love_heart: ["fruit_vine", "dove_peace", "rainbow"],
+  wisdom_scroll: ["lamp", "light_city", "starry_sky"],
+  light_city: ["lamp", "starry_sky", "creation"],
+  rainbow: ["creation", "dove_peace", "calm_waters"],
+  fruit_vine: ["love_heart", "creation", "shepherd"],
+  calm_waters: ["dove_peace", "shepherd", "starry_sky"],
+  eagle_wings: ["armor_shield", "creation", "starry_sky"],
+  gospel_world: ["light_city", "dove_peace", "creation"],
+  hope_heaven: ["starry_sky", "rainbow", "light_city"],
+  starry_sky: ["creation", "hope_heaven", "lamp"],
+};
+
 // Build the shuffled card deck for one deck + mode + translation.
 // `seed` varies the verse pick and layout per play (0 = the base deal,
 // used as the deterministic default in tests).
@@ -282,7 +303,9 @@ export function buildDeck(deckObj, modeIdx, translation, seed = 0) {
       const faces = cardFaces(verse, mode, translation);
       if (faces.some((face) => usedTexts.has(face.text))) return;
 
-      const fallbackArt = ALL_THEMES.find((t) => !usedArts.has(t));
+      const fallbackArt = [...RELATED_THEMES[getVerseArt(verse)], ...ALL_THEMES].find(
+        (t) => !usedArts.has(t)
+      );
       faces.forEach((face) => usedTexts.add(face.text));
       usedArts.add(fallbackArt);
       picked.push({ verse, faces, art: fallbackArt });

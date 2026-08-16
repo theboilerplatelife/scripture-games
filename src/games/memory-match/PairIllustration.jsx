@@ -5,19 +5,24 @@
    per Constitution Article 1.2.
    ============================================================ */
 
+import { useId } from "react";
+
 export function PairIllustration({ art = "creation" }) {
+  // Both cards of a pair render the same scene, so gradient IDs must be
+  // unique per component instance to keep the DOM valid
+  const uid = useId();
   switch (art) {
     case "shepherd":
       // Rolling meadow hills, cute fluffy lamb, wooden crook
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <linearGradient id="shep-sky" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`shep-sky-${uid}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#d4edda" />
               <stop offset="100%" stopColor="#f8fdf9" />
             </linearGradient>
           </defs>
-          <rect width="160" height="100" fill="url(#shep-sky)" />
+          <rect width="160" height="100" fill={`url(#shep-sky-${uid})`} />
           {/* Rolling hills */}
           <ellipse cx="40" cy="115" rx="70" ry="40" fill="#a8d5a2" opacity="0.6" />
           <ellipse cx="120" cy="110" rx="80" ry="45" fill="#88c580" opacity="0.6" />
@@ -52,14 +57,14 @@ export function PairIllustration({ art = "creation" }) {
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <radialGradient id="lamp-glow" cx="80" cy="45" r="60" fx="80" fy="45" gradientUnits="userSpaceOnUse">
+            <radialGradient id={`lamp-glow-${uid}`} cx="80" cy="45" r="60" fx="80" fy="45" gradientUnits="userSpaceOnUse">
               <stop offset="0%" stopColor="#fff3b0" stopOpacity="0.8" />
               <stop offset="60%" stopColor="#fed976" stopOpacity="0.35" />
               <stop offset="100%" stopColor="#fdf6e2" stopOpacity="0" />
             </radialGradient>
           </defs>
           <rect width="160" height="100" fill="#fdfbf5" />
-          <rect width="160" height="100" fill="url(#lamp-glow)" />
+          <rect width="160" height="100" fill={`url(#lamp-glow-${uid})`} />
           {/* Stone stepping path */}
           <path d="M 0 95 Q 80 85 160 90 L 160 100 L 0 100 Z" fill="#e8dacb" opacity="0.5" />
           <ellipse cx="50" cy="92" rx="14" ry="4" fill="#d4c2b0" opacity="0.6" />
@@ -87,12 +92,12 @@ export function PairIllustration({ art = "creation" }) {
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <linearGradient id="cre-sky" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`cre-sky-${uid}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#dbeafe" />
               <stop offset="100%" stopColor="#fef3c7" />
             </linearGradient>
           </defs>
-          <rect width="160" height="100" fill="url(#cre-sky)" />
+          <rect width="160" height="100" fill={`url(#cre-sky-${uid})`} />
           {/* Sun with rays */}
           <circle cx="135" cy="25" r="16" fill="#fde047" opacity="0.8" />
           <circle cx="135" cy="25" r="24" fill="#fef08a" opacity="0.4" />
@@ -113,12 +118,12 @@ export function PairIllustration({ art = "creation" }) {
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <linearGradient id="dove-sky" x1="0" y1="0" x2="1" y2="1">
+            <linearGradient id={`dove-sky-${uid}`} x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#e0f2fe" />
               <stop offset="100%" stopColor="#fdf2f8" />
             </linearGradient>
           </defs>
-          <rect width="160" height="100" fill="url(#dove-sky)" />
+          <rect width="160" height="100" fill={`url(#dove-sky-${uid})`} />
           {/* Clouds */}
           <ellipse cx="30" cy="80" rx="40" ry="20" fill="#ffffff" opacity="0.75" />
           <ellipse cx="140" cy="85" rx="35" ry="18" fill="#ffffff" opacity="0.7" />
@@ -145,12 +150,12 @@ export function PairIllustration({ art = "creation" }) {
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <linearGradient id="arm-bg" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`arm-bg-${uid}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#f1f5f9" />
               <stop offset="100%" stopColor="#e2e8f0" />
             </linearGradient>
           </defs>
-          <rect width="160" height="100" fill="url(#arm-bg)" />
+          <rect width="160" height="100" fill={`url(#arm-bg-${uid})`} />
           {/* Stone battlements */}
           <rect x="0" y="82" width="160" height="18" fill="#cbd5e1" opacity="0.6" />
           <rect x="20" y="74" width="22" height="10" fill="#cbd5e1" opacity="0.6" />
@@ -175,12 +180,12 @@ export function PairIllustration({ art = "creation" }) {
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <linearGradient id="harp-sky" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`harp-sky-${uid}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#fef3c7" />
               <stop offset="100%" stopColor="#fffbeb" />
             </linearGradient>
           </defs>
-          <rect width="160" height="100" fill="url(#harp-sky)" />
+          <rect width="160" height="100" fill={`url(#harp-sky-${uid})`} />
           {/* Sunburst rays */}
           <path d="M 0 0 L 40 100 M 0 0 L 80 100 M 0 0 L 120 100" stroke="#fde68a" strokeWidth="2" opacity="0.4" />
           {/* Golden Harp */}
@@ -206,12 +211,12 @@ export function PairIllustration({ art = "creation" }) {
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <linearGradient id="love-bg" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`love-bg-${uid}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#fdf2f8" />
               <stop offset="100%" stopColor="#ffe4e6" />
             </linearGradient>
           </defs>
-          <rect width="160" height="100" fill="url(#love-bg)" />
+          <rect width="160" height="100" fill={`url(#love-bg-${uid})`} />
           {/* Main Heart */}
           <g transform="translate(112, 30) scale(0.65)" opacity="0.85">
             <path d="M 28 12 C 28 5 18 2 12 8 C 6 2 -4 5 -4 12 C -4 22 12 36 12 36 C 12 36 28 22 28 12 Z" fill="#fb7185" stroke="#e11d48" strokeWidth="2" />
@@ -229,12 +234,12 @@ export function PairIllustration({ art = "creation" }) {
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <linearGradient id="wis-bg" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`wis-bg-${uid}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#f8fafc" />
               <stop offset="100%" stopColor="#ede9fe" />
             </linearGradient>
           </defs>
-          <rect width="160" height="100" fill="url(#wis-bg)" />
+          <rect width="160" height="100" fill={`url(#wis-bg-${uid})`} />
           {/* Ancient Scroll */}
           <g transform="translate(105, 26) scale(0.65)" opacity="0.85">
             <rect x="10" y="15" width="45" height="35" rx="3" fill="#fef3c7" stroke="#d97706" strokeWidth="1.5" />
@@ -259,12 +264,12 @@ export function PairIllustration({ art = "creation" }) {
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <linearGradient id="city-bg" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`city-bg-${uid}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#fed7aa" />
               <stop offset="100%" stopColor="#ffedd5" />
             </linearGradient>
           </defs>
-          <rect width="160" height="100" fill="url(#city-bg)" />
+          <rect width="160" height="100" fill={`url(#city-bg-${uid})`} />
           {/* Hilltop */}
           <ellipse cx="130" cy="100" rx="60" ry="35" fill="#78716c" opacity="0.4" />
           {/* City buildings */}
@@ -289,12 +294,12 @@ export function PairIllustration({ art = "creation" }) {
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <linearGradient id="rb-bg" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`rb-bg-${uid}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#e0f2fe" />
               <stop offset="100%" stopColor="#f0fdf4" />
             </linearGradient>
           </defs>
-          <rect width="160" height="100" fill="url(#rb-bg)" />
+          <rect width="160" height="100" fill={`url(#rb-bg-${uid})`} />
           {/* Rainbow arcs */}
           <g transform="translate(70, 85)" opacity="0.75" fill="none" strokeWidth="4">
             <ellipse cx="0" cy="0" rx="55" ry="55" stroke="#ef4444" />
@@ -315,12 +320,12 @@ export function PairIllustration({ art = "creation" }) {
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <linearGradient id="vine-bg" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`vine-bg-${uid}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#f0fdf4" />
               <stop offset="100%" stopColor="#dcfce7" />
             </linearGradient>
           </defs>
-          <rect width="160" height="100" fill="url(#vine-bg)" />
+          <rect width="160" height="100" fill={`url(#vine-bg-${uid})`} />
           {/* Vine branch */}
           <path d="M 160 10 Q 120 25 100 45" fill="none" stroke="#854d0e" strokeWidth="3" opacity="0.7" />
           <path d="M 125 22 Q 110 15 95 20" fill="none" stroke="#854d0e" strokeWidth="2" opacity="0.7" />
@@ -347,12 +352,12 @@ export function PairIllustration({ art = "creation" }) {
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <linearGradient id="water-bg" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`water-bg-${uid}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#e0f2fe" />
               <stop offset="100%" stopColor="#bae6fd" />
             </linearGradient>
           </defs>
-          <rect width="160" height="100" fill="url(#water-bg)" />
+          <rect width="160" height="100" fill={`url(#water-bg-${uid})`} />
           {/* Gentle waves */}
           <path d="M 0 75 Q 40 68 80 75 T 160 75 L 160 100 L 0 100 Z" fill="#38bdf8" opacity="0.5" />
           <path d="M 0 85 Q 40 80 80 85 T 160 85 L 160 100 L 0 100 Z" fill="#0284c7" opacity="0.4" />
@@ -374,12 +379,12 @@ export function PairIllustration({ art = "creation" }) {
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <linearGradient id="eagle-bg" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`eagle-bg-${uid}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#ffedd5" />
               <stop offset="100%" stopColor="#fed7aa" />
             </linearGradient>
           </defs>
-          <rect width="160" height="100" fill="url(#eagle-bg)" />
+          <rect width="160" height="100" fill={`url(#eagle-bg-${uid})`} />
           {/* Distant mountain peaks */}
           <polygon points="0,100 45,55 90,100" fill="#9a3412" opacity="0.25" />
           <polygon points="60,100 110,48 160,100" fill="#7c2d12" opacity="0.3" />
@@ -401,12 +406,12 @@ export function PairIllustration({ art = "creation" }) {
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <linearGradient id="gosp-bg" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`gosp-bg-${uid}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#f0f9ff" />
               <stop offset="100%" stopColor="#e0f2fe" />
             </linearGradient>
           </defs>
-          <rect width="160" height="100" fill="url(#gosp-bg)" />
+          <rect width="160" height="100" fill={`url(#gosp-bg-${uid})`} />
           {/* Earth Globe */}
           <g transform="translate(108, 25) scale(0.65)" opacity="0.85">
             <circle cx="28" cy="28" r="22" fill="#60a5fa" stroke="#2563eb" strokeWidth="2" />
@@ -428,12 +433,12 @@ export function PairIllustration({ art = "creation" }) {
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <linearGradient id="hope-bg" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`hope-bg-${uid}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#fef3c7" />
               <stop offset="100%" stopColor="#fae8ff" />
             </linearGradient>
           </defs>
-          <rect width="160" height="100" fill="url(#hope-bg)" />
+          <rect width="160" height="100" fill={`url(#hope-bg-${uid})`} />
           {/* Golden Crown */}
           <g transform="translate(108, 26) scale(0.65)" opacity="0.85">
             <polygon points="5,42 10,18 22,28 32,12 42,28 54,18 59,42" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
@@ -455,12 +460,12 @@ export function PairIllustration({ art = "creation" }) {
       return (
         <svg className="mm-card-bg-ill" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
-            <linearGradient id="star-bg" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`star-bg-${uid}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#1e293b" />
               <stop offset="100%" stopColor="#334155" />
             </linearGradient>
           </defs>
-          <rect width="160" height="100" fill="url(#star-bg)" />
+          <rect width="160" height="100" fill={`url(#star-bg-${uid})`} />
           {/* Crescent Moon */}
           <g transform="translate(118, 22) scale(0.65)" opacity="0.85">
             <path d="M 25 5 C 12 5 5 18 5 28 C 5 38 14 48 26 48 C 18 42 16 28 22 16 C 24 12 28 8 30 6 C 28 5 26 5 25 5 Z" fill="#fde047" />
