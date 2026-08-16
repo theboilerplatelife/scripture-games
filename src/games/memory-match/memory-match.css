@@ -113,6 +113,7 @@
   display: grid;
   gap: 10px;
   width: 100%;
+  margin-top: 16px;
 }
 
 .mm-grid-hints   { grid-template-columns: repeat(2, 1fr); }
@@ -269,11 +270,8 @@
 
 /* Card-face tag pills: Hint (red), Reference (blue), Verse (green) */
 .mm-card-tag {
-  position: absolute;
-  top: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
+  display: inline-block;
+  margin-bottom: 4px;
   font-family: 'Schoolbell', cursive;
   font-size: 13px;
   line-height: 1;
@@ -303,11 +301,6 @@
 }
 
 /* Leave room for the tag above the card text in the tagged modes */
-.mm-grid-hints .mm-card-front,
-.mm-grid-refs .mm-card-front {
-  padding-top: 26px;
-}
-
 .mm-card-text {
   font-size: 14px;
   line-height: 1.2;
