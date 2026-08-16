@@ -189,6 +189,12 @@
   color: #5a5246;
 }
 
+.hub-pill.highlight {
+  background: rgba(217, 79, 48, 0.09);
+  border-color: var(--vermilion);
+  color: var(--vermilion-deep);
+}
+
 .hub-game-meta {
   display: flex;
   justify-content: space-between;

@@ -69,6 +69,7 @@ export function GameHub({
           </div>
           <h2 className="hub-game-title">Verse Builder</h2>
           <div className="hub-card-pills">
+            <span className="hub-pill highlight">⭐ {earnedStarsCount} / {totalPossibleStars} Stars</span>
             <span className="hub-pill">📚 15 Chapters</span>
             <span className="hub-pill">🧩 Word Puzzle</span>
           </div>
