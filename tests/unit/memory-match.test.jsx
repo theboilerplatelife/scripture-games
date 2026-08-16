@@ -326,6 +326,24 @@ describe("MemoryMatch orchestrator", () => {
     fireEvent.click(screen.getByText("Next match →"));
     expect(screen.getByText(/Hint Hunt/)).toBeTruthy(); // jumps to unplayed mode 0
     second.unmount();
+
+    // Torn Verses already starred, Hint Hunt not: winning Verse Finder must
+    // skip the played mode and land on Hint Hunt, not replay Torn Verses
+    const third = render(
+      <MemoryMatch
+        stars={{ "mm-1-2": 2 }}
+        onSaveStar={vi.fn()}
+        translation="ESV"
+        onBackToHub={vi.fn()}
+        onOpenSettings={vi.fn()}
+        initialChapterId={1}
+        initialModeIdx={1}
+        initialScreen="win"
+      />
+    );
+    fireEvent.click(screen.getByText("Next match →"));
+    expect(screen.getByText(/Hint Hunt/)).toBeTruthy();
+    third.unmount();
   });
 
   test("all modes solved in a deck triggers complete deck and next deck", () => {
@@ -402,8 +420,9 @@ describe("MemoryMatch orchestrator", () => {
     );
     completeBoardFor(earlier.container, 0);
     expect(screen.queryByText("Complete Deck 🎉")).toBeNull();
-    fireEvent.click(screen.getByText("Next match →"));
-    expect(screen.getByText(/Verse Finder/)).toBeTruthy(); // now playing mode 1
+    // Every mode is already done, so there is no "next match" to offer
+    fireEvent.click(screen.getByText("Back to Modes ←"));
+    expect(screen.getByLabelText("Play Verse Finder")).toBeTruthy(); // mode select
     earlier.unmount();
     vi.useRealTimers();
   });

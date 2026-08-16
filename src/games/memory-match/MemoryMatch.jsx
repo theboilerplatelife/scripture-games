@@ -80,7 +80,6 @@ export function MemoryMatch({
     return typeof v === "number" && v > 0;
   });
 
-  const hasNextMode = selectedModeIdx + 1 < MODES.length;
   // Celebrate only the win that completed the deck, not later replays
   const justCompletedDeck = isDeckComplete && !lastResult.wasAlreadyComplete;
 
@@ -93,19 +92,18 @@ export function MemoryMatch({
         audio.playChapterFanfare();
       }
       setScreen("chapter-done");
-    } else if (hasNextMode) {
-      setSelectedModeIdx((prev) => prev + 1);
-      dealNewBoard();
-    } else if (!isDeckComplete) {
-      // Jump to the unplayed mode
-      const nextUnplayed = MODES.findIndex(
-        (_, m) => !(stars[`mm-${selectedChapterId}-${m}`] > 0)
-      );
+    } else if (isDeckComplete) {
+      // Deck was already complete — back to mode select
+      setScreen("modes");
+    } else {
+      // Nearest mode still missing a star, scanning forward with wraparound
+      // (skips modes that are already done, e.g. mode 2 starred but mode 0 not)
+      const nextUnplayed = MODES.map((_, m) => (selectedModeIdx + 1 + m) % MODES.length).find((m) => {
+        const v = stars[`mm-${selectedChapterId}-${m}`];
+        return !(typeof v === "number" && v > 0);
+      });
       setSelectedModeIdx(nextUnplayed);
       dealNewBoard();
-    } else {
-      // Deck was already complete and no next mode — back to mode select
-      setScreen("modes");
     }
   }
 
@@ -163,7 +161,7 @@ export function MemoryMatch({
           earnedStars={lastResult.earned}
           misses={lastResult.misses}
           isDeckComplete={justCompletedDeck}
-          returnsToModes={!justCompletedDeck && !hasNextMode && isDeckComplete}
+          returnsToModes={!justCompletedDeck && isDeckComplete}
           onReplay={dealNewBoard}
           onNext={handleNextFromWin}
           onBackToModes={() => setScreen("modes")}
