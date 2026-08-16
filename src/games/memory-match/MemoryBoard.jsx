@@ -6,6 +6,14 @@ import { MODES, buildDeck, starsForMisses } from "./matchData.js";
 // Each found pair gets its own sticker color, cycling in match order
 const PAIR_COLORS = ["#d94f30", "#3e7cb1", "#5c8a3a", "#c98a1b", "#7b2cbf"];
 
+// Kid-friendly card-face tags so players know what they're pairing
+// (halves mode needs none — both faces are verse pieces)
+const KIND_TAGS = {
+  hint: { label: "Hint", cls: "hint" },
+  ref: { label: "Reference", cls: "ref" },
+  verse: { label: "Verse", cls: "verse" },
+};
+
 export function MemoryBoard({
   deck: deckObj,
   modeIdx,
@@ -101,6 +109,8 @@ export function MemoryBoard({
           const isRevealed = isMatched || flipped.includes(card.key);
           // Position of this pair in match order (Set preserves insertion order)
           const matchNum = isMatched ? [...matched].indexOf(card.pairId) + 1 : 0;
+          const tag = KIND_TAGS[card.kind];
+          const spokenTag = tag ? `${tag.label} — ` : "";
           return (
             <button
               key={card.key}
@@ -110,9 +120,9 @@ export function MemoryBoard({
               disabled={isMatched}
               aria-label={
                 isMatched
-                  ? `Card ${i + 1}: ${card.text} (matched)`
+                  ? `Card ${i + 1}: ${spokenTag}${card.text} (matched)`
                   : isRevealed
-                    ? `Card ${i + 1}: ${card.text}`
+                    ? `Card ${i + 1}: ${spokenTag}${card.text}`
                     : `Card ${i + 1}: hidden`
               }
             >
@@ -128,6 +138,11 @@ export function MemoryBoard({
               <span className="mm-card-inner">
                 <span className="mm-card-back" aria-hidden="true">{mode.icon}</span>
                 <span className="mm-card-front">
+                  {tag && (
+                    <span className={`mm-card-tag mm-card-tag-${tag.cls}`} aria-hidden="true">
+                      {tag.label}
+                    </span>
+                  )}
                   <span className="mm-card-text">{card.text}</span>
                 </span>
               </span>

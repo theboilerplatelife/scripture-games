@@ -177,6 +177,46 @@
   cursor: default;
 }
 
+/* Card-face tag pills: Hint (red), Reference (blue), Verse (green) */
+.mm-card-tag {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Schoolbell', cursive;
+  font-size: 13px;
+  line-height: 1;
+  padding: 2px 8px;
+  border-radius: 8px;
+  border: 1px dashed;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.mm-card-tag-hint {
+  color: var(--vermilion-deep);
+  border-color: var(--vermilion);
+  background: rgba(217, 79, 48, 0.08);
+}
+
+.mm-card-tag-ref {
+  color: var(--slate-deep);
+  border-color: var(--slate);
+  background: rgba(62, 124, 177, 0.10);
+}
+
+.mm-card-tag-verse {
+  color: #46702c;
+  border-color: var(--leaf);
+  background: rgba(92, 138, 58, 0.10);
+}
+
+/* Leave room for the tag above the card text in the tagged modes */
+.mm-grid-hints .mm-card-front,
+.mm-grid-refs .mm-card-front {
+  padding-top: 26px;
+}
+
 .mm-card-text {
   font-size: 14px;
   line-height: 1.2;

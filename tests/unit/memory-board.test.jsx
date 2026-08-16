@@ -159,4 +159,33 @@ describe("MemoryBoard", () => {
     fireEvent.click(screen.getByLabelText("Back to Match Modes"));
     expect(onBackToModes).toHaveBeenCalled();
   });
+
+  test("hint and reference boards tag card faces so kids know what pairs with what", () => {
+    const hints = render(
+      <MemoryBoard deck={deckObj} modeIdx={0} translation="ESV" onBackToModes={vi.fn()} onComplete={vi.fn()} />
+    );
+    expect(screen.getAllByText("Hint").length).toBe(5);
+    expect(screen.getAllByText("Verse").length).toBe(5);
+    // Revealed cards announce their tag
+    const hintDeck = buildDeck(deckObj, 0, "ESV");
+    const cards = hints.container.querySelectorAll(".mm-card");
+    fireEvent.click(cards[0]);
+    const tagLabel = hintDeck[0].kind === "hint" ? "Hint" : "Verse";
+    expect(cards[0].getAttribute("aria-label")).toBe(`Card 1: ${tagLabel} — ${hintDeck[0].text}`);
+    hints.unmount();
+
+    const refs = render(
+      <MemoryBoard deck={deckObj} modeIdx={1} translation="ESV" onBackToModes={vi.fn()} onComplete={vi.fn()} />
+    );
+    expect(screen.getAllByText("Reference").length).toBe(5);
+    expect(screen.getAllByText("Verse").length).toBe(5);
+    refs.unmount();
+
+    // Torn Verses stays untagged — both faces are verse pieces
+    const halves = render(
+      <MemoryBoard deck={deckObj} modeIdx={2} translation="ESV" onBackToModes={vi.fn()} onComplete={vi.fn()} />
+    );
+    expect(halves.container.querySelector(".mm-card-tag")).toBeNull();
+    halves.unmount();
+  });
 });
