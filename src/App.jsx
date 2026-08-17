@@ -276,6 +276,44 @@ const globalCss = `
   --ink-soft: #4a4238;     /* body ink */
   --sand: #d5c8b2;         /* dashed rules & borders */
   --tape: rgba(250, 228, 158, 0.75); /* washi tape */
+
+  /* Semantic states — every game draws feedback from this one set */
+  --leaf-deep: #46702c;      /* success text on paper */
+  --ink-muted: #635b50;      /* secondary/small text */
+  --ink-soft-2: #5a5246;     /* card body copy */
+  --ink-faint: #6b655d;      /* disabled badges */
+  --slate-pencil: #aac4e0;   /* notebook rule lines */
+  --sand-deep: #b9ac95;      /* dashed outlines */
+  --clay: #6d6255;           /* muted captions */
+  --amber: #c98a1b;          /* hints & highlights */
+  --amber-deep: #8c6d1f;
+  --amber-tint: #fff4d6;
+  --rust: #8c4a32;           /* warm warning text */
+  --rust-deep: #a34328;
+  --moss: #385a24;           /* deep success text */
+
+  /* Paper tints for state washes */
+  --tint-leaf: #f2f7ee;
+  --tint-vermilion: #fbe5e0;
+  --tint-vermilion-strong: #fbd6ce;
+  --tint-amber: #fff8e8;
+  --tint-vermilion-deep: #682717;
+  --tint-vermilion-hover: #fad5ce;
+  --tint-leaf-soft: #e5f4e3;
+  --tint-leaf-hover: #d4edd0;
+  --tint-leaf-strong: #c3e5bd;
+
+  /* Interface surfaces */
+  --forest: #2b593f;         /* listen-button text */
+  --gold-deep: #a06f0f;      /* perfect stamp */
+  --kraft-2: #b08d57;        /* ghost button */
+  --kraft-2-hover: #be9b65;
+  --sand-2: #beb6a6;         /* disabled borders */
+  --sand-light: #e4dbc9;     /* slider track */
+  --paper-hover: #f8f4e6;
+  --paper-disabled: #ece8df;
+  --ink-disabled: #7b7264;
+  --toggle-off: #888888;
 }
 
 *, *::before, *::after {
@@ -424,10 +462,10 @@ body {
   transform: scale(1.03);
 }
 .vb-btn.ghost {
-  background: #b08d57;
+  background: var(--kraft-2);
 }
 .vb-btn.ghost:hover {
-  background: #be9b65;
+  background: var(--kraft-2-hover);
 }
 .vb-btn:active {
   transform: scale(0.95);
@@ -519,7 +557,7 @@ body {
   border: none;
   font-size: 20px;
   cursor: pointer;
-  color: #635b50;
+  color: var(--ink-muted);
   padding: 4px 8px;
 }
 .vb-settings-section {
@@ -533,7 +571,7 @@ body {
 }
 .vb-settings-desc {
   font-size: 15px;
-  color: #635b50;
+  color: var(--ink-muted);
   margin: 0 0 10px;
 }
 .vb-trans-grid {
@@ -553,12 +591,12 @@ body {
   font-family: inherit;
 }
 .vb-trans-card:hover {
-  background: #f8f4e6;
+  background: var(--paper-hover);
   border-color: var(--vermilion);
 }
 .vb-trans-card.active {
   border-color: var(--leaf);
-  background: #f2f7ee;
+  background: var(--tint-leaf);
   box-shadow: 0 0 0 2px rgba(92, 138, 58, 0.35);
 }
 .vb-trans-top {
@@ -573,7 +611,7 @@ body {
 }
 .vb-trans-badge {
   font-size: 13px;
-  color: #46702c;
+  color: var(--leaf-deep);
 }
 .vb-trans-name {
   font-size: 15px;
@@ -582,13 +620,13 @@ body {
 }
 .vb-trans-tagline {
   font-size: 13px;
-  color: #635b50;
+  color: var(--ink-muted);
   margin-top: 2px;
 }
 .vb-trans-check {
   display: inline-block;
   font-size: 13px;
-  color: #46702c;
+  color: var(--leaf-deep);
   margin-top: 4px;
 }
 .vb-setting-row {
@@ -610,7 +648,7 @@ body {
   transition: all 0.15s ease;
 }
 .vb-toggle-switch.off {
-  background: #888;
+  background: var(--toggle-off);
 }
 .vb-modal-footer {
   display: flex;
@@ -623,22 +661,22 @@ body {
   font-family: 'Schoolbell', cursive;
   font-size: 14px;
   color: var(--vermilion-deep);
-  background: #fbe5e0;
+  background: var(--tint-vermilion);
   border: 1px dashed var(--vermilion);
   padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
 }
 .vb-reset-btn:hover {
-  background: #fad5ce;
+  background: var(--tint-vermilion-hover);
 }
 
 /* ---- Victory Card Listen Button ---- */
 .vb-listen-btn {
   font-family: 'Schoolbell', cursive;
   font-size: 16px;
-  color: #2b593f;
-  background: #e5f4e3;
+  color: var(--forest);
+  background: var(--tint-leaf-soft);
   border: 1.5px dashed var(--leaf);
   padding: 6px 16px;
   border-radius: 8px;
@@ -650,20 +688,20 @@ body {
   transition: all 0.15s ease;
 }
 .vb-listen-btn:hover:not(:disabled) {
-  background: #d4edd0;
+  background: var(--tint-leaf-hover);
   transform: scale(1.04);
 }
 .vb-listen-btn.active {
-  background: #c3e5bd;
+  background: var(--tint-leaf-strong);
   box-shadow: 0 0 0 2px rgba(92, 138, 58, 0.4);
 }
 .vb-listen-btn:disabled,
 .vb-listen-btn.disabled {
   opacity: 0.55;
   cursor: not-allowed;
-  background: #ece8df;
-  border-color: #beb6a6;
-  color: #7b7264;
+  background: var(--paper-disabled);
+  border-color: var(--sand-2);
+  color: var(--ink-disabled);
   transform: none !important;
   box-shadow: none !important;
 }
@@ -701,7 +739,7 @@ body {
   width: 100%;
   height: 8px;
   border-radius: 5px;
-  background: #e4dbc9;
+  background: var(--sand-light);
   outline: none;
   margin: 4px 0;
   cursor: pointer;
@@ -797,7 +835,7 @@ body {
   z-index: 3;
   font-family: 'Schoolbell', cursive;
   font-size: 13px;
-  color: #46702c;
+  color: var(--leaf-deep);
   border: 2px dashed var(--leaf);
   border-radius: 6px;
   padding: 2px 8px;
@@ -807,8 +845,8 @@ body {
 }
 
 .vb-stamp.perfect {
-  color: #a06f0f;
-  border-color: #c98a1b;
+  color: var(--gold-deep);
+  border-color: var(--amber);
   background: rgba(255, 244, 214, 0.94);
 }
 

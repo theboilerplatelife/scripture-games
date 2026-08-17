@@ -127,7 +127,7 @@
   border-radius: 20px;
   padding: 4px 12px;
   font-size: 15px;
-  color: #682717;
+  color: var(--tint-vermilion-deep);
 }
 
 /* A big torn-paper scrap of a button, same material as every other action */
@@ -164,7 +164,7 @@
 .splash-audio-note {
   margin-top: 14px;
   font-size: 14px;
-  color: #635b50;
+  color: var(--ink-muted);
   display: flex;
   align-items: center;
   justify-content: center;

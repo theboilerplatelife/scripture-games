@@ -21,8 +21,25 @@ npm run preview        # Preview production build locally
 npm test               # Run all unit and constitutional test suites (Vitest)
 npm run test:watch     # Run tests in interactive watch mode
 npm run test:coverage  # Run tests with v8 coverage (enforces coverage thresholds)
-npm run check          # Full gate: ESLint + 100% Test coverage enforcement + Vite build
+npm run check          # Full gate — run before every deploy (see below)
+npm run test:constitution  # Run only the constitutional gates
 ```
+
+---
+
+### What `npm run check` enforces
+
+`npm run check` = **ESLint → Vitest (all tests + 100% coverage) → Vite build**, and is also the Netlify build command and the CI job, so every gate below runs on every push and deploy:
+
+| Gate | Where | Enforces |
+|---|---|---|
+| ESLint + `jsx-a11y` (strict) | `eslint.config.js` | Code quality and static accessibility |
+| 100% coverage, 4 metrics | `vitest.config.js` thresholds | Article 5.3 |
+| Theology & content | `tests/constitution/theology-content.test.js` | Article 1 (verse structure, no forbidden avatars, every story character has an avatar) |
+| Storage & privacy | `tests/constitution/storage-architecture.test.js` | Article 2 (only the 5 keys, no external URLs) |
+| Audio | `tests/constitution/audio-offline.test.js` | Article 3 (no audio files, default volumes) |
+| Design system | `tests/constitution/design-system.test.js` | Article 4 (tokens, no cross-stylesheet duplicates, **no undefined classNames**, **no raw hex colors**, no synthetic bold, 13px floor, WCAG contrast) |
+| Accessibility | `tests/constitution/a11y.test.jsx` | Article 4.3 (axe-core on every screen; a meta-check fails if a game module has no screens in the suite) |
 
 ---
 

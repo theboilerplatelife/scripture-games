@@ -110,7 +110,7 @@
 
 .vb-chapter-sub {
   font-size: 14px;
-  color: #6d6255;
+  color: var(--clay);
   line-height: 1.25;
   margin: 0;
 }
@@ -281,8 +281,8 @@
   text-align: center;
   font-family: 'Schoolbell', cursive;
   font-size: 17px;
-  color: #a34328;
-  background: #fbe5e0;
+  color: var(--rust-deep);
+  background: var(--tint-vermilion);
   padding: 5px 10px 4px;
   border-radius: 8px;
   border: 1.5px dashed rgba(217, 79, 48, 0.5);
@@ -299,11 +299,11 @@
 
 .vb-clear-btn {
   background: var(--paper);
-  border: 1.5px dashed #b9ac95;
+  border: 1.5px dashed var(--sand-deep);
   border-radius: 8px;
   font-family: 'Schoolbell', cursive;
   font-size: 16px;
-  color: #8c4a32;
+  color: var(--rust);
   padding: 5px 12px 4px;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -315,7 +315,7 @@
 }
 
 .vb-clear-btn:hover:not(:disabled) {
-  background: #fbe5e0;
+  background: var(--tint-vermilion);
   transform: translateY(-1px);
 }
 
@@ -358,7 +358,7 @@
 /* Notebook lined strip */
 .vb-strip {
   background:
-    repeating-linear-gradient(var(--paper) 0 34px, #aac4e0 34px 35px),
+    repeating-linear-gradient(var(--paper) 0 34px, var(--slate-pencil) 34px 35px),
     var(--paper);
   clip-path: polygon(0.5% 2%, 25% 0%, 75% 1.5%, 99.5% 0.5%, 100% 40%, 99% 98%, 70% 100%, 30% 98.5%, 0% 100%, 1% 50%);
   box-shadow: 0 4px 10px rgba(0,0,0,0.18);
@@ -388,7 +388,7 @@
   display: block;
   width: 52px;
   height: 34px;
-  border: 2.5px dashed #b9ac95;
+  border: 2.5px dashed var(--sand-deep);
   border-radius: 4px;
   background: rgba(185,172,149,0.08);
 }
@@ -399,7 +399,7 @@
 
 .vb-slot.shake .vb-scrap {
   animation: vb-shake 1.4s ease-in-out;
-  background: #fbd6ce !important;
+  background: var(--tint-vermilion-strong) !important;
   color: var(--vermilion-deep) !important;
   box-shadow: 0 0 0 2px rgba(217, 79, 48, 0.45);
 }
@@ -423,7 +423,7 @@
 }
 
 .vb-scrap.placed {
-  background: #f2f7ee;
+  background: var(--tint-leaf);
   font-size: 19px;
   padding: 7px 11px;
 }
@@ -479,10 +479,10 @@
 }
 
 @keyframes vb-pencil-scrap {
-  0% { transform: scale(0.92); background: #fff8e8; }
+  0% { transform: scale(0.92); background: var(--tint-amber); }
   30% { transform: scale(1.03); }
   70% { transform: scale(1.01); }
-  100% { transform: scale(1); background: #f2f7ee; }
+  100% { transform: scale(1); background: var(--tint-leaf); }
 }
 
 /* Pile of torn word scraps */
@@ -580,12 +580,12 @@
 
 .vb-win-cheer {
   font-size: 17px;
-  background: #f2f7ee;
+  background: var(--tint-leaf);
   display: inline-block;
   padding: 6px 14px;
   border-radius: 10px;
   margin: 0 0 16px;
-  color: #385a24;
+  color: var(--moss);
 }
 
 .vb-win-btns {
@@ -630,7 +630,7 @@
   background: var(--paper);
   font-family: 'Schoolbell', cursive;
   font-size: 16px;
-  color: #8c6d1f;
+  color: var(--amber-deep);
   padding: 5px 12px 4px;
   border-radius: 8px;
   border: 1.5px dashed rgba(201, 138, 27, 0.45);

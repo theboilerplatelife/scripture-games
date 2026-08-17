@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "check": "npm run lint && vitest run --coverage && vite build"
+    "check": "npm run lint && vitest run --coverage && vite build",
+    "test:constitution": "vitest run tests/constitution"
   },
   "dependencies": {
     "react": "^19.0.0",

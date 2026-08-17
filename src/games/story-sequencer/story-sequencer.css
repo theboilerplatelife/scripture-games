@@ -26,8 +26,8 @@
 .ss-story-card {
   position: relative;
   background: var(--paper);
-  border: 2px solid var(--sand);
-  border-radius: 12px;
+  border: none;
+  clip-path: polygon(1% 4%, 40% 0%, 99% 3%, 100% 55%, 98% 97%, 55% 100%, 2% 96%);
   padding: 22px 18px 18px;
   text-align: left;
   cursor: pointer;
@@ -39,12 +39,9 @@
   min-height: 190px;
 }
 
-.ss-story-card:hover,
-.ss-story-card:focus-visible {
-  transform: translateY(-4px) rotate(0deg) scale(1.02);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.16);
-  border-color: var(--vermilion);
-  outline: none;
+.ss-story-card:hover {
+  transform: scale(1.02) rotate(0deg);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
 }
 
 .ss-story-header {
@@ -95,9 +92,7 @@
 
 .ss-story-steps {
   font-size: 14px;
-  color: #635b50;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  color: var(--ink-muted);
 }
 
 .ss-story-stars {
@@ -116,7 +111,7 @@
 
 .ss-hint-btn {
   background: rgba(244, 162, 97, 0.18);
-  color: #a05a18;
+  color: var(--amber-deep);
   border: 1.5px solid rgba(244, 162, 97, 0.6);
   border-radius: 999px;
   padding: 6px 14px;
@@ -126,8 +121,8 @@
 }
 
 .ss-hint-btn:hover {
-  background: #f4a261;
-  color: #fff;
+  background: var(--amber);
+  color: var(--paper-bright);
   transform: translateY(-1px);
 }
 
@@ -144,9 +139,9 @@
 }
 
 .ss-check-banner {
-  background: #fef3c7;
-  color: #92400e;
-  border: 1.5px solid #fcd34d;
+  background: var(--amber-tint);
+  color: var(--amber-deep);
+  border: 1.5px solid var(--amber);
   padding: 8px 16px;
   border-radius: 8px;
   display: inline-block;
@@ -154,9 +149,9 @@
 }
 
 .ss-hint-banner {
-  background: #ecfdf5;
-  color: #065f46;
-  border: 1.5px solid #6ee7b7;
+  background: var(--tint-leaf);
+  color: var(--moss);
+  border: 1.5px solid var(--leaf-bright);
   padding: 8px 16px;
   border-radius: 8px;
   display: inline-block;
@@ -188,7 +183,7 @@
 }
 
 .ss-timeline-slot.correct {
-  border-color: #10b981;
+  border-color: var(--leaf);
   background: rgba(16, 185, 129, 0.06);
 }
 
@@ -207,12 +202,12 @@
 .ss-slot-num {
   font-family: 'Patrick Hand', cursive;
   font-size: 17px;
-  color: #635b50;
+  color: var(--ink-muted);
 }
 
 .ss-slot-check {
-  background: #10b981;
-  color: #ffffff;
+  background: var(--leaf);
+  color: var(--paper-bright);
   font-size: 15px;
   width: 22px;
   height: 22px;
@@ -227,8 +222,8 @@
 .ss-event-card {
   position: relative;
   background: var(--paper);
-  border: 2px solid var(--sand);
-  border-radius: 8px;
+  border: none;
+  clip-path: polygon(1% 3%, 35% 0%, 70% 2%, 99% 0.5%, 100% 35%, 98.5% 70%, 100% 97%, 65% 100%, 30% 98%, 0% 100%, 1.5% 55%);
   padding: 0 16px 14px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.12);
   cursor: grab;
@@ -238,18 +233,18 @@
 }
 
 .ss-event-card:hover {
-  box-shadow: 0 4px 10px rgba(0,0,0,0.16);
-  border-color: var(--vermilion);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+  transform: rotate(0deg) scale(1.01);
 }
 
 .ss-event-card.selected {
-  border-color: #d94f30;
+  border-color: var(--vermilion);
   box-shadow: 0 0 0 4px rgba(217, 79, 48, 0.25), 0 4px 10px rgba(0,0,0,0.16);
   transform: translateY(-2px) rotate(0deg) scale(1.01);
 }
 
 .ss-event-card.hint-glow {
-  border-color: #f59e0b;
+  border-color: var(--amber);
   animation: ssGlowPulse 1.2s infinite alternate;
 }
 
@@ -321,12 +316,12 @@
 
 .ss-shift-btn:hover {
   background: var(--ink);
-  color: #fff;
+  color: var(--paper-bright);
 }
 
 .ss-card-status {
   font-size: 13px;
-  color: #635b50;
+  color: var(--ink-muted);
   font-style: italic;
 }
 
@@ -353,13 +348,13 @@
 }
 
 .ss-read-btn {
-  background: #3e7cb1;
+  background: var(--slate);
   font-size: 18px;
   padding: 12px 24px;
 }
 
 .ss-read-btn:hover {
-  background: #2c5d88;
+  background: var(--slate-deep);
 }
 
 .ss-win-secondary-btns {
@@ -437,7 +432,7 @@
   background: transparent;
   border: none;
   font-size: 22px;
-  color: #635b50;
+  color: var(--ink-muted);
   cursor: pointer;
   padding: 4px 8px;
   border-radius: 4px;

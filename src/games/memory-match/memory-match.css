@@ -53,7 +53,7 @@
 
 .mm-mode-blurb {
   font-size: 14px;
-  color: #635b50;
+  color: var(--ink-muted);
   line-height: 1.25;
 }
 
@@ -99,7 +99,7 @@
 .mm-board-done-text {
   font-family: 'Schoolbell', cursive;
   font-size: 18px;
-  color: #46702c;
+  color: var(--leaf-deep);
 }
 
 .mm-board-hint {
@@ -223,21 +223,21 @@
 }
 
 .mm-card.matched .mm-card-caption {
-  background: #f2f7ee;
+  background: var(--tint-leaf);
 }
 
 .mm-card.miss .mm-card-caption {
-  background: #fbe5e0;
+  background: var(--tint-vermilion);
 }
 
 .mm-card.matched .mm-card-front {
-  background: #f2f7ee;
+  background: var(--tint-leaf);
   animation: mm-pop 0.3s ease;
 }
 
 /* A judged-wrong pair lingers face-up for self-paced reading, visibly "not it" */
 .mm-card.miss .mm-card-front {
-  background: #fbe5e0;
+  background: var(--tint-vermilion);
   animation: mm-miss-shake 0.5s ease;
 }
 
@@ -280,7 +280,7 @@
 }
 
 .mm-card-tag-verse {
-  color: #46702c;
+  color: var(--leaf-deep);
   border-color: var(--leaf);
   background: rgba(92, 138, 58, 0.10);
 }

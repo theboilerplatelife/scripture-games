@@ -1,4 +1,6 @@
 import { describe, test, expect } from "vitest";
+import fs from "node:fs";
+import path from "node:path";
 import { render } from "@testing-library/react";
 import { axe } from "vitest-axe";
 import * as matchers from "vitest-axe/matchers";
@@ -143,6 +145,20 @@ describe("Constitution Gate: Accessibility (Article 4.3)", () => {
       />
     );
     await expectAccessible(<StoryReaderModal story={STORIES[0]} onClose={noop} />);
+  });
+
+  test("every game module is covered by this suite", () => {
+    // A new game must not ship without its screens being audited here
+    const gamesDir = path.resolve(__dirname, "../../src/games");
+    const suite = fs.readFileSync(__filename, "utf8");
+    fs.readdirSync(gamesDir, { withFileTypes: true })
+      .filter((e) => e.isDirectory())
+      .forEach((entry) => {
+        expect(
+          suite.includes(`src/games/${entry.name}/`),
+          `src/games/${entry.name} has no screens in the accessibility suite`
+        ).toBe(true);
+      });
   });
 
   test("completion celebration card", async () => {

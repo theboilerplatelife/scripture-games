@@ -98,6 +98,18 @@ describe("Constitution Gate: Design System (Article 4)", () => {
     expect([...new Set(undefinedUses)]).toEqual([]);
   });
 
+  test("Article 4.4: stylesheets take every color from a design token", () => {
+    // Raw hex is how a second palette sneaks in (a game arrived carrying
+    // Tailwind emerald/amber). Colors live in :root; stylesheets use var().
+    cssSources().forEach(({ name, css }) => {
+      const body = name.includes("globalCss")
+        ? css.slice(css.indexOf("}", css.indexOf(":root {")) + 1)
+        : css;
+      const raw = body.match(/#[0-9a-fA-F]{3,8}\b/g) || [];
+      expect(raw, `${name} hard-codes colors instead of using design tokens`).toEqual([]);
+    });
+  });
+
   test("Article 4.5: no synthetic bold on the single-weight handwriting faces", () => {
     cssSources().forEach(({ name, css }) => {
       const badWeights = css.match(/font-weight:\s*(bold|[6-9]00)/g) || [];
