@@ -221,6 +221,7 @@ export function SequencerBoard({
 
                 {/* Keyboard Reordering Controls for Screen Readers and Touch Accessibility */}
                 <div className="ss-card-actions">
+                  <span className="ss-card-action-slot">
                   {i > 0 && (
                     <button
                       className="ss-shift-btn"
@@ -234,9 +235,11 @@ export function SequencerBoard({
                       ↑
                     </button>
                   )}
+                  </span>
                   <span className="ss-card-status">
                     {isSelected ? "Selected (tap another to swap)" : "Tap to select"}
                   </span>
+                  <span className="ss-card-action-slot ss-card-action-end">
                   {i < events.length - 1 && (
                     <button
                       className="ss-shift-btn"
@@ -250,6 +253,7 @@ export function SequencerBoard({
                       ↓
                     </button>
                   )}
+                  </span>
                 </div>
               </div>
             </div>
