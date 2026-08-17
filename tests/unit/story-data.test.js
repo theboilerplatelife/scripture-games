@@ -7,6 +7,7 @@ import {
   getStoryById,
   shuffleEvents,
   evaluateOrder,
+  getStoryEventArts,
 } from "../../src/games/story-sequencer/storyData.js";
 import * as randomUtils from "../../src/utils/random.js";
 
@@ -102,4 +103,32 @@ describe("Story Sequencer data & helper functions", () => {
     expect(check2.results).toEqual([true, true, true]);
   });
 
+
+  test("every story gives each card its own content-matched artwork", () => {
+    STORIES.forEach((story) => {
+      const arts = getStoryEventArts(story);
+      const values = Object.values(arts);
+      expect(Object.keys(arts).length).toBe(story.events.length);
+      expect(values.every(Boolean)).toBe(true);
+      // A row of identical pictures is what made the timeline look plain
+      expect(new Set(values).size).toBe(values.length);
+    });
+
+    // Keywords choose the motif: the Red Sea crossing is drawn as water
+    const exodus = STORIES.find((s) => s.title.includes("Red Sea"));
+    expect(Object.values(getStoryEventArts(exodus))).toContain("calm_waters");
+
+    // A story whose events match nothing falls back to its own art, then to
+    // unused themes so the cards still differ
+    const bland = {
+      art: "wisdom_scroll",
+      events: [
+        { step: 1, title: "Zzz", text: "qqq" },
+        { step: 2, title: "Zzz", text: "qqq" },
+      ],
+    };
+    const blandArts = Object.values(getStoryEventArts(bland));
+    expect(blandArts[0]).toBe("wisdom_scroll");
+    expect(blandArts[1]).not.toBe("wisdom_scroll");
+  });
 });

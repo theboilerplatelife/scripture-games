@@ -754,3 +754,51 @@ export function evaluateOrder(events) {
   const isComplete = correctCount === events.length;
   return { results, correctCount, isComplete, total: events.length };
 }
+
+// Each event card gets artwork drawn from its own moment in the story rather
+// than one picture repeated across the whole timeline. Ordered most specific
+// first; a story's own art is the fallback.
+const EVENT_ART_KEYWORDS = [
+  ["starry_sky", ["star", "night", "moon", "dream", "darkness", "asleep", "sleep"]],
+  ["rainbow", ["rainbow", "covenant", "ark", "flood", "dove returns"]],
+  ["eagle_wings", ["eagle", "wings", "soar", "mountain", "hills"]],
+  ["praise_harp", ["sing", "song", "praise", "harp", "tambourine", "music", "celebrate", "shout", "trumpet", "horn", "joy"]],
+  ["shepherd", ["sheep", "shepherd", "flock", "lamb", "pasture"]],
+  ["calm_waters", ["water", "sea", "river", "jordan", "nile", "boat", "ship", "fish", "wave", "storm", "wash", "dip", "swim", "lake"]],
+  ["armor_shield", ["armor", "shield", "sword", "battle", "army", "brave", "courage", "soldier", "warrior", "guard", "walls", "fortress", "furnace", "lions"]],
+  ["lamp", ["lamp", "torch", "candle", "oil", "flame", "fire"]],
+  ["light_city", ["city", "jerusalem", "town", "temple", "palace", "gate", "throne room"]],
+  ["fruit_vine", ["fruit", "tree", "vine", "harvest", "grain", "seed", "bread", "food", "feast", "eat", "garden"]],
+  ["wisdom_scroll", ["wisdom", "wise", "scroll", "law", "commandment", "tablet", "write", "written", "letter", "teach", "understanding"]],
+  ["love_heart", ["love", "kind", "forgive", "compassion", "mercy", "neighbor", "heart", "care", "weep"]],
+  ["dove_peace", ["dove", "peace", "pray", "prayer", "spirit", "quiet", "rest", "fasts", "fasting"]],
+  ["gospel_world", ["nations", "world", "preach", "gospel", "good news", "disciples", "message", "sent", "send", "witness"]],
+  ["hope_heaven", ["heaven", "glory", "crown", "king", "angel", "risen", "eternal", "hope", "cloud"]],
+  ["creation", ["creates", "created", "creation", "earth", "sky", "heavens", "animals", "birds", "plants", "made"]],
+];
+
+const ART_THEMES = EVENT_ART_KEYWORDS.map(([theme]) => theme);
+
+// Artwork for every card of a story, keyed by step. Each card gets the motif
+// that best fits its own moment, and no two cards in a story share one — a row
+// of identical pictures is what made the timeline look plain.
+export function getStoryEventArts(story) {
+  const used = new Set();
+  const arts = {};
+
+  story.events.forEach((event) => {
+    const haystack = `${event.title} ${event.text}`.toLowerCase();
+    const matches = EVENT_ART_KEYWORDS.filter(([, words]) =>
+      words.some((word) => haystack.includes(word))
+    ).map(([theme]) => theme);
+
+    const pick =
+      matches.find((theme) => !used.has(theme)) ||
+      [story.art, ...ART_THEMES].find((theme) => !used.has(theme));
+
+    used.add(pick);
+    arts[event.step] = pick;
+  });
+
+  return arts;
+}

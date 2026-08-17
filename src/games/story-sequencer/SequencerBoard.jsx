@@ -1,7 +1,7 @@
 import { useState, useRef, useLayoutEffect } from "react";
 import { audio } from "../../audio/SoundEngine.js";
 import { jitter } from "../../utils/random.js";
-import { shuffleEvents, evaluateOrder, starsForAttempts } from "./storyData.js";
+import { shuffleEvents, evaluateOrder, starsForAttempts, getStoryEventArts } from "./storyData.js";
 import { PairIllustration } from "../memory-match/PairIllustration.jsx";
 
 export function SequencerBoard({
@@ -11,6 +11,7 @@ export function SequencerBoard({
   onComplete, // (earnedStars, attempts, solvedEvents)
 }) {
   const [events, setEvents] = useState(() => shuffleEvents(story, seed));
+  const eventArts = getStoryEventArts(story);
   const [selectedIdx, setSelectedIdx] = useState(null);
   const slotRefs = useRef([]);
   // Last painted position of each card, keyed by its step, for the swap animation
@@ -179,6 +180,9 @@ export function SequencerBoard({
               <div className="ss-slot-badge">
                 <span className="ss-slot-num">Step {i + 1}</span>
                 {isCorrect && <span className="ss-slot-check" aria-label="Correctly placed">✓</span>}
+                {isIncorrect && (
+                  <span className="ss-slot-cross" aria-label="Not in the right place yet">✗</span>
+                )}
               </div>
 
               <div
@@ -203,7 +207,7 @@ export function SequencerBoard({
               >
                 <span className="vb-tape vb-tape-top" />
                 <span className="ss-card-art" aria-hidden="true">
-                  <PairIllustration art={story.art} />
+                  <PairIllustration art={eventArts[ev.step]} />
                 </span>
                 <div className="ss-card-content">
                   {/* No verse reference here — chapter/verse numbers would
