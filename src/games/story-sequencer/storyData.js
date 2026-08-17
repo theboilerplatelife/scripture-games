@@ -755,11 +755,19 @@ export function evaluateOrder(events) {
   return { results, correctCount, isComplete, total: events.length };
 }
 
-// Which slot rectangle contains a pointer position (null when outside them
-// all). Kept pure so the drag interaction is testable without a layout engine.
-export function slotIndexAtPoint(rects, x, y) {
-  const hit = rects.findIndex(
-    (r) => r && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom
-  );
-  return hit === -1 ? null : hit;
+// The slot a dragged card should occupy for a pointer position: the one whose
+// centre is nearest. Containment testing left dead zones in the gaps between
+// slots and flip-flopped on the boundaries. Pure, so the drag is testable
+// without a layout engine.
+export function slotIndexForPointer(rects, y) {
+  let best = 0;
+  let bestDistance = Infinity;
+  rects.forEach((rect, i) => {
+    const distance = Math.abs(rect.top + rect.height / 2 - y);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      best = i;
+    }
+  });
+  return best;
 }

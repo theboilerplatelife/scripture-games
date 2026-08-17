@@ -179,7 +179,9 @@
   border: 2px dashed rgba(180, 150, 130, 0.45);
   border-radius: 12px;
   padding: 12px 14px;
-  transition: all 0.2s ease;
+  /* Never transition transform here: the reorder animation drives it, and a
+     'transition: all' fights every frame of the drag */
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .ss-timeline-slot.correct {

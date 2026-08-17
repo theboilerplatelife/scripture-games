@@ -142,6 +142,13 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     });
 
     const before = [...document.querySelectorAll(".ss-card-title")].map((n) => n.textContent);
+    // Moving within the same slot only floats the card; nothing reorders
+    const settled = [...document.querySelectorAll(".ss-card-title")].map((n) => n.textContent);
+    fireEvent.pointerDown(live()[0], { pointerId: 9 });
+    fireEvent.pointerMove(live()[0], { pointerId: 9, clientX: 160, clientY: 40 });
+    expect([...document.querySelectorAll(".ss-card-title")].map((n) => n.textContent)).toEqual(settled);
+    fireEvent.pointerUp(live()[0], { pointerId: 9 });
+
     const dragged = live()[0];
     // jsdom has no pointer capture; stub it so the capture path is exercised
     const capture = vi.fn();
@@ -157,11 +164,14 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     expect(after[0]).toBe(before[1]);
     expect(after.slice(2)).toEqual(before.slice(2));
 
-    // A drag released outside every slot leaves the order untouched
+    // Dragging past the end of the list drops the card into the last slot —
+    // there is no dead zone between or beyond the slots any more
+    const beforeEnd = [...document.querySelectorAll(".ss-card-title")].map((n) => n.textContent);
     fireEvent.pointerDown(live()[0], { pointerId: 3 });
-    fireEvent.pointerMove(live()[0], { pointerId: 3, clientX: 9999, clientY: 9999 });
+    fireEvent.pointerMove(live()[0], { pointerId: 3, clientX: 150, clientY: 9999 });
     fireEvent.pointerUp(live()[0], { pointerId: 3 });
-    expect([...document.querySelectorAll(".ss-card-title")].map((n) => n.textContent)).toEqual(after);
+    const afterEnd = [...document.querySelectorAll(".ss-card-title")].map((n) => n.textContent);
+    expect(afterEnd[afterEnd.length - 1]).toBe(beforeEnd[0]);
 
     // Cancelled drag (e.g. the browser takes over) clears the drag state
     fireEvent.pointerDown(live()[0], { pointerId: 4 });

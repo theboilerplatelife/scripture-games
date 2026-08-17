@@ -1,7 +1,7 @@
 import { useState, useRef, useLayoutEffect } from "react";
 import { audio } from "../../audio/SoundEngine.js";
 import { jitter } from "../../utils/random.js";
-import { shuffleEvents, evaluateOrder, starsForAttempts, slotIndexAtPoint } from "./storyData.js";
+import { shuffleEvents, evaluateOrder, starsForAttempts, slotIndexForPointer } from "./storyData.js";
 import { PairIllustration } from "../memory-match/PairIllustration.jsx";
 
 export function SequencerBoard({
@@ -71,8 +71,11 @@ export function SequencerBoard({
       const prev = prevRects.current.get(key);
       const dx = prev ? prev.left - rect.left : 0;
       const dy = prev ? prev.top - rect.top : 0;
+      // The held card is already following the pointer — animating its slot
+      // too would fight that and make the whole row jitter
+      const isHeld = i === dragIdx;
 
-      if (!reduceMotion && (dx || dy)) {
+      if (!reduceMotion && !isHeld && (dx || dy)) {
         el.style.transition = "none";
         el.style.transform = `translate(${dx}px, ${dy}px)`;
         requestAnimationFrame(() => {
@@ -82,7 +85,7 @@ export function SequencerBoard({
       }
       prevRects.current.set(key, rect);
     });
-  }, [events]);
+  }, [events, dragIdx]);
 
   function slotRects() {
     return slotRefs.current.map((el) => el.getBoundingClientRect());
@@ -110,8 +113,8 @@ export function SequencerBoard({
       y: e.clientY - home.top - grabRef.current.y,
     });
 
-    const target = slotIndexAtPoint(rects, e.clientX, e.clientY);
-    if (target === null || target === dragIdx) return;
+    const target = slotIndexForPointer(rects, e.clientY);
+    if (target === dragIdx) return;
     // Reorder live so the other cards make room as you drag
     dragMovedRef.current = true;
     moveEvent(dragIdx, target);
