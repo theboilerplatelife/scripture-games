@@ -288,6 +288,7 @@ const globalCss = `
   --amber: #c98a1b;          /* hints & highlights */
   --amber-deep: #8c6d1f;
   --amber-tint: #fff4d6;
+  --highlighter: #ffe25c;    /* marker yellow for selection outlines */
   --rust: #8c4a32;           /* warm warning text */
   --rust-deep: #a34328;
   --moss: #385a24;           /* deep success text */

@@ -274,14 +274,19 @@
    vermilion. clip-path clips box-shadow, so the ring is a drop-shadow
    stack that follows the torn edge. */
 .ss-event-card.selected {
-  background: var(--tint-amber);
   z-index: 3;
   transform: rotate(0deg) scale(1.05) translateY(-6px);
+  /* clip-path clips borders and box-shadow, so the highlighter outline is a
+     drop-shadow stack — it traces the torn edge exactly */
   filter:
-    drop-shadow(3px 0 0 var(--vermilion))
-    drop-shadow(-3px 0 0 var(--vermilion))
-    drop-shadow(0 3px 0 var(--vermilion))
-    drop-shadow(0 -3px 0 var(--vermilion))
+    drop-shadow(4px 0 0 var(--highlighter))
+    drop-shadow(-4px 0 0 var(--highlighter))
+    drop-shadow(0 4px 0 var(--highlighter))
+    drop-shadow(0 -4px 0 var(--highlighter))
+    drop-shadow(3px 3px 0 var(--highlighter))
+    drop-shadow(-3px 3px 0 var(--highlighter))
+    drop-shadow(3px -3px 0 var(--highlighter))
+    drop-shadow(-3px -3px 0 var(--highlighter))
     drop-shadow(0 10px 14px rgba(0, 0, 0, 0.3));
   animation: ssHold 1.6s ease-in-out infinite;
 }
@@ -289,25 +294,6 @@
 /* Raise the whole slot so the enlarged card is never clipped by its neighbours */
 .ss-timeline-slot:has(.ss-event-card.selected) {
   z-index: 10;
-}
-
-/* A highlighter swipe across the picked-up card: multiply blending makes it
-   read as marker ink laid over the paper rather than a flat overlay */
-.ss-event-card.selected::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  pointer-events: none;
-  mix-blend-mode: multiply;
-  background: linear-gradient(
-    100deg,
-    rgba(255, 236, 120, 0) 0%,
-    rgba(255, 232, 92, 0.75) 8%,
-    rgba(255, 226, 74, 0.85) 50%,
-    rgba(255, 232, 92, 0.75) 92%,
-    rgba(255, 236, 120, 0) 100%
-  );
 }
 
 @keyframes ssHold {
