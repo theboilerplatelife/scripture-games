@@ -469,6 +469,9 @@
   border: 1px solid var(--sand);
   border-radius: 8px;
   overflow: hidden;
+  /* A flex item with overflow != visible gets min-height: 0, so the scrolling
+     flex column would squash each step instead of scrolling and clip the text */
+  flex-shrink: 0;
   background: rgba(255, 255, 255, 0.5);
 }
 
@@ -493,6 +496,7 @@
   position: relative;
   height: 74px;
   overflow: hidden;
+  flex-shrink: 0;
   border-bottom: 1px solid var(--sand);
 }
 

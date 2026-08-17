@@ -110,6 +110,37 @@ describe("Constitution Gate: Design System (Article 4)", () => {
     });
   });
 
+  test("Article 4.3: clipped children of scrolling flex columns cannot be squashed", () => {
+    // A flex item with overflow != visible resolves min-height to 0, so a
+    // scrolling flex column shrinks its children instead of scrolling and
+    // silently clips their content (this hid the storybook text entirely).
+    cssSources().forEach(({ name, css }) => {
+      const rules = [...css.matchAll(/\.([\w-]+)\s*\{([^}]*)\}/g)].map((m) => ({
+        cls: m[1],
+        body: m[2],
+      }));
+      const scrollingColumns = rules.filter(
+        (r) =>
+          /overflow(-y)?:\s*(auto|scroll)/.test(r.body) &&
+          /display:\s*flex/.test(r.body) &&
+          /flex-direction:\s*column/.test(r.body)
+      );
+
+      scrollingColumns.forEach((col) => {
+        // Children of the container are named with its class as a prefix
+        const kids = rules.filter(
+          (r) => r.cls !== col.cls && r.cls.startsWith(col.cls.replace(/-body$/, "")) && /overflow:\s*hidden/.test(r.body)
+        );
+        kids.forEach((kid) => {
+          expect(
+            /flex-shrink:\s*0/.test(kid.body) || /flex:\s*(none|0 0)/.test(kid.body),
+            `${name}: .${kid.cls} clips its overflow inside the scrolling flex column .${col.cls}, so it needs flex-shrink: 0 or its content will be squashed away`
+          ).toBe(true);
+        });
+      });
+    });
+  });
+
   test("Article 4.5: no synthetic bold on the single-weight handwriting faces", () => {
     cssSources().forEach(({ name, css }) => {
       const badWeights = css.match(/font-weight:\s*(bold|[6-9]00)/g) || [];
