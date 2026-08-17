@@ -165,8 +165,8 @@
 
 /* Timeline Track */
 .ss-timeline-track {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-auto-rows: 1fr;
   gap: 16px;
   width: 100%;
   max-width: 740px;
@@ -273,7 +273,7 @@
 /* The picked-up card: straightened, lifted out of the row, ringed in
    vermilion. clip-path clips box-shadow, so the ring is a drop-shadow
    stack that follows the torn edge. */
-.ss-event-card.selected {
+.ss-timeline-slot .ss-event-card.selected {
   z-index: 3;
   transform: rotate(0deg) scale(1.05) translateY(-6px);
   /* clip-path clips borders and box-shadow, so the highlighter outline is a
@@ -291,8 +291,14 @@
   animation: ssHold 1.6s ease-in-out infinite;
 }
 
-/* Raise the whole slot so the enlarged card is never clipped by its neighbours */
-.ss-timeline-slot:has(.ss-event-card.selected) {
+/* The slot holding the picked-up card is ringed in highlighter, and raised so
+   the enlarged card is never clipped by its neighbours */
+.ss-timeline-slot.holding {
+  /* outline, not border: it draws outside the box, so picking a card up
+     cannot resize the slot and shove the rest of the page around */
+  outline: 4px solid var(--highlighter);
+  outline-offset: -2px;
+  box-shadow: 0 0 0 5px rgba(255, 226, 92, 0.4);
   z-index: 10;
 }
 

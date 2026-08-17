@@ -175,7 +175,9 @@ export function SequencerBoard({
               ref={(el) => {
                 slotRefs.current[i] = el;
               }}
-              className={`ss-timeline-slot ${isCorrect ? "correct" : ""} ${isIncorrect ? "incorrect" : ""}`}
+              className={`ss-timeline-slot ${isCorrect ? "correct" : ""} ${isIncorrect ? "incorrect" : ""} ${
+                isSelected ? "holding" : ""
+              }`}
             >
               <div className="ss-slot-badge">
                 <span className="ss-slot-num">Step {i + 1}</span>
