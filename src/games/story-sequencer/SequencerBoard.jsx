@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 import { audio } from "../../audio/SoundEngine.js";
 import { jitter } from "../../utils/random.js";
 import { shuffleEvents, evaluateOrder, starsForAttempts, slotIndexAtPoint } from "./storyData.js";
@@ -17,6 +17,10 @@ export function SequencerBoard({
   const [dragIdx, setDragIdx] = useState(null);
   const slotRefs = useRef([]);
   const dragMovedRef = useRef(false);
+  const grabRef = useRef({ x: 0, y: 0 });
+  const [dragDelta, setDragDelta] = useState(null); // px offset of the held card
+  // Last painted position of each card, keyed by its step, for FLIP animation
+  const prevRects = useRef(new Map());
   const [attempts, setAttempts] = useState(0);
   const [lastCheck, setLastCheck] = useState(null); // { results, correctCount, isComplete, total }
   const [hintActive, setHintActive] = useState(false);
@@ -54,6 +58,32 @@ export function SequencerBoard({
     }
   }
 
+  // After the order changes, slide each displaced card from where it used to
+  // be to where it now is, so the row visibly reshuffles around the held card
+  useLayoutEffect(() => {
+    const reduceMotion =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    slotRefs.current.forEach((el, i) => {
+      const key = events[i].step;
+      const rect = el.getBoundingClientRect();
+      const prev = prevRects.current.get(key);
+      const dx = prev ? prev.left - rect.left : 0;
+      const dy = prev ? prev.top - rect.top : 0;
+
+      if (!reduceMotion && (dx || dy)) {
+        el.style.transition = "none";
+        el.style.transform = `translate(${dx}px, ${dy}px)`;
+        requestAnimationFrame(() => {
+          el.style.transition = "transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1)";
+          el.style.transform = "";
+        });
+      }
+      prevRects.current.set(key, rect);
+    });
+  }, [events]);
+
   function slotRects() {
     return slotRefs.current.map((el) => el.getBoundingClientRect());
   }
@@ -61,6 +91,8 @@ export function SequencerBoard({
   function handlePointerDown(i, e) {
     if (lockRef.current) return;
     dragMovedRef.current = false;
+    const rect = e.currentTarget.getBoundingClientRect();
+    grabRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     setDragIdx(i);
     if (e.currentTarget.setPointerCapture) {
       e.currentTarget.setPointerCapture(e.pointerId);
@@ -69,9 +101,18 @@ export function SequencerBoard({
 
   function handlePointerMove(e) {
     if (dragIdx === null) return;
-    const target = slotIndexAtPoint(slotRects(), e.clientX, e.clientY);
+
+    const rects = slotRects();
+    const home = rects[dragIdx];
+    // Keep the card pinned to the point where it was grabbed
+    setDragDelta({
+      x: e.clientX - home.left - grabRef.current.x,
+      y: e.clientY - home.top - grabRef.current.y,
+    });
+
+    const target = slotIndexAtPoint(rects, e.clientX, e.clientY);
     if (target === null || target === dragIdx) return;
-    // Reorder live so the other cards visibly make room as you drag
+    // Reorder live so the other cards make room as you drag
     dragMovedRef.current = true;
     moveEvent(dragIdx, target);
     setDragIdx(target);
@@ -84,6 +125,7 @@ export function SequencerBoard({
     // one already held
     if (!dragMovedRef.current) handleCardClick(i);
     setDragIdx(null);
+    setDragDelta(null);
   }
 
   // Move card left/right via keyboard accessibility buttons
@@ -184,7 +226,9 @@ export function SequencerBoard({
               ref={(el) => {
                 slotRefs.current[i] = el;
               }}
-              className={`ss-timeline-slot ${isCorrect ? "correct" : ""} ${isIncorrect ? "incorrect" : ""}`}
+              className={`ss-timeline-slot ${isCorrect ? "correct" : ""} ${isIncorrect ? "incorrect" : ""} ${
+                dragIdx === i && dragDelta ? "dragging-from" : ""
+              }`}
             >
               <div className="ss-slot-badge">
                 <span className="ss-slot-num">Step {i + 1}</span>
@@ -195,11 +239,21 @@ export function SequencerBoard({
                 className={`ss-event-card ${isSelected ? "selected" : ""} ${isHintTarget ? "hint-glow" : ""} ${
                   dragIdx === i ? "dragging" : ""
                 }`}
-                style={{ "--rot": `${jitter(story.id * 10 + ev.step, i, -2, 2)}deg` }}
+                style={
+                  dragIdx === i && dragDelta
+                    ? {
+                        "--rot": "0deg",
+                        transform: `translate(${dragDelta.x}px, ${dragDelta.y}px) rotate(1.5deg) scale(1.04)`,
+                      }
+                    : { "--rot": `${jitter(story.id * 10 + ev.step, i, -2, 2)}deg` }
+                }
                 onPointerDown={(e) => handlePointerDown(i, e)}
                 onPointerMove={handlePointerMove}
                 onPointerUp={() => handlePointerUp(i)}
-                onPointerCancel={() => setDragIdx(null)}
+                onPointerCancel={() => {
+                  setDragIdx(null);
+                  setDragDelta(null);
+                }}
                 role="button"
                 tabIndex={0}
                 aria-label={`Position ${i + 1}: ${ev.title}. ${ev.text}. ${isCorrect ? "(Correct)" : ""}`}

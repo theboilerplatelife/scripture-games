@@ -215,6 +215,67 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     });
   });
 
+  test("displaced cards animate from their old position, and hold still under reduced motion", () => {
+    const story = STORIES[0];
+
+    // jsdom has no layout, so give each slot a rect that follows the card
+    // currently inside it — then a reorder produces real deltas to animate
+    const rowFor = (slot) => {
+      const title = slot.querySelector(".ss-card-title")?.textContent ?? "";
+      return story.events.findIndex((ev) => ev.title === title);
+    };
+    const stubRects = (root) => {
+      root.querySelectorAll(".ss-timeline-slot").forEach((slot) => {
+        slot.getBoundingClientRect = () => {
+          const row = rowFor(slot);
+          return { left: 0, right: 300, top: row * 100, bottom: row * 100 + 100, width: 300, height: 100 };
+        };
+      });
+    };
+
+    const rafSpy = vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      cb(0);
+      return 1;
+    });
+
+    const { container, unmount } = render(
+      <SequencerBoard story={story} seed={3} onBackToStories={vi.fn()} onComplete={vi.fn()} />
+    );
+    stubRects(container);
+
+    // Move a card: the ones it displaces get a settling transition
+    const cards = () => [...container.querySelectorAll(".ss-event-card")];
+    tapCard(cards()[1]);
+    tapCard(cards()[0]);
+
+    const animated = [...container.querySelectorAll(".ss-timeline-slot")].filter((slot) =>
+      slot.style.transition.includes("transform")
+    );
+    expect(animated.length).toBeGreaterThan(0);
+    // requestAnimationFrame ran inline above, so the cards have settled home
+    expect(animated[0].style.transform).toBe("");
+    unmount();
+
+    // With reduced motion the same reorder moves nothing
+    // jsdom ships no matchMedia at all, which is why the component guards for it
+    const realMatchMedia = window.matchMedia;
+    window.matchMedia = () => ({ matches: true });
+    const still = render(
+      <SequencerBoard story={story} seed={3} onBackToStories={vi.fn()} onComplete={vi.fn()} />
+    );
+    stubRects(still.container);
+    const stillCards = () => [...still.container.querySelectorAll(".ss-event-card")];
+    tapCard(stillCards()[1]);
+    tapCard(stillCards()[0]);
+    expect(
+      [...still.container.querySelectorAll(".ss-timeline-slot")].every((slot) => !slot.style.transition)
+    ).toBe(true);
+
+    still.unmount();
+    window.matchMedia = realMatchMedia;
+    rafSpy.mockRestore();
+  });
+
   test("StoryWinCard renders congratulatory stars, story reader button, and next story", () => {
     const onPlayAgain = vi.fn();
     const onReadStory = vi.fn();

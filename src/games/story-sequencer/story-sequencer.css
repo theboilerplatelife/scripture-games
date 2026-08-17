@@ -233,12 +233,21 @@
   overflow: hidden;
 }
 
+/* The held card floats free of the row and tracks the pointer 1:1, so it
+   must not carry the settling transition the other cards use */
 .ss-event-card.dragging {
-  opacity: 0.85;
-  transform: rotate(0deg) scale(1.03);
-  box-shadow: 0 10px 22px rgba(0,0,0,0.28);
+  box-shadow: 0 16px 30px rgba(0,0,0,0.32);
   cursor: grabbing;
-  z-index: 5;
+  position: relative;
+  z-index: 20;
+  transition: box-shadow 0.15s ease;
+  will-change: transform;
+}
+
+/* The gap the held card left behind */
+.ss-timeline-slot.dragging-from .ss-event-card {
+  opacity: 0.35;
+  filter: saturate(0.5);
 }
 
 .ss-event-card:hover {
@@ -546,5 +555,12 @@
 
   .ss-win-secondary-btns {
     flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ss-event-card,
+  .ss-timeline-slot {
+    transition: none !important;
   }
 }
