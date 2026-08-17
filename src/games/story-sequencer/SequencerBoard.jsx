@@ -15,7 +15,6 @@ export function SequencerBoard({
   // Pointer-based drag: HTML5 drag events never fire on touch devices, and
   // this game is mostly played on tablets
   const [dragIdx, setDragIdx] = useState(null);
-  const [dragOverIdx, setDragOverIdx] = useState(null);
   const slotRefs = useRef([]);
   const dragMovedRef = useRef(false);
   const [attempts, setAttempts] = useState(0);
@@ -24,13 +23,14 @@ export function SequencerBoard({
   const lockRef = useRef(false);
 
   // Swap two cards in the timeline
-  function swapEvents(idxA, idxB) {
-    audio.playCardSnap(idxB);
+  // Move a card to a position, pushing the cards in between along — the
+  // behaviour people expect from any sortable list
+  function moveEvent(from, to) {
+    audio.playCardSnap(to);
     setEvents((prev) => {
       const next = [...prev];
-      const temp = next[idxA];
-      next[idxA] = next[idxB];
-      next[idxB] = temp;
+      const [card] = next.splice(from, 1);
+      next.splice(to, 0, card);
       return next;
     });
     setLastCheck(null);
@@ -49,8 +49,8 @@ export function SequencerBoard({
       audio.playButtonClick();
       setSelectedIdx(null);
     } else {
-      // Swap selected card with this card
-      swapEvents(selectedIdx, idx);
+      // Place the held card here; the rest shift to make room
+      moveEvent(selectedIdx, idx);
     }
   }
 
@@ -69,27 +69,26 @@ export function SequencerBoard({
 
   function handlePointerMove(e) {
     if (dragIdx === null) return;
+    const target = slotIndexAtPoint(slotRects(), e.clientX, e.clientY);
+    if (target === null || target === dragIdx) return;
+    // Reorder live so the other cards visibly make room as you drag
     dragMovedRef.current = true;
-    setDragOverIdx(slotIndexAtPoint(slotRects(), e.clientX, e.clientY));
+    moveEvent(dragIdx, target);
+    setDragIdx(target);
+    setSelectedIdx(null);
   }
 
   function handlePointerUp(i) {
     if (dragIdx === null) return;
-    const target = dragOverIdx;
-    // A drag that never moved is a tap — fall through to select/place
-    if (dragMovedRef.current && target !== null && target !== dragIdx) {
-      swapEvents(dragIdx, target);
-      setSelectedIdx(null);
-    } else if (!dragMovedRef.current) {
-      handleCardClick(i);
-    }
+    // A press that never moved is a tap: pick the card up, or place the
+    // one already held
+    if (!dragMovedRef.current) handleCardClick(i);
     setDragIdx(null);
-    setDragOverIdx(null);
   }
 
   // Move card left/right via keyboard accessibility buttons
   function moveCard(idx, direction) {
-    swapEvents(idx, idx + direction);
+    moveEvent(idx, idx + direction);
   }
 
   // Check current timeline sequence
@@ -157,7 +156,7 @@ export function SequencerBoard({
 
       <div className="ss-timeline-header">
         <p className="ss-instruction">
-          Arrange the {events.length} event cards from <strong>First (1)</strong> to <strong>Last ({events.length})</strong>:
+          Put the {events.length} cards in order from <strong>First (1)</strong> to <strong>Last ({events.length})</strong> — drag a card, or tap it and then tap where it goes.
         </p>
         {lastCheck && !lastCheck.isComplete && (
           <div className="ss-check-banner">
@@ -195,15 +194,12 @@ export function SequencerBoard({
               <div
                 className={`ss-event-card ${isSelected ? "selected" : ""} ${isHintTarget ? "hint-glow" : ""} ${
                   dragIdx === i ? "dragging" : ""
-                } ${dragIdx !== null && dragOverIdx === i && dragOverIdx !== dragIdx ? "drop-target" : ""}`}
+                }`}
                 style={{ "--rot": `${jitter(story.id * 10 + ev.step, i, -2, 2)}deg` }}
                 onPointerDown={(e) => handlePointerDown(i, e)}
                 onPointerMove={handlePointerMove}
                 onPointerUp={() => handlePointerUp(i)}
-                onPointerCancel={() => {
-                  setDragIdx(null);
-                  setDragOverIdx(null);
-                }}
+                onPointerCancel={() => setDragIdx(null)}
                 role="button"
                 tabIndex={0}
                 aria-label={`Position ${i + 1}: ${ev.title}. ${ev.text}. ${isCorrect ? "(Correct)" : ""}`}

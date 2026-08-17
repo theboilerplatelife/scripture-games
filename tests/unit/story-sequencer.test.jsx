@@ -152,8 +152,10 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     expect(dragged.className).toContain("dragging");
     fireEvent.pointerUp(dragged, { pointerId: 2 });
     const after = [...document.querySelectorAll(".ss-card-title")].map((n) => n.textContent);
-    expect(after[0]).toBe(before[1]);
+    // Card 0 was dropped on slot 1: it lands there and the others shift up
     expect(after[1]).toBe(before[0]);
+    expect(after[0]).toBe(before[1]);
+    expect(after.slice(2)).toEqual(before.slice(2));
 
     // A drag released outside every slot leaves the order untouched
     fireEvent.pointerDown(live()[0], { pointerId: 3 });
@@ -175,6 +177,11 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     fireEvent.click(screen.getByRole("button", { name: "Check timeline order" }));
     expect(screen.getByText(/in correct order! Keep going!/i)).toBeTruthy();
 
+    // Drop anything still held from the interactions above, so the solve
+    // loop starts from a clean slate
+    const held = document.querySelector(".ss-event-card.selected");
+    if (held) tapCard(held);
+
     // Reorder correctly to trigger lockRef and completion
     for (let i = 0; i < 5; i++) {
       const currentCards = container.querySelectorAll(".ss-event-card");
@@ -186,9 +193,9 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
         }
       });
       if (foundIdx !== -1 && foundIdx !== i) {
-        tapCard(currentCards[i]);
+        tapCard(currentCards[foundIdx]);
         const updated = container.querySelectorAll(".ss-event-card");
-        tapCard(updated[foundIdx]);
+        tapCard(updated[i]);
       }
     }
 
@@ -198,8 +205,9 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     // Every input is inert while the board is locked for the win transition
     const updatedCards = container.querySelectorAll(".ss-event-card");
     tapCard(updatedCards[0]);
+    const selectedBefore = document.querySelectorAll(".ss-event-card.selected").length;
     fireEvent.keyDown(updatedCards[0], { key: "Enter" });
-    expect(updatedCards[0].className).not.toContain("selected");
+    expect(document.querySelectorAll(".ss-event-card.selected").length).toBe(selectedBefore);
     fireEvent.click(screen.getByRole("button", { name: "Check timeline order" }));
 
     await waitFor(() => {
@@ -334,9 +342,10 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
         }
       });
       if (foundIdx !== -1 && foundIdx !== i) {
-        tapCard(cards[i]);
+        // Pick up the card that belongs at position i, then tap position i
+        tapCard(cards[foundIdx]);
         const updatedCards = container.querySelectorAll(".ss-event-card");
-        tapCard(updatedCards[foundIdx]);
+        tapCard(updatedCards[i]);
       }
     }
 
@@ -356,7 +365,7 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
 
     // 7. Click Play Again
     fireEvent.click(screen.getByText("Play Again 🔄"));
-    expect(screen.getByText(/Arrange the 5 event cards/i)).toBeTruthy();
+    expect(screen.getByText(/Put the 5 cards in order/i)).toBeTruthy();
 
     // 8. Solve again and click Next Story
     for (let i = 0; i < 5; i++) {
@@ -369,9 +378,10 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
         }
       });
       if (foundIdx !== -1 && foundIdx !== i) {
-        tapCard(cards[i]);
+        // Pick up the card that belongs at position i, then tap position i
+        tapCard(cards[foundIdx]);
         const updatedCards = container.querySelectorAll(".ss-event-card");
-        tapCard(updatedCards[foundIdx]);
+        tapCard(updatedCards[i]);
       }
     }
     fireEvent.click(screen.getByRole("button", { name: "Check timeline order" }));
@@ -419,9 +429,10 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
         }
       });
       if (foundIdx !== -1 && foundIdx !== i) {
-        tapCard(cards[i]);
+        // Pick up the card that belongs at position i, then tap position i
+        tapCard(cards[foundIdx]);
         const updatedCards = container.querySelectorAll(".ss-event-card");
-        tapCard(updatedCards[foundIdx]);
+        tapCard(updatedCards[i]);
       }
     }
     fireEvent.click(screen.getByRole("button", { name: "Check timeline order" }));
@@ -460,9 +471,10 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
         }
       });
       if (foundIdx !== -1 && foundIdx !== i) {
-        tapCard(cards[i]);
+        // Pick up the card that belongs at position i, then tap position i
+        tapCard(cards[foundIdx]);
         const updatedCards = container.querySelectorAll(".ss-event-card");
-        tapCard(updatedCards[foundIdx]);
+        tapCard(updatedCards[i]);
       }
     }
 
