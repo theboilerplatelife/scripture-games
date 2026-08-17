@@ -442,9 +442,9 @@ export class SoundEngine {
   }
 
   // --- Core Synthesis Helpers ---
-  playPluck(freq, duration = 0.5, vol = 0.3, type = "sine") {
+  playPluck(freq, duration = 0.5, vol = 0.3, type = "sine", when = null) {
     if (!this.ctx || this.ctx.state !== "running" || this.muted) return;
-    const now = this.ctx.currentTime;
+    const now = when ?? this.ctx.currentTime;
 
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
@@ -474,9 +474,9 @@ export class SoundEngine {
     }
   }
 
-  playBass(freq, duration = 0.6, vol = 0.2) {
+  playBass(freq, duration = 0.6, vol = 0.2, when = null) {
     if (!this.ctx || this.ctx.state !== "running" || this.muted) return;
-    const now = this.ctx.currentTime;
+    const now = when ?? this.ctx.currentTime;
 
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
@@ -862,31 +862,42 @@ export class SoundEngine {
       song = MAIN_HUB_SONG;
     }
 
-    const stepDurationMs = (60 / song.bpm / 2) * 1000;
+    // Lookahead scheduling ("a tale of two clocks"): a coarse JS timer only
+    // QUEUES notes ahead of time; the Web Audio clock plays them
+    // sample-accurately. Main-thread jank must exceed the whole lookahead
+    // window before it can be heard, and timer drift never accumulates.
+    const stepDuration = 60 / song.bpm / 2;
+    const LOOKAHEAD = 0.12; // seconds of audio queued ahead
+    const TICK_MS = 25;
 
     this.isPlaying = true;
+    this.nextStepTime = this.ctx ? this.ctx.currentTime + 0.06 : 0;
     this.timerId = setInterval(() => {
-      if (this.muted || this.isBackgrounded || !this.ctx || this.ctx.state !== "running") {
+      if (!this.ctx || this.ctx.state !== "running") return;
+
+      while (this.nextStepTime < this.ctx.currentTime + LOOKAHEAD) {
+        const when = this.nextStepTime;
+        // Skip (not replay) steps the clock has already passed — e.g. after a
+        // long main-thread stall — instead of splatting them all at once
+        const playable = when >= this.ctx.currentTime - 0.05 && !this.muted && !this.isBackgrounded;
+
+        if (playable) {
+          song.melody.forEach((m) => {
+            if (m.s === this.stepIndex && NOTES[m.n]) {
+              this.playPluck(NOTES[m.n], m.d * (60 / song.bpm), m.v, "sine", when);
+            }
+          });
+          song.bass.forEach((b) => {
+            if (b.s === this.stepIndex && NOTES[b.n]) {
+              this.playBass(NOTES[b.n], b.d * (60 / song.bpm), b.v, when);
+            }
+          });
+        }
+
         this.stepIndex = (this.stepIndex + 1) % song.steps;
-        return;
+        this.nextStepTime += stepDuration;
       }
-
-      // Melody
-      song.melody.forEach((m) => {
-        if (m.s === this.stepIndex && NOTES[m.n]) {
-          this.playPluck(NOTES[m.n], m.d * (60 / song.bpm), m.v, "sine");
-        }
-      });
-
-      // Bass
-      song.bass.forEach((b) => {
-        if (b.s === this.stepIndex && NOTES[b.n]) {
-          this.playBass(NOTES[b.n], b.d * (60 / song.bpm), b.v);
-        }
-      });
-
-      this.stepIndex = (this.stepIndex + 1) % song.steps;
-    }, stepDurationMs);
+    }, TICK_MS);
   }
 }
 

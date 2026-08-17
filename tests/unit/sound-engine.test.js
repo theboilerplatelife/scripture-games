@@ -182,6 +182,13 @@ describe("SoundEngine Comprehensive Unit Tests", () => {
       vi.advanceTimersByTime(2000);
     });
 
+    // A long main-thread stall: the scheduler skips past steps instead of
+    // replaying them in a burst
+    engine.setTrack("hub");
+    engine.ctx.currentTime = 30;
+    vi.advanceTimersByTime(100);
+    expect(engine.isPlaying).toBe(true);
+
     // Run while muted
     engine.setMuted(true);
     engine.setTrack("verse");
