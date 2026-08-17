@@ -77,7 +77,7 @@ export function SequencerBoard({
     });
   }, [events]);
 
-  // Move card left/right via keyboard accessibility buttons
+  // Move card up/down via the keyboard and the shift buttons
   function moveCard(idx, direction) {
     swapEvents(idx, idx + direction);
   }
@@ -198,10 +198,10 @@ export function SequencerBoard({
                   if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
                     handleCardClick(i);
-                  } else if (e.key === "ArrowLeft" && i > 0) {
+                  } else if (e.key === "ArrowUp" && i > 0) {
                     e.preventDefault();
                     moveCard(i, -1);
-                  } else if (e.key === "ArrowRight" && i < events.length - 1) {
+                  } else if (e.key === "ArrowDown" && i < events.length - 1) {
                     e.preventDefault();
                     moveCard(i, 1);
                   }
@@ -228,10 +228,10 @@ export function SequencerBoard({
                         e.stopPropagation();
                         moveCard(i, -1);
                       }}
-                      aria-label={`Move ${ev.title} left`}
-                      title="Move card left"
+                      aria-label={`Move ${ev.title} up`}
+                      title="Move card up"
                     >
-                      ←
+                      ↑
                     </button>
                   )}
                   <span className="ss-card-status">
@@ -244,10 +244,10 @@ export function SequencerBoard({
                         e.stopPropagation();
                         moveCard(i, 1);
                       }}
-                      aria-label={`Move ${ev.title} right`}
-                      title="Move card right"
+                      aria-label={`Move ${ev.title} down`}
+                      title="Move card down"
                     >
-                      →
+                      ↓
                     </button>
                   )}
                 </div>

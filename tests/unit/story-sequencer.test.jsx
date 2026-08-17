@@ -111,19 +111,19 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     // Keyboard navigation: Enter/Space to select/swap, ArrowLeft, ArrowRight
     fireEvent.keyDown(cards[0], { key: " " });
     fireEvent.keyDown(cards[1], { key: "Enter" });
-    fireEvent.keyDown(cards[1], { key: "ArrowLeft" });
-    fireEvent.keyDown(cards[0], { key: "ArrowRight" });
-    fireEvent.keyDown(cards[0], { key: "ArrowLeft" }); // boundary check (i === 0)
-    fireEvent.keyDown(cards[4], { key: "ArrowRight" }); // boundary check (i === 4)
+    fireEvent.keyDown(cards[1], { key: "ArrowUp" });
+    fireEvent.keyDown(cards[0], { key: "ArrowDown" });
+    fireEvent.keyDown(cards[0], { key: "ArrowUp" }); // boundary check (i === 0)
+    fireEvent.keyDown(cards[4], { key: "ArrowDown" }); // boundary check (i === 4)
 
     // Shift buttons
-    const shiftLeftBtns = container.querySelectorAll(".ss-shift-btn[aria-label*='left']");
-    if (shiftLeftBtns.length > 0) {
-      fireEvent.click(shiftLeftBtns[0]);
+    const shiftUpBtns = container.querySelectorAll(".ss-shift-btn[aria-label*='up']");
+    if (shiftUpBtns.length > 0) {
+      fireEvent.click(shiftUpBtns[0]);
     }
-    const shiftRightBtns = container.querySelectorAll(".ss-shift-btn[aria-label*='right']");
-    if (shiftRightBtns.length > 0) {
-      fireEvent.click(shiftRightBtns[0]);
+    const shiftDownBtns = container.querySelectorAll(".ss-shift-btn[aria-label*='down']");
+    if (shiftDownBtns.length > 0) {
+      fireEvent.click(shiftDownBtns[0]);
     }
 
     // Drag-and-drop simulation
