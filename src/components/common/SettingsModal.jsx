@@ -83,7 +83,7 @@ export function SettingsModal({
           <div className="vb-setting-row">
             <span>Master Mute</span>
             <button
-              className={`vb-toggle-switch ${musicOn ? "on" : "off"}`}
+              className={`vb-toggle-switch ${musicOn ? "" : "off"}`}
               onClick={() => {
                 audio.init();
                 onToggleMusic();
@@ -138,10 +138,10 @@ export function SettingsModal({
 
         {/* Reset Progress Section */}
         {onResetProgress && (
-          <div className="vb-settings-section danger-zone">
+          <div className="vb-settings-section">
             <h3 className="vb-settings-heading">🔄 Progress Data</h3>
             <div className="vb-setting-row">
-              <span className="vb-setting-note">Reset all earned stars and unlocked chapters:</span>
+              <span>Reset all earned stars and unlocked chapters:</span>
               <button
                 className="vb-reset-btn"
                 onClick={() => {

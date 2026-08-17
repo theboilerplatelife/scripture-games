@@ -144,7 +144,7 @@ export function PlayBoard({
           return (
             <button
               key={i}
-              className={`vb-slot ${tile ? "filled" : ""} ${
+              className={`vb-slot ${
                 id !== null && shakeIds.includes(id) ? "shake" : ""
               } ${justPlaced === id ? "pop" : ""}`}
               onClick={() => removeTile(i)}

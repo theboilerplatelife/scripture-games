@@ -50,11 +50,14 @@ export function StoryReaderModal({ story, onClose }) {
                 <span>Step {ev.step}</span>
               </div>
               <div className="ss-reader-step-content">
-                <PairIllustration art={story.art} />
+                {/* Banner above the words, never behind them */}
+                <span className="ss-reader-step-art" aria-hidden="true">
+                  <PairIllustration art={story.art} />
+                </span>
                 <div className="ss-reader-text-wrapper">
-                  <span className="ss-reader-step-ref">{ev.ref}</span>
                   <h3 className="ss-reader-step-title">{ev.title}</h3>
                   <p className="ss-reader-step-text">{ev.text}</p>
+                  <span className="ss-reader-step-ref">{ev.ref}</span>
                 </div>
               </div>
             </div>

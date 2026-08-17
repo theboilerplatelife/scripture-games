@@ -229,7 +229,7 @@
   background: var(--paper);
   border: 2px solid var(--sand);
   border-radius: 8px;
-  padding: 16px;
+  padding: 0 16px 14px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.12);
   cursor: grab;
   transform: rotate(var(--rot, 0deg));
@@ -258,18 +258,25 @@
   100% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0.6); }
 }
 
+/* Picture band across the top of the card — never behind the words */
+.ss-card-art {
+  display: block;
+  position: relative;
+  height: 56px;
+  margin: 0 -16px 10px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--sand);
+}
+
 .ss-card-content {
   position: relative;
-  z-index: 2;
-  background: rgba(255, 253, 248, 0.84);
-  border-radius: 4px;
-  padding: 12px 14px;
+  padding: 2px 0 0;
 }
 
 .ss-card-ref {
   font-family: 'Patrick Hand', cursive;
   font-size: 14px;
-  color: var(--vermilion);
+  color: var(--slate-deep);
   display: block;
   margin-bottom: 4px;
 }
@@ -283,7 +290,7 @@
 }
 
 .ss-card-text {
-  font-size: 15px;
+  font-size: 17px;
   color: var(--ink);
   line-height: 1.45;
   margin: 0;
@@ -457,8 +464,8 @@
 }
 
 .ss-reader-step-badge {
-  background: rgba(217, 79, 48, 0.12);
-  color: var(--vermilion);
+  background: rgba(74, 66, 56, 0.07);
+  color: var(--ink-soft);
   font-family: 'Patrick Hand', cursive;
   font-size: 15px;
   padding: 6px 14px;
@@ -466,35 +473,42 @@
 }
 
 .ss-reader-step-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* A storybook plate: the picture sits above the words, so text is always
+   on solid paper at full contrast */
+.ss-reader-step-art {
+  display: block;
   position: relative;
-  padding: 14px;
+  height: 74px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--sand);
 }
 
 .ss-reader-text-wrapper {
-  position: relative;
-  z-index: 2;
-  background: rgba(255, 253, 248, 0.88);
-  padding: 10px 12px;
-  border-radius: 4px;
+  background: var(--paper);
+  padding: 12px 14px 10px;
 }
 
 .ss-reader-step-ref {
   font-family: 'Patrick Hand', cursive;
   font-size: 14px;
-  color: var(--vermilion);
+  color: var(--slate-deep);
   display: block;
-  margin-bottom: 2px;
+  margin-top: 6px;
 }
 
 .ss-reader-step-title {
   font-family: 'Schoolbell', cursive;
-  font-size: 18px;
+  font-size: 20px;
   color: var(--ink);
   margin: 0 0 4px;
 }
 
 .ss-reader-step-text {
-  font-size: 15px;
+  font-size: 17px;
   color: var(--ink);
   line-height: 1.45;
   margin: 0;

@@ -26,7 +26,7 @@ export function StoryWinCard({
         <div className="vb-win-icon" aria-hidden="true">{story.icon}</div>
         <h2 className="vb-win-title">{getCheer()}</h2>
         <p className="vb-win-sub">
-          You sequenced <strong>{story.title}</strong> in {attempts} {attempts === 1 ? "check" : "checks"}!
+          You sequenced <strong>{story.title}</strong> in {attempts} {attempts === 1 ? "try" : "tries"}!
         </p>
 
         <div className="vb-win-stars">
@@ -48,7 +48,7 @@ export function StoryWinCard({
 
           <div className="ss-win-secondary-btns">
             <button
-              className="vb-btn vb-btn-sec"
+              className="vb-btn ghost"
               onClick={() => {
                 audio.playButtonClick();
                 onPlayAgain();

@@ -53,6 +53,51 @@ describe("Constitution Gate: Design System (Article 4)", () => {
     ).toEqual([]);
   });
 
+  test("Article 4.4: every className used by a component is defined in a stylesheet", () => {
+    // Undefined classes fail silently in the browser: a "modal overlay" with no
+    // rules renders in normal flow, an unstyled heading gets synthetic bold.
+    const defined = new Set();
+    cssSources().forEach(({ css }) => {
+      for (const m of css.matchAll(/\.([A-Za-z][\w-]*)/g)) defined.add(m[1]);
+    });
+
+    const componentFiles = [];
+    const walk = (dir) => {
+      fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (entry.name.endsWith(".jsx")) componentFiles.push(full);
+      });
+    };
+    walk(path.join(ROOT, "src"));
+
+    const undefinedUses = [];
+    componentFiles.forEach((file) => {
+      const code = fs.readFileSync(file, "utf8");
+      const rel = path.relative(ROOT, file);
+
+      // Plain string classNames plus the literal segments of template
+      // literals (interpolations are dropped, quoted strings inside them kept)
+      const candidates = [];
+      for (const m of code.matchAll(/className="([^"]*)"/g)) candidates.push(m[1]);
+      for (const m of code.matchAll(/className=\{`([^`]*)`\}/g)) {
+        const tpl = m[1];
+        for (const q of tpl.matchAll(/["']([^"']*)["']/g)) candidates.push(q[1]);
+        candidates.push(tpl.replace(/\$\{[^}]*\}/g, " "));
+      }
+
+      candidates
+        .flatMap((c) => c.split(/\s+/))
+        // Trailing "-" means the name was completed by an interpolation
+        .filter((c) => /^[A-Za-z][\w-]*$/.test(c) && !c.endsWith("-"))
+        .forEach((cls) => {
+          if (!defined.has(cls)) undefinedUses.push(`${rel}: .${cls}`);
+        });
+    });
+
+    expect([...new Set(undefinedUses)]).toEqual([]);
+  });
+
   test("Article 4.5: no synthetic bold on the single-weight handwriting faces", () => {
     cssSources().forEach(({ name, css }) => {
       const badWeights = css.match(/font-weight:\s*(bold|[6-9]00)/g) || [];

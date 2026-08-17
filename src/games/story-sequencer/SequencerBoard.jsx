@@ -181,7 +181,9 @@ export function SequencerBoard({
                 }}
               >
                 <span className="vb-tape vb-tape-top" />
-                <PairIllustration art={story.art} />
+                <span className="ss-card-art" aria-hidden="true">
+                  <PairIllustration art={story.art} />
+                </span>
                 <div className="ss-card-content">
                   {/* No verse reference here — chapter/verse numbers would
                       hand children the answer instead of the story doing it.

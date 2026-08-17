@@ -73,7 +73,7 @@ export function LevelSelect({
             >
               <span className="vb-tape vb-tape-top" />
               <span className="vb-level-num">{i + 1}</span>
-              <span className="vb-level-buddy">
+              <span>
                 <Buddy who={v.character} size={48} />
               </span>
               <span className="vb-level-ref">

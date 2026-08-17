@@ -737,6 +737,50 @@ body {
   cursor: not-allowed;
 }
 
+/* SVGs are inline by default, which leaves a baseline gap under them */
+.vb-pencil-svg {
+  display: block;
+}
+
+/* ---- Win card as a modal over the finished board (shared) ---- */
+.vb-win-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.vb-win-overlay .vb-win-card {
+  max-width: 460px;
+  width: 100%;
+}
+
+.vb-win-icon {
+  font-size: 52px;
+  line-height: 1;
+  margin: 2px 0 4px;
+}
+
+.vb-win-title {
+  font-family: 'Schoolbell', cursive;
+  font-size: 28px;
+  color: var(--vermilion);
+  margin: 0 0 6px;
+  line-height: 1.05;
+}
+
+.vb-win-sub {
+  font-size: 17px;
+  color: var(--ink-soft);
+  margin: 0 0 12px;
+}
+
 /* ---- Personal best line on win cards ---- */
 .vb-win-best {
   font-family: 'Schoolbell', cursive;
