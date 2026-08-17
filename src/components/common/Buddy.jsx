@@ -37,6 +37,13 @@ export function Buddy({ who, size = 64 }) {
     gideon:    { skin: "#d9a16f", hair: "side",  hairColor: "#473322", beard: "#473322", robe: "#c77dff", brow: "#2b1c11" },
     caleb:     { skin: "#d79966", hair: "curly", hairColor: "#8f8b82", beard: "#a39f96", robe: "#b56576", brow: "#66635c" },
 
+    // Story Sequencer figures
+    jacob:     { skin: "#e6b98d", hair: "curly", hairColor: "#5b3d26", beard: "#5b3d26", robe: "#457b9d", brow: "#3a2617" },
+    elisha:    { skin: "#dca878", hair: "side",  hairColor: "#cfc9bd", beard: "#e0dbd0", robe: "#6f4e37", brow: "#8f887b" },
+    jonah:     { skin: "#e2b083", hair: "curly", hairColor: "#4a3524", beard: "#4a3524", robe: "#0096c7", brow: "#33241a" },
+    abednego:  { skin: "#d99a63", hair: "curly", hairColor: "#2f2218", beard: null,      robe: "#e9a13b", brow: "#1f150e" },
+    john_baptist: { skin: "#d89f6c", hair: "curly", hairColor: "#3a2618", beard: "#3a2618", robe: "#946b3d", brow: "#24160c" },
+
     // Women of Faith
     esther:    { skin: "#ebd0b9", hair: "crown", hairColor: "#2b1e17", beard: null,      robe: "#0096c7", brow: "#1a100a", crown: "#ffd166" },
     ruth:      { skin: "#e2b188", hair: "wrap",  hairColor: "#3b281c", beard: null,      robe: "#d4a373", brow: "#24170e", wrap: "#e09f3e" },

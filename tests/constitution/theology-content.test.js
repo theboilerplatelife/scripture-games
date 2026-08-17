@@ -83,6 +83,19 @@ describe("Constitution Gate: Theological & Content Integrity (Article 1)", () =>
     });
   });
 
+  test("Article 1.4: Every Story Sequencer character key has a Buddy.jsx avatar", () => {
+    const buddyPath = path.resolve(process.cwd(), "src/components/common/Buddy.jsx");
+    const buddyCode = fs.readFileSync(buddyPath, "utf8");
+
+    new Set(STORIES.map((story) => story.character)).forEach((charKey) => {
+      const regex = new RegExp(`\\b${charKey}:\\s*\\{`, "i");
+      expect(
+        regex.test(buddyCode),
+        `Story character "${charKey}" has no avatar in Buddy.jsx and would render the default face`
+      ).toBe(true);
+    });
+  });
+
   test("Article 1.4: All character keys must be defined in Buddy.jsx config", () => {
     const buddyPath = path.resolve(process.cwd(), "src/components/common/Buddy.jsx");
     const buddyCode = fs.readFileSync(buddyPath, "utf8");
