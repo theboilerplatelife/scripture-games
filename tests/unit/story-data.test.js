@@ -7,7 +7,6 @@ import {
   getStoryById,
   shuffleEvents,
   evaluateOrder,
-  slotIndexForPointer,
 } from "../../src/games/story-sequencer/storyData.js";
 import * as randomUtils from "../../src/utils/random.js";
 
@@ -103,13 +102,4 @@ describe("Story Sequencer data & helper functions", () => {
     expect(check2.results).toEqual([true, true, true]);
   });
 
-  test("slotIndexForPointer picks the slot whose centre is nearest", () => {
-    const rects = [0, 1, 2].map((i) => ({ top: i * 100, height: 100 }));
-    expect(slotIndexForPointer(rects, 10)).toBe(0);   // inside the first
-    expect(slotIndexForPointer(rects, 140)).toBe(1);  // inside the second
-    expect(slotIndexForPointer(rects, 99)).toBe(0);   // in the gap, nearer the first
-    expect(slotIndexForPointer(rects, 101)).toBe(1);  // in the gap, nearer the second
-    expect(slotIndexForPointer(rects, -500)).toBe(0); // above everything
-    expect(slotIndexForPointer(rects, 9999)).toBe(2); // past the end
-  });
 });

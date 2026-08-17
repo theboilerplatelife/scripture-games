@@ -754,20 +754,3 @@ export function evaluateOrder(events) {
   const isComplete = correctCount === events.length;
   return { results, correctCount, isComplete, total: events.length };
 }
-
-// The slot a dragged card should occupy for a pointer position: the one whose
-// centre is nearest. Containment testing left dead zones in the gaps between
-// slots and flip-flopped on the boundaries. Pure, so the drag is testable
-// without a layout engine.
-export function slotIndexForPointer(rects, y) {
-  let best = 0;
-  let bestDistance = Infinity;
-  rects.forEach((rect, i) => {
-    const distance = Math.abs(rect.top + rect.height / 2 - y);
-    if (distance < bestDistance) {
-      bestDistance = distance;
-      best = i;
-    }
-  });
-  return best;
-}

@@ -1,7 +1,7 @@
 import { useState, useRef, useLayoutEffect } from "react";
 import { audio } from "../../audio/SoundEngine.js";
 import { jitter } from "../../utils/random.js";
-import { shuffleEvents, evaluateOrder, starsForAttempts, slotIndexForPointer } from "./storyData.js";
+import { shuffleEvents, evaluateOrder, starsForAttempts } from "./storyData.js";
 import { PairIllustration } from "../memory-match/PairIllustration.jsx";
 
 export function SequencerBoard({
@@ -12,29 +12,21 @@ export function SequencerBoard({
 }) {
   const [events, setEvents] = useState(() => shuffleEvents(story, seed));
   const [selectedIdx, setSelectedIdx] = useState(null);
-  // Pointer-based drag: HTML5 drag events never fire on touch devices, and
-  // this game is mostly played on tablets
-  const [dragIdx, setDragIdx] = useState(null);
   const slotRefs = useRef([]);
-  const dragMovedRef = useRef(false);
-  const grabRef = useRef({ x: 0, y: 0 });
-  const [dragDelta, setDragDelta] = useState(null); // px offset of the held card
-  // Last painted position of each card, keyed by its step, for FLIP animation
+  // Last painted position of each card, keyed by its step, for the swap animation
   const prevRects = useRef(new Map());
   const [attempts, setAttempts] = useState(0);
   const [lastCheck, setLastCheck] = useState(null); // { results, correctCount, isComplete, total }
   const [hintActive, setHintActive] = useState(false);
   const lockRef = useRef(false);
 
-  // Swap two cards in the timeline
-  // Move a card to a position, pushing the cards in between along — the
-  // behaviour people expect from any sortable list
-  function moveEvent(from, to) {
-    audio.playCardSnap(to);
+  // Two cards trade places — the whole interaction is tapping one card and
+  // then the card it should swap with
+  function swapEvents(a, b) {
+    audio.playCardSnap(b);
     setEvents((prev) => {
       const next = [...prev];
-      const [card] = next.splice(from, 1);
-      next.splice(to, 0, card);
+      [next[a], next[b]] = [next[b], next[a]];
       return next;
     });
     setLastCheck(null);
@@ -53,13 +45,13 @@ export function SequencerBoard({
       audio.playButtonClick();
       setSelectedIdx(null);
     } else {
-      // Place the held card here; the rest shift to make room
-      moveEvent(selectedIdx, idx);
+      // Trade places with the selected card
+      swapEvents(selectedIdx, idx);
     }
   }
 
-  // After the order changes, slide each displaced card from where it used to
-  // be to where it now is, so the row visibly reshuffles around the held card
+  // After a swap, slide both cards from where they were to where they now
+  // are, so they visibly glide past each other instead of blinking
   useLayoutEffect(() => {
     const reduceMotion =
       typeof window.matchMedia === "function" &&
@@ -71,11 +63,8 @@ export function SequencerBoard({
       const prev = prevRects.current.get(key);
       const dx = prev ? prev.left - rect.left : 0;
       const dy = prev ? prev.top - rect.top : 0;
-      // The held card is already following the pointer — animating its slot
-      // too would fight that and make the whole row jitter
-      const isHeld = i === dragIdx;
 
-      if (!reduceMotion && !isHeld && (dx || dy)) {
+      if (!reduceMotion && (dx || dy)) {
         el.style.transition = "none";
         el.style.transform = `translate(${dx}px, ${dy}px)`;
         requestAnimationFrame(() => {
@@ -85,55 +74,11 @@ export function SequencerBoard({
       }
       prevRects.current.set(key, rect);
     });
-  }, [events, dragIdx]);
-
-  function slotRects() {
-    return slotRefs.current.map((el) => el.getBoundingClientRect());
-  }
-
-  function handlePointerDown(i, e) {
-    if (lockRef.current) return;
-    dragMovedRef.current = false;
-    const rect = e.currentTarget.getBoundingClientRect();
-    grabRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-    setDragIdx(i);
-    if (e.currentTarget.setPointerCapture) {
-      e.currentTarget.setPointerCapture(e.pointerId);
-    }
-  }
-
-  function handlePointerMove(e) {
-    if (dragIdx === null) return;
-
-    const rects = slotRects();
-    const home = rects[dragIdx];
-    // Keep the card pinned to the point where it was grabbed
-    setDragDelta({
-      x: e.clientX - home.left - grabRef.current.x,
-      y: e.clientY - home.top - grabRef.current.y,
-    });
-
-    const target = slotIndexForPointer(rects, e.clientY);
-    if (target === dragIdx) return;
-    // Reorder live so the other cards make room as you drag
-    dragMovedRef.current = true;
-    moveEvent(dragIdx, target);
-    setDragIdx(target);
-    setSelectedIdx(null);
-  }
-
-  function handlePointerUp(i) {
-    if (dragIdx === null) return;
-    // A press that never moved is a tap: pick the card up, or place the
-    // one already held
-    if (!dragMovedRef.current) handleCardClick(i);
-    setDragIdx(null);
-    setDragDelta(null);
-  }
+  }, [events]);
 
   // Move card left/right via keyboard accessibility buttons
   function moveCard(idx, direction) {
-    moveEvent(idx, idx + direction);
+    swapEvents(idx, idx + direction);
   }
 
   // Check current timeline sequence
@@ -201,7 +146,7 @@ export function SequencerBoard({
 
       <div className="ss-timeline-header">
         <p className="ss-instruction">
-          Put the {events.length} cards in order from <strong>First (1)</strong> to <strong>Last ({events.length})</strong> — drag a card, or tap it and then tap where it goes.
+          Put the {events.length} cards in order from <strong>First (1)</strong> to <strong>Last ({events.length})</strong> — tap a card, then tap the one it should trade places with.
         </p>
         {lastCheck && !lastCheck.isComplete && (
           <div className="ss-check-banner">
@@ -210,7 +155,7 @@ export function SequencerBoard({
         )}
         {hintActive && (
           <div className="ss-hint-banner">
-            💡 Tap the glowing card and place it into its matching step slot!
+            💡 Tap the glowing card, then tap the card sitting in its step!
           </div>
         )}
       </div>
@@ -229,9 +174,7 @@ export function SequencerBoard({
               ref={(el) => {
                 slotRefs.current[i] = el;
               }}
-              className={`ss-timeline-slot ${isCorrect ? "correct" : ""} ${isIncorrect ? "incorrect" : ""} ${
-                dragIdx === i && dragDelta ? "dragging-from" : ""
-              }`}
+              className={`ss-timeline-slot ${isCorrect ? "correct" : ""} ${isIncorrect ? "incorrect" : ""}`}
             >
               <div className="ss-slot-badge">
                 <span className="ss-slot-num">Step {i + 1}</span>
@@ -239,24 +182,9 @@ export function SequencerBoard({
               </div>
 
               <div
-                className={`ss-event-card ${isSelected ? "selected" : ""} ${isHintTarget ? "hint-glow" : ""} ${
-                  dragIdx === i ? "dragging" : ""
-                }`}
-                style={
-                  dragIdx === i && dragDelta
-                    ? {
-                        "--rot": "0deg",
-                        transform: `translate(${dragDelta.x}px, ${dragDelta.y}px) rotate(1.5deg) scale(1.04)`,
-                      }
-                    : { "--rot": `${jitter(story.id * 10 + ev.step, i, -2, 2)}deg` }
-                }
-                onPointerDown={(e) => handlePointerDown(i, e)}
-                onPointerMove={handlePointerMove}
-                onPointerUp={() => handlePointerUp(i)}
-                onPointerCancel={() => {
-                  setDragIdx(null);
-                  setDragDelta(null);
-                }}
+                className={`ss-event-card ${isSelected ? "selected" : ""} ${isHintTarget ? "hint-glow" : ""}`}
+                style={{ "--rot": `${jitter(story.id * 10 + ev.step, i, -2, 2)}deg` }}
+                onClick={() => handleCardClick(i)}
                 role="button"
                 tabIndex={0}
                 aria-label={`Position ${i + 1}: ${ev.title}. ${ev.text}. ${isCorrect ? "(Correct)" : ""}`}
