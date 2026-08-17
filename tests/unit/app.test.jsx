@@ -129,6 +129,26 @@ describe("App Root & State Integration Tests", () => {
     expect(screen.getAllByText("Scripture Games").length).toBeGreaterThan(0);
   });
 
+  test("navigates to Story Sequencer and returns back to Hub", () => {
+    render(<App />);
+
+    // Dismiss welcome splash
+    fireEvent.click(screen.getByRole("button", { name: "Tap to Play and Start Game" }));
+
+    // Open Story Sequencer
+    fireEvent.click(screen.getByRole("button", { name: /Story Sequencer/i }));
+    expect(screen.getByText("Choose a volume and arrange biblical events into chronological order!")).toBeTruthy();
+
+    // Open settings from inside Story Sequencer
+    fireEvent.click(screen.getByLabelText("Settings"));
+    expect(screen.getByText("⚙️ Game Settings")).toBeTruthy();
+    fireEvent.click(screen.getByLabelText("Close Settings"));
+
+    // Back to hub
+    fireEvent.click(screen.getByLabelText("Back to Game Hub"));
+    expect(screen.getAllByText("Scripture Games").length).toBeGreaterThan(0);
+  });
+
   test("saving star progress updates state and localStorage", () => {
     vi.useFakeTimers();
     render(<App />);

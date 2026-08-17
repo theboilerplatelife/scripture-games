@@ -18,10 +18,16 @@ export function starValue(stars, key) {
 // Total stars, optionally limited to (or excluding) a key prefix — the
 // games share one storage map, namespaced by prefix (e.g. "mm-").
 export function sumStars(stars, { prefix, excludePrefix } = {}) {
+  const excludeList = Array.isArray(excludePrefix)
+    ? excludePrefix
+    : excludePrefix
+    ? [excludePrefix]
+    : [];
+
   return Object.entries(stars).reduce((acc, [k, v]) => {
     if (typeof v !== "number") return acc;
     if (prefix && !k.startsWith(prefix)) return acc;
-    if (excludePrefix && k.startsWith(excludePrefix)) return acc;
+    if (excludeList.some((p) => k.startsWith(p))) return acc;
     return acc + v;
   }, 0);
 }

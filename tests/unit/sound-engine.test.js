@@ -135,6 +135,9 @@ describe("SoundEngine Comprehensive Unit Tests", () => {
     expect(() => engine.playChapterFanfare()).not.toThrow();
     expect(() => engine.playAllDoneFanfare()).not.toThrow();
     expect(() => engine.playSettingsChime()).not.toThrow();
+    expect(() => engine.playCardSnap(0)).not.toThrow();
+    expect(() => engine.playTimelineWhoosh()).not.toThrow();
+    expect(() => engine.playStepSuccess(0)).not.toThrow();
     expect(() => engine.playPluck(NOTES.C4, 0.4, 0.3, "sine")).not.toThrow();
     expect(() => engine.playPluck(NOTES.C6, 0.4, 0.3, "triangle")).not.toThrow();
     expect(() => engine.playBass(NOTES.C3, 0.5, 0.2)).not.toThrow();
@@ -148,6 +151,9 @@ describe("SoundEngine Comprehensive Unit Tests", () => {
     expect(() => engine.playPencilScratch()).not.toThrow();
     expect(() => engine.playPlaceScrap(0)).not.toThrow();
     expect(() => engine.playRemoveScrap()).not.toThrow();
+    expect(() => engine.playCardSnap(0)).not.toThrow();
+    expect(() => engine.playTimelineWhoosh()).not.toThrow();
+    expect(() => engine.playStepSuccess(0)).not.toThrow();
     expect(() => engine.playStarChime(0)).not.toThrow();
     expect(() => engine.playLightApplause()).not.toThrow();
     expect(() => engine.playWinFanfare()).not.toThrow();
@@ -171,6 +177,9 @@ describe("SoundEngine Comprehensive Unit Tests", () => {
       "trivia-title",
       "memory",
       "memory-title",
+      "sequencer",
+      "story-sequencer",
+      "story",
       "unknown-fallback",
     ];
 

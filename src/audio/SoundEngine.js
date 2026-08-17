@@ -340,6 +340,68 @@ export const MEMORY_TITLE_SONG = {
   ],
 };
 
+// 6. Story Sequencer Theme: Adventurous acoustic lute & harp progression (100 BPM - 64 steps)
+export const SEQUENCER_TITLE_SONG = {
+  bpm: 100,
+  steps: 64,
+  melody: [
+    // Phrase 1 (0-31)
+    { s: 0, n: "D5", d: 1.5, v: 0.36 },
+    { s: 2, n: "F5", d: 1.5, v: 0.38 },
+    { s: 4, n: "A5", d: 2.0, v: 0.40 },
+    { s: 7, n: "G5", d: 1.0, v: 0.32 },
+    { s: 8, n: "F5", d: 1.5, v: 0.35 },
+    { s: 10, n: "E5", d: 1.5, v: 0.32 },
+    { s: 12, n: "D5", d: 3.0, v: 0.38 },
+
+    { s: 16, n: "F5", d: 1.5, v: 0.35 },
+    { s: 18, n: "G5", d: 1.5, v: 0.36 },
+    { s: 20, n: "A5", d: 2.0, v: 0.40 },
+    { s: 23, n: "C6", d: 1.0, v: 0.38 },
+    { s: 24, n: "B5", d: 1.5, v: 0.35 },
+    { s: 26, n: "G5", d: 1.5, v: 0.32 },
+    { s: 28, n: "A5", d: 3.0, v: 0.38 },
+
+    // Phrase 2 Variation & Resolution (32-63)
+    { s: 32, n: "A5", d: 1.5, v: 0.38 },
+    { s: 34, n: "C6", d: 1.5, v: 0.40 },
+    { s: 36, n: "D6", d: 2.0, v: 0.42 },
+    { s: 39, n: "C6", d: 1.0, v: 0.35 },
+    { s: 40, n: "A5", d: 1.5, v: 0.36 },
+    { s: 42, n: "F5", d: 1.5, v: 0.32 },
+    { s: 44, n: "G5", d: 3.0, v: 0.38 },
+
+    { s: 48, n: "E5", d: 1.5, v: 0.34 },
+    { s: 50, n: "F5", d: 1.5, v: 0.35 },
+    { s: 52, n: "G5", d: 1.5, v: 0.36 },
+    { s: 54, n: "E5", d: 1.5, v: 0.32 },
+    { s: 56, n: "C5", d: 1.5, v: 0.30 },
+    { s: 58, n: "E5", d: 1.5, v: 0.34 },
+    { s: 60, n: "D5", d: 3.5, v: 0.40 },
+  ],
+  bass: [
+    // Phrase 1 (0-31)
+    { s: 0, n: "D3", d: 3.5, v: 0.20 },
+    { s: 4, n: "F3", d: 3.5, v: 0.18 },
+    { s: 8, n: "A3", d: 3.5, v: 0.18 },
+    { s: 12, n: "D3", d: 3.5, v: 0.20 },
+    { s: 16, n: "F3", d: 3.5, v: 0.20 },
+    { s: 20, n: "A3", d: 3.5, v: 0.18 },
+    { s: 24, n: "G3", d: 3.5, v: 0.20 },
+    { s: 28, n: "A3", d: 3.5, v: 0.22 },
+
+    // Phrase 2 (32-63)
+    { s: 32, n: "F3", d: 3.5, v: 0.20 },
+    { s: 36, n: "A3", d: 3.5, v: 0.18 },
+    { s: 40, n: "D3", d: 3.5, v: 0.20 },
+    { s: 44, n: "G3", d: 3.5, v: 0.20 },
+    { s: 48, n: "C3", d: 3.5, v: 0.18 },
+    { s: 52, n: "A3", d: 3.5, v: 0.18 },
+    { s: 56, n: "C3", d: 3.5, v: 0.18 },
+    { s: 60, n: "D3", d: 3.5, v: 0.24 },
+  ],
+};
+
 // Constitution Article 3.5: default volume levels (0..100 scale, as shown on the settings sliders)
 export const DEFAULT_BGM_VOL = 50;
 export const DEFAULT_SFX_VOL = 75;
@@ -646,6 +708,74 @@ export class SoundEngine {
     osc.stop(now + 0.4);
   }
 
+  // 4b. Card snap into timeline slot
+  playCardSnap(slotIndex = 0) {
+    this.init();
+    if (!this.ctx || this.ctx.state !== "running" || this.muted) return;
+    const now = this.ctx.currentTime;
+    const scale = [440, 493.88, 554.37, 659.25, 739.99, 880];
+    const freq = scale[slotIndex % scale.length];
+
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(freq * 1.2, now);
+    osc.frequency.exponentialRampToValueAtTime(freq, now + 0.06);
+
+    gain.gain.setValueAtTime(0.3, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+
+    osc.connect(gain);
+    gain.connect(this.sfxGain);
+    osc.start(now);
+    osc.stop(now + 0.14);
+  }
+
+  // 4c. Timeline swipe / whoosh sound
+  playTimelineWhoosh() {
+    this.init();
+    if (!this.ctx || this.ctx.state !== "running" || this.muted) return;
+    const now = this.ctx.currentTime;
+
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(320, now);
+    osc.frequency.exponentialRampToValueAtTime(640, now + 0.08);
+    osc.frequency.exponentialRampToValueAtTime(240, now + 0.18);
+
+    gain.gain.setValueAtTime(0.18, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
+    osc.connect(gain);
+    gain.connect(this.sfxGain);
+    osc.start(now);
+    osc.stop(now + 0.18);
+  }
+
+  // 4d. Individual correct step lock-in chime
+  playStepSuccess(stepIdx = 0) {
+    this.init();
+    if (!this.ctx || this.ctx.state !== "running" || this.muted) return;
+    const now = this.ctx.currentTime;
+    const chord = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+    const freq = chord[stepIdx % chord.length];
+
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(freq, now);
+    osc.frequency.exponentialRampToValueAtTime(freq * 1.5, now + 0.12);
+
+    gain.gain.setValueAtTime(0.32, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+    osc.connect(gain);
+    gain.connect(this.sfxGain);
+    osc.start(now);
+    osc.stop(now + 0.22);
+  }
+
   // 5. Button tap
   playButtonClick() {
     this.init();
@@ -858,6 +988,8 @@ export class SoundEngine {
       song = TRIVIA_TITLE_SONG;
     } else if (trackName === "memory-title" || trackName === "memory") {
       song = MEMORY_TITLE_SONG;
+    } else if (trackName === "sequencer" || trackName === "story-sequencer" || trackName === "story") {
+      song = SEQUENCER_TITLE_SONG;
     } else if (trackName === "hub" || trackName === "main") {
       song = MAIN_HUB_SONG;
     }

@@ -158,12 +158,13 @@ describe("Common Components Tests", () => {
     );
 
     expect(screen.getByText("Scripture Games")).toBeTruthy();
-    expect(screen.getByText(/2 games ready/)).toBeTruthy();
+    expect(screen.getByText(/3 games ready/)).toBeTruthy();
     expect(screen.getByText(/Total Stars/i)).toBeTruthy();
 
     // Per-game star pills are prefix-filtered from the shared stars map
     expect(screen.getByText("⭐ 3 / 360 Stars")).toBeTruthy();
     expect(screen.getByText("⭐ 2 / 72 Stars")).toBeTruthy();
+    expect(screen.getByText("⭐ 0 / 108 Stars")).toBeTruthy();
     // Hub chip shows the combined figure
     expect(screen.getByText("5")).toBeTruthy();
 

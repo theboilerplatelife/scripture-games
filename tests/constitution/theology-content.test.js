@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { CHAPTERS } from "../../src/data/chapters.js";
 import { TRANSLATIONS } from "../../src/data/translations.js";
+import { STORIES } from "../../src/games/story-sequencer/storyData.js";
 
 describe("Constitution Gate: Theological & Content Integrity (Article 1)", () => {
   test("Article 1.4: Must contain exactly 15 chapters with 8 verses each (120 total)", () => {
@@ -56,6 +57,13 @@ describe("Constitution Gate: Theological & Content Integrity (Article 1)", () =>
     forbiddenKeywords.forEach((forbidden) => {
       const regex = new RegExp(`\\b${forbidden}:\\s*\\{`, "i");
       expect(regex.test(buddyCode), `Buddy.jsx must not define avatar config for "${forbidden}"`).toBe(false);
+    });
+
+    STORIES.forEach((story) => {
+      const charKey = (story.character || "").toLowerCase();
+      forbiddenKeywords.forEach((forbidden) => {
+        expect(charKey, `Story ${story.id} assigns forbidden character "${charKey}"`).not.toBe(forbidden);
+      });
     });
   });
 

@@ -4,6 +4,7 @@ import { DEFAULT_TRANSLATION } from "./data/translations.js";
 import { GameHub } from "./games/hub/GameHub.jsx";
 import { VerseBuilder } from "./games/verse-builder/VerseBuilder.jsx";
 import { MemoryMatch } from "./games/memory-match/MemoryMatch.jsx";
+import { StorySequencer } from "./games/story-sequencer/StorySequencer.jsx";
 import { SettingsModal } from "./components/common/SettingsModal.jsx";
 import { WelcomeSplash } from "./components/common/WelcomeSplash.jsx";
 
@@ -194,6 +195,22 @@ export default function App() {
               stars={stars}
               onSaveStar={handleSaveStar}
               translation={translation}
+              onBackToHub={() => {
+                setActiveGame("hub");
+              }}
+              onOpenSettings={() => {
+                audio.playSettingsChime();
+                setIsSettingsOpen(true);
+              }}
+            />
+          )}
+
+          {/* Screen 4: Story Sequencer Game */}
+          {activeGame === "story-sequencer" && (
+            <StorySequencer
+              key={`ss-${resetCount}`}
+              stars={stars}
+              onSaveStars={handleSaveStar}
               onBackToHub={() => {
                 setActiveGame("hub");
               }}

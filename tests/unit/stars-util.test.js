@@ -21,6 +21,7 @@ describe("Shared star/progress math", () => {
     expect(sumStars(stars)).toBe(6); // everything numeric
     expect(sumStars(stars, { prefix: "mm-" })).toBe(3);
     expect(sumStars(stars, { excludePrefix: "mm-" })).toBe(3);
+    expect(sumStars(stars, { excludePrefix: ["mm-", "ss-"] })).toBe(3);
   });
 
   test("groupStars sums an explicit key list", () => {

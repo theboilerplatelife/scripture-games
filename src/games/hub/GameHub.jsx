@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { audio } from "../../audio/SoundEngine.js";
 import { CHAPTERS } from "../../data/chapters.js";
 import { DECKS, MODES } from "../memory-match/matchData.js";
+import { STORIES } from "../story-sequencer/storyData.js";
 import { sumStars } from "../../utils/stars.js";
 import { GameIcon } from "./GameIcon.jsx";
 import "./hub.css";
@@ -16,11 +17,17 @@ export function GameHub({
     audio.setTrack("hub");
   }, []);
 
-  // Per-game star pools share one storage object; Memory Match keys are "mm-" prefixed
+  // Per-game star pools share one storage object:
+  // Verse Builder (no prefix), Memory Match ("mm-"), Story Sequencer ("ss-")
   const vbMaxStars = CHAPTERS.length * 8 * 3; // 360
   const mmMaxStars = DECKS.length * MODES.length * 3; // 72
-  const vbStars = sumStars(allStars, { excludePrefix: "mm-" });
+  const ssMaxStars = STORIES.length * 3; // 108
+  const totalMaxStars = vbMaxStars + mmMaxStars + ssMaxStars; // 540
+
+  const vbStars = sumStars(allStars, { excludePrefix: ["mm-", "ss-"] });
   const mmStars = sumStars(allStars, { prefix: "mm-" });
+  const ssStars = sumStars(allStars, { prefix: "ss-" });
+  const totalEarnedStars = vbStars + mmStars + ssStars;
 
   return (
     <div className="hub-root">
@@ -50,10 +57,10 @@ export function GameHub({
 
       <div className="hub-stats-bar">
         <div className="hub-stat-chip">
-          ✂️ <strong>2 games ready</strong> · 4 on the way
+          ✂️ <strong>3 games ready</strong> · 3 on the way
         </div>
         <div className="hub-stat-chip">
-          ⭐ <strong>{vbStars + mmStars}</strong> / {vbMaxStars + mmMaxStars} Total Stars Earned
+          ⭐ <strong>{totalEarnedStars}</strong> / {totalMaxStars} Total Stars Earned
         </div>
       </div>
 
@@ -141,28 +148,33 @@ export function GameHub({
         </div>
 
         {/* Game 4: Story Sequencer */}
-        <div
-          className="hub-game-card disabled"
+        <button
+          className="hub-game-card"
+          onClick={() => {
+            audio.playButtonClick();
+            onSelectGame("story-sequencer");
+          }}
           style={{ "--rot": "-0.8deg" }}
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
             <span className="hub-game-icon"><GameIcon kind="scroll" /></span>
-            <span className="hub-game-badge coming-soon">Coming Soon</span>
+            <span className="hub-game-badge">Ready to Play</span>
           </div>
           <h2 className="hub-game-title">Story Sequencer</h2>
           <div className="hub-card-pills">
-            <span className="hub-pill">⏳ Timelines</span>
-            <span className="hub-pill">📖 Scripture Stories</span>
+            <span className="hub-pill highlight">⭐ {ssStars} / {ssMaxStars} Stars</span>
+            <span className="hub-pill">📜 6 Volumes · 36 Stories</span>
+            <span className="hub-pill">⏳ Timeline Puzzle</span>
           </div>
           <p className="hub-game-desc">
-            Arrange narrative event cards into chronological order and check them against the biblical account.
+            Arrange narrative event cards into chronological order and check them against the biblical account!
           </p>
           <div className="hub-game-meta">
-            <span>Chronological Order</span>
-            <span className="hub-dev-note">In Development</span>
+            <span>36 Illustrated Narratives</span>
+            <span className="hub-play-btn">Play Now →</span>
           </div>
-        </div>
+        </button>
 
         {/* Game 5: Sword Drill */}
         <div

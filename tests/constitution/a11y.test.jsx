@@ -10,8 +10,12 @@ import { VerseBuilder } from "../../src/games/verse-builder/VerseBuilder.jsx";
 import { WinCard } from "../../src/games/verse-builder/WinCard.jsx";
 import { MemoryMatch } from "../../src/games/memory-match/MemoryMatch.jsx";
 import { MMWinCard } from "../../src/games/memory-match/MMWinCard.jsx";
+import { StorySequencer } from "../../src/games/story-sequencer/StorySequencer.jsx";
+import { StoryWinCard } from "../../src/games/story-sequencer/StoryWinCard.jsx";
+import { StoryReaderModal } from "../../src/games/story-sequencer/StoryReaderModal.jsx";
 import { CHAPTERS } from "../../src/data/chapters.js";
 import { DECKS } from "../../src/games/memory-match/matchData.js";
+import { STORIES } from "../../src/games/story-sequencer/storyData.js";
 
 expect.extend(matchers);
 
@@ -40,7 +44,7 @@ describe("Constitution Gate: Accessibility (Article 4.3)", () => {
   test("welcome splash and game hub", async () => {
     await expectAccessible(<WelcomeSplash onStart={noop} />);
     await expectAccessible(
-      <GameHub onSelectGame={noop} onOpenSettings={noop} translation="ESV" allStars={{ "1-0": 3, "mm-1-0": 2 }} />
+      <GameHub onSelectGame={noop} onOpenSettings={noop} translation="ESV" allStars={{ "1-0": 3, "mm-1-0": 2, "ss-1": 3 }} />
     );
   });
 
@@ -116,6 +120,29 @@ describe("Constitution Gate: Accessibility (Article 4.3)", () => {
         onBackToDecks={noop}
       />
     );
+  });
+
+  test("story sequencer screens", async () => {
+    const props = {
+      stars: { "ss-1": 2 },
+      onSaveStars: noop,
+      onBackToHub: noop,
+      onOpenSettings: noop,
+    };
+    await expectAccessible(<StorySequencer {...props} />);
+    await expectAccessible(
+      <StoryWinCard
+        story={STORIES[0]}
+        earnedStars={3}
+        attempts={1}
+        hasNextStory={true}
+        onPlayAgain={noop}
+        onReadStory={noop}
+        onNextStory={noop}
+        onBackToStories={noop}
+      />
+    );
+    await expectAccessible(<StoryReaderModal story={STORIES[0]} onClose={noop} />);
   });
 
   test("completion celebration card", async () => {
