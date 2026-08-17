@@ -25,13 +25,13 @@
 
 .ss-story-card {
   position: relative;
-  background: var(--paper-warm);
-  border: 2px solid var(--border-warm);
-  border-radius: var(--radius-lg);
+  background: var(--paper);
+  border: 2px solid var(--sand);
+  border-radius: 12px;
   padding: 22px 18px 18px;
   text-align: left;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.12);
   transform: rotate(var(--rot, 0deg));
   transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease;
   display: flex;
@@ -42,8 +42,8 @@
 .ss-story-card:hover,
 .ss-story-card:focus-visible {
   transform: translateY(-4px) rotate(0deg) scale(1.02);
-  box-shadow: var(--shadow-md);
-  border-color: var(--terracotta);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.16);
+  border-color: var(--vermilion);
   outline: none;
 }
 
@@ -55,31 +55,29 @@
 }
 
 .ss-story-icon {
-  font-size: 2rem;
+  font-size: 32px;
   line-height: 1;
 }
 
 .ss-story-ref {
-  font-family: var(--font-hand);
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--terracotta);
+  font-family: 'Patrick Hand', cursive;
+  font-size: 15px;
+  color: var(--vermilion);
   background: rgba(217, 79, 48, 0.1);
   padding: 3px 10px;
-  border-radius: var(--radius-full);
+  border-radius: 999px;
 }
 
 .ss-story-title {
-  font-family: var(--font-serif);
-  font-size: 1.35rem;
-  font-weight: 800;
+  font-family: 'Schoolbell', cursive;
+  font-size: 22px;
   color: var(--ink);
   margin: 0 0 6px;
   line-height: 1.25;
 }
 
 .ss-story-sub {
-  font-size: 0.92rem;
+  font-size: 15px;
   color: var(--ink-soft);
   line-height: 1.4;
   margin: 0 0 14px;
@@ -90,15 +88,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px dashed var(--border-warm);
+  border-top: 1px dashed var(--sand);
   padding-top: 10px;
   margin-top: auto;
 }
 
 .ss-story-steps {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--ink-muted);
+  font-size: 14px;
+  color: #635b50;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -121,10 +118,9 @@
   background: rgba(244, 162, 97, 0.18);
   color: #a05a18;
   border: 1.5px solid rgba(244, 162, 97, 0.6);
-  border-radius: var(--radius-full);
+  border-radius: 999px;
   padding: 6px 14px;
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
@@ -142,7 +138,7 @@
 }
 
 .ss-instruction {
-  font-size: 1.05rem;
+  font-size: 17px;
   color: var(--ink);
   margin: 0 0 8px;
 }
@@ -152,8 +148,7 @@
   color: #92400e;
   border: 1.5px solid #fcd34d;
   padding: 8px 16px;
-  border-radius: var(--radius-md);
-  font-weight: 700;
+  border-radius: 8px;
   display: inline-block;
   animation: ssBounceIn 0.3s ease;
 }
@@ -163,8 +158,7 @@
   color: #065f46;
   border: 1.5px solid #6ee7b7;
   padding: 8px 16px;
-  border-radius: var(--radius-md);
-  font-weight: 700;
+  border-radius: 8px;
   display: inline-block;
   animation: ssBounceIn 0.3s ease;
 }
@@ -188,7 +182,7 @@
   position: relative;
   background: rgba(255, 255, 255, 0.45);
   border: 2px dashed rgba(180, 150, 130, 0.45);
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   padding: 12px 14px;
   transition: all 0.2s ease;
 }
@@ -211,17 +205,15 @@
 }
 
 .ss-slot-num {
-  font-family: var(--font-hand);
-  font-weight: 800;
-  font-size: 1.05rem;
-  color: var(--ink-muted);
+  font-family: 'Patrick Hand', cursive;
+  font-size: 17px;
+  color: #635b50;
 }
 
 .ss-slot-check {
   background: #10b981;
   color: #ffffff;
-  font-weight: 900;
-  font-size: 0.95rem;
+  font-size: 15px;
   width: 22px;
   height: 22px;
   border-radius: 50%;
@@ -234,11 +226,11 @@
 /* Event Cards */
 .ss-event-card {
   position: relative;
-  background: var(--paper-warm);
-  border: 2px solid var(--border-warm);
-  border-radius: var(--radius-md);
+  background: var(--paper);
+  border: 2px solid var(--sand);
+  border-radius: 8px;
   padding: 16px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.12);
   cursor: grab;
   transform: rotate(var(--rot, 0deg));
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
@@ -246,13 +238,13 @@
 }
 
 .ss-event-card:hover {
-  box-shadow: var(--shadow-md);
-  border-color: var(--terracotta);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.16);
+  border-color: var(--vermilion);
 }
 
 .ss-event-card.selected {
   border-color: #d94f30;
-  box-shadow: 0 0 0 4px rgba(217, 79, 48, 0.25), var(--shadow-md);
+  box-shadow: 0 0 0 4px rgba(217, 79, 48, 0.25), 0 4px 10px rgba(0,0,0,0.16);
   transform: translateY(-2px) rotate(0deg) scale(1.01);
 }
 
@@ -270,30 +262,28 @@
   position: relative;
   z-index: 2;
   background: rgba(255, 253, 248, 0.84);
-  border-radius: var(--radius-sm);
+  border-radius: 4px;
   padding: 12px 14px;
 }
 
 .ss-card-ref {
-  font-family: var(--font-hand);
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--terracotta);
+  font-family: 'Patrick Hand', cursive;
+  font-size: 14px;
+  color: var(--vermilion);
   display: block;
   margin-bottom: 4px;
 }
 
 .ss-card-title {
-  font-family: var(--font-serif);
-  font-size: 1.2rem;
-  font-weight: 800;
+  font-family: 'Schoolbell', cursive;
+  font-size: 19px;
   color: var(--ink);
   margin: 0 0 6px;
   line-height: 1.25;
 }
 
 .ss-card-text {
-  font-size: 0.96rem;
+  font-size: 15px;
   color: var(--ink);
   line-height: 1.45;
   margin: 0;
@@ -315,9 +305,8 @@
   background: rgba(44, 34, 30, 0.08);
   color: var(--ink);
   border: 1px solid rgba(44, 34, 30, 0.2);
-  border-radius: var(--radius-sm);
-  font-weight: 800;
-  font-size: 1rem;
+  border-radius: 4px;
+  font-size: 16px;
   padding: 4px 12px;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -329,8 +318,8 @@
 }
 
 .ss-card-status {
-  font-size: 0.82rem;
-  color: var(--ink-muted);
+  font-size: 13px;
+  color: #635b50;
   font-style: italic;
 }
 
@@ -342,9 +331,9 @@
 }
 
 .ss-check-btn {
-  font-size: 1.25rem;
+  font-size: 20px;
   padding: 14px 36px;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.16);
 }
 
 /* Win Card Actions */
@@ -358,7 +347,7 @@
 
 .ss-read-btn {
   background: #3e7cb1;
-  font-size: 1.15rem;
+  font-size: 18px;
   padding: 12px 24px;
 }
 
@@ -391,15 +380,15 @@
 
 .ss-reader-card {
   position: relative;
-  background: var(--paper-warm);
-  border: 2px solid var(--border-warm);
-  border-radius: var(--radius-lg);
+  background: var(--paper);
+  border: 2px solid var(--sand);
+  border-radius: 12px;
   width: 100%;
   max-width: 680px;
   max-height: 85vh;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
   padding: 24px 20px;
 }
 
@@ -407,7 +396,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  border-bottom: 2px dashed var(--border-warm);
+  border-bottom: 2px dashed var(--sand);
   padding-bottom: 14px;
   margin-bottom: 16px;
 }
@@ -419,34 +408,32 @@
 }
 
 .ss-reader-icon {
-  font-size: 2.4rem;
+  font-size: 38px;
   line-height: 1;
 }
 
 .ss-reader-title {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  font-weight: 800;
+  font-family: 'Schoolbell', cursive;
+  font-size: 24px;
   color: var(--ink);
   margin: 0 0 4px;
 }
 
 .ss-reader-scripture {
-  font-family: var(--font-hand);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--terracotta);
+  font-family: 'Patrick Hand', cursive;
+  font-size: 16px;
+  color: var(--vermilion);
   margin: 0;
 }
 
 .ss-close-btn {
   background: transparent;
   border: none;
-  font-size: 1.4rem;
-  color: var(--ink-muted);
+  font-size: 22px;
+  color: #635b50;
   cursor: pointer;
   padding: 4px 8px;
-  border-radius: var(--radius-sm);
+  border-radius: 4px;
 }
 
 .ss-close-btn:hover {
@@ -463,20 +450,19 @@
 }
 
 .ss-reader-step {
-  border: 1px solid var(--border-warm);
-  border-radius: var(--radius-md);
+  border: 1px solid var(--sand);
+  border-radius: 8px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.5);
 }
 
 .ss-reader-step-badge {
   background: rgba(217, 79, 48, 0.12);
-  color: var(--terracotta);
-  font-family: var(--font-hand);
-  font-weight: 800;
-  font-size: 0.95rem;
+  color: var(--vermilion);
+  font-family: 'Patrick Hand', cursive;
+  font-size: 15px;
   padding: 6px 14px;
-  border-bottom: 1px solid var(--border-warm);
+  border-bottom: 1px solid var(--sand);
 }
 
 .ss-reader-step-content {
@@ -489,28 +475,26 @@
   z-index: 2;
   background: rgba(255, 253, 248, 0.88);
   padding: 10px 12px;
-  border-radius: var(--radius-sm);
+  border-radius: 4px;
 }
 
 .ss-reader-step-ref {
-  font-family: var(--font-hand);
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--terracotta);
+  font-family: 'Patrick Hand', cursive;
+  font-size: 14px;
+  color: var(--vermilion);
   display: block;
   margin-bottom: 2px;
 }
 
 .ss-reader-step-title {
-  font-family: var(--font-serif);
-  font-size: 1.15rem;
-  font-weight: 800;
+  font-family: 'Schoolbell', cursive;
+  font-size: 18px;
   color: var(--ink);
   margin: 0 0 4px;
 }
 
 .ss-reader-step-text {
-  font-size: 0.95rem;
+  font-size: 15px;
   color: var(--ink);
   line-height: 1.45;
   margin: 0;
@@ -519,7 +503,7 @@
 .ss-reader-footer {
   margin-top: 16px;
   padding-top: 14px;
-  border-top: 2px dashed var(--border-warm);
+  border-top: 2px dashed var(--sand);
   display: flex;
   justify-content: flex-end;
 }

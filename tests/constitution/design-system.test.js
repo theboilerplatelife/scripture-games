@@ -18,6 +18,7 @@ function cssSources() {
     "src/games/hub/hub.css",
     "src/games/verse-builder/verse-builder.css",
     "src/games/memory-match/memory-match.css",
+    "src/games/story-sequencer/story-sequencer.css",
     "src/components/common/welcome-splash.css",
   ];
   return [

@@ -6,7 +6,7 @@ import { LevelSelect } from "./LevelSelect.jsx";
 import { PlayBoard } from "./PlayBoard.jsx";
 import { WinCard } from "./WinCard.jsx";
 import { CompletionCard } from "../../components/common/CompletionCard.jsx";
-import { isStarred, sumStars, nextUnfinished } from "../../utils/stars.js";
+import { isStarred, sumStars, nextUnfinished, OTHER_GAME_PREFIXES } from "../../utils/stars.js";
 import "./verse-builder.css";
 
 export function VerseBuilder({
@@ -108,7 +108,7 @@ export function VerseBuilder({
 
   const totalPossibleStars = CHAPTERS.length * 8 * 3;
   // Exclude other games' namespaced keys (e.g. Memory Match "mm-") from VB totals
-  const totalEarnedStars = sumStars(stars, { excludePrefix: "mm-" });
+  const totalEarnedStars = sumStars(stars, { excludePrefix: OTHER_GAME_PREFIXES });
 
   return (
     <div className="vb-wrapper">

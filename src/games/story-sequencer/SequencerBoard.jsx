@@ -183,7 +183,9 @@ export function SequencerBoard({
                 <span className="vb-tape vb-tape-top" />
                 <PairIllustration art={story.art} />
                 <div className="ss-card-content">
-                  <span className="ss-card-ref">{ev.ref}</span>
+                  {/* No verse reference here — chapter/verse numbers would
+                      hand children the answer instead of the story doing it.
+                      Refs appear in the story reader after the win. */}
                   <h3 className="ss-card-title">{ev.title}</h3>
                   <p className="ss-card-text">{ev.text}</p>
                 </div>

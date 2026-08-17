@@ -3,6 +3,11 @@
    as "starred", how totals are summed per game namespace, and how the
    next unfinished item is found. */
 
+// Star keys are namespaced per game inside one storage map: Verse Builder
+// uses bare "{chapter}-{level}" keys, so every OTHER game's prefix must be
+// excluded from its totals. Add new games' prefixes here.
+export const OTHER_GAME_PREFIXES = ["mm-", "ss-"];
+
 // A key counts as starred only for a positive numeric value — corrupt
 // or foreign values must never unlock or count anything.
 export function isStarred(stars, key) {

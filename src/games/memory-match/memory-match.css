@@ -177,13 +177,6 @@
   opacity: 0.92;
 }
 
-.mm-card-front {
-  background: var(--paper-bright);
-  transform: rotateY(180deg);
-  padding: 3px;
-  overflow: hidden;
-}
-
 /* Full-card scene behind the caption */
 .mm-card-bg-ill {
   position: absolute;

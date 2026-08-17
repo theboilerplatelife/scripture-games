@@ -43,6 +43,20 @@ describe("Verse Builder Gameplay Flow Tests", () => {
     expect(handleOpenSettings).toHaveBeenCalled();
   });
 
+  test("ChapterSelect totals ignore every other game's namespaced stars", () => {
+    const noop = vi.fn();
+    render(
+      <ChapterSelect
+        stars={{ "1-0": 3, "mm-1-0": 3, "ss-1": 3, "1-1": "bad" }}
+        translation="ESV"
+        onSelectChapter={noop}
+        onBackToHub={noop}
+        onOpenSettings={noop}
+      />
+    );
+    expect(screen.getByText(/3 of 360 total stars collected/)).toBeTruthy();
+  });
+
   test("ChapterSelect stamps completed and perfect chapters", () => {
     const noop = vi.fn();
     const complete = { "1-0": 1, "1-1": 1, "1-2": 2, "1-3": 1, "1-4": 3, "1-5": 1, "1-6": 1, "1-7": 1, "2-0": "bad" };

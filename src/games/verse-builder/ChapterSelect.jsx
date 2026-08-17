@@ -1,7 +1,7 @@
 import { audio } from "../../audio/SoundEngine.js";
 import { CHAPTERS } from "../../data/chapters.js";
 import { jitter } from "../../utils/random.js";
-import { isStarred, groupStars, sumStars } from "../../utils/stars.js";
+import { isStarred, groupStars, sumStars, OTHER_GAME_PREFIXES } from "../../utils/stars.js";
 import { CompletionStamp } from "../../components/common/CompletionStamp.jsx";
 
 export function ChapterSelect({
@@ -23,7 +23,7 @@ export function ChapterSelect({
 
   const getChapterStars = (chap) => groupStars(stars, chapterKeys(chap));
 
-  const totalEarnedStars = sumStars(stars, { excludePrefix: "mm-" });
+  const totalEarnedStars = sumStars(stars, { excludePrefix: OTHER_GAME_PREFIXES });
   const maxPossibleStars = CHAPTERS.length * 8 * 3; // 360
 
   return (

@@ -123,31 +123,7 @@ export function GameHub({
           </div>
         </button>
 
-        {/* Game 3: Who Am I? */}
-        <div
-          className="hub-game-card disabled"
-          style={{ "--rot": "1.2deg" }}
-        >
-          <span className="vb-tape vb-tape-top" />
-          <div className="hub-card-header">
-            <span className="hub-game-icon"><GameIcon kind="magnifier" /></span>
-            <span className="hub-game-badge coming-soon">Coming Soon</span>
-          </div>
-          <h2 className="hub-game-title">Who Am I?</h2>
-          <div className="hub-card-pills">
-            <span className="hub-pill">🔍 Clue Deduction</span>
-            <span className="hub-pill">👑 Bible Heroes</span>
-          </div>
-          <p className="hub-game-desc">
-            Solve progressive scripture clues one at a time to uncover Bible heroes and unlock their full story!
-          </p>
-          <div className="hub-game-meta">
-            <span>Character Mysteries</span>
-            <span className="hub-dev-note">In Development</span>
-          </div>
-        </div>
-
-        {/* Game 4: Story Sequencer */}
+        {/* Game 3: Story Sequencer */}
         <button
           className="hub-game-card"
           onClick={() => {
@@ -175,6 +151,30 @@ export function GameHub({
             <span className="hub-play-btn">Play Now →</span>
           </div>
         </button>
+
+        {/* Game 4: Who Am I? */}
+        <div
+          className="hub-game-card disabled"
+          style={{ "--rot": "1.2deg" }}
+        >
+          <span className="vb-tape vb-tape-top" />
+          <div className="hub-card-header">
+            <span className="hub-game-icon"><GameIcon kind="magnifier" /></span>
+            <span className="hub-game-badge coming-soon">Coming Soon</span>
+          </div>
+          <h2 className="hub-game-title">Who Am I?</h2>
+          <div className="hub-card-pills">
+            <span className="hub-pill">🔍 Clue Deduction</span>
+            <span className="hub-pill">👑 Bible Heroes</span>
+          </div>
+          <p className="hub-game-desc">
+            Solve progressive scripture clues one at a time to uncover Bible heroes and unlock their full story!
+          </p>
+          <div className="hub-game-meta">
+            <span>Character Mysteries</span>
+            <span className="hub-dev-note">In Development</span>
+          </div>
+        </div>
 
         {/* Game 5: Sword Drill */}
         <div
