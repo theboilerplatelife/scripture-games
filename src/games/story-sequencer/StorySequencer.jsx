@@ -8,16 +8,21 @@ import { StoryReaderModal } from "./StoryReaderModal.jsx";
 import { getStoryById, getVolumeStories } from "./storyData.js";
 import "./story-sequencer.css";
 
+function randomBoardSeed() {
+  return Math.floor(Math.random() * 1_000_000);
+}
+
 export function StorySequencer({
   onBackToHub,
   onOpenSettings,
   stars = {},
   onSaveStars,
+  initialSeed = null, // tests pin the deal; players get a fresh one per board
 }) {
   const [screen, setScreen] = useState("volumes"); // "volumes" | "stories" | "play"
   const [volumeId, setVolumeId] = useState(1);
   const [storyId, setStoryId] = useState(1);
-  const [playSeed, setPlaySeed] = useState(0);
+  const [playSeed, setPlaySeed] = useState(() => initialSeed ?? randomBoardSeed());
   const [winState, setWinState] = useState(null); // { earnedStars, attempts, story }
   const [readerStory, setReaderStory] = useState(null);
 
@@ -37,7 +42,7 @@ export function StorySequencer({
 
   function handleSelectStory(sId) {
     setStoryId(sId);
-    setPlaySeed((s) => s + 1);
+    setPlaySeed(randomBoardSeed());
     setWinState(null);
     setScreen("play");
   }
@@ -53,13 +58,13 @@ export function StorySequencer({
 
   function handlePlayAgain() {
     setWinState(null);
-    setPlaySeed((s) => s + 1);
+    setPlaySeed(randomBoardSeed());
   }
 
   function handleNextStory() {
     const nextStory = volumeStories[currentStoryIndex + 1];
     setStoryId(nextStory.id);
-    setPlaySeed((s) => s + 1);
+    setPlaySeed(randomBoardSeed());
     setWinState(null);
   }
 

@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { audio } from "../../audio/SoundEngine.js";
 import { jitter } from "../../utils/random.js";
-import { shuffleEvents, evaluateOrder, starsForAttempts } from "./storyData.js";
+import { shuffleEvents, evaluateOrder, starsForAttempts, slotIndexAtPoint } from "./storyData.js";
 import { PairIllustration } from "../memory-match/PairIllustration.jsx";
 
 export function SequencerBoard({
@@ -12,7 +12,12 @@ export function SequencerBoard({
 }) {
   const [events, setEvents] = useState(() => shuffleEvents(story, seed));
   const [selectedIdx, setSelectedIdx] = useState(null);
-  const [draggedIdx, setDraggedIdx] = useState(null);
+  // Pointer-based drag: HTML5 drag events never fire on touch devices, and
+  // this game is mostly played on tablets
+  const [dragIdx, setDragIdx] = useState(null);
+  const [dragOverIdx, setDragOverIdx] = useState(null);
+  const slotRefs = useRef([]);
+  const dragMovedRef = useRef(false);
   const [attempts, setAttempts] = useState(0);
   const [lastCheck, setLastCheck] = useState(null); // { results, correctCount, isComplete, total }
   const [hintActive, setHintActive] = useState(false);
@@ -47,6 +52,39 @@ export function SequencerBoard({
       // Swap selected card with this card
       swapEvents(selectedIdx, idx);
     }
+  }
+
+  function slotRects() {
+    return slotRefs.current.map((el) => el.getBoundingClientRect());
+  }
+
+  function handlePointerDown(i, e) {
+    if (lockRef.current) return;
+    dragMovedRef.current = false;
+    setDragIdx(i);
+    if (e.currentTarget.setPointerCapture) {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
+  }
+
+  function handlePointerMove(e) {
+    if (dragIdx === null) return;
+    dragMovedRef.current = true;
+    setDragOverIdx(slotIndexAtPoint(slotRects(), e.clientX, e.clientY));
+  }
+
+  function handlePointerUp(i) {
+    if (dragIdx === null) return;
+    const target = dragOverIdx;
+    // A drag that never moved is a tap — fall through to select/place
+    if (dragMovedRef.current && target !== null && target !== dragIdx) {
+      swapEvents(dragIdx, target);
+      setSelectedIdx(null);
+    } else if (!dragMovedRef.current) {
+      handleCardClick(i);
+    }
+    setDragIdx(null);
+    setDragOverIdx(null);
   }
 
   // Move card left/right via keyboard accessibility buttons
@@ -144,6 +182,9 @@ export function SequencerBoard({
           return (
             <div
               key={ev.step}
+              ref={(el) => {
+                slotRefs.current[i] = el;
+              }}
               className={`ss-timeline-slot ${isCorrect ? "correct" : ""} ${isIncorrect ? "incorrect" : ""}`}
             >
               <div className="ss-slot-badge">
@@ -152,17 +193,16 @@ export function SequencerBoard({
               </div>
 
               <div
-                className={`ss-event-card ${isSelected ? "selected" : ""} ${isHintTarget ? "hint-glow" : ""}`}
+                className={`ss-event-card ${isSelected ? "selected" : ""} ${isHintTarget ? "hint-glow" : ""} ${
+                  dragIdx === i ? "dragging" : ""
+                } ${dragIdx !== null && dragOverIdx === i && dragOverIdx !== dragIdx ? "drop-target" : ""}`}
                 style={{ "--rot": `${jitter(story.id * 10 + ev.step, i, -2, 2)}deg` }}
-                onClick={() => handleCardClick(i)}
-                draggable
-                onDragStart={() => setDraggedIdx(i)}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={() => {
-                  if (draggedIdx !== null) {
-                    swapEvents(draggedIdx, i);
-                    setDraggedIdx(null);
-                  }
+                onPointerDown={(e) => handlePointerDown(i, e)}
+                onPointerMove={handlePointerMove}
+                onPointerUp={() => handlePointerUp(i)}
+                onPointerCancel={() => {
+                  setDragIdx(null);
+                  setDragOverIdx(null);
                 }}
                 role="button"
                 tabIndex={0}

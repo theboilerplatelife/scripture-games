@@ -754,3 +754,12 @@ export function evaluateOrder(events) {
   const isComplete = correctCount === events.length;
   return { results, correctCount, isComplete, total: events.length };
 }
+
+// Which slot rectangle contains a pointer position (null when outside them
+// all). Kept pure so the drag interaction is testable without a layout engine.
+export function slotIndexAtPoint(rects, x, y) {
+  const hit = rects.findIndex(
+    (r) => r && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom
+  );
+  return hit === -1 ? null : hit;
+}
