@@ -2,7 +2,7 @@ import { useState, useMemo, useRef } from "react";
 import { audio } from "../../audio/SoundEngine.js";
 import { jitter } from "../../utils/random.js";
 import { MODES, buildDeck, starsForMisses } from "./matchData.js";
-import { PairIllustration } from "./PairIllustration.jsx";
+import { CardScene } from "../../art/CardScene.jsx";
 
 // Each found pair gets its own sticker color, cycling in match order
 const PAIR_COLORS = ["#a33520", "#2f6394", "#46702c", "#6d5312", "#5b2196"];
@@ -162,7 +162,7 @@ export function MemoryBoard({
                 <span className="mm-card-front">
                   {/* Both cards of a pair carry the same full scene; the text
                       sits on a taped paper caption strip in the calm mid-band */}
-                  <PairIllustration scene={card.ref} art={card.art} />
+                  <CardScene scene={card.ref} />
                   <span className="mm-card-caption">
                     <span className="mm-caption-tape" aria-hidden="true" />
                     {tag && (

@@ -1,7 +1,8 @@
 /* ============================================================
    STORY SEQUENCER — 36 Scripture Stories Across 6 Volumes
    Each story has 4 to 5 chronological events with kid-friendly
-   narratives, scripture references, and thematic artwork motifs.
+   narratives, and scripture references. Each card's picture lives in
+   src/art, keyed by "{storyId}-{step}".
    Complies with Constitution Article 1 (no depictions of Jesus).
    ============================================================ */
 import { shuffle } from "../../utils/random.js";
@@ -68,7 +69,6 @@ export const STORIES = [
     icon: "🌍",
     color: "#5c8a3a",
     character: "moses",
-    art: "creation",
     events: [
       { step: 1, title: "Light in Darkness", text: "God speaks into the darkness and says, 'Let there be light!' and separates light from darkness.", ref: "Genesis 1:3–5" },
       { step: 2, title: "Sky, Seas & Dry Land", text: "God creates the expanse of the sky, gathers the waters into seas, and brings forth plants and trees.", ref: "Genesis 1:6–13" },
@@ -86,7 +86,6 @@ export const STORIES = [
     icon: "🌳",
     color: "#2a9d8f",
     character: "moses",
-    art: "fruit_vine",
     events: [
       { step: 1, title: "The Garden Home", text: "God plants a lush, beautiful garden in Eden with sweet fruit trees and fresh rivers.", ref: "Genesis 2:8–10" },
       { step: 2, title: "Naming the Animals", text: "Adam cares for the garden and names all the living animals and birds.", ref: "Genesis 2:15, 19–20" },
@@ -104,7 +103,6 @@ export const STORIES = [
     icon: "🕊️",
     color: "#3e7cb1",
     character: "noah",
-    art: "rainbow",
     events: [
       { step: 1, title: "Building the Ark", text: "God tells faithful Noah to build a giant wooden ark with rooms and a roof.", ref: "Genesis 6:13–16" },
       { step: 2, title: "Animals Board Two by Two", text: "Noah's family and pairs of every kind of bird and animal enter the safe ark.", ref: "Genesis 7:7–9" },
@@ -122,7 +120,6 @@ export const STORIES = [
     icon: "🏗️",
     color: "#b08d57",
     character: "noah",
-    art: "wisdom_scroll",
     events: [
       { step: 1, title: "One Common Language", text: "All people on the earth speak a single language and travel east to settle in a plain.", ref: "Genesis 11:1–2" },
       { step: 2, title: "Baking Strong Bricks", text: "The builders make bricks and mortar, saying, 'Let us build a city and a tower reaching to the sky, and make a great name for ourselves!'", ref: "Genesis 11:3–4" },
@@ -140,7 +137,6 @@ export const STORIES = [
     icon: "⛺",
     color: "#e88b6a",
     character: "abraham",
-    art: "starry_sky",
     events: [
       { step: 1, title: "A Call to Journey", text: "God calls Abraham: 'Go from your country to the land that I will show you, and I will bless you.'", ref: "Genesis 12:1–3" },
       { step: 2, title: "Pitching Tents by Faith", text: "Abraham, Sarah, and Lot pack their tents and journey into the land of Canaan.", ref: "Genesis 12:4–7" },
@@ -158,7 +154,6 @@ export const STORIES = [
     icon: "🪜",
     color: "#8a6bbf",
     character: "jacob",
-    art: "hope_heaven",
     events: [
       { step: 1, title: "Sleeping on a Stone", text: "Jacob journeys toward Haran, sets a stone under his head for a pillow, and falls asleep.", ref: "Genesis 28:10–11" },
       { step: 2, title: "The Stairway to Heaven", text: "In a dream, Jacob sees a stairway reaching from earth to heaven with angels ascending and descending.", ref: "Genesis 28:12" },
@@ -178,7 +173,6 @@ export const STORIES = [
     icon: "🧥",
     color: "#3a86ff",
     character: "joseph",
-    art: "love_heart",
     events: [
       { step: 1, title: "The Colorful Coat", text: "Jacob gives his son Joseph a special coat of many bright colors, making his brothers jealous.", ref: "Genesis 37:3–4" },
       { step: 2, title: "Thrown into a Pit", text: "His brothers throw Joseph into a dry cistern and sell him to traveling merchants going to Egypt.", ref: "Genesis 37:23–28" },
@@ -196,7 +190,6 @@ export const STORIES = [
     icon: "🧺",
     color: "#588157",
     character: "miriam",
-    art: "calm_waters",
     events: [
       { step: 1, title: "A Mother's Clever Basket", text: "Moses' mother weaves a tar-coated papyrus basket to protect her baby boy from danger.", ref: "Exodus 2:1–3" },
       { step: 2, title: "Placed in the River Reeds", text: "She gently places the basket among the tall reeds along the bank of the Nile River.", ref: "Exodus 2:3" },
@@ -214,7 +207,6 @@ export const STORIES = [
     icon: "🔥",
     color: "#d94f30",
     character: "moses",
-    art: "lamp",
     events: [
       { step: 1, title: "Tending Sheep in Midian", text: "Moses leads his father-in-law's flock across the desert to Mount Horeb.", ref: "Exodus 3:1" },
       { step: 2, title: "A Bush Blazing with Fire", text: "Moses sees a bush burning with bright flames, yet the leaves do not burn up!", ref: "Exodus 3:2" },
@@ -232,7 +224,6 @@ export const STORIES = [
     icon: "🌊",
     color: "#3e7cb1",
     character: "moses",
-    art: "calm_waters",
     events: [
       { step: 1, title: "Trapped at the Seashore", text: "The Israelites look back and see Pharaoh's chariots chasing them while the Red Sea blocks their way.", ref: "Exodus 14:10–12" },
       { step: 2, title: "Fear Not, Stand Firm!", text: "Moses tells the people, 'Do not be afraid. Stand firm and see the salvation of the LORD today.'", ref: "Exodus 14:13–14" },
@@ -250,7 +241,6 @@ export const STORIES = [
     icon: "📜",
     color: "#b08d57",
     character: "moses",
-    art: "wisdom_scroll",
     events: [
       { step: 1, title: "Camp at the Mountain Foot", text: "The people of Israel camp at the base of Mount Sinai, washing their clothes and preparing their hearts.", ref: "Exodus 19:1–11" },
       { step: 2, title: "Thunder, Smoke & Trumpet", text: "A thick cloud covers Mount Sinai with thunder, lightning, and a loud trumpet sound as God descends.", ref: "Exodus 19:16–18" },
@@ -268,7 +258,6 @@ export const STORIES = [
     icon: "🎺",
     color: "#e63946",
     character: "joshua",
-    art: "armor_shield",
     events: [
       { step: 1, title: "A City Tightly Shut", text: "Jericho's high stone walls are locked tight against Israel, but God promises Joshua the victory.", ref: "Joshua 6:1–2" },
       { step: 2, title: "Marching in Silence", text: "For six days, the soldiers and priests carry the Ark and march once around the city in quiet obedience.", ref: "Joshua 6:3–14" },
@@ -288,7 +277,6 @@ export const STORIES = [
     icon: "🏺",
     color: "#b08d57",
     character: "gideon",
-    art: "lamp",
     events: [
       { step: 1, title: "A Huge Opposing Army", text: "Gideon gathers an army, but the Midianite camp in the valley is as numerous as sand on the seashore.", ref: "Judges 7:1–3, 12" },
       { step: 2, title: "Testing at the Water", text: "God tells Gideon to choose only the 300 men who lap water from their cupped hands while watching alertly.", ref: "Judges 7:4–7" },
@@ -306,7 +294,6 @@ export const STORIES = [
     icon: "🌾",
     color: "#f4a261",
     character: "ruth",
-    art: "fruit_vine",
     events: [
       { step: 1, title: "Where You Go, I Will Go", text: "Ruth promises her mother-in-law Naomi: 'Where you go I will go, and your God will be my God.'", ref: "Ruth 1:16–17" },
       { step: 2, title: "Gleaning in the Barley Field", text: "Ruth gathers leftover stalks of grain behind the harvesters in the field of kind Boaz.", ref: "Ruth 2:2–3" },
@@ -324,7 +311,6 @@ export const STORIES = [
     icon: "🕯️",
     color: "#5c8a3a",
     character: "samuel",
-    art: "lamp",
     events: [
       { step: 1, title: "Serving in the Tabernacle", text: "Young Samuel serves the LORD by helping the elderly priest Eli in the tabernacle at Shiloh.", ref: "1 Samuel 3:1" },
       { step: 2, title: "A Voice Calls at Night", text: "While lying down near the Ark, Samuel hears a voice call, 'Samuel! Samuel!' and runs to Eli.", ref: "1 Samuel 3:4–5" },
@@ -342,7 +328,6 @@ export const STORIES = [
     icon: "🪨",
     color: "#b08d57",
     character: "david",
-    art: "armor_shield",
     events: [
       { step: 1, title: "A Giant Taunts the Army", text: "Goliath the giant challenges Israel's soldiers every morning, and everyone trembles in fear.", ref: "1 Samuel 17:4–11" },
       { step: 2, title: "Young David Arrives with Bread", text: "Young shepherd David visits the camp with loaves for his brothers and hears the giant's taunts.", ref: "1 Samuel 17:17–26" },
@@ -360,7 +345,6 @@ export const STORIES = [
     icon: "👑",
     color: "#3a86ff",
     character: "solomon",
-    art: "wisdom_scroll",
     events: [
       { step: 1, title: "A Young King at Gibeon", text: "Young Solomon becomes king over Israel, loves the LORD, and goes to Gibeon to worship Him.", ref: "1 Kings 2:12; 3:3–4" },
       { step: 2, title: "Ask What I Shall Give You", text: "The LORD appears to Solomon in a dream at night and says, 'Ask what I shall give you.'", ref: "1 Kings 3:5" },
@@ -378,7 +362,6 @@ export const STORIES = [
     icon: "⚡",
     color: "#d94f30",
     character: "elijah",
-    art: "light_city",
     events: [
       { step: 1, title: "The Challenge on Mount Carmel", text: "Elijah gathers all the people and false prophets on the mountain to see who the true God is.", ref: "1 Kings 18:20–21" },
       { step: 2, title: "False Prophets Shout in Vain", text: "The false prophets dance and shout all day to their idol, but there is no voice and no answer.", ref: "1 Kings 18:26–29" },
@@ -398,7 +381,6 @@ export const STORIES = [
     icon: "💧",
     color: "#3e7cb1",
     character: "elisha",
-    art: "calm_waters",
     events: [
       { step: 1, title: "A Great General with Sickness", text: "Naaman is a brave army commander, but he suffers from a painful skin disease.", ref: "2 Kings 5:1" },
       { step: 2, title: "A Little Girl's Faithful Clue", text: "A young captive Israelite servant girl tells Naaman's wife about Elisha the prophet who can heal him.", ref: "2 Kings 5:2–3" },
@@ -416,7 +398,6 @@ export const STORIES = [
     icon: "👑",
     color: "#8a6bbf",
     character: "esther",
-    art: "hope_heaven",
     events: [
       { step: 1, title: "Chosen as Queen of Persia", text: "Humble, kind Esther is chosen to become the queen in the palace of Susa.", ref: "Esther 2:17" },
       { step: 2, title: "A Wicked Plot Revealed", text: "Haman plans a cruel law to destroy all Jewish people throughout the kingdom.", ref: "Esther 3:8–9" },
@@ -434,7 +415,6 @@ export const STORIES = [
     icon: "🦁",
     color: "#b08d57",
     character: "daniel",
-    art: "armor_shield",
     events: [
       { step: 1, title: "Faithful in Babylon", text: "Daniel serves King Darius with wisdom and an excellent spirit that pleases the king.", ref: "Daniel 6:1–3" },
       { step: 2, title: "Praying Toward Jerusalem", text: "Even when an unfair law forbids prayer, Daniel opens his window and prays to God three times a day.", ref: "Daniel 6:10" },
@@ -452,7 +432,6 @@ export const STORIES = [
     icon: "🔥",
     color: "#d94f30",
     character: "abednego",
-    art: "lamp",
     events: [
       { step: 1, title: "The Golden Statue", text: "King Nebuchadnezzar builds a giant gold statue and commands everyone to bow down when music plays.", ref: "Daniel 3:1–5" },
       { step: 2, title: "Refusing to Bow", text: "Shadrach, Meshach, and Abednego refuse to worship any god except the one true LORD.", ref: "Daniel 3:12" },
@@ -470,7 +449,6 @@ export const STORIES = [
     icon: "🐋",
     color: "#3e7cb1",
     character: "jonah",
-    art: "calm_waters",
     events: [
       { step: 1, title: "Running to Tarshish", text: "God tells Jonah to preach to Nineveh, but Jonah boards a ship sailing in the opposite direction.", ref: "Jonah 1:1–3" },
       { step: 2, title: "A Great Storm on the Sea", text: "A mighty tempest rocks the ship, and the sailors cast lots and discover Jonah is running from God.", ref: "Jonah 1:4–12" },
@@ -488,7 +466,6 @@ export const STORIES = [
     icon: "🧱",
     color: "#588157",
     character: "nehemiah",
-    art: "armor_shield",
     events: [
       { step: 1, title: "Tears for Broken Walls", text: "Nehemiah hears that Jerusalem's stone walls are broken down and burns with prayer and fasting.", ref: "Nehemiah 1:3–4" },
       { step: 2, title: "Sent by the Persian King", text: "The king notices Nehemiah's sad face and graciously sends him to Jerusalem with timber supplies.", ref: "Nehemiah 2:1–8" },
@@ -508,7 +485,6 @@ export const STORIES = [
     icon: "⭐",
     color: "#e88b6a",
     character: "luke",
-    art: "hope_heaven",
     events: [
       { step: 1, title: "Journey to Bethlehem", text: "Mary and Joseph travel to Bethlehem, where a baby is wrapped in swaddling clothes in a humble manger.", ref: "Luke 2:4–7" },
       { step: 2, title: "Angels Sing to Shepherds", text: "An angel appears to shepherds in night fields, singing: 'Glory to God in the highest, and peace on earth!'", ref: "Luke 2:8–14" },
@@ -526,7 +502,6 @@ export const STORIES = [
     icon: "🕊️",
     color: "#3e7cb1",
     character: "john_baptist",
-    art: "dove_peace",
     events: [
       { step: 1, title: "A Voice in the Wilderness", text: "John the Baptist preaches by the Jordan River, calling all people to prepare their hearts.", ref: "Matthew 3:1–3" },
       { step: 2, title: "Crowds Gather at the Water", text: "Many people come out to be baptized in the flowing waters of the Jordan.", ref: "Matthew 3:5–6" },
@@ -544,7 +519,6 @@ export const STORIES = [
     icon: "⛵",
     color: "#3a86ff",
     character: "peter",
-    art: "calm_waters",
     events: [
       { step: 1, title: "Sailing Across at Evening", text: "The disciples steer their wooden fishing boat across the Sea of Galilee as evening falls.", ref: "Mark 4:35–36" },
       { step: 2, title: "A Furious Windstorm", text: "A sudden violent windstorm kicks up gigantic waves that crash into the boat, filling it with water.", ref: "Mark 4:37" },
@@ -562,7 +536,6 @@ export const STORIES = [
     icon: "🍞",
     color: "#f4a261",
     character: "john",
-    art: "fruit_vine",
     events: [
       { step: 1, title: "A Hungry Crowd on the Hill", text: "A vast crowd of over five thousand people gathers on the grassy hillside to listen to teaching.", ref: "John 6:1–5" },
       { step: 2, title: "A Boy's Five Loaves & Two Fish", text: "Andrew says, 'Here is a boy with five barley loaves and two small fish, but what are they among so many?'", ref: "John 6:8–9" },
@@ -580,7 +553,6 @@ export const STORIES = [
     icon: "🩹",
     color: "#d94f30",
     character: "luke",
-    art: "love_heart",
     events: [
       { step: 1, title: "A Wounded Traveler", text: "A man travelling down from Jerusalem to Jericho is attacked by robbers and left hurting by the roadside.", ref: "Luke 10:30" },
       { step: 2, title: "Passed by on the Other Side", text: "A priest and a Levite walk down the road, see the injured man, but pass by on the other side.", ref: "Luke 10:31–32" },
@@ -598,7 +570,6 @@ export const STORIES = [
     icon: "🏡",
     color: "#5c8a3a",
     character: "luke",
-    art: "love_heart",
     events: [
       { step: 1, title: "Leaving for a Far Country", text: "A younger son takes his inheritance and travels to a distant land, wasting all his money.", ref: "Luke 15:11–13" },
       { step: 2, title: "Feeding Pigs in the Famine", text: "When famine strikes, he ends up feeding pigs and longs even for the pods the pigs eat.", ref: "Luke 15:14–16" },
@@ -618,7 +589,6 @@ export const STORIES = [
     icon: "🌿",
     color: "#2a9d8f",
     character: "matthew",
-    art: "praise_harp",
     events: [
       { step: 1, title: "Finding the Colt", text: "Two disciples find a gentle donkey colt tied in the village, just as they were told.", ref: "Matthew 21:1–3" },
       { step: 2, title: "Spreading Cloaks on the Road", text: "The disciples lay their cloaks on the donkey, and crowds spread their coats across the road.", ref: "Matthew 21:7–8" },
@@ -636,7 +606,6 @@ export const STORIES = [
     icon: "🌅",
     color: "#e63946",
     character: "john",
-    art: "hope_heaven",
     events: [
       { step: 1, title: "Visiting the Garden at Dawn", text: "Early on Sunday morning at sunrise, faithful women bring sweet spices to the garden tomb.", ref: "Luke 24:1" },
       { step: 2, title: "The Giant Stone Rolled Away", text: "They look up and see that the massive stone in front of the tomb has already been rolled away!", ref: "Luke 24:2" },
@@ -654,7 +623,6 @@ export const STORIES = [
     icon: "☁️",
     color: "#3a86ff",
     character: "matthew",
-    art: "gospel_world",
     events: [
       { step: 1, title: "Meeting on the Mountain", text: "The disciples gather on the mountain in Galilee to meet with their risen Lord.", ref: "Matthew 28:16" },
       { step: 2, title: "All Authority in Heaven and Earth", text: "Jesus speaks words of peace: 'All authority in heaven and on earth has been given to Me.'", ref: "Matthew 28:18" },
@@ -672,7 +640,6 @@ export const STORIES = [
     icon: "💨",
     color: "#d94f30",
     character: "peter",
-    art: "light_city",
     events: [
       { step: 1, title: "Praying in the Upper Room", text: "One hundred and twenty disciples gather together in one place, praying with one accord.", ref: "Acts 1:14–2:1" },
       { step: 2, title: "A Sound Like a Mighty Rushing Wind", text: "Suddenly a sound like a violent blowing wind fills the entire house where they are sitting.", ref: "Acts 2:2" },
@@ -690,7 +657,6 @@ export const STORIES = [
     icon: "🏛️",
     color: "#b08d57",
     character: "peter",
-    art: "praise_harp",
     events: [
       { step: 1, title: "Walking to the Temple to Pray", text: "Peter and John walk up to the temple at the hour of prayer in the afternoon.", ref: "Acts 3:1" },
       { step: 2, title: "A Man Begging at the Gate", text: "A man who had never walked since birth sits at the gate called Beautiful, asking for coins.", ref: "Acts 3:2–3" },
@@ -708,7 +674,6 @@ export const STORIES = [
     icon: "☀️",
     color: "#8a6bbf",
     character: "paul",
-    art: "gospel_world",
     events: [
       { step: 1, title: "Journeying to Damascus", text: "Saul breathes threats against the believers and travels to Damascus with letters of arrest.", ref: "Acts 9:1–2" },
       { step: 2, title: "A Light Brighter Than the Sun", text: "Suddenly a blazing light from heaven flashes all around him, and he falls to the ground.", ref: "Acts 9:3–4" },
@@ -764,137 +729,3 @@ export function evaluateOrder(events) {
   return { results, correctCount, isComplete, total: events.length };
 }
 
-// Each event card gets artwork drawn from its own moment in the story rather
-// than one picture repeated across the whole timeline. Ordered most specific
-// first; a story's own art is the fallback.
-const EVENT_ART_KEYWORDS = [
-  ["ark_boat", ["noah", "flood", "two by two", "dove returns"]],
-  ["great_fish", ["great fish", "swallow", "whale", "belly"]],
-  ["lion_rest", ["lion", "den"]],
-  ["stone_tablets", ["tablet", "commandment", "sinai", "engrav"]],
-  ["stairway", ["stairway", "ladder", "bethel", "angels ascending"]],
-  ["city_walls", ["wall", "jericho", "gate", "rebuild", "brick", "tower"]],
-  ["throne_crown", ["throne", "palace", "queen", "king ", "scepter", "crowned", "royal"]],
-  ["altar_fire", ["altar", "sacrifice", "offering", "carmel"]],
-  ["well_water", ["well", "jar", "pitcher", "draw water"]],
-  ["fish_net", ["net", "fishermen", "catch", "boat"]],
-  ["bread_basket", ["bread", "loaves", "manna", "basket", "feast", "supper", "grain"]],
-  ["sower_field", ["sow", "seed", "field", "plant", "gleaning", "reap"]],
-  ["desert_tents", ["tent", "camp", "wilderness", "desert", "journey", "travel", "canaan"]],
-  ["starry_sky", ["star", "night", "moon", "dream", "darkness", "asleep", "sleep"]],
-  ["rainbow", ["rainbow", "covenant", "never again", "promise"]],
-  ["eagle_wings", ["eagle", "wings", "soar", "mountain", "hills"]],
-  ["praise_harp", ["sing", "song", "praise", "harp", "tambourine", "music", "celebrate", "shout", "trumpet", "horn", "joy"]],
-  ["shepherd", ["sheep", "shepherd", "flock", "lamb", "pasture"]],
-  ["calm_waters", ["water", "sea", "river", "jordan", "nile", "boat", "ship", "fish", "wave", "storm", "wash", "dip", "swim", "lake"]],
-  ["armor_shield", ["armor", "shield", "sword", "battle", "army", "brave", "courage", "soldier", "warrior", "guard", "walls", "fortress", "furnace", "lions"]],
-  ["lamp", ["lamp", "torch", "candle", "oil", "flame", "fire"]],
-  ["light_city", ["city", "jerusalem", "town", "temple", "palace", "gate", "throne room"]],
-  ["fruit_vine", ["fruit", "tree", "vine", "harvest", "grain", "seed", "bread", "food", "feast", "eat", "garden"]],
-  ["wisdom_scroll", ["wisdom", "wise", "scroll", "law", "commandment", "tablet", "write", "written", "letter", "teach", "understanding"]],
-  ["love_heart", ["love", "kind", "forgive", "compassion", "mercy", "neighbor", "heart", "care", "weep"]],
-  ["dove_peace", ["dove", "peace", "pray", "prayer", "spirit", "quiet", "rest", "fasts", "fasting"]],
-  ["gospel_world", ["nations", "world", "preach", "gospel", "good news", "disciples", "message", "sent", "send", "witness"]],
-  ["hope_heaven", ["heaven", "glory", "crown", "king", "angel", "risen", "eternal", "hope", "cloud"]],
-  ["creation", ["creates", "created", "creation", "earth", "sky", "heavens", "animals", "birds", "plants", "made"]],
-];
-
-export const ART_THEMES = EVENT_ART_KEYWORDS.map(([theme]) => theme);
-
-// Artwork for every card of a story, keyed by step. Each card gets the motif
-// that best fits its own moment, and no two cards in a story share one — a row
-// of identical pictures is what made the timeline look plain.
-function artsForStories(stories) {
-  const matchesFor = (source) => {
-    const haystack = source.toLowerCase();
-    // Matched at word starts: plain substrings put an ark in "darkness" and
-    // a lion's den in "garden"
-    return EVENT_ART_KEYWORDS.filter(([, words]) =>
-      words.some((word) => new RegExp(`\\b${word}`).test(haystack))
-    ).map(([theme]) => theme);
-  };
-
-  const slots = stories.flatMap((story) => {
-    // A story's title names its scene — Jericho gets the walls, Jonah the
-    // great fish — so one of its cards holds that picture even if a
-    // neighbouring story would otherwise have spent it first. Titles that
-    // name nothing drawable fall back to the story's own art
-    const signature = matchesFor(story.title || "")[0] || story.art;
-    return story.events.map((event) => ({
-      story,
-      signature,
-      event,
-      matches: matchesFor(`${event.title} ${event.text}`),
-    }));
-  });
-
-  // Hand each scene to the card with the strongest claim on it, not to
-  // whichever story happens to come first: cards with the fewest options
-  // choose first, so the walls go to Jericho and the tablets to Sinai
-  const order = slots
-    .map((slot, index) => ({ slot, index }))
-    .sort((a, b) => {
-      const options = a.slot.matches.length - b.slot.matches.length;
-      if (options !== 0) return options;
-      // Then by how specific the best match is (the keyword table is ordered
-      // most specific first)
-      const specificity =
-        (ART_THEMES.indexOf(a.slot.matches[0]) + 1 || 999) -
-        (ART_THEMES.indexOf(b.slot.matches[0]) + 1 || 999);
-      if (specificity !== 0) return specificity;
-      return a.index - b.index;
-    });
-
-  // Every card ranks the whole palette and takes the best scene still going:
-  // one the words actually call for, never one already on this story, and
-  // preferring scenes the rest of the volume has not spent
-  const uses = new Map();
-  const perStory = new Map(stories.map((story) => [story.id, new Set()]));
-  const countOf = (theme) => uses.get(theme) || 0;
-  const rank = (slot, theme) => {
-    const matched = slot.matches.indexOf(theme);
-    const count = countOf(theme);
-    return (
-      // Never the same picture twice inside one story
-      (perStory.get(slot.story.id).has(theme) ? 1e6 : 0) +
-      // Never a third time inside one volume
-      (count >= 2 ? 1e5 : 0) +
-      // A scene the words call for, even one the volume has already shown,
-      // beats an unrelated scene; unrelated picks favour general backdrops
-      // (sky, hills, harvest) over pointed ones like a great fish
-      (matched === -1 ? 1e4 + ART_THEMES.length - ART_THEMES.indexOf(theme) : matched) +
-      count * 1e3 +
-      // The story's own title scene outranks a merely fresh alternative
-      (theme === slot.signature ? -700 : 0)
-    );
-  };
-
-  order.forEach(({ slot }) => {
-    slot.art = ART_THEMES.concat(slot.matches).reduce((best, theme) =>
-      rank(slot, theme) < rank(slot, best) ? theme : best
-    );
-    uses.set(slot.art, countOf(slot.art) + 1);
-    perStory.get(slot.story.id).add(slot.art);
-  });
-
-  const byStory = new Map();
-  stories.forEach((story) => byStory.set(story.id, {}));
-  slots.forEach(({ story, event, art }) => {
-    byStory.get(story.id)[event.step] = art;
-  });
-  return byStory;
-}
-
-const volumeArts = new Map();
-
-export function getStoryEventArts(story) {
-  if (!volumeArts.has(story.id)) {
-    const volume = VOLUMES.find((v) => v.storyIds.includes(story.id));
-    // A story outside the volumes (a test fixture) is allocated on its own
-    if (!volume) return artsForStories([story]).get(story.id);
-    artsForStories(volume.storyIds.map(getStoryById)).forEach((arts, id) =>
-      volumeArts.set(id, arts)
-    );
-  }
-  return volumeArts.get(story.id);
-}

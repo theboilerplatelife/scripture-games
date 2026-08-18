@@ -1,11 +1,9 @@
 import { useEffect } from "react";
 import { audio } from "../../audio/SoundEngine.js";
-import { PairIllustration } from "../memory-match/PairIllustration.jsx";
-import { getStoryEventArts } from "./storyData.js";
+import { CardScene } from "../../art/CardScene.jsx";
 import { useScrollLock } from "../../components/common/useScrollLock.js";
 
 export function StoryReaderModal({ story, onClose }) {
-  const eventArts = getStoryEventArts(story);
   useScrollLock();
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -56,7 +54,7 @@ export function StoryReaderModal({ story, onClose }) {
               <div className="ss-reader-step-content">
                 {/* Banner above the words, never behind them */}
                 <span className="ss-reader-step-art" aria-hidden="true">
-                  <PairIllustration scene={`${story.id}-${ev.step}`} art={eventArts[ev.step]} />
+                  <CardScene scene={`${story.id}-${ev.step}`} />
                 </span>
                 <div className="ss-reader-text-wrapper">
                   <h3 className="ss-reader-step-title">{ev.title}</h3>

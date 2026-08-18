@@ -1,6 +1,4 @@
 import { describe, test, expect, vi } from "vitest";
-import fs from "node:fs";
-import path from "node:path";
 import {
   VOLUMES,
   STORIES,
@@ -10,9 +8,6 @@ import {
   getStoryById,
   shuffleEvents,
   evaluateOrder,
-  getStoryEventArts,
-  ART_THEMES,
-  VOLUMES as ART_VOLUMES,
 } from "../../src/games/story-sequencer/storyData.js";
 import * as randomUtils from "../../src/utils/random.js";
 
@@ -109,66 +104,10 @@ describe("Story Sequencer data & helper functions", () => {
   });
 
 
-  test("every story gives each card its own content-matched artwork", () => {
-    STORIES.forEach((story) => {
-      const arts = getStoryEventArts(story);
-      const values = Object.values(arts);
-      expect(Object.keys(arts).length).toBe(story.events.length);
-      expect(values.every(Boolean)).toBe(true);
-      // A row of identical pictures is what made the timeline look plain
-      expect(new Set(values).size).toBe(values.length);
-    });
-
-    // Keywords choose the motif: the Red Sea crossing is drawn as water
-    const exodus = STORIES.find((s) => s.title.includes("Red Sea"));
-    expect(Object.values(getStoryEventArts(exodus))).toContain("calm_waters");
-
-    // A story whose events match nothing falls back to its own art, then to
-    // unused themes so the cards still differ
-    const bland = {
-      art: "wisdom_scroll",
-      events: [
-        { step: 1, title: "Zzz", text: "qqq" },
-        { step: 2, title: "Zzz", text: "qqq" },
-      ],
-    };
-    const blandArts = Object.values(getStoryEventArts(bland));
-    expect(blandArts[0]).toBe("wisdom_scroll");
-    expect(blandArts[1]).not.toBe("wisdom_scroll");
-  });
-
   test("hints cap the score however few checks it takes", () => {
     expect(starsForHints(0)).toBe(3);
     expect(starsForHints(1)).toBe(2);
     expect(starsForHints(2)).toBe(1);
     expect(starsForHints(9)).toBe(1);
-  });
-
-  test("every artwork theme is actually drawn, and volumes do not repeat scenes", () => {
-    // A theme with no drawing silently falls back to the night sky
-    const illustrations = fs.readFileSync(
-      path.resolve(__dirname, "../../src/games/memory-match/PairIllustration.jsx"),
-      "utf8"
-    );
-    ART_THEMES.forEach((theme) => {
-      expect(illustrations.includes(`case "${theme}"`), `no drawing for "${theme}"`).toBe(true);
-    });
-
-    // A shelf of stories showing the same picture is what made the timeline
-    // look repetitive: never twice inside one story, at most twice per volume
-    ART_VOLUMES.forEach((volume) => {
-      const arts = volume.storyIds.flatMap((id) => {
-        const own = Object.values(getStoryEventArts(STORIES.find((s) => s.id === id)));
-        expect(new Set(own).size, `story ${id} repeats a scene on its own cards`).toBe(own.length);
-        return own;
-      });
-      const counts = {};
-      arts.forEach((art) => {
-        counts[art] = (counts[art] || 0) + 1;
-      });
-      Object.entries(counts).forEach(([art, count]) => {
-        expect(count, `volume ${volume.id} shows "${art}" ${count} times`).toBeLessThanOrEqual(2);
-      });
-    });
   });
 });

@@ -1,7 +1,7 @@
 import { describe, test, expect } from "vitest";
 import { render } from "@testing-library/react";
 import { SCENES } from "../../src/art/scenes.js";
-import { PairIllustration } from "../../src/games/memory-match/PairIllustration.jsx";
+import { CardScene } from "../../src/art/CardScene.jsx";
 import { STORIES } from "../../src/games/story-sequencer/storyData.js";
 import { CHAPTERS } from "../../src/data/chapters.js";
 import * as Staging from "../../src/art/staging.jsx";
@@ -12,7 +12,7 @@ import * as Staging from "../../src/art/staging.jsx";
    registry with no card to sit behind. */
 
 function draw(scene) {
-  const { container, unmount } = render(<PairIllustration scene={scene} />);
+  const { container, unmount } = render(<CardScene scene={scene} />);
   const svg = container.querySelector("svg");
   const markup = svg ? svg.innerHTML : "";
   unmount();
@@ -85,8 +85,22 @@ describe("hand-drawn card scenes", () => {
       });
   });
 
-  test("a card with no drawing yet still gets themed artwork", () => {
-    const markup = draw("not-drawn-yet");
+  test("every card in the app has a scene of its own", () => {
+    // This is the point of the whole art module: no card falls back to a
+    // shared picture, and none is left blank
+    const cards = [
+      ...STORIES.flatMap((story) => story.events.map((event) => `${story.id}-${event.step}`)),
+      ...CHAPTERS.flatMap((chapter) => chapter.verses.map((verse) => verse.ref)),
+    ];
+    const missing = cards.filter((key) => !SCENES[key]);
+    expect(missing, `cards with no drawing: ${missing.join(", ")}`).toEqual([]);
+    expect(cards.length).toBe(300);
+  });
+
+  test("a key with no drawing renders a quiet field rather than nothing", () => {
+    // Unreachable in the shipped app — the gate above forbids it — but a
+    // typo should show a plain field, not a blank card or a crash
+    const markup = draw("not-a-card");
     expect(markup).toMatch(/<(path|circle|rect)\b/);
   });
 });

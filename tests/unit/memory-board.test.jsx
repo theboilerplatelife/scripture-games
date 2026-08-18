@@ -2,7 +2,6 @@ import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { MemoryBoard } from "../../src/games/memory-match/MemoryBoard.jsx";
 import { buildDeck, MODES, DECKS, starsForMisses } from "../../src/games/memory-match/matchData.js";
-import { ART_THEMES } from "../../src/games/story-sequencer/storyData.js";
 
 const deckObj = DECKS[0];
 const HALVES = 2; // Torn Verses: 4 pairs / 8 cards
@@ -214,17 +213,6 @@ describe("MemoryBoard", () => {
     );
     expect(halves.container.querySelector(".mm-card-tag")).toBeNull();
     halves.unmount();
-  });
-
-  test("PairIllustration renders each content-unique art theme cleanly", async () => {
-    const { PairIllustration } = await import("../../src/games/memory-match/PairIllustration.jsx");
-    const themes = ART_THEMES.concat(["fallback_theme"]);
-
-    themes.forEach((art) => {
-      const { container, unmount } = render(<PairIllustration art={art} />);
-      expect(container.querySelector("svg.mm-card-bg-ill")).toBeTruthy();
-      unmount();
-    });
   });
 
   test("every card carries the full scene with a taped caption strip", () => {

@@ -6,7 +6,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { createElement } from "react";
 import fs from "node:fs";
 import { SCENES } from "../src/art/scenes.js";
-import { PairIllustration } from "../src/games/memory-match/PairIllustration.jsx";
+import { CardScene } from "../src/art/CardScene.jsx";
 
 const filter = process.argv[2] || "";
 const keys = Object.keys(SCENES).filter((k) => k.includes(filter));
@@ -24,7 +24,7 @@ const sheet = renderToStaticMarkup(
         createElement(
           "div",
           { className: "card" },
-          createElement(PairIllustration, { scene: key }),
+          createElement(CardScene, { scene: key }),
           createElement("span", { className: "cap" }, "caption strip sits here")
         ),
         createElement("figcaption", null, key)
