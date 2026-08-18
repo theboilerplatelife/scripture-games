@@ -1,7 +1,7 @@
 import { describe, test, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
-import { render } from "@testing-library/react";
+import { render, fireEvent, screen } from "@testing-library/react";
 import { axe } from "vitest-axe";
 import * as matchers from "vitest-axe/matchers";
 import { WelcomeSplash } from "../../src/components/common/WelcomeSplash.jsx";
@@ -18,6 +18,9 @@ import { StoryReaderModal } from "../../src/games/story-sequencer/StoryReaderMod
 import { CHAPTERS } from "../../src/data/chapters.js";
 import { DECKS } from "../../src/games/memory-match/matchData.js";
 import { STORIES } from "../../src/games/story-sequencer/storyData.js";
+import { SequencerBoard } from "../../src/games/story-sequencer/SequencerBoard.jsx";
+import { MemoryBoard } from "../../src/games/memory-match/MemoryBoard.jsx";
+import { buildDeck } from "../../src/games/memory-match/matchData.js";
 
 expect.extend(matchers);
 
@@ -36,9 +39,25 @@ const AXE_OPTIONS = {
 
 const noop = () => {};
 
+// Every class this suite has actually put on screen. A screen audited only in
+// its resting state hides whatever its interactions look like, so the last
+// test in this file checks that each state in the design system appears here.
+const auditedClasses = new Set();
+
+function recordClasses(container) {
+  container.querySelectorAll("[class]").forEach((el) => {
+    el.classList.forEach((cls) => auditedClasses.add(cls));
+  });
+}
+
+async function auditDom(container) {
+  recordClasses(container);
+  expect(await axe(container, AXE_OPTIONS)).toHaveNoViolations();
+}
+
 async function expectAccessible(ui) {
   const { container, unmount } = render(ui);
-  expect(await axe(container, AXE_OPTIONS)).toHaveNoViolations();
+  await auditDom(container);
   unmount();
 }
 
@@ -145,6 +164,130 @@ describe("Constitution Gate: Accessibility (Article 4.3)", () => {
       />
     );
     await expectAccessible(<StoryReaderModal story={STORIES[0]} onClose={noop} />);
+  });
+
+  test("story sequencer mid-play states", async () => {
+    const story = STORIES[0];
+    const { container, unmount } = render(
+      <SequencerBoard story={story} seed={3} onBackToStories={noop} onComplete={noop} />
+    );
+
+    // A card picked up, and the slot holding it
+    const cards = () => [...container.querySelectorAll(".ss-event-card")];
+    fireEvent.click(cards()[0]);
+    await auditDom(container);
+
+    // The hint: one card called out, its destination marked
+    fireEvent.click(screen.getByLabelText(/Get a hint/));
+    await auditDom(container);
+
+    // A checked order, with right and wrong placements marked
+    fireEvent.click(screen.getByRole("button", { name: "Check timeline order" }));
+    await auditDom(container);
+    unmount();
+  });
+
+  test("memory match mid-play states", async () => {
+    const deck = DECKS[0];
+    const cardDeck = buildDeck(deck, 0, "ESV", 0);
+    const { container, unmount } = render(
+      <MemoryBoard deck={deck} modeIdx={0} translation="ESV" seed={0} onBackToModes={noop} onComplete={noop} />
+    );
+    const cards = () => [...container.querySelectorAll(".mm-card")];
+    const indexesOf = (pairId) =>
+      cardDeck.map((c, i) => ({ c, i })).filter(({ c }) => c.pairId === pairId).map(({ i }) => i);
+
+    // Two cards face up that do not match
+    fireEvent.click(cards()[indexesOf(0)[0]]);
+    fireEvent.click(cards()[indexesOf(1)[0]]);
+    await new Promise((resolve) => setTimeout(resolve, 700));
+    await auditDom(container);
+
+    // A matched pair, stickered and locked
+    const [a, b] = indexesOf(2);
+    fireEvent.click(cards()[a]);
+    fireEvent.click(cards()[b]);
+    await new Promise((resolve) => setTimeout(resolve, 700));
+    await auditDom(container);
+    unmount();
+  });
+
+  test("verse builder mid-play states", async () => {
+    const { container, unmount } = render(
+      <VerseBuilder
+        stars={{}}
+        onSaveStar={noop}
+        translation="ESV"
+        onBackToHub={noop}
+        onOpenSettings={noop}
+        initialScreen="play"
+      />
+    );
+    // A word scrap placed on the notebook strip
+    fireEvent.click(screen.getByRole("button", { name: "Place word Pray" }));
+    await auditDom(container);
+    unmount();
+  });
+
+  test("settings dialog with audio switched off", async () => {
+    await expectAccessible(
+      <SettingsModal
+        isOpen={true}
+        onClose={noop}
+        translation="ESV"
+        onSelectTranslation={noop}
+        musicOn={false}
+        onToggleMusic={noop}
+        bgmVol={25}
+        onChangeBgmVol={noop}
+        sfxVol={50}
+        onChangeSfxVol={noop}
+        onResetProgress={noop}
+      />
+    );
+  });
+
+  test("completed and perfect progress marks", async () => {
+    const perfect = Object.fromEntries([0, 1, 2, 3, 4, 5, 6, 7].map((l) => [`1-${l}`, 3]));
+    await expectAccessible(
+      <VerseBuilder
+        stars={perfect}
+        onSaveStar={noop}
+        translation="ESV"
+        onBackToHub={noop}
+        onOpenSettings={noop}
+        initialScreen="chapters"
+      />
+    );
+  });
+
+  test("every state in the design system gets audited, not just resting screens", () => {
+    // A screen audited only at rest hides what its interactions look like —
+    // the sequencer's play board was never audited, and had nested buttons.
+    // Any state the stylesheets define must appear in a rendered DOM above.
+    const cssFiles = [
+      "src/games/hub/hub.css",
+      "src/games/verse-builder/verse-builder.css",
+      "src/games/memory-match/memory-match.css",
+      "src/games/story-sequencer/story-sequencer.css",
+      "src/components/common/welcome-splash.css",
+    ].map((f) => fs.readFileSync(path.resolve(__dirname, "../..", f), "utf8"));
+
+    const appCode = fs.readFileSync(path.resolve(__dirname, "../../src/App.jsx"), "utf8");
+    cssFiles.push(appCode.slice(appCode.indexOf("const globalCss")));
+
+    // States only reachable mid-animation, which a static render cannot hold
+    const TRANSIENT = new Set(["pop", "shake", "writing"]);
+
+    const states = new Set();
+    cssFiles.forEach((css) => {
+      for (const m of css.matchAll(/\.[\w-]+\.([\w-]+)/g)) {
+        if (!TRANSIENT.has(m[1])) states.add(m[1]);
+      }
+    });
+
+    const unaudited = [...states].filter((state) => !auditedClasses.has(state)).sort();
+    expect(unaudited).toEqual([]);
   });
 
   test("every game module is covered by this suite", () => {

@@ -253,42 +253,43 @@ export function SequencerBoard({
                   <p className="ss-card-text">{ev.text}</p>
                 </div>
 
-                {/* Keyboard Reordering Controls for Screen Readers and Touch Accessibility */}
-                <div className="ss-card-actions">
-                  <span className="ss-card-action-slot">
-                  {i > 0 && (
-                    <button
-                      className="ss-shift-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        moveCard(i, -1);
-                      }}
-                      aria-label={`Move ${ev.title} up`}
-                      title="Move card up"
-                    >
-                      ↑
-                    </button>
-                  )}
-                  </span>
-                  <span className="ss-card-status">
-                    {isSelected ? "Selected (tap another to swap)" : "Tap to select"}
-                  </span>
-                  <span className="ss-card-action-slot ss-card-action-end">
-                  {i < events.length - 1 && (
-                    <button
-                      className="ss-shift-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        moveCard(i, 1);
-                      }}
-                      aria-label={`Move ${ev.title} down`}
-                      title="Move card down"
-                    >
-                      ↓
-                    </button>
-                  )}
-                  </span>
-                </div>
+              </div>
+
+              {/* Keyboard Reordering Controls for Screen Readers and Touch Accessibility */}
+              <div className="ss-card-actions">
+                <span className="ss-card-action-slot">
+                {i > 0 && (
+                  <button
+                    className="ss-shift-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      moveCard(i, -1);
+                    }}
+                    aria-label={`Move ${ev.title} up`}
+                    title="Move card up"
+                  >
+                    ↑
+                  </button>
+                )}
+                </span>
+                <span className="ss-card-status">
+                  {isSelected ? "Selected (tap another to swap)" : "Tap to select"}
+                </span>
+                <span className="ss-card-action-slot ss-card-action-end">
+                {i < events.length - 1 && (
+                  <button
+                    className="ss-shift-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      moveCard(i, 1);
+                    }}
+                    aria-label={`Move ${ev.title} down`}
+                    title="Move card down"
+                  >
+                    ↓
+                  </button>
+                )}
+                </span>
               </div>
             </div>
           );

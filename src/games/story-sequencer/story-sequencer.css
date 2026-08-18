@@ -388,17 +388,17 @@
 }
 
 /* Card Reordering Controls */
+/* Sits in the slot beneath the card — nesting these controls inside the
+   card made it a button containing buttons */
 .ss-card-actions {
   position: relative;
-  z-index: 2;
   /* Equal side columns keep the status text centred on the first and last
      cards, which have only one shift button */
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   margin-top: 10px;
-  padding-top: 8px;
-  border-top: 1px dashed rgba(180, 150, 130, 0.4);
+  padding-top: 2px;
 }
 
 .ss-shift-btn {
