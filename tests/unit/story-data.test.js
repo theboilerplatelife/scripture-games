@@ -3,6 +3,7 @@ import {
   VOLUMES,
   STORIES,
   starsForAttempts,
+  starsForHints,
   getVolumeStories,
   getStoryById,
   shuffleEvents,
@@ -130,5 +131,12 @@ describe("Story Sequencer data & helper functions", () => {
     const blandArts = Object.values(getStoryEventArts(bland));
     expect(blandArts[0]).toBe("wisdom_scroll");
     expect(blandArts[1]).not.toBe("wisdom_scroll");
+  });
+
+  test("hints cap the score however few checks it takes", () => {
+    expect(starsForHints(0)).toBe(3);
+    expect(starsForHints(1)).toBe(2);
+    expect(starsForHints(2)).toBe(1);
+    expect(starsForHints(9)).toBe(1);
   });
 });

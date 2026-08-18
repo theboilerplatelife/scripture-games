@@ -279,8 +279,8 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     act(() => vi.advanceTimersByTime(1000));
     vi.useRealTimers();
 
-    // One check plus three hints scores as four tries, not one
-    expect(onComplete).toHaveBeenCalledWith(2, 1, 3);
+    // Solved on the first check, but three hints cap it at a single star
+    expect(onComplete).toHaveBeenCalledWith(1, 1, 3);
   });
 
   test("a swap leaves the page scrolled exactly where it was", () => {

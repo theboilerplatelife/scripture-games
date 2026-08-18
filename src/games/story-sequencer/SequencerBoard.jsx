@@ -1,7 +1,7 @@
 import { useState, useRef, useLayoutEffect } from "react";
 import { audio } from "../../audio/SoundEngine.js";
 import { jitter } from "../../utils/random.js";
-import { shuffleEvents, evaluateOrder, starsForAttempts, getStoryEventArts } from "./storyData.js";
+import { shuffleEvents, evaluateOrder, starsForAttempts, starsForHints, getStoryEventArts } from "./storyData.js";
 import { PairIllustration } from "../memory-match/PairIllustration.jsx";
 
 export function SequencerBoard({
@@ -19,9 +19,8 @@ export function SequencerBoard({
   const [attempts, setAttempts] = useState(0);
   const [lastCheck, setLastCheck] = useState(null); // { results, correctCount, isComplete, total }
   const [hintActive, setHintActive] = useState(false);
-  // A hint names the exact swap to make, so it counts against the score the
-  // same way another try does — otherwise three stars can be had without
-  // reading the story at all
+  // A hint names the exact swap to make, so using them caps the score —
+  // otherwise three stars can be had without reading the story at all
   const [hintsUsed, setHintsUsed] = useState(0);
   const lockRef = useRef(false);
   // Where the page was scrolled when a swap started, so the view can be put
@@ -111,7 +110,7 @@ export function SequencerBoard({
       lockRef.current = true;
       audio.playChapterFanfare();
       setTimeout(() => {
-        const earnedStars = starsForAttempts(newAttempts + hintsUsed);
+        const earnedStars = Math.min(starsForAttempts(newAttempts), starsForHints(hintsUsed));
         onComplete(earnedStars, newAttempts, hintsUsed);
       }, 750);
     } else {
@@ -170,8 +169,8 @@ export function SequencerBoard({
           <button
             className="ss-hint-btn"
             onClick={handleShowHint}
-            aria-label="Get a hint (counts like a try)"
-            title="Hint: shows which card goes where — counts like another try"
+            aria-label="Get a hint (using hints lowers your stars)"
+            title="Hint: shows which card goes where — using hints lowers your stars"
           >
             💡 Hint
           </button>

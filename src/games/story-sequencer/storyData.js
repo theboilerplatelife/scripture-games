@@ -720,6 +720,15 @@ export const STORIES = [
 ];
 
 // Pure scoring helper: Generous scoring for children
+// Each hint names an exact swap, so leaning on them caps the score no matter
+// how few checks it then takes: help is always available, but a perfect score
+// means you ordered the story yourself.
+export function starsForHints(hintsUsed) {
+  if (hintsUsed === 0) return 3;
+  if (hintsUsed === 1) return 2;
+  return 1;
+}
+
 export function starsForAttempts(attempts) {
   if (attempts <= 2) return 3;
   if (attempts <= 4) return 2;
