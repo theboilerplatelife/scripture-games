@@ -443,3 +443,36 @@ export function Boat({ x, y, scale, hull, sail }) {
     </g>
   );
 }
+
+/* A person, drawn plainly: robe, head, and a headscarf that marks the
+   people of these stories. About 43 units tall at scale 1, so a figure
+   standing on the ground line wants scale 0.8-0.9 — any larger and the
+   head disappears behind the caption strip. Never used for Jesus, per Article 1.2 —
+   scenes that touch his life are drawn through objects and light. */
+export function Person({ x, y, scale, robe, scarf, skin }) {
+  return (
+    <g transform={`translate(${x},${y}) scale(${scale})`}>
+      <path d="M -9 0 L -9 -24 Q -9 -32 0 -32 Q 9 -32 9 -24 L 9 0 Z" fill={robe} />
+      <circle cx="0" cy="-36" r="7" fill={skin} />
+      <path d="M -8 -38 q 8 -10 16 0 q -3 -8 -8 -8 q -5 0 -8 8 Z" fill={scarf} />
+      <path d="M -8 -38 q -3 8 0 14 M 8 -38 q 3 8 0 14" stroke={scarf} strokeWidth="2.4" fill="none" />
+    </g>
+  );
+}
+
+/* A horse: the messenger and the war animal of the later books. */
+export function Horse({ x, y, scale, coat, mane }) {
+  return (
+    <g transform={`translate(${x},${y}) scale(${scale})`}>
+      <path d="M 0 0 q 0 -16 14 -18 q 12 -2 20 0 q 12 2 12 18 Z" fill={coat} />
+      <path d="M 42 -16 q 10 -4 12 -16 q 2 -8 8 -6 q 5 2 2 9 q -3 11 -10 17 Z" fill={coat} />
+      <path d="M 52 -32 q 2 -7 5 -4 q 2 3 -1 6 Z" fill={coat} />
+      <path d="M 40 -18 q 10 -6 16 -14 q 2 8 -4 16 Z" fill={mane} />
+      <rect x="4" y="-2" width="3.4" height="16" rx="1.6" fill={coat} />
+      <rect x="14" y="-2" width="3.4" height="16" rx="1.6" fill={coat} />
+      <rect x="30" y="-2" width="3.4" height="16" rx="1.6" fill={coat} />
+      <rect x="40" y="-2" width="3.4" height="14" rx="1.6" fill={coat} />
+      <path d="M 0 -8 q -8 6 -6 16" stroke={mane} strokeWidth="3" fill="none" strokeLinecap="round" />
+    </g>
+  );
+}
