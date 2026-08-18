@@ -1,5 +1,5 @@
 /* Hand-drawn doodle icons for the hub game cards — same procedural-SVG
-   craft language as the Buddy avatars, instead of platform-dependent emoji. */
+   craft language as the verse portraits, instead of platform-dependent emoji. */
 export function GameIcon({ kind, size = 40 }) {
   const icons = {
     /* Verse Builder: craft scissors */

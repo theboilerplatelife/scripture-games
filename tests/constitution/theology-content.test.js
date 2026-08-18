@@ -53,11 +53,11 @@ describe("Constitution Gate: Theological & Content Integrity (Article 1)", () =>
       });
     });
 
-    const buddyPath = path.resolve(process.cwd(), "src/components/common/Buddy.jsx");
-    const buddyCode = fs.readFileSync(buddyPath, "utf8");
+    const buddyPath = path.resolve(process.cwd(), "src/art/portrait-kit.jsx");
+    const portraitCode = fs.readFileSync(buddyPath, "utf8");
     forbiddenKeywords.forEach((forbidden) => {
       const regex = new RegExp(`\\b${forbidden}:\\s*\\{`, "i");
-      expect(regex.test(buddyCode), `Buddy.jsx must not define avatar config for "${forbidden}"`).toBe(false);
+      expect(regex.test(portraitCode), `portrait-kit.jsx must not define a person for "${forbidden}"`).toBe(false);
     });
 
     STORIES.forEach((story) => {
@@ -123,29 +123,17 @@ describe("Constitution Gate: Theological & Content Integrity (Article 1)", () =>
     });
   });
 
-  test("Article 1.4: Every Story Sequencer character key has a Buddy.jsx avatar", () => {
-    const buddyPath = path.resolve(process.cwd(), "src/components/common/Buddy.jsx");
-    const buddyCode = fs.readFileSync(buddyPath, "utf8");
-
-    new Set(STORIES.map((story) => story.character)).forEach((charKey) => {
-      const regex = new RegExp(`\\b${charKey}:\\s*\\{`, "i");
-      expect(
-        regex.test(buddyCode),
-        `Story character "${charKey}" has no avatar in Buddy.jsx and would render the default face`
-      ).toBe(true);
+  test("Article 1.4: Every verse resolves to a portrait", () => {
+    // The face beside a verse is looked up from the verse itself, so a
+    // missing portrait means a level renders a stranger
+    const portraits = fs.readFileSync(path.resolve(process.cwd(), "src/art/portraits.jsx"), "utf8");
+    const missing = [];
+    CHAPTERS.forEach((chapter) => {
+      chapter.verses.forEach((verse) => {
+        const key = `${authorOf(verse.ref)}/${verse.ref.replace(/\s+\d+[:\d–\-a-c]*$/, "").trim()}`;
+        if (!portraits.includes(`"${key}"`)) missing.push(`${verse.ref} -> ${key}`);
+      });
     });
-  });
-
-  test("Article 1.4: All character keys must be defined in Buddy.jsx config", () => {
-    const buddyPath = path.resolve(process.cwd(), "src/components/common/Buddy.jsx");
-    const buddyCode = fs.readFileSync(buddyPath, "utf8");
-    
-    const distinctCharacters = new Set();
-    CHAPTERS.forEach((c) => c.verses.forEach((v) => distinctCharacters.add(v.character)));
-
-    distinctCharacters.forEach((charKey) => {
-      const regex = new RegExp(`\\b${charKey}:\\s*\\{`, "i");
-      expect(regex.test(buddyCode), `Missing avatar configuration in Buddy.jsx for character "${charKey}"`).toBe(true);
-    });
+    expect(missing, `verses with no portrait:\n${missing.join("\n")}`).toEqual([]);
   });
 });

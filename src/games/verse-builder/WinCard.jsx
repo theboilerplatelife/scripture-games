@@ -1,4 +1,4 @@
-import { Buddy } from "../../components/common/Buddy.jsx";
+import { Portrait } from "../../art/Portrait.jsx";
 import { Confetti } from "../../components/common/Confetti.jsx";
 import { WinStars, BestLine } from "../../components/common/WinParts.jsx";
 
@@ -35,7 +35,7 @@ export function WinCard({
         </div>
 
         <div className="vb-win-buddy">
-          <Buddy who={verse.character} size={84} />
+          <Portrait verseRef={verse.ref} size={84} />
         </div>
 
         <WinStars earned={earnedStars} />

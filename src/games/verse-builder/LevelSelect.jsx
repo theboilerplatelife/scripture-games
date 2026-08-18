@@ -1,5 +1,5 @@
 import { audio } from "../../audio/SoundEngine.js";
-import { Buddy } from "../../components/common/Buddy.jsx";
+import { Portrait } from "../../art/Portrait.jsx";
 import { Star } from "../../components/common/Star.jsx";
 import { jitter } from "../../utils/random.js";
 import { starValue } from "../../utils/stars.js";
@@ -74,7 +74,7 @@ export function LevelSelect({
               <span className="vb-tape vb-tape-top" />
               <span className="vb-level-num">{i + 1}</span>
               <span>
-                <Buddy who={v.character} size={48} />
+                <Portrait verseRef={v.ref} size={48} />
               </span>
               <span className="vb-level-ref">
                 {unlocked ? v.ref : "? ? ?"}

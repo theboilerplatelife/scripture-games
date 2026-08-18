@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef } from "react";
 import { audio } from "../../audio/SoundEngine.js";
-import { Buddy } from "../../components/common/Buddy.jsx";
+import { Portrait } from "../../art/Portrait.jsx";
 import { Pencil } from "../../components/common/Pencil.jsx";
 import { jitter, tornEdge, shuffle } from "../../utils/random.js";
 
@@ -131,9 +131,9 @@ export function PlayBoard({
         </div>
       </div>
 
-      {/* Buddy dialogue row */}
+      {/* The writer, and what they say about the verse */}
       <div className="vb-buddy-row">
-        <Buddy who={verse.character} size={64} />
+        <Portrait verseRef={verse.ref} size={64} />
         <div className="vb-bubble">{verse.hint}</div>
       </div>
 

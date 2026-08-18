@@ -1,4 +1,4 @@
-import { Buddy } from "./Buddy.jsx";
+import { Portrait } from "../../art/Portrait.jsx";
 import { Pencil } from "./Pencil.jsx";
 import { audio } from "../../audio/SoundEngine.js";
 import "./welcome-splash.css";
@@ -16,16 +16,16 @@ export function WelcomeSplash({ onStart }) {
 
         <div className="splash-buddy-row">
           <div className="splash-buddy-wrap">
-            <Buddy who="david" size={56} />
+            <Portrait verseRef="Psalm 23:1" size={56} />
           </div>
           <div className="splash-buddy-wrap">
-            <Buddy who="esther" size={56} />
+            <Portrait verseRef="Proverbs 3:5a" size={56} />
           </div>
           <div className="splash-buddy-wrap">
-            <Buddy who="solomon" size={56} />
+            <Portrait verseRef="Philippians 4:13" size={56} />
           </div>
           <div className="splash-buddy-wrap">
-            <Buddy who="ruth" size={56} />
+            <Portrait verseRef="1 John 4:19" size={56} />
           </div>
         </div>
 
