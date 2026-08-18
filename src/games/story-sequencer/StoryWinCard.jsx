@@ -16,6 +16,9 @@ export function StoryWinCard({
 }) {
   useScrollLock();
 
+  // Hints and checks both count as tries in the tally the player sees
+  const totalTries = attempts + hintsUsed;
+
   const getCheer = () => {
     if (earnedStars === 3) return "Brilliant Timeline Mastery!";
     if (earnedStars === 2) return "Great Story Ordering!";
@@ -30,8 +33,9 @@ export function StoryWinCard({
         <div className="vb-win-icon" aria-hidden="true">{story.icon}</div>
         <h2 className="vb-win-title">{getCheer()}</h2>
         <p className="vb-win-sub">
-          You sequenced <strong>{story.title}</strong> in {attempts} {attempts === 1 ? "try" : "tries"}
-          {hintsUsed > 0 ? ` with ${hintsUsed} ${hintsUsed === 1 ? "hint" : "hints"}` : ""}!
+          You sequenced <strong>{story.title}</strong> in {totalTries}{" "}
+          {totalTries === 1 ? "try" : "tries"}
+          {hintsUsed > 0 ? " with hints" : ""}!
         </p>
 
         <div className="vb-win-stars">

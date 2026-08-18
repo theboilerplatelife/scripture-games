@@ -227,7 +227,7 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     expect(container.querySelectorAll(".ss-event-card.hint-glow").length).toBe(0);
   });
 
-  test("the win card owns up to how many hints were used", () => {
+  test("the win card counts hints as tries and says help was used", () => {
     const props = {
       story: STORIES[0],
       earnedStars: 2,
@@ -237,16 +237,18 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
       onBackToStories: vi.fn(),
       hasNextStory: true,
     };
+    // Hints fold into the try count, with a note that help was used
     const one = render(<StoryWinCard {...props} attempts={1} hintsUsed={1} />);
-    expect(screen.getByText(/with 1 hint/)).toBeTruthy();
+    expect(screen.getByText(/2 tries with hints/)).toBeTruthy();
     one.unmount();
 
     const many = render(<StoryWinCard {...props} attempts={2} hintsUsed={3} />);
-    expect(screen.getByText(/with 3 hints/)).toBeTruthy();
+    expect(screen.getByText(/5 tries with hints/)).toBeTruthy();
     many.unmount();
 
     const none = render(<StoryWinCard {...props} attempts={2} hintsUsed={0} />);
-    expect(screen.queryByText(/hint/)).toBeNull();
+    expect(screen.getByText(/2 tries/)).toBeTruthy();
+    expect(screen.queryByText(/with hints/)).toBeNull();
     none.unmount();
   });
 
