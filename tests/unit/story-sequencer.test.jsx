@@ -92,7 +92,7 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
 
     // Hint button
     fireEvent.click(screen.getByLabelText("Get a hint"));
-    expect(screen.getByText(/marked in gold/i)).toBeTruthy();
+    expect(screen.getByText(/belongs in Step/i)).toBeTruthy();
 
     // Tap-to-select and tap-to-swap
     const cards = container.querySelectorAll(".ss-event-card");
@@ -188,8 +188,15 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
       <SequencerBoard story={story} seed={3} onBackToStories={vi.fn()} onComplete={vi.fn()} />
     );
 
+    // The hinted card is usually off screen, so it is scrolled into view
+    const scrollIntoView = vi.fn();
+    container.querySelectorAll(".ss-timeline-slot").forEach((slot) => {
+      slot.scrollIntoView = scrollIntoView;
+    });
+
     fireEvent.click(screen.getByLabelText("Get a hint"));
-    expect(screen.getByText(/marked in gold/i)).toBeTruthy();
+    expect(screen.getByText(/belongs in Step/i)).toBeTruthy();
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: "center" });
     // Exactly one card is called out, with the step it belongs in marked
     expect(container.querySelectorAll(".ss-event-card.hint-glow").length).toBe(1);
     expect(container.querySelectorAll(".ss-timeline-slot.hint-target").length).toBe(1);

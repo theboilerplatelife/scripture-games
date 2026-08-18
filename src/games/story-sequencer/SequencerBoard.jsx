@@ -115,10 +115,16 @@ export function SequencerBoard({
     }
   }
 
-  // Activate helpful hint (highlights earliest misplaced card)
+  // Activate helpful hint (marks the earliest misplaced card)
   function handleShowHint() {
     audio.playButtonClick();
     setHintActive(true);
+    // The card being pointed at is usually further down the timeline, so the
+    // player would otherwise read the hint with nothing marked in view
+    const idx = events.findIndex((ev, i) => ev.step !== i + 1);
+    if (idx !== -1) {
+      slotRefs.current[idx]?.scrollIntoView?.({ block: "center" });
+    }
   }
 
   // The hint calls out a single card — the first one out of place — and marks
@@ -176,7 +182,7 @@ export function SequencerBoard({
           <div className="ss-hint-banner">
             {hintFromIdx === -1
               ? "💡 Everything is already in order — tap Check Order!"
-              : "💡 Tap the card marked in gold, then tap the card in the gold box — they trade places."}
+              : `💡 The card in Step ${hintFromIdx + 1} belongs in Step ${hintToIdx + 1}. Tap them both to trade places.`}
           </div>
         )}
       </div>
