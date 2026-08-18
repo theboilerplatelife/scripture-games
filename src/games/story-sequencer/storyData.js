@@ -768,8 +768,21 @@ export function evaluateOrder(events) {
 // than one picture repeated across the whole timeline. Ordered most specific
 // first; a story's own art is the fallback.
 const EVENT_ART_KEYWORDS = [
+  ["ark_boat", ["noah", "flood", "two by two", "dove returns"]],
+  ["great_fish", ["great fish", "swallow", "whale", "belly"]],
+  ["lion_rest", ["lion", "den"]],
+  ["stone_tablets", ["tablet", "commandment", "sinai", "engrav"]],
+  ["stairway", ["stairway", "ladder", "bethel", "angels ascending"]],
+  ["city_walls", ["wall", "jericho", "gate", "rebuild", "brick", "tower"]],
+  ["throne_crown", ["throne", "palace", "queen", "king ", "scepter", "crowned", "royal"]],
+  ["altar_fire", ["altar", "sacrifice", "offering", "carmel"]],
+  ["well_water", ["well", "jar", "pitcher", "draw water"]],
+  ["fish_net", ["net", "fishermen", "catch", "boat"]],
+  ["bread_basket", ["bread", "loaves", "manna", "basket", "feast", "supper", "grain"]],
+  ["sower_field", ["sow", "seed", "field", "plant", "gleaning", "reap"]],
+  ["desert_tents", ["tent", "camp", "wilderness", "desert", "journey", "travel", "canaan"]],
   ["starry_sky", ["star", "night", "moon", "dream", "darkness", "asleep", "sleep"]],
-  ["rainbow", ["rainbow", "covenant", "ark", "flood", "dove returns"]],
+  ["rainbow", ["rainbow", "covenant", "never again", "promise"]],
   ["eagle_wings", ["eagle", "wings", "soar", "mountain", "hills"]],
   ["praise_harp", ["sing", "song", "praise", "harp", "tambourine", "music", "celebrate", "shout", "trumpet", "horn", "joy"]],
   ["shepherd", ["sheep", "shepherd", "flock", "lamb", "pasture"]],
@@ -786,28 +799,102 @@ const EVENT_ART_KEYWORDS = [
   ["creation", ["creates", "created", "creation", "earth", "sky", "heavens", "animals", "birds", "plants", "made"]],
 ];
 
-const ART_THEMES = EVENT_ART_KEYWORDS.map(([theme]) => theme);
+export const ART_THEMES = EVENT_ART_KEYWORDS.map(([theme]) => theme);
 
 // Artwork for every card of a story, keyed by step. Each card gets the motif
 // that best fits its own moment, and no two cards in a story share one — a row
 // of identical pictures is what made the timeline look plain.
-export function getStoryEventArts(story) {
-  const used = new Set();
-  const arts = {};
-
-  story.events.forEach((event) => {
-    const haystack = `${event.title} ${event.text}`.toLowerCase();
-    const matches = EVENT_ART_KEYWORDS.filter(([, words]) =>
-      words.some((word) => haystack.includes(word))
+function artsForStories(stories) {
+  const matchesFor = (source) => {
+    const haystack = source.toLowerCase();
+    // Matched at word starts: plain substrings put an ark in "darkness" and
+    // a lion's den in "garden"
+    return EVENT_ART_KEYWORDS.filter(([, words]) =>
+      words.some((word) => new RegExp(`\\b${word}`).test(haystack))
     ).map(([theme]) => theme);
+  };
 
-    const pick =
-      matches.find((theme) => !used.has(theme)) ||
-      [story.art, ...ART_THEMES].find((theme) => !used.has(theme));
-
-    used.add(pick);
-    arts[event.step] = pick;
+  const slots = stories.flatMap((story) => {
+    // A story's title names its scene — Jericho gets the walls, Jonah the
+    // great fish — so one of its cards holds that picture even if a
+    // neighbouring story would otherwise have spent it first. Titles that
+    // name nothing drawable fall back to the story's own art
+    const signature = matchesFor(story.title || "")[0] || story.art;
+    return story.events.map((event) => ({
+      story,
+      signature,
+      event,
+      matches: matchesFor(`${event.title} ${event.text}`),
+    }));
   });
 
-  return arts;
+  // Hand each scene to the card with the strongest claim on it, not to
+  // whichever story happens to come first: cards with the fewest options
+  // choose first, so the walls go to Jericho and the tablets to Sinai
+  const order = slots
+    .map((slot, index) => ({ slot, index }))
+    .sort((a, b) => {
+      const options = a.slot.matches.length - b.slot.matches.length;
+      if (options !== 0) return options;
+      // Then by how specific the best match is (the keyword table is ordered
+      // most specific first)
+      const specificity =
+        (ART_THEMES.indexOf(a.slot.matches[0]) + 1 || 999) -
+        (ART_THEMES.indexOf(b.slot.matches[0]) + 1 || 999);
+      if (specificity !== 0) return specificity;
+      return a.index - b.index;
+    });
+
+  // Every card ranks the whole palette and takes the best scene still going:
+  // one the words actually call for, never one already on this story, and
+  // preferring scenes the rest of the volume has not spent
+  const uses = new Map();
+  const perStory = new Map(stories.map((story) => [story.id, new Set()]));
+  const countOf = (theme) => uses.get(theme) || 0;
+  const rank = (slot, theme) => {
+    const matched = slot.matches.indexOf(theme);
+    const count = countOf(theme);
+    return (
+      // Never the same picture twice inside one story
+      (perStory.get(slot.story.id).has(theme) ? 1e6 : 0) +
+      // Never a third time inside one volume
+      (count >= 2 ? 1e5 : 0) +
+      // A scene the words call for, even one the volume has already shown,
+      // beats an unrelated scene; unrelated picks favour general backdrops
+      // (sky, hills, harvest) over pointed ones like a great fish
+      (matched === -1 ? 1e4 + ART_THEMES.length - ART_THEMES.indexOf(theme) : matched) +
+      count * 1e3 +
+      // The story's own title scene outranks a merely fresh alternative
+      (theme === slot.signature ? -700 : 0)
+    );
+  };
+
+  order.forEach(({ slot }) => {
+    slot.art = ART_THEMES.concat(slot.matches).reduce((best, theme) =>
+      rank(slot, theme) < rank(slot, best) ? theme : best
+    );
+    uses.set(slot.art, countOf(slot.art) + 1);
+    perStory.get(slot.story.id).add(slot.art);
+  });
+
+  const byStory = new Map();
+  stories.forEach((story) => byStory.set(story.id, {}));
+  slots.forEach(({ story, event, art }) => {
+    byStory.get(story.id)[event.step] = art;
+  });
+  return byStory;
+}
+
+const volumeArts = new Map();
+
+export function getStoryEventArts(story) {
+  if (!volumeArts.has(story.id)) {
+    const volume = VOLUMES.find((v) => v.storyIds.includes(story.id));
+    // A story outside the volumes (a test fixture) is allocated on its own
+    if (!volume) return artsForStories([story]).get(story.id);
+    artsForStories(volume.storyIds.map(getStoryById)).forEach((arts, id) =>
+      volumeArts.set(id, arts)
+    );
+  }
+  return volumeArts.get(story.id);
 }

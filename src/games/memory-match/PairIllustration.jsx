@@ -273,6 +273,190 @@ export function PairIllustration({ art = "creation" }) {
         </svg>
       );
 
+    case "ark_boat":
+      // A great wooden ark riding calm water under a clearing sky
+      return (
+        <svg className="mm-card-bg-ill" viewBox="0 0 272 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id={`ak-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#dcecf7"/><stop offset="1" stopColor="#f7e7c8"/></linearGradient></defs><rect width="272" height="120" fill={`url(#ak-${uid})`} />
+        <g fill="#ffffff" opacity="0.9"><ellipse cx="52" cy="18" rx="20" ry="7"/><ellipse cx="70" cy="14" rx="13" ry="5"/><ellipse cx="216" cy="22" rx="16" ry="6"/></g>
+        <rect x="0" y="84" width="272" height="36" fill="#9fc9e0"/>
+        <path d="M 0 84 Q 68 80 136 84 T 272 84 L 272 90 Q 204 94 136 90 T 0 90 Z" fill="#bcdcee"/>
+        <g><path d="M 68 56 L 204 56 L 190 84 L 82 84 Z" fill="#a9713f" stroke="#7d4f28" strokeWidth="2.5"/><rect x="92" y="34" width="88" height="22" rx="3" fill="#c9974f" stroke="#7d4f28" strokeWidth="2.5"/><path d="M 88 34 L 184 34 L 176 24 L 96 24 Z" fill="#8a5a3b"/><g fill="#5f3f22"><rect x="104" y="40" width="12" height="10" rx="1.5"/><rect x="130" y="40" width="12" height="10" rx="1.5"/><rect x="156" y="40" width="12" height="10" rx="1.5"/></g><g stroke="#7d4f28" strokeWidth="1.4" opacity="0.7"><line x1="76" y1="66" x2="196" y2="66"/><line x1="80" y1="75" x2="192" y2="75"/></g></g>
+        <g stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" opacity="0.85"><line x1="24" y1="98" x2="46" y2="98"/><line x1="220" y1="104" x2="242" y2="104"/></g>
+        </svg>
+      );
+
+    case "desert_tents":
+      // A camp of tents on golden sand beneath a wide evening sky
+      return (
+        <svg className="mm-card-bg-ill" viewBox="0 0 272 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id={`dt-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fde9c4"/><stop offset="1" stopColor="#f2c98d"/></linearGradient></defs><rect width="272" height="120" fill={`url(#dt-${uid})`} />
+        <circle cx="220" cy="26" r="14" fill="#ffdb70"/>
+        <g stroke="#e0b070" strokeWidth="1.6" fill="none" strokeLinecap="round" opacity="0.7"><path d="M 60 30 q 8 -6 16 0"/><path d="M 120 20 q 8 -6 16 0"/></g>
+        <path d="M 0 78 Q 70 66 140 76 T 272 72 L 272 120 L 0 120 Z" fill="#e5c184"/>
+        <path d="M 0 98 Q 90 88 180 96 T 272 94 L 272 120 L 0 120 Z" fill="#d3aa68"/>
+        <g><path d="M 44 96 L 74 52 L 104 96 Z" fill="#b9855a" stroke="#8a5f3a" strokeWidth="2"/><path d="M 64 96 L 74 74 L 84 96 Z" fill="#6f472a"/><line x1="74" y1="52" x2="74" y2="44" stroke="#8a5f3a" strokeWidth="2"/></g>
+        <g><path d="M 138 98 L 162 62 L 186 98 Z" fill="#c9a06b" stroke="#8a5f3a" strokeWidth="2"/><path d="M 154 98 L 162 80 L 170 98 Z" fill="#7d5636"/></g>
+        <g><path d="M 200 100 L 218 72 L 236 100 Z" fill="#b9855a" stroke="#8a5f3a" strokeWidth="2"/></g>
+        <g stroke="#8a6b3a" strokeWidth="1.6" strokeLinecap="round" opacity="0.8"><path d="M 22 108 l 0 -8 M 18 104 l 4 -4 M 26 104 l -4 -4"/></g>
+        </svg>
+      );
+
+    case "well_water":
+      // A stone well with a full water jar in the cool of the day
+      return (
+        <svg className="mm-card-bg-ill" viewBox="0 0 272 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id={`wl-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#dfeef2"/><stop offset="1" stopColor="#f7ecd2"/></linearGradient></defs><rect width="272" height="120" fill={`url(#wl-${uid})`} />
+        <g fill="#ffffff" opacity="0.85"><ellipse cx="60" cy="18" rx="18" ry="6"/><ellipse cx="200" cy="24" rx="14" ry="5"/></g>
+        <path d="M 0 88 Q 80 78 160 86 T 272 84 L 272 120 L 0 120 Z" fill="#c8d9a8"/>
+        <g><rect x="104" y="66" width="64" height="34" rx="4" fill="#cbbba0" stroke="#a1917a" strokeWidth="2.5"/><ellipse cx="136" cy="66" rx="32" ry="8" fill="#8ab4c9" stroke="#a1917a" strokeWidth="2.5"/><g stroke="#a1917a" strokeWidth="1.5"><line x1="104" y1="78" x2="168" y2="78"/><line x1="120" y1="66" x2="120" y2="100"/><line x1="152" y1="66" x2="152" y2="100"/></g><path d="M 108 60 L 108 34 L 164 34 L 164 60" fill="none" stroke="#8a5f3a" strokeWidth="3"/><line x1="136" y1="34" x2="136" y2="54" stroke="#7d6a52" strokeWidth="1.6"/><rect x="128" y="54" width="16" height="12" rx="2" fill="#a9713f" stroke="#7d4f28" strokeWidth="1.5"/></g>
+        <g><path d="M 200 88 q -8 0 -8 10 q 0 12 12 12 q 12 0 12 -12 q 0 -10 -8 -10 Z" fill="#c9974f" stroke="#8a5f3a" strokeWidth="1.8"/><rect x="198" y="80" width="12" height="8" rx="2" fill="#a9713f" stroke="#8a5f3a" strokeWidth="1.5"/></g>
+        <g stroke="#5f9c52" strokeWidth="1.6" strokeLinecap="round"><path d="M 44 106 l 0 -8 M 40 106 l -3 -6 M 48 106 l 3 -6"/></g>
+        </svg>
+      );
+
+    case "fish_net":
+      // A fishing boat and a net heavy with silver fish
+      return (
+        <svg className="mm-card-bg-ill" viewBox="0 0 272 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id={`fn-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#dceef7"/><stop offset="1" stopColor="#fdf0d5"/></linearGradient></defs><rect width="272" height="120" fill={`url(#fn-${uid})`} />
+        <circle cx="44" cy="22" r="12" fill="#ffe8a0" opacity="0.9"/>
+        <g fill="#ffffff" opacity="0.85"><ellipse cx="180" cy="16" rx="17" ry="6"/><ellipse cx="196" cy="12" rx="11" ry="4"/></g>
+        <rect x="0" y="76" width="272" height="44" fill="#8fc0dc"/>
+        <path d="M 0 76 Q 68 72 136 76 T 272 76 L 272 82 Q 204 86 136 82 T 0 82 Z" fill="#b3d7ea"/>
+        <g><path d="M 84 66 L 196 66 L 178 88 L 102 88 Z" fill="#a9713f" stroke="#7d4f28" strokeWidth="2.5"/><line x1="140" y1="66" x2="140" y2="30" stroke="#7d4f28" strokeWidth="3"/><path d="M 144 32 L 176 58 L 144 60 Z" fill="#fdfaf1" stroke="#c9bba4" strokeWidth="1.6"/></g>
+        <g stroke="#e8e3d5" strokeWidth="1.3" opacity="0.9"><path d="M 40 88 l 40 24 M 60 84 l 30 28 M 20 96 l 44 18"/><path d="M 22 106 l 56 -14 M 30 114 l 52 -16"/></g>
+        <g fill="#cfe3ef" stroke="#8fb8d4" strokeWidth="1.2"><ellipse cx="46" cy="100" rx="9" ry="5"/><ellipse cx="66" cy="108" rx="8" ry="4.5"/></g>
+        <g fill="#8fb8d4"><path d="M 55 100 l 6 -4 l 0 8 Z"/><path d="M 74 108 l 6 -3.5 l 0 7 Z"/></g>
+        </svg>
+      );
+
+    case "bread_basket":
+      // A basket of fresh loaves on a cloth, still warm
+      return (
+        <svg className="mm-card-bg-ill" viewBox="0 0 272 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id={`bb-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fdeed0"/><stop offset="1" stopColor="#f6dcb0"/></linearGradient></defs><rect width="272" height="120" fill={`url(#bb-${uid})`} />
+        <g stroke="#e0b070" strokeWidth="1.6" fill="none" strokeLinecap="round" opacity="0.6"><path d="M 60 24 q 8 -6 16 0"/><path d="M 196 20 q 8 -6 16 0"/></g>
+        <rect x="0" y="92" width="272" height="28" fill="#c9a06b"/>
+        <path d="M 40 92 Q 136 78 232 92 Z" fill="#efe3c8"/>
+        <g><path d="M 96 66 L 176 66 L 166 96 L 106 96 Z" fill="#c9974f" stroke="#a3773a" strokeWidth="2.2"/><g stroke="#a3773a" strokeWidth="1.3" opacity="0.8"><line x1="100" y1="76" x2="172" y2="76"/><line x1="102" y1="86" x2="170" y2="86"/><line x1="120" y1="66" x2="116" y2="96"/><line x1="152" y1="66" x2="156" y2="96"/></g></g>
+        <g fill="#e2b169" stroke="#b8832f" strokeWidth="1.8"><ellipse cx="118" cy="62" rx="20" ry="12"/><ellipse cx="154" cy="62" rx="20" ry="12"/><ellipse cx="136" cy="52" rx="20" ry="12"/></g>
+        <g stroke="#b8832f" strokeWidth="1.4" strokeLinecap="round"><path d="M 128 50 l 16 0 M 126 55 l 20 0"/></g>
+        <g fill="#e7c78d"><circle cx="66" cy="100" r="4"/><circle cx="212" cy="102" r="3.4"/></g>
+        </svg>
+      );
+
+    case "throne_crown":
+      // A palace hall with a golden throne beneath tall pillars
+      return (
+        <svg className="mm-card-bg-ill" viewBox="0 0 272 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id={`tc-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#f6e3c4"/><stop offset="1" stopColor="#eccfa2"/></linearGradient></defs><rect width="272" height="120" fill={`url(#tc-${uid})`} />
+        <g fill="#e0c79c"><rect x="18" y="18" width="20" height="86" rx="3"/><rect x="234" y="18" width="20" height="86" rx="3"/><rect x="12" y="12" width="32" height="9" rx="2"/><rect x="228" y="12" width="32" height="9" rx="2"/></g>
+        <rect x="0" y="96" width="272" height="24" fill="#c9a06b"/>
+        <g stroke="#b08d57" strokeWidth="1.4"><line x1="0" y1="104" x2="272" y2="104"/><line x1="60" y1="96" x2="60" y2="120"/><line x1="140" y1="96" x2="140" y2="120"/><line x1="212" y1="96" x2="212" y2="120"/></g>
+        <path d="M 92 96 L 180 96 L 172 86 L 100 86 Z" fill="#9b2226" opacity="0.85"/>
+        <g><rect x="110" y="46" width="52" height="50" rx="4" fill="#c9974f" stroke="#8a5f2a" strokeWidth="2.5"/><rect x="104" y="70" width="64" height="10" rx="3" fill="#e2b169" stroke="#8a5f2a" strokeWidth="2"/><path d="M 110 46 q 26 -16 52 0 Z" fill="#e2b169" stroke="#8a5f2a" strokeWidth="2"/></g>
+        <g transform="translate(118,14)"><polygon points="0,20 6,6 13,15 18,3 24,15 31,6 36,20" fill="#ffd166" stroke="#d49b10" strokeWidth="1.8"/><rect x="0" y="19" width="36" height="6" rx="2" fill="#ffd166" stroke="#d49b10" strokeWidth="1.8"/><circle cx="18" cy="8" r="2" fill="#e63946"/></g>
+        </svg>
+      );
+
+    case "sower_field":
+      // Furrowed earth with seed scattered across the rows
+      return (
+        <svg className="mm-card-bg-ill" viewBox="0 0 272 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id={`sf-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fdeec9"/><stop offset="1" stopColor="#eef4d4"/></linearGradient></defs><rect width="272" height="120" fill={`url(#sf-${uid})`} />
+        <circle cx="228" cy="20" r="13" fill="#ffdb70"/>
+        <g fill="#ffffff" opacity="0.85"><ellipse cx="56" cy="18" rx="17" ry="6"/><ellipse cx="72" cy="14" rx="11" ry="4"/></g>
+        <path d="M 0 62 Q 70 52 140 60 T 272 56 L 272 120 L 0 120 Z" fill="#c6b06a"/>
+        <g stroke="#a68d4c" strokeWidth="2" opacity="0.8"><path d="M -10 78 Q 90 70 282 76"/><path d="M -10 92 Q 90 84 282 90"/><path d="M -10 106 Q 90 98 282 104"/><path d="M -10 118 Q 90 110 282 116"/></g>
+        <g fill="#8a6b3a"><circle cx="46" cy="74" r="2.4"/><circle cx="92" cy="88" r="2.4"/><circle cx="150" cy="80" r="2.4"/><circle cx="196" cy="96" r="2.4"/><circle cx="238" cy="86" r="2.4"/><circle cx="120" cy="104" r="2.4"/><circle cx="70" cy="110" r="2.4"/></g>
+        <g stroke="#5f9c52" strokeWidth="2" strokeLinecap="round"><path d="M 176 74 q -2 -10 2 -14"/><path d="M 178 62 q 6 -4 8 -9 q -8 0 -9 7 Z" fill="#7fbd72" stroke="none"/></g>
+        </svg>
+      );
+
+    case "stone_tablets":
+      // Two stone tablets on the mountain in cloud and light
+      return (
+        <svg className="mm-card-bg-ill" viewBox="0 0 272 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id={`st-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#e6dcf0"/><stop offset="0.6" stopColor="#f2d9b8"/><stop offset="1" stopColor="#f7e7c8"/></linearGradient></defs><rect width="272" height="120" fill={`url(#st-${uid})`} />
+        <g stroke="#ffd166" strokeWidth="2" strokeLinecap="round" opacity="0.7"><line x1="136" y1="6" x2="136" y2="22"/><line x1="106" y1="12" x2="116" y2="26"/><line x1="166" y1="12" x2="156" y2="26"/></g>
+        <g fill="#ffffff" opacity="0.9"><ellipse cx="60" cy="40" rx="26" ry="9"/><ellipse cx="212" cy="36" rx="24" ry="9"/><ellipse cx="88" cy="46" rx="18" ry="7"/></g>
+        <path d="M 0 96 L 60 56 L 110 96 Z" fill="#a1917a"/>
+        <path d="M 150 96 L 216 48 L 272 96 Z" fill="#8d7f6c"/>
+        <rect x="0" y="94" width="272" height="26" fill="#7d6f5e"/>
+        <g transform="translate(104,44)"><path d="M 0 12 q 0 -12 14 -12 q 14 0 14 12 L 28 52 L 0 52 Z" fill="#efe7d8" stroke="#b3a894" strokeWidth="2"/><path d="M 34 12 q 0 -12 14 -12 q 14 0 14 12 L 62 52 L 34 52 Z" fill="#efe7d8" stroke="#b3a894" strokeWidth="2"/><g stroke="#9b8f79" strokeWidth="1.6" strokeLinecap="round"><line x1="7" y1="20" x2="21" y2="20"/><line x1="7" y1="28" x2="21" y2="28"/><line x1="7" y1="36" x2="18" y2="36"/><line x1="41" y1="20" x2="55" y2="20"/><line x1="41" y1="28" x2="55" y2="28"/><line x1="41" y1="36" x2="52" y2="36"/></g></g>
+        </svg>
+      );
+
+    case "altar_fire":
+      // A stone altar with a bright flame rising into the evening
+      return (
+        <svg className="mm-card-bg-ill" viewBox="0 0 272 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id={`af-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#6b5a90"/><stop offset="0.7" stopColor="#c08a72"/><stop offset="1" stopColor="#eda76a"/></linearGradient></defs><rect width="272" height="120" fill={`url(#af-${uid})`} />
+        <g fill="#fff3d9" opacity="0.9"><circle cx="40" cy="16" r="1.8"/><circle cx="98" cy="10" r="1.4"/><circle cx="230" cy="14" r="1.7"/></g>
+        <path d="M 0 96 Q 80 86 160 94 T 272 92 L 272 120 L 0 120 Z" fill="#5e4a3c"/>
+        <g><rect x="98" y="70" width="76" height="28" rx="3" fill="#a1917a" stroke="#7d6f5e" strokeWidth="2.2"/><g stroke="#7d6f5e" strokeWidth="1.5"><line x1="98" y1="84" x2="174" y2="84"/><line x1="122" y1="70" x2="122" y2="98"/><line x1="150" y1="70" x2="150" y2="98"/></g><rect x="92" y="62" width="88" height="10" rx="2" fill="#b3a894" stroke="#7d6f5e" strokeWidth="2"/></g>
+        <g><path d="M 136 20 q 18 20 12 34 q -3 8 -12 8 q -9 0 -12 -8 q -6 -14 12 -34 Z" fill="#f4a259"/><path d="M 136 34 q 10 12 6 22 q -2 5 -6 5 q -4 0 -6 -5 q -4 -10 6 -22 Z" fill="#ffd166"/></g>
+        <g fill="#ffd97a" opacity="0.9"><circle cx="112" cy="46" r="1.6"/><circle cx="162" cy="40" r="1.4"/><circle cx="150" cy="28" r="1.2"/></g>
+        </svg>
+      );
+
+    case "city_walls":
+      // High brick walls and a gate, banners on the towers
+      return (
+        <svg className="mm-card-bg-ill" viewBox="0 0 272 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id={`cw-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fdeecd"/><stop offset="1" stopColor="#f5d9a8"/></linearGradient></defs><rect width="272" height="120" fill={`url(#cw-${uid})`} />
+        <circle cx="42" cy="20" r="12" fill="#ffe08a"/>
+        <g fill="#ffffff" opacity="0.8"><ellipse cx="190" cy="18" rx="16" ry="6"/></g>
+        <rect x="0" y="58" width="272" height="62" fill="#cbbba0"/>
+        <g fill="#b3a894"><rect x="16" y="40" width="34" height="20"/><rect x="112" y="34" width="42" height="26"/><rect x="220" y="42" width="34" height="18"/></g>
+        <g fill="#cbbba0"><rect x="16" y="32" width="9" height="10"/><rect x="30" y="32" width="9" height="10"/><rect x="44" y="32" width="6" height="10"/><rect x="112" y="26" width="10" height="10"/><rect x="128" y="26" width="10" height="10"/><rect x="144" y="26" width="10" height="10"/><rect x="220" y="34" width="10" height="10"/><rect x="236" y="34" width="10" height="10"/></g>
+        <g stroke="#a1917a" strokeWidth="1.4" opacity="0.85"><line x1="0" y1="72" x2="272" y2="72"/><line x1="0" y1="86" x2="272" y2="86"/><line x1="0" y1="100" x2="272" y2="100"/><line x1="34" y1="58" x2="34" y2="72"/><line x1="86" y1="58" x2="86" y2="72"/><line x1="188" y1="58" x2="188" y2="72"/><line x1="240" y1="58" x2="240" y2="72"/><line x1="60" y1="72" x2="60" y2="86"/><line x1="212" y1="72" x2="212" y2="86"/><line x1="112" y1="86" x2="112" y2="100"/><line x1="164" y1="86" x2="164" y2="100"/></g>
+        <path d="M 118 120 L 118 96 q 15 -14 30 0 L 148 120 Z" fill="#7d4f28"/>
+        <g><line x1="133" y1="26" x2="133" y2="10" stroke="#8a5f2a" strokeWidth="2"/><path d="M 133 10 L 152 15 L 133 20 Z" fill="#d94f30"/></g>
+        </svg>
+      );
+
+    case "stairway":
+      // A stairway of light climbing from the earth into the sky
+      return (
+        <svg className="mm-card-bg-ill" viewBox="0 0 272 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id={`sw-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#4a3a68"/><stop offset="0.55" stopColor="#8a6bb0"/><stop offset="1" stopColor="#e8a76c"/></linearGradient></defs><rect width="272" height="120" fill={`url(#sw-${uid})`} />
+        <g fill="#fff8e7"><circle cx="34" cy="18" r="2"/><circle cx="86" cy="30" r="1.5"/><circle cx="196" cy="16" r="2.2"/><circle cx="240" cy="34" r="1.5"/></g>
+        <g opacity="0.9"><path d="M 96 118 L 122 118 L 176 12 L 158 12 Z" fill="#ffe9a3" opacity="0.35"/></g>
+        <g stroke="#ffdf7e" strokeWidth="4" strokeLinecap="round"><line x1="104" y1="112" x2="130" y2="112"/><line x1="110" y1="98" x2="136" y2="98"/><line x1="116" y1="84" x2="142" y2="84"/><line x1="122" y1="70" x2="148" y2="70"/><line x1="128" y1="56" x2="154" y2="56"/><line x1="134" y1="42" x2="160" y2="42"/><line x1="140" y1="28" x2="166" y2="28"/><line x1="146" y1="16" x2="172" y2="16"/></g>
+        <path d="M 0 104 Q 80 94 160 102 T 272 100 L 272 120 L 0 120 Z" fill="#3a2d52"/>
+        <g fill="#2e2342"><ellipse cx="60" cy="108" rx="14" ry="6"/><ellipse cx="214" cy="110" rx="12" ry="5"/></g>
+        </svg>
+      );
+
+    case "lion_rest":
+      // A great lion resting peacefully in a quiet den
+      return (
+        <svg className="mm-card-bg-ill" viewBox="0 0 272 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id={`lr-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#6b5a90"/><stop offset="0.75" stopColor="#b98a6e"/><stop offset="1" stopColor="#e8b87a"/></linearGradient></defs><rect width="272" height="120" fill={`url(#lr-${uid})`} />
+        <g fill="#fff3d9" opacity="0.85"><circle cx="46" cy="18" r="1.8"/><circle cx="222" cy="14" r="1.6"/></g>
+        <path d="M 0 34 L 60 34 L 44 0 L 0 0 Z" fill="#4a3a2e" opacity="0.55"/>
+        <path d="M 272 30 L 212 30 L 228 0 L 272 0 Z" fill="#4a3a2e" opacity="0.55"/>
+        <path d="M 0 92 Q 80 82 160 90 T 272 88 L 272 120 L 0 120 Z" fill="#8a6b4a"/>
+        <g transform="translate(96,52)"><ellipse cx="44" cy="42" rx="46" ry="18" fill="#c9974f"/><circle cx="26" cy="26" r="22" fill="#e2b169"/><circle cx="26" cy="26" r="15" fill="#f0cd94"/><g fill="#c9974f"><circle cx="26" cy="4" r="5"/><circle cx="8" cy="10" r="5"/><circle cx="44" cy="10" r="5"/><circle cx="4" cy="26" r="5"/><circle cx="48" cy="26" r="5"/><circle cx="10" cy="42" r="5"/><circle cx="42" cy="42" r="5"/></g><path d="M 20 26 q 6 -3 12 0" stroke="#8a5f2a" strokeWidth="2" fill="none" strokeLinecap="round"/><path d="M 22 32 q 4 4 8 0" stroke="#8a5f2a" strokeWidth="2" fill="none" strokeLinecap="round"/><ellipse cx="26" cy="30" rx="3" ry="2" fill="#8a5f2a"/><path d="M 86 40 q 12 -6 10 -18" stroke="#c9974f" strokeWidth="5" fill="none" strokeLinecap="round"/></g>
+        <g stroke="#7d5636" strokeWidth="1.6" strokeLinecap="round" opacity="0.8"><path d="M 34 108 l 0 -7 M 30 108 l -3 -5"/></g>
+        </svg>
+      );
+
+    case "great_fish":
+      // A great fish breaching a dark sea under parting clouds
+      return (
+        <svg className="mm-card-bg-ill" viewBox="0 0 272 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id={`gf-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#5b6f90"/><stop offset="0.7" stopColor="#8aa8c0"/><stop offset="1" stopColor="#dbe7ef"/></linearGradient></defs><rect width="272" height="120" fill={`url(#gf-${uid})`} />
+        <g fill="#e9eef4" opacity="0.85"><ellipse cx="60" cy="20" rx="24" ry="8"/><ellipse cx="84" cy="14" rx="16" ry="6"/><ellipse cx="214" cy="24" rx="20" ry="7"/></g>
+        <rect x="0" y="72" width="272" height="48" fill="#3f6a8a"/>
+        <path d="M 0 72 Q 68 66 136 72 T 272 72 L 272 80 Q 204 86 136 80 T 0 80 Z" fill="#5a89a8"/>
+        <g transform="translate(70,40)"><path d="M 20 44 q 30 -34 76 -12 q 22 10 26 26 q -30 16 -66 10 q -28 -6 -36 -24 Z" fill="#4a6f8c" stroke="#2f4f68" strokeWidth="2.5"/><path d="M 118 34 q 16 -12 22 -4 q -4 12 -6 22 q -10 -8 -16 -18 Z" fill="#3f6a8a" stroke="#2f4f68" strokeWidth="2.2"/><path d="M 56 16 q 8 -14 18 -6 q -4 8 -8 14 Z" fill="#3f6a8a" stroke="#2f4f68" strokeWidth="2"/><circle cx="42" cy="34" r="4" fill="#fdfaf1"/><circle cx="43" cy="34" r="2" fill="#2b2621"/><path d="M 24 44 q 16 6 34 4" stroke="#2f4f68" strokeWidth="1.6" fill="none"/></g>
+        <g stroke="#cfe3ef" strokeWidth="2" strokeLinecap="round" opacity="0.9"><path d="M 46 84 q 8 -6 16 0"/><path d="M 210 92 q 8 -6 16 0"/></g>
+        </svg>
+      );
+
     case "starry_sky":
     default:
       // Warm twilight: amber horizon, crescent, cypress silhouettes, fireflies

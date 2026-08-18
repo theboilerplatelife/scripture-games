@@ -2,6 +2,7 @@ import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { MemoryBoard } from "../../src/games/memory-match/MemoryBoard.jsx";
 import { buildDeck, MODES, DECKS, starsForMisses } from "../../src/games/memory-match/matchData.js";
+import { ART_THEMES } from "../../src/games/story-sequencer/storyData.js";
 
 const deckObj = DECKS[0];
 const HALVES = 2; // Torn Verses: 4 pairs / 8 cards
@@ -217,25 +218,7 @@ describe("MemoryBoard", () => {
 
   test("PairIllustration renders each content-unique art theme cleanly", async () => {
     const { PairIllustration } = await import("../../src/games/memory-match/PairIllustration.jsx");
-    const themes = [
-      "shepherd",
-      "lamp",
-      "creation",
-      "dove_peace",
-      "armor_shield",
-      "praise_harp",
-      "love_heart",
-      "wisdom_scroll",
-      "light_city",
-      "rainbow",
-      "fruit_vine",
-      "calm_waters",
-      "eagle_wings",
-      "gospel_world",
-      "hope_heaven",
-      "starry_sky",
-      "fallback_theme",
-    ];
+    const themes = ART_THEMES.concat(["fallback_theme"]);
 
     themes.forEach((art) => {
       const { container, unmount } = render(<PairIllustration art={art} />);

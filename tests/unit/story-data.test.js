@@ -1,4 +1,6 @@
 import { describe, test, expect, vi } from "vitest";
+import fs from "node:fs";
+import path from "node:path";
 import {
   VOLUMES,
   STORIES,
@@ -9,6 +11,8 @@ import {
   shuffleEvents,
   evaluateOrder,
   getStoryEventArts,
+  ART_THEMES,
+  VOLUMES as ART_VOLUMES,
 } from "../../src/games/story-sequencer/storyData.js";
 import * as randomUtils from "../../src/utils/random.js";
 
@@ -138,5 +142,33 @@ describe("Story Sequencer data & helper functions", () => {
     expect(starsForHints(1)).toBe(2);
     expect(starsForHints(2)).toBe(1);
     expect(starsForHints(9)).toBe(1);
+  });
+
+  test("every artwork theme is actually drawn, and volumes do not repeat scenes", () => {
+    // A theme with no drawing silently falls back to the night sky
+    const illustrations = fs.readFileSync(
+      path.resolve(__dirname, "../../src/games/memory-match/PairIllustration.jsx"),
+      "utf8"
+    );
+    ART_THEMES.forEach((theme) => {
+      expect(illustrations.includes(`case "${theme}"`), `no drawing for "${theme}"`).toBe(true);
+    });
+
+    // A shelf of stories showing the same picture is what made the timeline
+    // look repetitive: never twice inside one story, at most twice per volume
+    ART_VOLUMES.forEach((volume) => {
+      const arts = volume.storyIds.flatMap((id) => {
+        const own = Object.values(getStoryEventArts(STORIES.find((s) => s.id === id)));
+        expect(new Set(own).size, `story ${id} repeats a scene on its own cards`).toBe(own.length);
+        return own;
+      });
+      const counts = {};
+      arts.forEach((art) => {
+        counts[art] = (counts[art] || 0) + 1;
+      });
+      Object.entries(counts).forEach(([art, count]) => {
+        expect(count, `volume ${volume.id} shows "${art}" ${count} times`).toBeLessThanOrEqual(2);
+      });
+    });
   });
 });
