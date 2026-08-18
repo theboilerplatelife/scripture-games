@@ -12,10 +12,10 @@ export const VOLUME_2 = {
   "7-1": (uid) => (
     <>
       <Sky id={`a${uid}`} top={C.daySky} bottom={C.dawn} />
-      <Ridge y={96} sway={8} fill={C.sand} />
-      <path d="M 30 96 L 30 30" stroke={C.earth} strokeWidth="4" strokeLinecap="round" />
-      <path d="M 30 34 q 100 10 212 -2" stroke={C.earthDeep} strokeWidth="2" fill="none" />
-      <g transform="translate(96,34)">
+      <Ridge y={110} sway={8} fill={C.sand} />
+      <path d="M 30 110 L 30 44" stroke={C.earth} strokeWidth="4" strokeLinecap="round" />
+      <path d="M 30 48 q 100 10 212 -2" stroke={C.earthDeep} strokeWidth="2" fill="none" />
+      <g transform="translate(96,52)">
         <path d="M 0 0 L 76 0 L 68 52 L 8 52 Z" fill={C.crimson} />
         <path d="M 4 0 L 12 0 L 10 52 L 8 52 Z" fill={C.gold} />
         <path d="M 20 0 L 30 0 L 28 52 L 20 52 Z" fill={C.leaf} />
@@ -303,12 +303,12 @@ export const VOLUME_2 = {
   "9-5": (uid) => (
     <>
       <Sky id={`a${uid}`} top={C.deepNight} bottom={C.dusk} />
-      <Glow id={`b${uid}`} x={136} y={30} r={110} color={C.flameBright} />
+      <Glow id={`b${uid}`} x={136} y={72} r={120} color={C.flameBright} />
       <g stroke={C.dawn} strokeWidth="3" strokeLinecap="round" opacity="0.55">
-        <path d="M 136 30 L 40 4" /><path d="M 136 30 L 96 -8" /><path d="M 136 30 L 176 -8" />
-        <path d="M 136 30 L 232 4" /><path d="M 136 30 L 20 40" /><path d="M 136 30 L 252 40" />
+        <path d="M 136 72 L 30 30" /><path d="M 136 72 L 100 8" /><path d="M 136 72 L 172 8" />
+        <path d="M 136 72 L 242 30" /><path d="M 136 72 L 16 88" /><path d="M 136 72 L 256 88" />
       </g>
-      <circle cx="136" cy="30" r="18" fill={C.star} opacity="0.9" />
+      <circle cx="136" cy="72" r="20" fill={C.star} opacity="0.9" />
       <Peaks points="L 46 96 L 100 62 L 152 100 L 206 68 L 272 104" fill={C.night} />
       <Peaks points="L 70 116 L 130 96 L 190 118 L 272 110" fill={C.deepNight} />
     </>

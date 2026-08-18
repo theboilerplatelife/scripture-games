@@ -183,9 +183,9 @@ export const VOLUME_5 = {
         <ellipse cx="188" cy="10" rx="42" ry="12" />
       </g>
       <g stroke={C.dawn} strokeWidth="2.4" strokeLinecap="round" opacity="0.55">
-        <path d="M 110 22 L 96 96" /><path d="M 136 24 L 136 96" /><path d="M 162 22 L 176 96" />
+        <path d="M 110 22 L 100 78" /><path d="M 136 24 L 136 76" /><path d="M 162 22 L 172 78" />
       </g>
-      <Dove x={116} y={26} scale={1.1} flip={1} />
+      <Dove x={116} y={86} scale={1.1} flip={1} />
       <Water y={100} fill={C.water} />
       <g stroke={C.foam} strokeWidth="2" fill="none" opacity="0.7" strokeLinecap="round">
         <path d="M 60 110 q 12 -6 24 0" /><path d="M 190 112 q 12 -6 24 0" />

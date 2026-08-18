@@ -224,10 +224,10 @@ export const VOLUME_6 = {
   "33-2": (uid) => (
     <>
       <Sky id={`a${uid}`} top={C.dawn} bottom={C.noon} />
-      <Glow id={`b${uid}`} x={136} y={16} r={116} color={C.flameBright} />
+      <Glow id={`b${uid}`} x={136} y={58} r={124} color={C.flameBright} />
       <g stroke={C.gold} strokeWidth="3" strokeLinecap="round" opacity="0.55">
-        <path d="M 136 16 L 20 40" /><path d="M 136 16 L 62 4" /><path d="M 136 16 L 210 4" />
-        <path d="M 136 16 L 252 40" /><path d="M 136 16 L 96 96" /><path d="M 136 16 L 176 96" />
+        <path d="M 136 58 L 16 46" /><path d="M 136 58 L 56 8" /><path d="M 136 58 L 216 8" />
+        <path d="M 136 58 L 256 46" /><path d="M 136 58 L 76 116" /><path d="M 136 58 L 196 116" />
       </g>
       <Peaks points="L 60 98 L 136 60 L 212 100 L 272 112" fill={C.stoneShade} />
       <Ridge y={112} sway={4} fill={C.grass} />

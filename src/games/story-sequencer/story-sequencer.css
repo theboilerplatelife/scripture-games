@@ -344,11 +344,13 @@
   100% { background: rgba(201, 138, 27, 0.18); }
 }
 
-/* Picture band across the top of the card — never behind the words */
+/* Picture band across the top of the card — never behind the words.
+   Tall enough that the bottom-anchored scene shows its subject and not
+   just the ground line */
 .ss-card-art {
   display: block;
   position: relative;
-  height: 56px;
+  height: 104px;
   margin: 0 -16px 10px;
   overflow: hidden;
   border-bottom: 1px solid var(--sand);
@@ -583,7 +585,7 @@
 .ss-reader-step-art {
   display: block;
   position: relative;
-  height: 74px;
+  height: 96px;
   overflow: hidden;
   flex-shrink: 0;
   border-bottom: 1px solid var(--sand);

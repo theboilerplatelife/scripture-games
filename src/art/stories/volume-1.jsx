@@ -142,15 +142,15 @@ export const VOLUME_1 = {
       <Glow id={`b${uid}`} x={136} y={40} r={78} color={C.dawn} />
       <Ridge y={96} sway={10} fill={C.grass} />
       <Ridge y={112} sway={6} fill={C.grassDeep} />
-      <path d="M 272 40 q -60 -6 -104 4" stroke={C.earth} strokeWidth="5" fill="none" strokeLinecap="round" />
+      <path d="M 272 104 q -60 -6 -104 4" stroke={C.earth} strokeWidth="5" fill="none" strokeLinecap="round" />
       <g fill={C.leaf}>
-        <path d="M 214 38 q -10 -8 -18 -2 q 8 6 18 2 Z" />
-        <path d="M 240 36 q 10 -8 18 -2 q -8 7 -18 2 Z" />
+        <path d="M 214 102 q -10 -8 -18 -2 q 8 6 18 2 Z" />
+        <path d="M 240 100 q 10 -8 18 -2 q -8 7 -18 2 Z" />
       </g>
-      <Dove x={150} y={20} scale={0.7} flip={1} />
-      <Dove x={228} y={16} scale={0.7} flip={-1} />
+      <Dove x={150} y={96} scale={0.7} flip={1} />
+      <Dove x={228} y={92} scale={0.7} flip={-1} />
       <g fill={C.crimson} opacity="0.8">
-        <path d="M 190 8 q 5 -6 10 0 q 5 -6 10 0 q 0 8 -10 12 q -10 -4 -10 -12 Z" />
+        <path d="M 190 84 q 5 -6 10 0 q 5 -6 10 0 q 0 8 -10 12 q -10 -4 -10 -12 Z" />
       </g>
       <Bloom x={54} y={104} r={2.8} petal={C.cloud} heart={C.gold} />
       <Bloom x={86} y={112} r={2.4} petal={C.blossom} heart={C.gold} />
@@ -244,7 +244,7 @@ export const VOLUME_1 = {
       </g>
       <Rain seed={5} count={26} color={C.foam} />
       <Waves y={80} fill={C.darkWater} crest={C.foam} />
-      <Ark x={132} y={80} scale={0.85} />
+      <Ark x={132} y={112} scale={0.8} />
       <path d="M 236 76 l 12 -18 l 14 18 Z" fill={C.stoneDeep} opacity="0.85" />
     </>
   ),
@@ -254,12 +254,12 @@ export const VOLUME_1 = {
       <Glow id={`b${uid}`} x={54} y={24} r={46} color={C.dawn} />
       <Water y={88} fill={C.deepWater} />
       <g opacity="0.55">
-        <Ark x={228} y={88} scale={0.5} />
+        <Ark x={236} y={96} scale={0.42} />
       </g>
-      <Dove x={96} y={22} scale={1.15} flip={1} />
+      <Dove x={96} y={92} scale={1.15} flip={1} />
       <g fill={C.leaf}>
-        <path d="M 86 32 q -14 -6 -24 0 q 12 7 24 0 Z" />
-        <path d="M 74 32 l 0 8" stroke={C.leaf} strokeWidth="2" />
+        <path d="M 86 102 q -14 -6 -24 0 q 12 7 24 0 Z" />
+        <path d="M 74 102 l 0 8" stroke={C.leaf} strokeWidth="2" />
       </g>
       <Birds x={196} y={22} scale={0.8} color={C.stoneShade} />
     </>
@@ -423,9 +423,9 @@ export const VOLUME_1 = {
   "5-3": (uid) => (
     <>
       <Sky id={`a${uid}`} top={C.ember} bottom={C.dawn} />
-      <Glow id={`b${uid}`} x={136} y={44} r={76} color={C.gold} />
+      <Glow id={`b${uid}`} x={136} y={86} r={80} color={C.gold} />
       <Ridge y={100} sway={8} fill={C.sandDeep} />
-      <g transform="translate(136,44)">
+      <g transform="translate(136,84)">
         <path d="M 0 -34 L 30 -22 L 30 8 Q 30 30 0 42 Q -30 30 -30 8 L -30 -22 Z" fill={C.bronze} />
         <path d="M 0 -28 L 24 -18 L 24 6 Q 24 24 0 34 Q -24 24 -24 6 L -24 -18 Z" fill={C.gold} />
         <path d="M 0 -18 L 0 24 M -16 2 L 16 2" stroke={C.bronze} strokeWidth="4" strokeLinecap="round" />

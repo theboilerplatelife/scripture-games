@@ -43,6 +43,7 @@ npm run test:a11y      # Browser accessibility gate (Playwright + axe, real Chro
 | Storage & privacy | `tests/constitution/storage-architecture.test.js` | Article 2 (only the 5 keys, no external URLs) |
 | Audio | `tests/constitution/audio-offline.test.js` | Article 3 (no audio files, default volumes) |
 | Design system | `tests/constitution/design-system.test.js` | Article 4 (tokens, no cross-stylesheet duplicates, **no undefined classNames**, **no raw hex colors**, no synthetic bold, 13px floor, WCAG contrast) |
+| Card artwork | `tests/unit/card-scenes.test.jsx` | Every one of the 300 cards has a scene of its own, no two scenes are the same drawing, no scene is orphaned, every staging piece draws |
 | Accessibility (jsdom) | `tests/constitution/a11y.test.jsx` | Article 4.3 — axe over every screen **and every interactive state**, plus contrast measured on the rendered DOM (ancestors and alpha composited). Meta-gates fail if a game module or a design-system state is never audited |
 | Accessibility (browser) | `tests/browser/a11y.spec.js`, run by `npm run test:a11y` | Article 4.3 in real Chromium at desktop and tablet sizes, with axe's own colour-contrast rule enabled — it sees opacity, filters and compositing that jsdom cannot. Runs as its own CI job (needs a browser download), not part of `npm run check` |
 
@@ -54,6 +55,7 @@ npm run test:a11y      # Browser accessibility gate (Playwright + axe, real Chro
 * **Build Tool**: Vite 6
 * **Styling**: Vanilla CSS with torn-paper clip paths and responsive layout. The palette is defined once as CSS custom properties in the `:root` block of `globalCss` (`src/App.jsx`) — always use `var(--token)` for shared colors, and never define the same class in two stylesheets (see CONSTITUTION.md Article 4)
 * **Audio Engine**: Pure procedural Web Audio synthesizer (`SoundEngine.js`) — zero external MP3s or network dependencies
+* **Card artwork**: every card in the app carries its own hand-drawn SVG scene — no image files. `src/art/staging.jsx` holds the shared palette and the pieces scenes are built from; `src/art/scenes.js` is the registry, keyed `"{storyId}-{step}"` for Story Sequencer cards and by verse reference for Memory Match; `src/art/CardScene.jsx` renders one. Both games hide the middle of a card (Memory Match tapes its caption across it, Story Sequencer crops to a bottom-anchored band), so **a scene's subject belongs below y=80**. `node scripts/contact-sheet.mjs` renders every scene onto one page, and `... "" band` renders them as the Sequencer crops them
 * **Testing & Gates**: Vitest 4 + `@vitest/coverage-v8` + ESLint 9
 
 ---

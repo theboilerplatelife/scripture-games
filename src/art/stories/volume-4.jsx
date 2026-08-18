@@ -117,7 +117,7 @@ export const VOLUME_4 = {
         <rect x="6" y="70" width="26" height="7" rx="2" /><rect x="56" y="70" width="26" height="7" rx="2" />
         <rect x="190" y="70" width="26" height="7" rx="2" /><rect x="240" y="70" width="26" height="7" rx="2" />
       </g>
-      <g transform="translate(136,22)">
+      <g transform="translate(136,80)">
         <path d="M -30 18 L -30 -4 L -18 8 L -6 -14 L 6 8 L 18 -4 L 18 18 Z" fill={C.gold} transform="translate(6,0)" />
         <g fill={C.crimson}>
           <circle cx="-6" cy="12" r="2.8" /><circle cx="10" cy="12" r="2.8" /><circle cx="24" cy="12" r="2.8" />

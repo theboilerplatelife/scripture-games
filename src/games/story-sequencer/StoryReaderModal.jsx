@@ -54,7 +54,7 @@ export function StoryReaderModal({ story, onClose }) {
               <div className="ss-reader-step-content">
                 {/* Banner above the words, never behind them */}
                 <span className="ss-reader-step-art" aria-hidden="true">
-                  <CardScene scene={`${story.id}-${ev.step}`} />
+                  <CardScene scene={`${story.id}-${ev.step}`} anchor="bottom" />
                 </span>
                 <div className="ss-reader-text-wrapper">
                   <h3 className="ss-reader-step-title">{ev.title}</h3>

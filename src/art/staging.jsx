@@ -6,11 +6,13 @@
    still read as one book. Everything distinctive about a scene is
    drawn in the scene itself.
 
-   The frame is the card's real 272x120. Cards print their words on
-   a taped strip across the middle, which covers roughly y=43 to y=77
-   — anything drawn in that band is invisible in the game. Keep the
-   subject above y=40 or below y=80, or make it tall enough to cross
-   the strip and read at both ends.
+   The frame is the card's real 272x120, and both games hide the middle
+   of it: Memory Match tapes its caption across y=43..77, and Story
+   Sequencer crops to a shallow band anchored at the bottom. So the
+   subject of a scene belongs below y=80, where both games show it.
+   Sky business — stars, glory, a rainbow — reads in Memory Match and is
+   cropped away in the Sequencer, which is fine for atmosphere but not
+   for the thing the card is about.
 
    No depictions of Jesus, per Constitution Article 1.2: scenes are
    scenery, animals, and objects.
@@ -66,14 +68,19 @@ export const C = {
   blossom: "#e88bb1",
 };
 
-/* The card frame. Scenes are drawn edge to edge and cropped by the
-   card's torn clip path, so the artwork always fills its paper. */
-export function Frame({ children }) {
+/* The card frame. Scenes are drawn edge to edge and cropped to whatever
+   shape the card gives them.
+
+   Memory Match shows the whole scene behind a caption, so it crops from
+   the centre. Story Sequencer shows a shallow band above the words and
+   would otherwise crop to the empty middle, so it anchors to the bottom
+   — which is where the subject of every scene sits. */
+export function Frame({ anchor, children }) {
   return (
     <svg
       className="mm-card-bg-ill"
       viewBox="0 0 272 120"
-      preserveAspectRatio="xMidYMid slice"
+      preserveAspectRatio={anchor === "bottom" ? "xMidYMax slice" : "xMidYMid slice"}
       aria-hidden="true"
     >
       {children}
