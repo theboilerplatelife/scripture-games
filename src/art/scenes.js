@@ -5,7 +5,9 @@
    back to the shared themed artwork in PairIllustration; once every
    card has its own scene that fallback goes away. */
 import { VOLUME_1 } from "./stories/volume-1.jsx";
+import { VOLUME_2 } from "./stories/volume-2.jsx";
 
 export const SCENES = {
   ...VOLUME_1,
+  ...VOLUME_2,
 };
