@@ -7,6 +7,7 @@ export function StoryWinCard({
   story,
   earnedStars,
   attempts,
+  hintsUsed = 0,
   onPlayAgain,
   onReadStory,
   onNextStory,
@@ -29,7 +30,8 @@ export function StoryWinCard({
         <div className="vb-win-icon" aria-hidden="true">{story.icon}</div>
         <h2 className="vb-win-title">{getCheer()}</h2>
         <p className="vb-win-sub">
-          You sequenced <strong>{story.title}</strong> in {attempts} {attempts === 1 ? "try" : "tries"}!
+          You sequenced <strong>{story.title}</strong> in {attempts} {attempts === 1 ? "try" : "tries"}
+          {hintsUsed > 0 ? ` with ${hintsUsed} ${hintsUsed === 1 ? "hint" : "hints"}` : ""}!
         </p>
 
         <div className="vb-win-stars">

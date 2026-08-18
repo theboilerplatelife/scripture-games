@@ -47,13 +47,13 @@ export function StorySequencer({
     setScreen("play");
   }
 
-  function handleCompleteStory(earnedStars, attempts) {
+  function handleCompleteStory(earnedStars, attempts, hintsUsed) {
     const key = `ss-${storyId}`;
     const prev = stars[key] || 0;
     if (earnedStars > prev && onSaveStars) {
       onSaveStars(key, earnedStars);
     }
-    setWinState({ earnedStars, attempts, story: currentStory });
+    setWinState({ earnedStars, attempts, hintsUsed, story: currentStory });
   }
 
   function handlePlayAgain() {
@@ -110,6 +110,7 @@ export function StorySequencer({
           story={winState.story}
           earnedStars={winState.earnedStars}
           attempts={winState.attempts}
+          hintsUsed={winState.hintsUsed}
           hasNextStory={hasNextStory}
           onPlayAgain={handlePlayAgain}
           onReadStory={() => setReaderStory(winState.story)}

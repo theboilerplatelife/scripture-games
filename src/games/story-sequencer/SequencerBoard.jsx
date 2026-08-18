@@ -19,6 +19,10 @@ export function SequencerBoard({
   const [attempts, setAttempts] = useState(0);
   const [lastCheck, setLastCheck] = useState(null); // { results, correctCount, isComplete, total }
   const [hintActive, setHintActive] = useState(false);
+  // A hint names the exact swap to make, so it counts against the score the
+  // same way another try does — otherwise three stars can be had without
+  // reading the story at all
+  const [hintsUsed, setHintsUsed] = useState(0);
   const lockRef = useRef(false);
   // Where the page was scrolled when a swap started, so the view can be put
   // back before the browser paints the new order
@@ -107,8 +111,8 @@ export function SequencerBoard({
       lockRef.current = true;
       audio.playChapterFanfare();
       setTimeout(() => {
-        const earnedStars = starsForAttempts(newAttempts);
-        onComplete(earnedStars, newAttempts, events);
+        const earnedStars = starsForAttempts(newAttempts + hintsUsed);
+        onComplete(earnedStars, newAttempts, hintsUsed);
       }, 750);
     } else {
       audio.playWrongAnswer();
@@ -127,6 +131,7 @@ export function SequencerBoard({
     // player would otherwise read the hint with nothing marked in view
     const idx = events.findIndex((ev, i) => ev.step !== i + 1);
     if (idx !== -1) {
+      setHintsUsed((used) => used + 1);
       slotRefs.current[idx]?.scrollIntoView?.({ block: "center" });
     }
   }
@@ -165,8 +170,8 @@ export function SequencerBoard({
           <button
             className="ss-hint-btn"
             onClick={handleShowHint}
-            aria-label="Get a hint"
-            title="Hint: Show which card goes where"
+            aria-label="Get a hint (counts like a try)"
+            title="Hint: shows which card goes where — counts like another try"
           >
             💡 Hint
           </button>
@@ -207,7 +212,7 @@ export function SequencerBoard({
               }}
               className={`ss-timeline-slot ${isCorrect ? "correct" : ""} ${isIncorrect ? "incorrect" : ""} ${
                 isSelected ? "holding" : ""
-              } ${i === hintToIdx ? "hint-target" : ""}`}
+              } ${i === hintFromIdx ? "hint-from" : ""} ${i === hintToIdx ? "hint-target" : ""}`}
             >
               <div className="ss-slot-badge">
                 <span className="ss-slot-num">Step {i + 1}</span>

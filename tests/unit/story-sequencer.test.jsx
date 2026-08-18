@@ -1,5 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
 import { StorySequencer } from "../../src/games/story-sequencer/StorySequencer.jsx";
 
 // Cards are tapped, never dragged
@@ -91,7 +91,7 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     expect(onBackToStories).toHaveBeenCalled();
 
     // Hint button
-    fireEvent.click(screen.getByLabelText("Get a hint"));
+    fireEvent.click(screen.getByLabelText(/Get a hint/));
     expect(screen.getByText(/belongs in Step/i)).toBeTruthy();
 
     // Tap-to-select and tap-to-swap
@@ -194,15 +194,17 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
       <SequencerBoard story={story} seed={3} onBackToStories={vi.fn()} onComplete={vi.fn()} />
     );
 
-    // The hinted card is usually off screen, so it is scrolled into view
+    // The screen snaps to the first step the hint names, and that step is the
+    // one highlighted
     const scrollIntoView = vi.fn();
     container.querySelectorAll(".ss-timeline-slot").forEach((slot) => {
       slot.scrollIntoView = scrollIntoView;
     });
 
-    fireEvent.click(screen.getByLabelText("Get a hint"));
+    fireEvent.click(screen.getByLabelText(/Get a hint/));
     expect(screen.getByText(/belongs in Step/i)).toBeTruthy();
     expect(scrollIntoView).toHaveBeenCalledWith({ block: "center" });
+    expect(container.querySelectorAll(".ss-timeline-slot.hint-from").length).toBe(1);
     // Exactly one card is called out, with the step it belongs in marked
     expect(container.querySelectorAll(".ss-event-card.hint-glow").length).toBe(1);
     expect(container.querySelectorAll(".ss-timeline-slot.hint-target").length).toBe(1);
@@ -220,9 +222,65 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
       }
     }
 
-    fireEvent.click(screen.getByLabelText("Get a hint"));
+    fireEvent.click(screen.getByLabelText(/Get a hint/));
     expect(screen.getByText(/already in order/i)).toBeTruthy();
     expect(container.querySelectorAll(".ss-event-card.hint-glow").length).toBe(0);
+  });
+
+  test("the win card owns up to how many hints were used", () => {
+    const props = {
+      story: STORIES[0],
+      earnedStars: 2,
+      onPlayAgain: vi.fn(),
+      onReadStory: vi.fn(),
+      onNextStory: vi.fn(),
+      onBackToStories: vi.fn(),
+      hasNextStory: true,
+    };
+    const one = render(<StoryWinCard {...props} attempts={1} hintsUsed={1} />);
+    expect(screen.getByText(/with 1 hint/)).toBeTruthy();
+    one.unmount();
+
+    const many = render(<StoryWinCard {...props} attempts={2} hintsUsed={3} />);
+    expect(screen.getByText(/with 3 hints/)).toBeTruthy();
+    many.unmount();
+
+    const none = render(<StoryWinCard {...props} attempts={2} hintsUsed={0} />);
+    expect(screen.queryByText(/hint/)).toBeNull();
+    none.unmount();
+  });
+
+  test("hints count against the score, so they cannot buy three stars", () => {
+    const story = STORIES[0];
+    const onComplete = vi.fn();
+    const { container } = render(
+      <SequencerBoard story={story} seed={3} onBackToStories={vi.fn()} onComplete={onComplete} />
+    );
+
+    // Lean on the hint three times before solving
+    for (let n = 0; n < 3; n++) {
+      fireEvent.click(screen.getByLabelText(/Get a hint/));
+    }
+
+    for (let i = 0; i < story.events.length; i++) {
+      const cards = container.querySelectorAll(".ss-event-card");
+      let foundIdx = -1;
+      cards.forEach((c, idx) => {
+        if (c.textContent.includes(story.events[i].title)) foundIdx = idx;
+      });
+      if (foundIdx !== -1 && foundIdx !== i) {
+        tapCard(cards[i]);
+        tapCard(container.querySelectorAll(".ss-event-card")[foundIdx]);
+      }
+    }
+
+    vi.useFakeTimers();
+    fireEvent.click(screen.getByRole("button", { name: "Check timeline order" }));
+    act(() => vi.advanceTimersByTime(1000));
+    vi.useRealTimers();
+
+    // One check plus three hints scores as four tries, not one
+    expect(onComplete).toHaveBeenCalledWith(2, 1, 3);
   });
 
   test("a swap leaves the page scrolled exactly where it was", () => {
