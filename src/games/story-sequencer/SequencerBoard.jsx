@@ -244,7 +244,7 @@ export function SequencerBoard({
               >
                 <span className="vb-tape vb-tape-top" />
                 <span className="ss-card-art" aria-hidden="true">
-                  <PairIllustration art={eventArts[ev.step]} />
+                  <PairIllustration scene={`${story.id}-${ev.step}`} art={eventArts[ev.step]} />
                 </span>
                 <div className="ss-card-content">
                   {/* No verse reference here — chapter/verse numbers would

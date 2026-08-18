@@ -6,11 +6,19 @@
    Jesus per Constitution Article 1.2 — animals, objects, scenery.
    ============================================================ */
 import { useId } from "react";
+import { SCENES } from "../../art/scenes.js";
+import { Frame } from "../../art/staging.jsx";
 
-export function PairIllustration({ art = "creation" }) {
+export function PairIllustration({ art = "creation", scene }) {
   // Both cards of a pair render the same scene, so gradient IDs must be
-  // unique per component instance to keep the DOM valid
-  const uid = useId();
+  // unique per component instance to keep the DOM valid. React's id is
+  // punctuated, which a url(#...) reference cannot carry.
+  const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
+
+  // A card with its own hand-drawn scene uses it; the themed artwork
+  // below covers whatever has not been drawn yet
+  const drawn = SCENES[scene];
+  if (drawn) return <Frame>{drawn(uid)}</Frame>;
 
   switch (art) {
     case "shepherd":
