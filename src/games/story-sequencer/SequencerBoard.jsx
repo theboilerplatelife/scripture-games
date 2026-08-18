@@ -112,6 +112,10 @@ export function SequencerBoard({
       }, 750);
     } else {
       audio.playWrongAnswer();
+      // The Check button sits below the board while the result lands on the
+      // cards above it, so show the player the first card to fix
+      const firstWrong = check.results.findIndex((placed) => !placed);
+      slotRefs.current[firstWrong]?.scrollIntoView?.({ block: "center" });
     }
   }
 

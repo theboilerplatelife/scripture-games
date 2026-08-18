@@ -140,9 +140,15 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     // Selection clears once the swap happens
     expect(document.querySelectorAll(".ss-event-card.selected").length).toBe(0);
 
-    // Check Order with incorrect sequence
+    // Check Order with incorrect sequence: the result lands on the cards above
+    // the button, so the first card to fix is brought into view
+    const checkScroll = vi.fn();
+    container.querySelectorAll(".ss-timeline-slot").forEach((slot) => {
+      slot.scrollIntoView = checkScroll;
+    });
     fireEvent.click(screen.getByRole("button", { name: "Check timeline order" }));
     expect(screen.getByText(/in correct order! Keep going!/i)).toBeTruthy();
+    expect(checkScroll).toHaveBeenCalledWith({ block: "center" });
 
     // Drop anything still held from the interactions above, so the solve
     // loop starts from a clean slate
