@@ -292,7 +292,6 @@
     drop-shadow(3px -3px 0 var(--highlighter))
     drop-shadow(-3px -3px 0 var(--highlighter))
     drop-shadow(0 10px 14px rgba(0, 0, 0, 0.3));
-  animation: ssHold 1.6s ease-in-out infinite;
 }
 
 /* The slot holding the picked-up card is ringed in highlighter, and raised so
@@ -304,11 +303,6 @@
   outline-offset: -2px;
   box-shadow: 0 0 0 5px rgba(255, 226, 92, 0.4);
   z-index: 10;
-}
-
-@keyframes ssHold {
-  0%, 100% { transform: rotate(0deg) scale(1.05) translateY(-6px); }
-  50% { transform: rotate(0deg) scale(1.06) translateY(-9px); }
 }
 
 /* The hinted card: box-shadow and border are both invisible on a clip-path
@@ -653,9 +647,6 @@
   .ss-event-card,
   .ss-timeline-slot {
     transition: none !important;
-  }
-  .ss-event-card.selected {
-    animation: none;
   }
   .ss-timeline-slot.incorrect .ss-event-card {
     animation: none;
