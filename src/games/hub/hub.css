@@ -143,7 +143,7 @@
 }
 
 .hub-game-badge {
-  background: var(--leaf);
+  background: var(--leaf-deep);
   color: var(--paper);
   font-family: 'Schoolbell', cursive;
   font-size: 13px;

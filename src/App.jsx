@@ -306,7 +306,7 @@ const globalCss = `
 
   /* Interface surfaces */
   --forest: #2b593f;         /* listen-button text */
-  --gold-deep: #a06f0f;      /* perfect stamp */
+  --gold-deep: #6d5312;      /* small text on amber washes */
   --kraft-2: #b08d57;        /* ghost button */
   --kraft-2-hover: #be9b65;
   --sand-2: #beb6a6;         /* disabled borders */
@@ -644,7 +644,7 @@ body {
   border: 1px solid var(--sand);
   border-radius: 20px;
   cursor: pointer;
-  background: var(--leaf);
+  background: var(--leaf-deep);
   color: var(--paper);
   transition: all 0.15s ease;
 }
@@ -702,7 +702,7 @@ body {
   cursor: not-allowed;
   background: var(--paper-disabled);
   border-color: var(--sand-2);
-  color: var(--ink-disabled);
+  color: var(--ink-muted);
   transform: none !important;
   box-shadow: none !important;
 }

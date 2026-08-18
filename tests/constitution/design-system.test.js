@@ -148,6 +148,111 @@ describe("Constitution Gate: Design System (Article 4)", () => {
     });
   });
 
+  test("Article 4.3: every colour pair a stylesheet declares meets WCAG AA", () => {
+    // Checking a hand-written list of pairs missed real failures (a hint
+    // button sat at 2:1). This reads the rules themselves instead.
+    const appCode = fs.readFileSync(path.join(ROOT, "src/App.jsx"), "utf8");
+    const tokens = {};
+    for (const m of appCode.matchAll(/(--[\w-]+):\s*(#[0-9a-fA-F]{6})/g)) tokens[m[1]] = m[2];
+
+    const toRgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    const luminance = (rgb) => {
+      const [r, g, b] = rgb.map((v) => {
+        const c = v / 255;
+        return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    const ratio = (a, b) => {
+      const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+      return (hi + 0.05) / (lo + 0.05);
+    };
+    const over = (rgba, ground) =>
+      rgba.slice(0, 3).map((v, i) => Math.round(v * rgba[3] + ground[i] * (1 - rgba[3])));
+
+    // Translucent fills are washes over the cardstock a control sits on
+    const PAPER = toRgb(tokens["--paper"]);
+
+    const resolve = (value) => {
+      if (!value) return null;
+      const varMatch = value.match(/var\((--[\w-]+)/);
+      const raw = varMatch ? tokens[varMatch[1]] : value.trim();
+      if (!raw) return null;
+      if (/^#[0-9a-fA-F]{6}$/.test(raw)) return { rgb: toRgb(raw), alpha: 1 };
+      const rgba = raw.match(/rgba?\(([^)]+)\)/);
+      if (rgba) {
+        const parts = rgba[1].split(",").map((n) => parseFloat(n));
+        return { rgb: parts.slice(0, 3), alpha: parts.length > 3 ? parts[3] : 1 };
+      }
+      return null;
+    };
+
+    const failures = [];
+    cssSources().forEach(({ name, css }) => {
+      for (const rule of css.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
+        const selector = rule[1].trim();
+        const body = rule[2];
+        if (selector.startsWith("@") || selector.includes("%")) continue;
+
+        const fg = resolve((body.match(/(?:^|[;{\s])color:\s*([^;]+)/) || [])[1]);
+        const bgRaw = (body.match(/background(?:-color)?:\s*([^;]+)/) || [])[1];
+        const bg = resolve(bgRaw);
+        if (!fg || !bg || fg.alpha < 1) continue;
+        // Gradients and images cannot be reduced to one colour
+        if (bgRaw && /gradient|url\(/.test(bgRaw)) continue;
+
+        const size = parseFloat((body.match(/font-size:\s*(\d+(?:\.\d+)?)px/) || [])[1] || "14");
+        const required = size >= 18 ? 3 : 4.5;
+
+        const solid = bg.alpha < 1 ? over([...bg.rgb, bg.alpha], PAPER) : bg.rgb;
+        const contrast = ratio(fg.rgb, solid);
+        if (contrast < required) {
+          failures.push(`${name} ${selector} — ${contrast.toFixed(2)}:1, needs ${required}:1`);
+        }
+      }
+    });
+
+    expect(failures).toEqual([]);
+  });
+
+  test("Article 4.3: clipped children of scrolling flex columns cannot be squashed", () => {
+    // A flex item with overflow != visible resolves min-height to 0, so a
+    // scrolling flex column shrinks its children instead of scrolling and
+    // silently clips their content (this hid the storybook text entirely).
+    cssSources().forEach(({ name, css }) => {
+      const rules = [...css.matchAll(/\.([\w-]+)\s*\{([^}]*)\}/g)].map((m) => ({
+        cls: m[1],
+        body: m[2],
+      }));
+      const scrollingColumns = rules.filter(
+        (r) =>
+          /overflow(-y)?:\s*(auto|scroll)/.test(r.body) &&
+          /display:\s*flex/.test(r.body) &&
+          /flex-direction:\s*column/.test(r.body)
+      );
+
+      scrollingColumns.forEach((col) => {
+        // Children of the container are named with its class as a prefix
+        const kids = rules.filter(
+          (r) => r.cls !== col.cls && r.cls.startsWith(col.cls.replace(/-body$/, "")) && /overflow:\s*hidden/.test(r.body)
+        );
+        kids.forEach((kid) => {
+          expect(
+            /flex-shrink:\s*0/.test(kid.body) || /flex:\s*(none|0 0)/.test(kid.body),
+            `${name}: .${kid.cls} clips its overflow inside the scrolling flex column .${col.cls}, so it needs flex-shrink: 0 or its content will be squashed away`
+          ).toBe(true);
+        });
+      });
+    });
+  });
+
+  test("Article 4.5: no synthetic bold on the single-weight handwriting faces", () => {
+    cssSources().forEach(({ name, css }) => {
+      const badWeights = css.match(/font-weight:\s*(bold|[6-9]00)/g) || [];
+      expect(badWeights, `${name} requests a font weight the bundled fonts cannot render`).toEqual([]);
+    });
+  });
+
   test("Article 4.3: text color pairs meet WCAG contrast ratios", () => {
     const appCode = fs.readFileSync(path.join(ROOT, "src/App.jsx"), "utf8");
     const tokens = {};

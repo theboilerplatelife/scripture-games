@@ -5,7 +5,7 @@ import { MODES, buildDeck, starsForMisses } from "./matchData.js";
 import { PairIllustration } from "./PairIllustration.jsx";
 
 // Each found pair gets its own sticker color, cycling in match order
-const PAIR_COLORS = ["#d94f30", "#3e7cb1", "#5c8a3a", "#c98a1b", "#7b2cbf"];
+const PAIR_COLORS = ["#a33520", "#2f6394", "#46702c", "#6d5312", "#5b2196"];
 
 // Kid-friendly card-face tags so players know what they're pairing
 // (halves mode needs none — both faces are verse pieces)

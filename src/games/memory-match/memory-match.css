@@ -304,7 +304,7 @@
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: var(--leaf);
+  background: var(--leaf-deep);
   color: var(--paper);
   font-family: 'Schoolbell', cursive;
   font-size: 15px;

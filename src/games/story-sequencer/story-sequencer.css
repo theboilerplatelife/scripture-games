@@ -59,7 +59,7 @@
 .ss-story-ref {
   font-family: 'Patrick Hand', cursive;
   font-size: 15px;
-  color: var(--vermilion);
+  color: var(--vermilion-deep);
   background: rgba(217, 79, 48, 0.1);
   padding: 3px 10px;
   border-radius: 999px;
@@ -110,9 +110,9 @@
 }
 
 .ss-hint-btn {
-  background: rgba(244, 162, 97, 0.18);
-  color: var(--amber-deep);
-  border: 1.5px solid rgba(244, 162, 97, 0.6);
+  background: var(--paper);
+  color: var(--ink-soft);
+  border: 2px solid var(--amber);
   border-radius: 999px;
   padding: 6px 14px;
   font-size: 14px;
@@ -121,7 +121,7 @@
 }
 
 .ss-hint-btn:hover {
-  background: var(--amber);
+  background: var(--amber-deep);
   color: var(--paper-bright);
   transform: translateY(-1px);
 }
@@ -140,7 +140,7 @@
 
 .ss-check-banner {
   background: var(--amber-tint);
-  color: var(--amber-deep);
+  color: var(--gold-deep);
   border: 1.5px solid var(--amber);
   padding: 8px 16px;
   border-radius: 8px;
@@ -230,7 +230,7 @@
 }
 
 .ss-slot-cross {
-  background: var(--vermilion);
+  background: var(--vermilion-deep);
   color: var(--paper-bright);
   font-size: 15px;
   width: 22px;
@@ -242,7 +242,7 @@
 }
 
 .ss-slot-check {
-  background: var(--leaf);
+  background: var(--leaf-deep);
   color: var(--paper-bright);
   font-size: 15px;
   width: 22px;
