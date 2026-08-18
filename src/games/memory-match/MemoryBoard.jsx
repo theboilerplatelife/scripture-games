@@ -162,7 +162,7 @@ export function MemoryBoard({
                 <span className="mm-card-front">
                   {/* Both cards of a pair carry the same full scene; the text
                       sits on a taped paper caption strip in the calm mid-band */}
-                  <PairIllustration art={card.art} />
+                  <PairIllustration scene={card.ref} art={card.art} />
                   <span className="mm-card-caption">
                     <span className="mm-caption-tape" aria-hidden="true" />
                     {tag && (

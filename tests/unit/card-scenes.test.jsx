@@ -3,6 +3,7 @@ import { render } from "@testing-library/react";
 import { SCENES } from "../../src/art/scenes.js";
 import { PairIllustration } from "../../src/games/memory-match/PairIllustration.jsx";
 import { STORIES } from "../../src/games/story-sequencer/storyData.js";
+import { CHAPTERS } from "../../src/data/chapters.js";
 import * as Staging from "../../src/art/staging.jsx";
 
 /* Every card in the app carries its own hand-drawn scene. These checks
@@ -42,14 +43,13 @@ describe("hand-drawn card scenes", () => {
   test("every drawn scene belongs to a card that exists", () => {
     // An orphan key is a drawing nobody will ever see — usually a typo
     // in a story id or a verse reference
-    const storyKeys = new Set(
-      STORIES.flatMap((story) => story.events.map((event) => `${story.id}-${event.step}`))
-    );
-    Object.keys(SCENES)
-      .filter((key) => /^\d+-\d+$/.test(key))
-      .forEach((key) => {
-        expect(storyKeys.has(key), `scene "${key}" has no story card`).toBe(true);
-      });
+    const cardKeys = new Set([
+      ...STORIES.flatMap((story) => story.events.map((event) => `${story.id}-${event.step}`)),
+      ...CHAPTERS.flatMap((chapter) => chapter.verses.map((verse) => verse.ref)),
+    ]);
+    Object.keys(SCENES).forEach((key) => {
+      expect(cardKeys.has(key), `scene "${key}" has no card`).toBe(true);
+    });
   });
 
   test("every staging piece draws something on its own", () => {
