@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { TRANSLATIONS } from "../../data/translations.js";
+import { useScrollLock } from "./useScrollLock.js";
 import { audio, DEFAULT_BGM_VOL, DEFAULT_SFX_VOL } from "../../audio/SoundEngine.js";
 
 export function SettingsModal({
@@ -15,6 +16,8 @@ export function SettingsModal({
   onChangeSfxVol,
   onResetProgress,
 }) {
+  useScrollLock(isOpen);
+
   // Keyboard users close with Escape (backdrop click stays as a
   // pointer-only convenience)
   useEffect(() => {

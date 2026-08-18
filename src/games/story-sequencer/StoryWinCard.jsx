@@ -1,6 +1,7 @@
 import { Confetti } from "../../components/common/Confetti.jsx";
 import { Star } from "../../components/common/Star.jsx";
 import { audio } from "../../audio/SoundEngine.js";
+import { useScrollLock } from "../../components/common/useScrollLock.js";
 
 export function StoryWinCard({
   story,
@@ -12,6 +13,8 @@ export function StoryWinCard({
   onBackToStories,
   hasNextStory,
 }) {
+  useScrollLock();
+
   const getCheer = () => {
     if (earnedStars === 3) return "Brilliant Timeline Mastery!";
     if (earnedStars === 2) return "Great Story Ordering!";

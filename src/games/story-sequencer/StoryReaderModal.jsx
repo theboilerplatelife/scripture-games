@@ -2,9 +2,11 @@ import { useEffect } from "react";
 import { audio } from "../../audio/SoundEngine.js";
 import { PairIllustration } from "../memory-match/PairIllustration.jsx";
 import { getStoryEventArts } from "./storyData.js";
+import { useScrollLock } from "../../components/common/useScrollLock.js";
 
 export function StoryReaderModal({ story, onClose }) {
   const eventArts = getStoryEventArts(story);
+  useScrollLock();
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key === "Escape") onClose();
