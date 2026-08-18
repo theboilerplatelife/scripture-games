@@ -13,6 +13,7 @@ export function StoryWinCard({
   onNextStory,
   onBackToStories,
   hasNextStory,
+  completesVolume = false,
 }) {
   useScrollLock();
 
@@ -66,7 +67,17 @@ export function StoryWinCard({
               Play Again 🔄
             </button>
 
-            {hasNextStory ? (
+            {completesVolume ? (
+              <button
+                className="vb-btn"
+                onClick={() => {
+                  audio.playButtonClick();
+                  onNextStory();
+                }}
+              >
+                Complete Volume 🎉
+              </button>
+            ) : hasNextStory ? (
               <button
                 className="vb-btn"
                 onClick={() => {

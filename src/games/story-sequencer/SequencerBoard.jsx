@@ -108,7 +108,8 @@ export function SequencerBoard({
 
     if (check.isComplete) {
       lockRef.current = true;
-      audio.playChapterFanfare();
+      // One story is one unit of play — the fanfare belongs to a whole volume
+      audio.playLightApplause();
       setTimeout(() => {
         const earnedStars = Math.min(starsForAttempts(newAttempts), starsForHints(hintsUsed));
         onComplete(earnedStars, newAttempts, hintsUsed);

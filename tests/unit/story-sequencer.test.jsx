@@ -252,6 +252,119 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     none.unmount();
   });
 
+  test("finishing a volume celebrates, and the last volume ends the game", () => {
+    // Five of the six stories in volume 1 are already done
+    const nearlyDone = { "ss-1": 3, "ss-2": 3, "ss-3": 3, "ss-4": 3, "ss-5": 3 };
+    const { unmount } = render(
+      <StorySequencer
+        stars={nearlyDone}
+        onSaveStars={vi.fn()}
+        onBackToHub={vi.fn()}
+        onOpenSettings={vi.fn()}
+        initialSeed={1}
+      />
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /Foundations/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Play story 6/ }));
+
+    const story = STORIES[5];
+    const solve = () => {
+      for (let i = 0; i < story.events.length; i++) {
+        const cards = document.querySelectorAll(".ss-event-card");
+        let foundIdx = -1;
+        cards.forEach((c, idx) => {
+          if (c.textContent.includes(story.events[i].title)) foundIdx = idx;
+        });
+        if (foundIdx !== -1 && foundIdx !== i) {
+          tapCard(cards[i]);
+          tapCard(document.querySelectorAll(".ss-event-card")[foundIdx]);
+        }
+      }
+    };
+    solve();
+
+    vi.useFakeTimers();
+    fireEvent.click(screen.getByRole("button", { name: "Check timeline order" }));
+    act(() => vi.advanceTimersByTime(1000));
+    vi.useRealTimers();
+
+    // The win card offers the volume finish rather than another story
+    fireEvent.click(screen.getByText("Complete Volume 🎉"));
+    expect(screen.getByText(/Complete!/)).toBeTruthy();
+    fireEvent.click(screen.getByText("Next Volume →"));
+    expect(screen.getByRole("button", { name: /Play story 7/ })).toBeTruthy();
+    unmount();
+  });
+
+  test("the last volume ends the game, and replays in a finished volume return to the list", () => {
+    const solveCurrent = (story) => {
+      for (let i = 0; i < story.events.length; i++) {
+        const cards = document.querySelectorAll(".ss-event-card");
+        let foundIdx = -1;
+        cards.forEach((c, idx) => {
+          if (c.textContent.includes(story.events[i].title)) foundIdx = idx;
+        });
+        if (foundIdx !== -1 && foundIdx !== i) {
+          tapCard(cards[i]);
+          tapCard(document.querySelectorAll(".ss-event-card")[foundIdx]);
+        }
+      }
+      vi.useFakeTimers();
+      fireEvent.click(screen.getByRole("button", { name: "Check timeline order" }));
+      act(() => vi.advanceTimersByTime(1000));
+      vi.useRealTimers();
+    };
+
+    // Everything done but the very last story
+    const almostAll = Object.fromEntries(
+      STORIES.slice(0, STORIES.length - 1).map((s) => [`ss-${s.id}`, 3])
+    );
+    const onBackToHubFinale = vi.fn();
+    const finale = render(
+      <StorySequencer
+        stars={almostAll}
+        onSaveStars={vi.fn()}
+        onBackToHub={onBackToHubFinale}
+        onOpenSettings={vi.fn()}
+        initialSeed={1}
+      />
+    );
+    fireEvent.click(screen.getByRole("button", { name: /Resurrection/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Play story 36/ }));
+    solveCurrent(STORIES[35]);
+
+    fireEvent.click(screen.getByText("Complete Volume 🎉"));
+    expect(screen.getByText("You Ordered Every Story!")).toBeTruthy();
+    // The game is over — there is no next volume
+    expect(screen.queryByText("Next Volume →")).toBeNull();
+    // The hub button on the finale card leaves the game and stops its music
+    fireEvent.click(screen.getByText("Game Hub 🏠"));
+    expect(onBackToHubFinale).toHaveBeenCalled();
+
+    fireEvent.click(screen.getByText("Story Volumes"));
+    expect(screen.getByRole("button", { name: /Foundations/ })).toBeTruthy();
+    finale.unmount();
+
+    // Replaying a story in a volume that is already finished hands back the list
+    const done = render(
+      <StorySequencer
+        stars={Object.fromEntries(STORIES.map((s) => [`ss-${s.id}`, 3]))}
+        onSaveStars={vi.fn()}
+        onBackToHub={vi.fn()}
+        onOpenSettings={vi.fn()}
+        initialSeed={1}
+      />
+    );
+    fireEvent.click(screen.getByRole("button", { name: /Foundations/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Play story 1/ }));
+    solveCurrent(STORIES[0]);
+    expect(screen.queryByText("Complete Volume 🎉")).toBeNull();
+    fireEvent.click(screen.getByText(/Next Story|Back to Stories/));
+    expect(screen.getByRole("button", { name: /Play story 2/ })).toBeTruthy();
+    done.unmount();
+  });
+
   test("hints count against the score, so they cannot buy three stars", () => {
     const story = STORIES[0];
     const onComplete = vi.fn();

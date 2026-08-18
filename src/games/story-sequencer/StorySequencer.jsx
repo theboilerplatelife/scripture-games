@@ -5,8 +5,12 @@ import { StorySelect } from "./StorySelect.jsx";
 import { SequencerBoard } from "./SequencerBoard.jsx";
 import { StoryWinCard } from "./StoryWinCard.jsx";
 import { StoryReaderModal } from "./StoryReaderModal.jsx";
-import { getStoryById, getVolumeStories } from "./storyData.js";
+import { VOLUMES, STORIES, getStoryById, getVolumeStories } from "./storyData.js";
+import { CompletionCard } from "../../components/common/CompletionCard.jsx";
+import { isStarred, sumStars, nextUnfinished } from "../../utils/stars.js";
 import "./story-sequencer.css";
+
+const STORY_STARS = STORIES.length * 3; // 108
 
 function randomBoardSeed() {
   return Math.floor(Math.random() * 1_000_000);
@@ -19,11 +23,14 @@ export function StorySequencer({
   onSaveStars,
   initialSeed = null, // tests pin the deal; players get a fresh one per board
 }) {
-  const [screen, setScreen] = useState("volumes"); // "volumes" | "stories" | "play"
+  const [screen, setScreen] = useState("volumes"); // "volumes" | "stories" | "play" | "volume-done"
   const [volumeId, setVolumeId] = useState(1);
   const [storyId, setStoryId] = useState(1);
   const [playSeed, setPlaySeed] = useState(() => initialSeed ?? randomBoardSeed());
   const [winState, setWinState] = useState(null); // { earnedStars, attempts, story }
+  // Whether the volume was already finished before the latest win, so a
+  // replay cannot re-run the celebration
+  const [wasVolumeComplete, setWasVolumeComplete] = useState(false);
   const [readerStory, setReaderStory] = useState(null);
 
   useEffect(() => {
@@ -34,6 +41,12 @@ export function StorySequencer({
   const volumeStories = getVolumeStories(volumeId);
   const currentStoryIndex = volumeStories.findIndex((s) => s.id === storyId);
   const hasNextStory = currentStoryIndex >= 0 && currentStoryIndex < volumeStories.length - 1;
+  const isVolumeComplete = volumeStories.every(
+    (story) => story.id === storyId || isStarred(stars, `ss-${story.id}`)
+  );
+  const justCompletedVolume = isVolumeComplete && !wasVolumeComplete;
+  const isLastVolume = volumeId === VOLUMES.length;
+  const currentVolume = VOLUMES[volumeId - 1];
 
   function handleSelectVolume(volId) {
     setVolumeId(volId);
@@ -47,9 +60,12 @@ export function StorySequencer({
     setScreen("play");
   }
 
+  const isStoryDone = (story) => isStarred(stars, `ss-${story.id}`);
+
   function handleCompleteStory(earnedStars, attempts, hintsUsed) {
     const key = `ss-${storyId}`;
     const prev = stars[key] || 0;
+    setWasVolumeComplete(volumeStories.every(isStoryDone));
     if (earnedStars > prev && onSaveStars) {
       onSaveStars(key, earnedStars);
     }
@@ -62,10 +78,35 @@ export function StorySequencer({
   }
 
   function handleNextStory() {
-    const nextStory = volumeStories[currentStoryIndex + 1];
-    setStoryId(nextStory.id);
-    setPlaySeed(randomBoardSeed());
     setWinState(null);
+    if (justCompletedVolume) {
+      if (isLastVolume) {
+        audio.playAllDoneFanfare();
+      } else {
+        audio.playChapterFanfare();
+      }
+      setScreen("volume-done");
+      return;
+    }
+    // The nearest story still unfinished, wrapping around — stories can be
+    // played in any order
+    const nextIdx = nextUnfinished(volumeStories.length, currentStoryIndex, (i) =>
+      isStoryDone(volumeStories[i])
+    );
+    if (nextIdx === undefined) {
+      // Replaying inside a volume that was already finished — nothing to move
+      // on to, so hand the player back the list
+      setScreen("stories");
+      return;
+    }
+    setStoryId(volumeStories[nextIdx].id);
+    setPlaySeed(randomBoardSeed());
+  }
+
+  function handleNextVolume() {
+    audio.playButtonClick();
+    setVolumeId((id) => id + 1);
+    setScreen("stories");
   }
 
   return (
@@ -112,12 +153,47 @@ export function StorySequencer({
           attempts={winState.attempts}
           hintsUsed={winState.hintsUsed}
           hasNextStory={hasNextStory}
+          completesVolume={justCompletedVolume}
           onPlayAgain={handlePlayAgain}
           onReadStory={() => setReaderStory(winState.story)}
           onNextStory={handleNextStory}
           onBackToStories={() => {
             setWinState(null);
             setScreen("stories");
+          }}
+        />
+      )}
+
+      {screen === "volume-done" && (
+        <CompletionCard
+          icon={isLastVolume ? "📚" : currentVolume.icon}
+          title={
+            isLastVolume
+              ? "You Ordered Every Story!"
+              : `${currentVolume.title} Complete!`
+          }
+          cheer={
+            isLastVolume ? (
+              <>
+                ⭐ <strong>{sumStars(stars, { prefix: "ss-" })} of {STORY_STARS} Story Stars Collected!</strong>
+                <br />
+                &ldquo;Tell the next generation the glorious deeds of the LORD.&rdquo; (Psalm 78:4)
+              </>
+            ) : (
+              <>
+                You put every story in <strong>{currentVolume.title}</strong> in order!
+                <br />
+                The next volume is waiting for you.
+              </>
+            )
+          }
+          nextLabel="Next Volume →"
+          onNext={isLastVolume ? null : handleNextVolume}
+          selectLabel="Story Volumes"
+          onSelect={() => setScreen("volumes")}
+          onBackToHub={() => {
+            audio.setTrack("hub");
+            onBackToHub();
           }}
         />
       )}
