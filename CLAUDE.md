@@ -21,16 +21,19 @@ npm run preview        # Preview production build locally
 npm test               # Run all unit and constitutional test suites (Vitest)
 npm run test:watch     # Run tests in interactive watch mode
 npm run test:coverage  # Run tests with v8 coverage (enforces coverage thresholds)
-npm run check          # Full gate — run before every deploy (see below)
+npm run check          # Fast gate: lint, tests, coverage, build (also the Netlify build command)
+npm run check:all      # Everything, including the real-browser accessibility gate
 npm run test:constitution  # Run only the constitutional gates
 npm run test:a11y      # Browser accessibility gate (Playwright + axe, real Chromium)
 ```
 
 ---
 
-### What `npm run check` enforces
+### What the gates enforce
 
-`npm run check` = **ESLint → Vitest (all tests + 100% coverage) → Vite build**, and is also the Netlify build command and the CI job, so every gate below runs on every push and deploy:
+`npm run check` = **ESLint → Vitest (all tests + 100% coverage) → Vite build**. It is also the Netlify build command. It deliberately does **not** launch a browser, so it stays fast and cannot fail a deploy on a browser download.
+
+`npm run check:all` adds the browser gate on top. CI runs both as separate jobs on every push, so nothing reaches `main` unaudited; a deploy itself runs only the fast gate.
 
 | Gate | Where | Enforces |
 |---|---|---|

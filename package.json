@@ -13,7 +13,8 @@
     "test:coverage": "vitest run --coverage",
     "check": "npm run lint && vitest run --coverage && vite build",
     "test:constitution": "vitest run tests/constitution",
-    "test:a11y": "playwright test"
+    "test:a11y": "playwright test",
+    "check:all": "npm run check && npm run test:a11y"
   },
   "dependencies": {
     "react": "^19.0.0",
