@@ -307,14 +307,14 @@ const globalCss = `
   /* Interface surfaces */
   --forest: #2b593f;         /* listen-button text */
   --gold-deep: #6d5312;      /* small text on amber washes */
-  --kraft-2: #b08d57;        /* ghost button */
-  --kraft-2-hover: #be9b65;
+  --kraft-2: #a37f49;        /* ghost button */
+  --kraft-2-hover: #b58c50;
   --sand-2: #beb6a6;         /* disabled borders */
   --sand-light: #e4dbc9;     /* slider track */
   --paper-hover: #f8f4e6;
   --paper-disabled: #ece8df;
   --ink-disabled: #7b7264;
-  --toggle-off: #888888;
+  --toggle-off: #6b6b6b;
 }
 
 *, *::before, *::after {
@@ -732,7 +732,7 @@ body {
 .vb-slider-val {
   font-family: 'Schoolbell', cursive;
   font-size: 16px;
-  color: var(--vermilion);
+  color: var(--vermilion-deep);
 }
 .vb-range-slider {
   -webkit-appearance: none;

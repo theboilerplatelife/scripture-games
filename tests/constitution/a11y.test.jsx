@@ -1,6 +1,7 @@
 import { describe, test, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
+import { beforeAll } from "vitest";
 import { render, fireEvent, screen } from "@testing-library/react";
 import { axe } from "vitest-axe";
 import * as matchers from "vitest-axe/matchers";
@@ -39,6 +40,121 @@ const AXE_OPTIONS = {
 
 const noop = () => {};
 
+/* ------------------------------------------------------------------
+   Rendered contrast: jsdom has no layout engine, so axe's colour-contrast
+   rule cannot run — which is how a 2:1 hint button and 4.25:1 slot text
+   shipped. jsdom does resolve the cascade though, so loading the real
+   stylesheets lets every audited state be measured against the background
+   it actually composites onto, ancestors and alpha included.
+   ------------------------------------------------------------------ */
+const CSS_FILES = [
+  "src/games/hub/hub.css",
+  "src/games/verse-builder/verse-builder.css",
+  "src/games/memory-match/memory-match.css",
+  "src/games/story-sequencer/story-sequencer.css",
+  "src/components/common/welcome-splash.css",
+];
+
+let DESK = [201, 160, 107, 1];
+
+beforeAll(() => {
+  const root = path.resolve(__dirname, "../..");
+  const appCode = fs.readFileSync(path.join(root, "src/App.jsx"), "utf8");
+  const globalCss = appCode.slice(
+    appCode.indexOf("const globalCss = `") + "const globalCss = `".length,
+    appCode.lastIndexOf("`;")
+  );
+
+  const tokens = {};
+  for (const m of globalCss.matchAll(/(--[\w-]+):\s*([^;]+);/g)) tokens[m[1]] = m[2].trim();
+
+  let css = [globalCss, ...CSS_FILES.map((f) => fs.readFileSync(path.join(root, f), "utf8"))].join("\n");
+  // jsdom does not resolve custom properties, so fold them in first
+  for (let pass = 0; pass < 3; pass += 1) {
+    css = css.replace(/var\((--[\w-]+)(?:,\s*([^)]+))?\)/g, (all, name, fallback) =>
+      tokens[name] || fallback || all
+    );
+  }
+
+  const style = document.createElement("style");
+  style.textContent = css;
+  document.head.appendChild(style);
+
+  DESK = parseColour(tokens["--kraft"]) || DESK;
+});
+
+function parseColour(value) {
+  if (!value) return null;
+  const hex = value.trim().match(/^#([0-9a-fA-F]{6})$/);
+  if (hex) return [1, 3, 5].map((i) => parseInt(value.slice(i, i + 2), 16)).concat(1);
+  const rgb = value.match(/rgba?\(([^)]+)\)/);
+  if (!rgb) return null;
+  const parts = rgb[1].split(",").map((n) => parseFloat(n));
+  return [parts[0], parts[1], parts[2], parts.length > 3 ? parts[3] : 1];
+}
+
+function composite(top, bottom) {
+  return [0, 1, 2].map((i) => Math.round(top[i] * top[3] + bottom[i] * (1 - top[3]))).concat(1);
+}
+
+function luminance([r, g, b]) {
+  const [rr, gg, bb] = [r, g, b].map((v) => {
+    const c = v / 255;
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * rr + 0.7152 * gg + 0.0722 * bb;
+}
+
+function contrast(a, b) {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+// The colour a piece of text is actually drawn on: every translucent layer
+// between it and the desk, composited in order
+function groundUnder(el) {
+  const layers = [];
+  let node = el;
+  while (node && node.nodeType === 1) {
+    const colour = parseColour(getComputedStyle(node).backgroundColor);
+    if (colour && colour[3] > 0) {
+      layers.push(colour);
+      if (colour[3] === 1) break;
+    }
+    node = node.parentElement;
+  }
+  return layers.reduceRight((ground, layer) => composite(layer, ground), DESK);
+}
+
+function contrastFailures(container) {
+  const failures = [];
+  container.querySelectorAll("*").forEach((el) => {
+    if (el.closest("[aria-hidden='true']") || el.tagName === "SVG") return;
+    const text = [...el.childNodes]
+      .filter((n) => n.nodeType === 3)
+      .map((n) => n.textContent.trim())
+      .join("");
+    // Emoji carry no meaning here and are exempt from contrast rules
+    if (!text || !/[a-zA-Z0-9]/.test(text)) return;
+
+    const styles = getComputedStyle(el);
+    const colour = parseColour(styles.color);
+    if (!colour) return;
+
+    const size = parseFloat(styles.fontSize) || 16;
+    const required = size >= 18 ? 3 : 4.5;
+    const ground = groundUnder(el);
+    const ratio = contrast(colour, ground);
+    if (ratio < required) {
+      const hex = (c) => "#" + c.slice(0, 3).map((v) => Math.round(v).toString(16).padStart(2, "0")).join("");
+      failures.push(
+        `${el.className || el.tagName} "${text.slice(0, 32)}" — ${ratio.toFixed(2)}:1 (${hex(colour)} on ${hex(ground)}), needs ${required}:1`
+      );
+    }
+  });
+  return [...new Set(failures)];
+}
+
 // Every class this suite has actually put on screen. A screen audited only in
 // its resting state hides whatever its interactions look like, so the last
 // test in this file checks that each state in the design system appears here.
@@ -53,6 +169,7 @@ function recordClasses(container) {
 async function auditDom(container) {
   recordClasses(container);
   expect(await axe(container, AXE_OPTIONS)).toHaveNoViolations();
+  expect(contrastFailures(container)).toEqual([]);
 }
 
 async function expectAccessible(ui) {
