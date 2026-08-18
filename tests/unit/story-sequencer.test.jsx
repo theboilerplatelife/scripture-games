@@ -334,6 +334,14 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     fireEvent.click(screen.getByRole("button", { name: /Play story 36/ }));
     solveCurrent(STORIES[35]);
 
+    // The win card can jump straight to the volume list, matching the chapter
+    // and deck shortcuts the other games' win cards offer
+    fireEvent.click(screen.getByText("Story Volumes"));
+    expect(screen.getByRole("button", { name: /Resurrection/ })).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: /Resurrection/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Play story 36/ }));
+    solveCurrent(STORIES[35]);
+
     fireEvent.click(screen.getByText("Complete Volume 🎉"));
     expect(screen.getByText("You Ordered Every Story!")).toBeTruthy();
     // The game is over — there is no next volume

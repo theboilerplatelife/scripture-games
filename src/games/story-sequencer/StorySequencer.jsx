@@ -164,6 +164,10 @@ export function StorySequencer({
             setWinState(null);
             setScreen("stories");
           }}
+          onBackToVolumes={() => {
+            setWinState(null);
+            setScreen("volumes");
+          }}
         />
       )}
 

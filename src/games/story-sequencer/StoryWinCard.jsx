@@ -12,6 +12,7 @@ export function StoryWinCard({
   onReadStory,
   onNextStory,
   onBackToStories,
+  onBackToVolumes,
   hasNextStory,
   completesVolume = false,
 }) {
@@ -66,6 +67,18 @@ export function StoryWinCard({
             >
               Play Again 🔄
             </button>
+
+            {onBackToVolumes && (
+              <button
+                className="vb-btn ghost"
+                onClick={() => {
+                  audio.playButtonClick();
+                  onBackToVolumes();
+                }}
+              >
+                Story Volumes
+              </button>
+            )}
 
             {completesVolume ? (
               <button
