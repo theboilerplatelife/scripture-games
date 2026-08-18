@@ -176,7 +176,7 @@ export function SequencerBoard({
           <div className="ss-hint-banner">
             {hintFromIdx === -1
               ? "💡 Everything is already in order — tap Check Order!"
-              : "💡 Tap the glowing card, then tap the card in the marked step to trade places."}
+              : "💡 Tap the card marked in gold, then tap the card in the gold box — they trade places."}
           </div>
         )}
       </div>
