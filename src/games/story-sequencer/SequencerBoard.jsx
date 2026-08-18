@@ -107,10 +107,13 @@ export function SequencerBoard({
 
     if (check.isComplete) {
       lockRef.current = true;
-      // One story is one unit of play — the fanfare belongs to a whole volume
-      audio.playLightApplause();
+      // A chime confirms the order right away; the board then shows itself
+      // solved for a beat. The applause belongs with the card it celebrates,
+      // so it waits — playing it here left the sound 750ms ahead of the win.
+      audio.playStarChime(2);
       setTimeout(() => {
         const earnedStars = Math.min(starsForAttempts(newAttempts), starsForHints(hintsUsed));
+        audio.playLightApplause();
         onComplete(earnedStars, newAttempts, hintsUsed);
       }, 750);
     } else {

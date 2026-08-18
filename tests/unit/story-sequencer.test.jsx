@@ -9,6 +9,7 @@ function tapCard(card) {
 import { VolumeSelect } from "../../src/games/story-sequencer/VolumeSelect.jsx";
 import { StorySelect } from "../../src/games/story-sequencer/StorySelect.jsx";
 import { SequencerBoard } from "../../src/games/story-sequencer/SequencerBoard.jsx";
+import { audio } from "../../src/audio/SoundEngine.js";
 import { StoryWinCard } from "../../src/games/story-sequencer/StoryWinCard.jsx";
 import { StoryReaderModal } from "../../src/games/story-sequencer/StoryReaderModal.jsx";
 import { STORIES } from "../../src/games/story-sequencer/storyData.js";
@@ -186,6 +187,54 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     await waitFor(() => {
       expect(onComplete).toHaveBeenCalled();
     });
+  });
+
+  test("the applause lands with the win card, not before it", async () => {
+    // The sound used to fire the moment the order was checked, 750ms ahead
+    // of the card it was celebrating
+    vi.useFakeTimers();
+    const applause = vi.spyOn(audio, "playLightApplause").mockImplementation(() => {});
+    const chime = vi.spyOn(audio, "playStarChime").mockImplementation(() => {});
+    const onComplete = vi.fn();
+    const story = STORIES[0];
+    const solved = [...story.events];
+
+    const { container } = render(
+      <SequencerBoard
+        story={{ ...story, events: solved }}
+        seed={0}
+        onBackToStories={vi.fn()}
+        onComplete={onComplete}
+      />
+    );
+
+    // Put the board in order, then check it
+    for (let i = 0; i < story.events.length; i += 1) {
+      const cards = container.querySelectorAll(".ss-event-card");
+      let found = -1;
+      cards.forEach((card, idx) => {
+        if (card.textContent.includes(story.events[i].title)) found = idx;
+      });
+      if (found !== -1 && found !== i) {
+        fireEvent.click(cards[i]);
+        fireEvent.click(container.querySelectorAll(".ss-event-card")[found]);
+      }
+    }
+    fireEvent.click(screen.getByRole("button", { name: "Check timeline order" }));
+
+    // Right away: a chime, and nothing else
+    expect(chime).toHaveBeenCalled();
+    expect(applause).not.toHaveBeenCalled();
+    expect(onComplete).not.toHaveBeenCalled();
+
+    // The card and its celebration arrive together
+    act(() => vi.advanceTimersByTime(750));
+    expect(applause).toHaveBeenCalled();
+    expect(onComplete).toHaveBeenCalled();
+
+    applause.mockRestore();
+    chime.mockRestore();
+    vi.useRealTimers();
   });
 
   test("the hint marks one card and its step, and says so when nothing is out of place", () => {
