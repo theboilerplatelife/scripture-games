@@ -177,6 +177,15 @@
   opacity: 0.92;
 }
 
+/* The face is pre-turned so it points at the child only once the card flips.
+   Without this both faces aim at the viewer and every card sits open */
+.mm-card-front {
+  background: var(--paper-bright);
+  transform: rotateY(180deg);
+  padding: 3px;
+  overflow: hidden;
+}
+
 /* Full-card scene behind the caption */
 .mm-card-bg-ill {
   position: absolute;

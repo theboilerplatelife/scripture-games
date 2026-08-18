@@ -112,6 +112,24 @@ test("story sequencer, through selection, hint and a checked order", async ({ pa
   await audit(page, "story sequencer — order checked");
 });
 
+test("a face-down card keeps its face hidden", async ({ page }) => {
+  // jsdom has no 3D engine, so only a real browser can catch the flip
+  // collapsing: if both faces point at the viewer the whole board sits open
+  await openHub(page);
+  await page.getByRole("button", { name: /Memory Match/ }).click();
+  await page.getByRole("button", { name: /Memory Match Deck 1/ }).click();
+  await page.getByRole("button", { name: /Play Verse Finder/ }).click();
+
+  const card = page.locator(".mm-card").first();
+  await expect(card).not.toHaveClass(/flipped/);
+
+  const faces = await card.evaluate((el) => ({
+    back: getComputedStyle(el.querySelector(".mm-card-back")).transform,
+    front: getComputedStyle(el.querySelector(".mm-card-front")).transform,
+  }));
+  expect(faces.front, "the face must be turned away until the card is flipped").not.toBe(faces.back);
+});
+
 test("nothing scrolls the page behind an open dialog", async ({ page }) => {
   await openHub(page);
   await page.getByLabel("Open Game Settings").click();
