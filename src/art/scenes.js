@@ -9,6 +9,7 @@ import { VOLUME_2 } from "./stories/volume-2.jsx";
 import { VOLUME_3 } from "./stories/volume-3.jsx";
 import { VOLUME_4 } from "./stories/volume-4.jsx";
 import { VOLUME_5 } from "./stories/volume-5.jsx";
+import { VOLUME_6 } from "./stories/volume-6.jsx";
 
 export const SCENES = {
   ...VOLUME_1,
@@ -16,4 +17,5 @@ export const SCENES = {
   ...VOLUME_3,
   ...VOLUME_4,
   ...VOLUME_5,
+  ...VOLUME_6,
 };
