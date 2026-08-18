@@ -7,6 +7,7 @@ import { StoryWinCard } from "./StoryWinCard.jsx";
 import { StoryReaderModal } from "./StoryReaderModal.jsx";
 import { VOLUMES, STORIES, getStoryById, getVolumeStories } from "./storyData.js";
 import { CompletionCard } from "../../components/common/CompletionCard.jsx";
+import { useScrollToTop } from "../../components/common/useScrollToTop.js";
 import { isStarred, sumStars, nextUnfinished } from "../../utils/stars.js";
 import "./story-sequencer.css";
 
@@ -36,6 +37,8 @@ export function StorySequencer({
   useEffect(() => {
     audio.setTrack("sequencer");
   }, []);
+
+  useScrollToTop(screen);
 
   const currentStory = getStoryById(storyId);
   const volumeStories = getVolumeStories(volumeId);

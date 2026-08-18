@@ -6,6 +6,7 @@ import { ModeSelect } from "./ModeSelect.jsx";
 import { MemoryBoard } from "./MemoryBoard.jsx";
 import { MMWinCard } from "./MMWinCard.jsx";
 import { CompletionCard } from "../../components/common/CompletionCard.jsx";
+import { useScrollToTop } from "../../components/common/useScrollToTop.js";
 import { isStarred, starValue, sumStars, nextUnfinished } from "../../utils/stars.js";
 import "./memory-match.css";
 
@@ -34,6 +35,8 @@ export function MemoryMatch({
   const [lastResult, setLastResult] = useState({ earned: 0, misses: 0, prevBest: 0, wasAlreadyComplete: false });
   // A fresh seed per board entry so replays deal different cards
   const [playSeed, setPlaySeed] = useState(() => initialSeed ?? randomBoardSeed());
+
+  useScrollToTop(screen);
 
   const currentDeck = DECKS[selectedChapterId - 1];
   const starKey = `mm-${selectedChapterId}-${selectedModeIdx}`;

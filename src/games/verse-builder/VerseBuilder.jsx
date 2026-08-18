@@ -6,6 +6,7 @@ import { LevelSelect } from "./LevelSelect.jsx";
 import { PlayBoard } from "./PlayBoard.jsx";
 import { WinCard } from "./WinCard.jsx";
 import { CompletionCard } from "../../components/common/CompletionCard.jsx";
+import { useScrollToTop } from "../../components/common/useScrollToTop.js";
 import { isStarred, sumStars, nextUnfinished, OTHER_GAME_PREFIXES } from "../../utils/stars.js";
 import "./verse-builder.css";
 
@@ -29,6 +30,8 @@ export function VerseBuilder({
   // The just-finished run and the best banked before it, so the win card can
   // show the fresh result honestly alongside the personal best
   const [lastResult, setLastResult] = useState({ earned: 0, prevBest: 0 });
+
+  useScrollToTop(screen);
 
   const currentChapter = CHAPTERS[selectedChapterId - 1];
   const currentVerse = currentChapter.verses[selectedLevelIdx];

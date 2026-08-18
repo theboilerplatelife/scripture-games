@@ -7,6 +7,7 @@ import { MemoryMatch } from "./games/memory-match/MemoryMatch.jsx";
 import { StorySequencer } from "./games/story-sequencer/StorySequencer.jsx";
 import { SettingsModal } from "./components/common/SettingsModal.jsx";
 import { WelcomeSplash } from "./components/common/WelcomeSplash.jsx";
+import { useScrollToTop } from "./components/common/useScrollToTop.js";
 
 const STORAGE_STARS_KEY = "scripture_games_stars_v1";
 const STORAGE_TRANS_KEY = "scripture_games_translation_v1";
@@ -18,6 +19,8 @@ export default function App() {
   // Global Navigation: "hub" | "verse-builder"
   const [activeGame, setActiveGame] = useState("hub");
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  useScrollToTop(activeGame);
 
   // Settings State: Default ESV
   const [translation, setTranslation] = useState(() => {
