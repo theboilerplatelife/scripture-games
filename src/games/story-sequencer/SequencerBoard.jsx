@@ -121,6 +121,11 @@ export function SequencerBoard({
     setHintActive(true);
   }
 
+  // The hint calls out a single card — the first one out of place — and marks
+  // the step it belongs in, rather than lighting up everything that is wrong
+  const hintFromIdx = hintActive ? events.findIndex((ev, i) => ev.step !== i + 1) : -1;
+  const hintToIdx = hintFromIdx === -1 ? -1 : events[hintFromIdx].step - 1;
+
   return (
     <div className="ss-play-container">
       {/* Topbar */}
@@ -169,7 +174,9 @@ export function SequencerBoard({
         )}
         {hintActive && (
           <div className="ss-hint-banner">
-            💡 Tap the glowing card, then tap the card sitting in its step!
+            {hintFromIdx === -1
+              ? "💡 Everything is already in order — tap Check Order!"
+              : "💡 Tap the glowing card, then tap the card in the marked step to trade places."}
           </div>
         )}
       </div>
@@ -180,7 +187,7 @@ export function SequencerBoard({
           const isSelected = selectedIdx === i;
           const isCorrect = lastCheck?.results[i] === true;
           const isIncorrect = lastCheck && !lastCheck.results[i];
-          const isHintTarget = hintActive && ev.step !== i + 1;
+          const isHintTarget = i === hintFromIdx;
 
           return (
             <div
@@ -190,7 +197,7 @@ export function SequencerBoard({
               }}
               className={`ss-timeline-slot ${isCorrect ? "correct" : ""} ${isIncorrect ? "incorrect" : ""} ${
                 isSelected ? "holding" : ""
-              }`}
+              } ${i === hintToIdx ? "hint-target" : ""}`}
             >
               <div className="ss-slot-badge">
                 <span className="ss-slot-num">Step {i + 1}</span>

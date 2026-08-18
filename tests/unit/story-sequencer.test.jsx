@@ -182,6 +182,36 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     });
   });
 
+  test("the hint marks one card and its step, and says so when nothing is out of place", () => {
+    const story = STORIES[0];
+    const { container } = render(
+      <SequencerBoard story={story} seed={3} onBackToStories={vi.fn()} onComplete={vi.fn()} />
+    );
+
+    fireEvent.click(screen.getByLabelText("Get a hint"));
+    expect(screen.getByText(/Tap the glowing card/i)).toBeTruthy();
+    // Exactly one card is called out, with the step it belongs in marked
+    expect(container.querySelectorAll(".ss-event-card.hint-glow").length).toBe(1);
+    expect(container.querySelectorAll(".ss-timeline-slot.hint-target").length).toBe(1);
+
+    // Put the story in order, then ask for a hint with nothing left to fix
+    for (let i = 0; i < story.events.length; i++) {
+      const cards = container.querySelectorAll(".ss-event-card");
+      let foundIdx = -1;
+      cards.forEach((c, idx) => {
+        if (c.textContent.includes(story.events[i].title)) foundIdx = idx;
+      });
+      if (foundIdx !== -1 && foundIdx !== i) {
+        tapCard(cards[i]);
+        tapCard(container.querySelectorAll(".ss-event-card")[foundIdx]);
+      }
+    }
+
+    fireEvent.click(screen.getByLabelText("Get a hint"));
+    expect(screen.getByText(/already in order/i)).toBeTruthy();
+    expect(container.querySelectorAll(".ss-event-card.hint-glow").length).toBe(0);
+  });
+
   test("a swap leaves the page scrolled exactly where it was", () => {
     const story = STORIES[0];
     const { container, unmount } = render(

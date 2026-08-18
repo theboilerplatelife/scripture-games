@@ -310,14 +310,36 @@
   50% { transform: rotate(0deg) scale(1.06) translateY(-9px); }
 }
 
+/* The hinted card: box-shadow and border are both invisible on a clip-path
+   card, so the pulse is a drop-shadow outline that follows the torn edge */
 .ss-event-card.hint-glow {
-  border-color: var(--amber);
   animation: ssGlowPulse 1.2s infinite alternate;
 }
 
 @keyframes ssGlowPulse {
-  0% { box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3); }
-  100% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0.6); }
+  0% {
+    filter:
+      drop-shadow(2px 0 0 var(--amber)) drop-shadow(-2px 0 0 var(--amber))
+      drop-shadow(0 2px 0 var(--amber)) drop-shadow(0 -2px 0 var(--amber));
+  }
+  100% {
+    filter:
+      drop-shadow(4px 0 0 var(--amber)) drop-shadow(-4px 0 0 var(--amber))
+      drop-shadow(0 4px 0 var(--amber)) drop-shadow(0 -4px 0 var(--amber))
+      drop-shadow(0 0 10px rgba(201, 138, 27, 0.7));
+  }
+}
+
+/* The step the hinted card belongs in */
+.ss-timeline-slot.hint-target {
+  outline: 3px dashed var(--amber);
+  outline-offset: -2px;
+  animation: ssTargetPulse 1.2s infinite alternate;
+}
+
+@keyframes ssTargetPulse {
+  0% { background: rgba(201, 138, 27, 0.06); }
+  100% { background: rgba(201, 138, 27, 0.18); }
 }
 
 /* Picture band across the top of the card — never behind the words */
@@ -628,6 +650,10 @@
     animation: none;
   }
   .ss-timeline-slot.incorrect .ss-event-card {
+    animation: none;
+  }
+  .ss-event-card.hint-glow,
+  .ss-timeline-slot.hint-target {
     animation: none;
   }
 }
