@@ -226,7 +226,8 @@
 .ss-slot-num {
   font-family: 'Patrick Hand', cursive;
   font-size: 17px;
-  color: var(--ink-muted);
+  /* Sits on the slot, not on cardstock — --ink-muted is only 4.25:1 there */
+  color: var(--ink-soft);
 }
 
 .ss-slot-cross {
@@ -319,27 +320,27 @@
 @keyframes ssGlowPulse {
   0% {
     filter:
-      drop-shadow(2px 0 0 var(--amber)) drop-shadow(-2px 0 0 var(--amber))
-      drop-shadow(0 2px 0 var(--amber)) drop-shadow(0 -2px 0 var(--amber));
+      drop-shadow(2px 0 0 var(--gold-deep)) drop-shadow(-2px 0 0 var(--gold-deep))
+      drop-shadow(0 2px 0 var(--gold-deep)) drop-shadow(0 -2px 0 var(--gold-deep));
   }
   100% {
     filter:
-      drop-shadow(4px 0 0 var(--amber)) drop-shadow(-4px 0 0 var(--amber))
-      drop-shadow(0 4px 0 var(--amber)) drop-shadow(0 -4px 0 var(--amber))
+      drop-shadow(4px 0 0 var(--gold-deep)) drop-shadow(-4px 0 0 var(--gold-deep))
+      drop-shadow(0 4px 0 var(--gold-deep)) drop-shadow(0 -4px 0 var(--gold-deep))
       drop-shadow(0 0 10px rgba(201, 138, 27, 0.7));
   }
 }
 
 /* The step the hint sends you to first: the card to pick up */
 .ss-timeline-slot.hint-from {
-  outline: 4px solid var(--amber);
+  outline: 4px solid var(--gold-deep);
   outline-offset: -2px;
   animation: ssTargetPulse 1.2s infinite alternate;
 }
 
 /* The step that card belongs in */
 .ss-timeline-slot.hint-target {
-  outline: 3px dashed var(--amber);
+  outline: 3px dashed var(--gold-deep);
   outline-offset: -2px;
   animation: ssTargetPulse 1.2s infinite alternate;
 }
@@ -429,7 +430,7 @@
 .ss-card-status {
   text-align: center;
   font-size: 13px;
-  color: var(--ink-muted);
+  color: var(--ink-soft);
   font-style: italic;
 }
 
