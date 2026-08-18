@@ -151,8 +151,10 @@
   border-radius: 4px;
 }
 
+/* The card is drawn at opacity 0.7, so this badge composites over the desk
+   before it reaches the eye — it has to start darker than it looks */
 .hub-game-badge.coming-soon {
-  background: var(--ink-faint);
+  background: var(--ink-soft);
 }
 
 .hub-game-title {

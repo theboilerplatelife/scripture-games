@@ -457,7 +457,7 @@
 }
 
 .ss-read-btn {
-  background: var(--slate);
+  background: var(--slate-deep);
   font-size: 18px;
   padding: 12px 24px;
 }

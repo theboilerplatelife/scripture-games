@@ -202,7 +202,8 @@ describe("Constitution Gate: Design System (Article 4)", () => {
         if (bgRaw && /gradient|url\(/.test(bgRaw)) continue;
 
         const size = parseFloat((body.match(/font-size:\s*(\d+(?:\.\d+)?)px/) || [])[1] || "14");
-        const required = size >= 18 ? 3 : 4.5;
+        // WCAG large text is 18pt (24px); these fonts have no bold weight
+    const required = size >= 24 ? 3 : 4.5;
 
         const solid = bg.alpha < 1 ? over([...bg.rgb, bg.alpha], PAPER) : bg.rgb;
         const contrast = ratio(fg.rgb, solid);

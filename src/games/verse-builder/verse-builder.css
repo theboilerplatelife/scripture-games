@@ -182,7 +182,7 @@
   left: 10px;
   font-family: 'Schoolbell', cursive;
   font-size: 20px;
-  color: var(--slate);
+  color: var(--slate-deep);
 }
 
 .vb-level-ref {
@@ -574,7 +574,7 @@
 .vb-win-ref {
   font-family: 'Schoolbell', cursive;
   font-size: 18px;
-  color: var(--slate);
+  color: var(--slate-deep);
   margin: 2px 0 12px;
 }
 

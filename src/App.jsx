@@ -270,7 +270,8 @@ const globalCss = `
   --vermilion-deep: #a33520;
   --leaf: #5c8a3a;         /* leaf green: success & go */
   --leaf-bright: #689e42;
-  --slate: #3e7cb1;        /* pencil blue: references & counts */
+  --leaf-hover: #527d33;   /* still AA against paper text */
+  --slate: #3e7cb1;        /* pencil blue: large text and rules only */
   --slate-deep: #2f6394;   /* slate at small-text contrast */
   --ink: #2b2621;          /* heavy pencil ink */
   --ink-soft: #4a4238;     /* body ink */
@@ -307,8 +308,8 @@ const globalCss = `
   /* Interface surfaces */
   --forest: #2b593f;         /* listen-button text */
   --gold-deep: #6d5312;      /* small text on amber washes */
-  --kraft-2: #a37f49;        /* ghost button */
-  --kraft-2-hover: #b58c50;
+  --kraft-2: #8a6a39;        /* ghost button */
+  --kraft-2-hover: #7d5f33;
   --sand-2: #beb6a6;         /* disabled borders */
   --sand-light: #e4dbc9;     /* slider track */
   --paper-hover: #f8f4e6;
@@ -450,7 +451,7 @@ body {
   font-family: 'Schoolbell', cursive;
   font-size: 20px;
   color: var(--paper);
-  background: var(--leaf);
+  background: var(--leaf-deep);
   border: none;
   padding: 10px 22px 8px;
   cursor: pointer;
@@ -459,7 +460,7 @@ body {
   transition: transform 0.12s ease, background 0.15s ease;
 }
 .vb-btn:hover {
-  background: var(--leaf-bright);
+  background: var(--leaf-hover);
   transform: scale(1.03);
 }
 .vb-btn.ghost {

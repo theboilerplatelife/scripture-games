@@ -129,7 +129,11 @@ function groundUnder(el) {
 function contrastFailures(container) {
   const failures = [];
   container.querySelectorAll("*").forEach((el) => {
-    if (el.closest("[aria-hidden='true']") || el.tagName === "SVG") return;
+    // aria-hidden text is still seen by sighted players, so it is still
+    // measured; only genuinely hidden elements are skipped
+    if (el.tagName === "SVG") return;
+    const shown = getComputedStyle(el);
+    if (shown.display === "none" || shown.visibility === "hidden") return;
     const text = [...el.childNodes]
       .filter((n) => n.nodeType === 3)
       .map((n) => n.textContent.trim())
@@ -142,7 +146,8 @@ function contrastFailures(container) {
     if (!colour) return;
 
     const size = parseFloat(styles.fontSize) || 16;
-    const required = size >= 18 ? 3 : 4.5;
+    // WCAG large text is 18pt (24px); these fonts have no bold weight
+    const required = size >= 24 ? 3 : 4.5;
     const ground = groundUnder(el);
     const ratio = contrast(colour, ground);
     if (ratio < required) {

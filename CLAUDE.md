@@ -23,6 +23,7 @@ npm run test:watch     # Run tests in interactive watch mode
 npm run test:coverage  # Run tests with v8 coverage (enforces coverage thresholds)
 npm run check          # Full gate — run before every deploy (see below)
 npm run test:constitution  # Run only the constitutional gates
+npm run test:a11y      # Browser accessibility gate (Playwright + axe, real Chromium)
 ```
 
 ---
@@ -39,7 +40,8 @@ npm run test:constitution  # Run only the constitutional gates
 | Storage & privacy | `tests/constitution/storage-architecture.test.js` | Article 2 (only the 5 keys, no external URLs) |
 | Audio | `tests/constitution/audio-offline.test.js` | Article 3 (no audio files, default volumes) |
 | Design system | `tests/constitution/design-system.test.js` | Article 4 (tokens, no cross-stylesheet duplicates, **no undefined classNames**, **no raw hex colors**, no synthetic bold, 13px floor, WCAG contrast) |
-| Accessibility | `tests/constitution/a11y.test.jsx` | Article 4.3 (axe-core on every screen; a meta-check fails if a game module has no screens in the suite) |
+| Accessibility (jsdom) | `tests/constitution/a11y.test.jsx` | Article 4.3 — axe over every screen **and every interactive state**, plus contrast measured on the rendered DOM (ancestors and alpha composited). Meta-gates fail if a game module or a design-system state is never audited |
+| Accessibility (browser) | `tests/browser/a11y.spec.js`, run by `npm run test:a11y` | Article 4.3 in real Chromium at desktop and tablet sizes, with axe's own colour-contrast rule enabled — it sees opacity, filters and compositing that jsdom cannot. Runs as its own CI job (needs a browser download), not part of `npm run check` |
 
 ---
 
