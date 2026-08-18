@@ -44,6 +44,11 @@ export function Buddy({ who, size = 64 }) {
     abednego:  { skin: "#d99a63", hair: "curly", hairColor: "#2f2218", beard: null,      robe: "#e9a13b", brow: "#1f150e" },
     john_baptist: { skin: "#d89f6c", hair: "curly", hairColor: "#3a2618", beard: "#3a2618", robe: "#946b3d", brow: "#24160c" },
 
+    // Writers scripture does not name — drawn as what they are
+    chronicler: { skin: "#e0ab7f", hair: "side", hairColor: "#cfc9bd", beard: "#ded9cf", robe: "#7f5539", brow: "#8f887b" },
+    sons_of_korah: { skin: "#e4b087", hair: "headband", hairColor: "#382315", beard: null, robe: "#2a9d8f", brow: "#21130a", band: "#ffd166" },
+    hebrews_writer: { skin: "#dfb088", hair: "wrap", hairColor: "#3b281c", beard: null, robe: "#6c757d", brow: "#26180e", wrap: "#adb5bd" },
+
     // Women of Faith
     esther:    { skin: "#ebd0b9", hair: "crown", hairColor: "#2b1e17", beard: null,      robe: "#0096c7", brow: "#1a100a", crown: "#ffd166" },
     ruth:      { skin: "#e2b188", hair: "wrap",  hairColor: "#3b281c", beard: null,      robe: "#d4a373", brow: "#24170e", wrap: "#e09f3e" },

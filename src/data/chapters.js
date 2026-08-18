@@ -40,8 +40,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 56:3",
-        "character": "caleb",
-        "name": "Caleb",
+        "character": "david",
+        "name": "David",
         "hint": "David sang this when he felt scared.",
         "cheer": "When you feel afraid, you can trust God too!",
         "text": {
@@ -127,8 +127,8 @@ export const CHAPTERS = [
     "verses": [
       {
         "ref": "Psalm 119:105",
-        "character": "david",
-        "name": "David",
+        "character": "psalmist",
+        "name": "The Psalmist",
         "hint": "God's word shows us where to step!",
         "cheer": "The Bible is a bright flashlight for your path!",
         "text": {
@@ -153,8 +153,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "1 John 4:8b",
-        "character": "solomon",
-        "name": "Solomon",
+        "character": "john",
+        "name": "John",
         "hint": "Three simple words that tell us who God is.",
         "cheer": "God is love, always and forever!",
         "text": {
@@ -166,8 +166,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Proverbs 15:1",
-        "character": "peter",
-        "name": "Peter",
+        "character": "solomon",
+        "name": "Solomon",
         "hint": "A gentle word helps calm down big feelings.",
         "cheer": "Speaking softly brings peace to everyone.",
         "text": {
@@ -179,8 +179,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 136:1",
-        "character": "miriam",
-        "name": "Miriam",
+        "character": "psalmist",
+        "name": "The Psalmist",
         "hint": "Give thanks because God's love never ends!",
         "cheer": "His steadfast love endures forever!",
         "text": {
@@ -192,8 +192,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Hebrews 13:8",
-        "character": "barnabas",
-        "name": "Barnabas",
+        "character": "hebrews_writer",
+        "name": "The Writer of Hebrews",
         "hint": "Jesus never changes — He is always faithful!",
         "cheer": "Yesterday, today, and forever the same!",
         "text": {
@@ -218,8 +218,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Philippians 4:13",
-        "character": "timothy",
-        "name": "Timothy",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Paul wrote this from prison and still felt strong!",
         "cheer": "Christ gives you strength for every challenge!",
         "text": {
@@ -253,8 +253,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Colossians 3:2",
-        "character": "nehemiah",
-        "name": "Nehemiah",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Keep your thoughts focused on heavenly things.",
         "cheer": "Think about God's wonderful goodness!",
         "text": {
@@ -266,8 +266,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 147:1a",
-        "character": "hannah",
-        "name": "Hannah",
+        "character": "psalmist",
+        "name": "The Psalmist",
         "hint": "Praising God is pleasant and good.",
         "cheer": "Singing praises to God brings happiness!",
         "text": {
@@ -292,8 +292,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 28:7a",
-        "character": "miriam",
-        "name": "Miriam",
+        "character": "david",
+        "name": "David",
         "hint": "The Lord is your shield and your helper.",
         "cheer": "God protects you and lifts your spirits!",
         "text": {
@@ -305,8 +305,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 9:1",
-        "character": "job",
-        "name": "Job",
+        "character": "david",
+        "name": "David",
         "hint": "David wants to tell of all God's wonders.",
         "cheer": "Tell everyone about God's amazing deeds!",
         "text": {
@@ -318,8 +318,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 150:6",
-        "character": "deborah",
-        "name": "Deborah",
+        "character": "psalmist",
+        "name": "The Psalmist",
         "hint": "If you have breath in your lungs, praise the Lord!",
         "cheer": "Let everything that has breath praise the LORD!",
         "text": {
@@ -331,8 +331,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Nehemiah 8:10c",
-        "character": "jeremiah",
-        "name": "Jeremiah",
+        "character": "nehemiah",
+        "name": "Nehemiah",
         "hint": "God's joy gives you energy and courage.",
         "cheer": "The joy of the LORD is your strength!",
         "text": {
@@ -366,8 +366,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 24:1",
-        "character": "samuel",
-        "name": "Samuel",
+        "character": "david",
+        "name": "David",
         "hint": "Everything in the whole world belongs to God.",
         "cheer": "The whole earth is full of God's treasures!",
         "text": {
@@ -379,8 +379,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 139:14",
-        "character": "moses",
-        "name": "Moses",
+        "character": "david",
+        "name": "David",
         "hint": "You were made with love and great care!",
         "cheer": "You are fearfully and wonderfully made!",
         "text": {
@@ -392,8 +392,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Jeremiah 10:12",
-        "character": "isaiah",
-        "name": "Isaiah",
+        "character": "jeremiah",
+        "name": "Jeremiah",
         "hint": "God made the world by His great power.",
         "cheer": "God's wisdom stretched out the heavens!",
         "text": {
@@ -418,8 +418,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 8:1",
-        "character": "job",
-        "name": "Job",
+        "character": "david",
+        "name": "David",
         "hint": "How majestic is God's name in all the earth!",
         "cheer": "God's glory is higher than the clouds!",
         "text": {
@@ -431,8 +431,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Job 12:10",
-        "character": "jeremiah",
-        "name": "Jeremiah",
+        "character": "job",
+        "name": "Job",
         "hint": "The life of every creature is in God's hand.",
         "cheer": "God holds the breath of all living things!",
         "text": {
@@ -444,8 +444,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 33:6",
-        "character": "noah",
-        "name": "Noah",
+        "character": "psalmist",
+        "name": "The Psalmist",
         "hint": "God spoke, and the heavens were made!",
         "cheer": "By the word of the LORD the heavens were created!",
         "text": {
@@ -479,8 +479,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "1 John 3:18",
-        "character": "luke",
-        "name": "Luke",
+        "character": "john",
+        "name": "John",
         "hint": "Don't just say you love — show it with your actions!",
         "cheer": "Love is something we DO, not just say!",
         "text": {
@@ -492,8 +492,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Romans 12:10",
-        "character": "barnabas",
-        "name": "Barnabas",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Try to honor others even before yourself!",
         "cheer": "Kindness is a race where everyone wins!",
         "text": {
@@ -505,8 +505,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Proverbs 17:17a",
-        "character": "john",
-        "name": "John",
+        "character": "solomon",
+        "name": "Solomon",
         "hint": "A real friend loves at all times.",
         "cheer": "Good friends are a wonderful gift from God!",
         "text": {
@@ -518,8 +518,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Galatians 6:2",
-        "character": "ruth",
-        "name": "Ruth",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Help carry each other's heavy backpacks and burdens.",
         "cheer": "Helping each other fulfills Christ's law of love!",
         "text": {
@@ -531,8 +531,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "1 Thessalonians 5:15",
-        "character": "peter",
-        "name": "Peter",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Always look for ways to do good to everyone.",
         "cheer": "Never pay back wrong for wrong — choose good!",
         "text": {
@@ -544,8 +544,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Colossians 3:13",
-        "character": "solomon",
-        "name": "Solomon",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Forgive others just as the Lord forgave you.",
         "cheer": "A forgiving heart is full of peace!",
         "text": {
@@ -557,8 +557,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Hebrews 13:16",
-        "character": "micah",
-        "name": "Micah",
+        "character": "hebrews_writer",
+        "name": "The Writer of Hebrews",
         "hint": "Do good and share what you have with others.",
         "cheer": "God is pleased when we share with cheerful hearts!",
         "text": {
@@ -592,8 +592,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 23:3",
-        "character": "samuel",
-        "name": "Samuel",
+        "character": "david",
+        "name": "David",
         "hint": "He guides me in paths that are right.",
         "cheer": "God restores your soul and leads the way!",
         "text": {
@@ -605,8 +605,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "John 10:11",
-        "character": "caleb",
-        "name": "Caleb",
+        "character": "john",
+        "name": "John",
         "hint": "The Good Shepherd protects His sheep with His life.",
         "cheer": "Jesus is the Good Shepherd who cares for you!",
         "text": {
@@ -618,8 +618,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 121:1–2",
-        "character": "john",
-        "name": "John",
+        "character": "psalmist",
+        "name": "The Psalmist",
         "hint": "Where does my help come from? From the Lord!",
         "cheer": "The Maker of heaven and earth is your helper!",
         "text": {
@@ -631,8 +631,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 121:7",
-        "character": "isaiah",
-        "name": "Isaiah",
+        "character": "psalmist",
+        "name": "The Psalmist",
         "hint": "The Lord will keep you safe from all harm.",
         "cheer": "God watches over your life day and night!",
         "text": {
@@ -644,8 +644,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Isaiah 40:11",
-        "character": "peter",
-        "name": "Peter",
+        "character": "isaiah",
+        "name": "Isaiah",
         "hint": "He gathers the little lambs close in His arms.",
         "cheer": "God carries you close to His loving heart!",
         "text": {
@@ -670,8 +670,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 23:6",
-        "character": "abraham",
-        "name": "Abraham",
+        "character": "david",
+        "name": "David",
         "hint": "Goodness and mercy will follow you every single day.",
         "cheer": "You will live in the house of the LORD forever!",
         "text": {
@@ -705,8 +705,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Deuteronomy 31:6",
-        "character": "david",
-        "name": "David",
+        "character": "moses",
+        "name": "Moses",
         "hint": "Moses encouraged Israel before crossing the Jordan.",
         "cheer": "God will never leave you or forsake you!",
         "text": {
@@ -718,8 +718,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 27:1",
-        "character": "isaiah",
-        "name": "Isaiah",
+        "character": "david",
+        "name": "David",
         "hint": "The Lord is my light and my salvation — who shall I fear?",
         "cheer": "With God as your fortress, you are safe!",
         "text": {
@@ -744,8 +744,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Isaiah 41:10",
-        "character": "moses",
-        "name": "Moses",
+        "character": "isaiah",
+        "name": "Isaiah",
         "hint": "Fear not, for I am with you; I will uphold you.",
         "cheer": "God holds you tight in His righteous right hand!",
         "text": {
@@ -757,8 +757,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 46:1",
-        "character": "timothy",
-        "name": "Timothy",
+        "character": "sons_of_korah",
+        "name": "The Sons of Korah",
         "hint": "God is our refuge and strength in times of trouble.",
         "cheer": "God is a very present help whenever you need Him!",
         "text": {
@@ -770,8 +770,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "1 Corinthians 16:13",
-        "character": "gideon",
-        "name": "Gideon",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Stand firm in the faith, be brave, and be strong!",
         "cheer": "Be on guard, stand strong, and do everything in love!",
         "text": {
@@ -783,8 +783,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Romans 8:31",
-        "character": "caleb",
-        "name": "Caleb",
+        "character": "paul",
+        "name": "Paul",
         "hint": "If God is for us, who can ever be against us?",
         "cheer": "With God on your side, nothing can defeat you!",
         "text": {
@@ -818,8 +818,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "John 15:5a",
-        "character": "barnabas",
-        "name": "Barnabas",
+        "character": "john",
+        "name": "John",
         "hint": "Stay connected to the Vine like a healthy branch.",
         "cheer": "Abiding in Jesus brings forth great fruit!",
         "text": {
@@ -831,8 +831,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Colossians 3:12",
-        "character": "timothy",
-        "name": "Timothy",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Put on clothes of compassion, kindness, and humility.",
         "cheer": "Dressing your heart in kindness is beautiful!",
         "text": {
@@ -844,8 +844,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "James 1:19",
-        "character": "luke",
-        "name": "Luke",
+        "character": "james",
+        "name": "James",
         "hint": "Quick to listen, slow to speak, slow to get angry.",
         "cheer": "Listening with patience shows true wisdom!",
         "text": {
@@ -857,8 +857,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Matthew 5:9",
-        "character": "john",
-        "name": "John",
+        "character": "matthew",
+        "name": "Matthew",
         "hint": "Blessed are the peacemakers, for they are God's children.",
         "cheer": "Making peace brings smiles to heaven and earth!",
         "text": {
@@ -870,8 +870,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Philippians 2:4",
-        "character": "lydia",
-        "name": "Lydia",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Look out not only for your own interests, but for others.",
         "cheer": "Thinking of others first makes you like Christ!",
         "text": {
@@ -883,8 +883,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "1 Peter 3:8",
-        "character": "james",
-        "name": "James",
+        "character": "peter",
+        "name": "Peter",
         "hint": "Have unity of mind, sympathy, and a tender heart.",
         "cheer": "Loving like brothers and sisters brings harmony!",
         "text": {
@@ -896,8 +896,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Romans 12:21",
-        "character": "matthew",
-        "name": "Matthew",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Do not be overcome by evil, but overcome evil with good.",
         "cheer": "Goodness is the most powerful force in the world!",
         "text": {
@@ -931,8 +931,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Matthew 5:16",
-        "character": "stephen",
-        "name": "Stephen",
+        "character": "matthew",
+        "name": "Matthew",
         "hint": "Let your light shine so people praise your Father in heaven.",
         "cheer": "Your kindness points others straight to God!",
         "text": {
@@ -957,8 +957,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Ephesians 5:8",
-        "character": "david",
-        "name": "David",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Now you are light in the Lord — walk as children of light!",
         "cheer": "Step into each day as a child of the light!",
         "text": {
@@ -983,8 +983,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "1 John 1:5b",
-        "character": "philip",
-        "name": "Philip",
+        "character": "john",
+        "name": "John",
         "hint": "God is light, and in Him is no darkness at all.",
         "cheer": "God's light drives away all shadows!",
         "text": {
@@ -996,8 +996,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 27:1b",
-        "character": "isaiah",
-        "name": "Isaiah",
+        "character": "david",
+        "name": "David",
         "hint": "The Lord is the defense and strength of my life.",
         "cheer": "Walk boldly in the light of the Lord!",
         "text": {
@@ -1009,8 +1009,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Proverbs 4:18",
-        "character": "lydia",
-        "name": "Lydia",
+        "character": "solomon",
+        "name": "Solomon",
         "hint": "The path of the righteous gets brighter and brighter.",
         "cheer": "Walking with God gets brighter every single day!",
         "text": {
@@ -1044,8 +1044,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "James 1:5",
-        "character": "daniel",
-        "name": "Daniel",
+        "character": "james",
+        "name": "James",
         "hint": "If you need wisdom, just ask God — He gives generously!",
         "cheer": "God loves to give you wisdom when you ask!",
         "text": {
@@ -1057,8 +1057,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Proverbs 1:7",
-        "character": "job",
-        "name": "Job",
+        "character": "solomon",
+        "name": "Solomon",
         "hint": "The fear of the Lord is the beginning of knowledge.",
         "cheer": "Respecting and honoring God is where true wisdom starts!",
         "text": {
@@ -1070,8 +1070,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Proverbs 16:3",
-        "character": "joseph",
-        "name": "Joseph",
+        "character": "solomon",
+        "name": "Solomon",
         "hint": "Commit your work to the Lord, and your plans will succeed.",
         "cheer": "Give your homework and projects to God!",
         "text": {
@@ -1083,8 +1083,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Proverbs 4:23",
-        "character": "deborah",
-        "name": "Deborah",
+        "character": "solomon",
+        "name": "Solomon",
         "hint": "Guard your heart with all diligence, for life flows from it.",
         "cheer": "Protect your heart and fill it with God's goodness!",
         "text": {
@@ -1096,8 +1096,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Proverbs 18:10",
-        "character": "james",
-        "name": "James",
+        "character": "solomon",
+        "name": "Solomon",
         "hint": "The name of the Lord is a strong tower.",
         "cheer": "Run to God's strong tower and be safe!",
         "text": {
@@ -1109,8 +1109,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Psalm 111:10",
-        "character": "david",
-        "name": "David",
+        "character": "psalmist",
+        "name": "The Psalmist",
         "hint": "Those who practice God's commands have good understanding.",
         "cheer": "Doing what God says builds great wisdom!",
         "text": {
@@ -1122,8 +1122,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Proverbs 2:6",
-        "character": "esther",
-        "name": "Esther",
+        "character": "solomon",
+        "name": "Solomon",
         "hint": "The Lord gives wisdom; from His mouth come knowledge.",
         "cheer": "God's word is packed with priceless wisdom!",
         "text": {
@@ -1157,8 +1157,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Philippians 4:7",
-        "character": "hannah",
-        "name": "Hannah",
+        "character": "paul",
+        "name": "Paul",
         "hint": "The peace of God will guard your hearts and minds.",
         "cheer": "God's peace is bigger than anything we can understand!",
         "text": {
@@ -1170,8 +1170,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "1 Peter 5:7",
-        "character": "matthew",
-        "name": "Matthew",
+        "character": "peter",
+        "name": "Peter",
         "hint": "Cast all your anxieties on Him, because He cares for you.",
         "cheer": "Give all your worries to God — He cares for you so much!",
         "text": {
@@ -1183,8 +1183,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Matthew 11:28",
-        "character": "jeremiah",
-        "name": "Jeremiah",
+        "character": "matthew",
+        "name": "Matthew",
         "hint": "Come to Me, all who labor and are heavy laden.",
         "cheer": "Jesus gives sweet rest when you are tired!",
         "text": {
@@ -1209,8 +1209,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Isaiah 26:3",
-        "character": "mary_b",
-        "name": "Mary of Bethany",
+        "character": "isaiah",
+        "name": "Isaiah",
         "hint": "You keep him in perfect peace whose mind is stayed on You.",
         "cheer": "Keeping your thoughts on God brings perfect peace!",
         "text": {
@@ -1235,8 +1235,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Colossians 3:15",
-        "character": "peter",
-        "name": "Peter",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Let the peace of Christ rule in your hearts.",
         "cheer": "Let God's peace be the referee in your heart!",
         "text": {
@@ -1270,8 +1270,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Ephesians 6:14",
-        "character": "joshua",
-        "name": "Joshua",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Fasten on the belt of truth and breastplate of righteousness.",
         "cheer": "Truth and doing right protect your heart!",
         "text": {
@@ -1283,8 +1283,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Ephesians 6:15",
-        "character": "gideon",
-        "name": "Gideon",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Put on shoes of readiness to share the gospel of peace.",
         "cheer": "Your shoes are ready to walk and share peace!",
         "text": {
@@ -1296,8 +1296,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Ephesians 6:16",
-        "character": "caleb",
-        "name": "Caleb",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Take up the shield of faith to stop flaming arrows.",
         "cheer": "Faith in God blocks every scary lie!",
         "text": {
@@ -1309,8 +1309,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Ephesians 6:17",
-        "character": "david",
-        "name": "David",
+        "character": "paul",
+        "name": "Paul",
         "hint": "The helmet of salvation and sword of the Spirit.",
         "cheer": "God's Word is the sharp sword of the Spirit!",
         "text": {
@@ -1322,8 +1322,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Hebrews 4:12a",
-        "character": "nehemiah",
-        "name": "Nehemiah",
+        "character": "hebrews_writer",
+        "name": "The Writer of Hebrews",
         "hint": "The word of God is living and active.",
         "cheer": "God's word is sharper than any two-edged sword!",
         "text": {
@@ -1335,8 +1335,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "2 Corinthians 10:4",
-        "character": "timothy",
-        "name": "Timothy",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Our weapons have divine power to destroy strongholds.",
         "cheer": "God gives you spiritual power to stand strong!",
         "text": {
@@ -1348,8 +1348,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "1 Thessalonians 5:8",
-        "character": "daniel",
-        "name": "Daniel",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Putting on faith and love as a breastplate.",
         "cheer": "Hope in God protects your mind like a strong helmet!",
         "text": {
@@ -1383,8 +1383,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "1 Corinthians 13:5",
-        "character": "ruth",
-        "name": "Ruth",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Love is not rude and does not demand its own way.",
         "cheer": "Love is not easily angered and keeps no score of wrongs!",
         "text": {
@@ -1396,8 +1396,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "1 Corinthians 13:6",
-        "character": "barnabas",
-        "name": "Barnabas",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Love does not rejoice at wrongdoing, but rejoices with the truth.",
         "cheer": "Love always celebrates what is true and good!",
         "text": {
@@ -1409,8 +1409,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "1 Corinthians 13:7",
-        "character": "martha",
-        "name": "Martha",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Love bears all things, believes all things, hopes all things.",
         "cheer": "Love never gives up — it endures through everything!",
         "text": {
@@ -1422,8 +1422,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "1 Corinthians 13:8a",
-        "character": "timothy",
-        "name": "Timothy",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Prophecies will pass away, but love never ends.",
         "cheer": "Love never fails — it lasts for eternity!",
         "text": {
@@ -1435,8 +1435,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "1 Corinthians 13:13",
-        "character": "stephen",
-        "name": "Stephen",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Faith, hope, and love remain — and the greatest is love!",
         "cheer": "Love is the greatest treasure in the entire world!",
         "text": {
@@ -1461,8 +1461,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "John 13:34",
-        "character": "mary_b",
-        "name": "Mary of Bethany",
+        "character": "john",
+        "name": "John",
         "hint": "A new commandment: love one another as I have loved you.",
         "cheer": "Loving others shows everyone that we follow Jesus!",
         "text": {
@@ -1496,8 +1496,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Matthew 28:20",
-        "character": "mark",
-        "name": "Mark",
+        "character": "matthew",
+        "name": "Matthew",
         "hint": "I am with you always, even to the end of the age.",
         "cheer": "Jesus is with you every single day, wherever you go!",
         "text": {
@@ -1509,8 +1509,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Mark 16:15",
-        "character": "luke",
-        "name": "Luke",
+        "character": "mark",
+        "name": "Mark",
         "hint": "Go into all the world and proclaim the good news.",
         "cheer": "The Gospel is the greatest news on earth!",
         "text": {
@@ -1535,8 +1535,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Romans 10:14b",
-        "character": "peter",
-        "name": "Peter",
+        "character": "paul",
+        "name": "Paul",
         "hint": "How will they hear without someone preaching?",
         "cheer": "Your voice can tell someone about Jesus today!",
         "text": {
@@ -1548,8 +1548,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Acts 1:8b",
-        "character": "philip",
-        "name": "Philip",
+        "character": "luke",
+        "name": "Luke",
         "hint": "You will be My witnesses in Jerusalem and to the end of the earth.",
         "cheer": "The Holy Spirit gives you power to be a witness!",
         "text": {
@@ -1561,8 +1561,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "2 Timothy 4:2a",
-        "character": "stephen",
-        "name": "Stephen",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Preach the word; be ready in season and out of season.",
         "cheer": "Always be ready to share God's encouraging truth!",
         "text": {
@@ -1574,8 +1574,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Micah 6:8",
-        "character": "john",
-        "name": "John",
+        "character": "micah",
+        "name": "Micah",
         "hint": "Do justice, love kindness, and walk humbly with your God.",
         "cheer": "Walking humbly with God is what He loves most!",
         "text": {
@@ -1609,8 +1609,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Romans 8:38–39",
-        "character": "abraham",
-        "name": "Abraham",
+        "character": "paul",
+        "name": "Paul",
         "hint": "Neither height nor depth can separate us from God's love.",
         "cheer": "Nothing in all creation can ever separate you from God's love!",
         "text": {
@@ -1622,8 +1622,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Isaiah 40:31",
-        "character": "peter",
-        "name": "Peter",
+        "character": "isaiah",
+        "name": "Isaiah",
         "hint": "Those who wait for the Lord shall mount up with wings like eagles.",
         "cheer": "God renews your strength so you can run and not grow weary!",
         "text": {
@@ -1635,8 +1635,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "John 14:1–2",
-        "character": "martha",
-        "name": "Martha",
+        "character": "john",
+        "name": "John",
         "hint": "In My Father's house are many rooms; I go to prepare a place for you.",
         "cheer": "God has prepared a glorious home in heaven for you!",
         "text": {
@@ -1648,8 +1648,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "Revelation 21:4",
-        "character": "david",
-        "name": "David",
+        "character": "john",
+        "name": "John",
         "hint": "He will wipe away every tear from their eyes; no more pain.",
         "cheer": "In heaven, joy never ends and tears are wiped away forever!",
         "text": {
@@ -1661,8 +1661,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "2 Corinthians 5:17",
-        "character": "timothy",
-        "name": "Timothy",
+        "character": "paul",
+        "name": "Paul",
         "hint": "If anyone is in Christ, he is a new creation! The old has passed away.",
         "cheer": "You are a brand new creation in Jesus!",
         "text": {
@@ -1674,8 +1674,8 @@ export const CHAPTERS = [
       },
       {
         "ref": "John 11:25",
-        "character": "elijah",
-        "name": "Elijah",
+        "character": "john",
+        "name": "John",
         "hint": "I am the resurrection and the life. Whoever believes in Me shall live.",
         "cheer": "Believing in Jesus gives life that lasts forever!",
         "text": {

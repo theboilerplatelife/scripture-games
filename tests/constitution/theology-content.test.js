@@ -2,6 +2,7 @@ import { describe, test, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import { CHAPTERS } from "../../src/data/chapters.js";
+import { authorOf } from "../../src/data/authorship.js";
 import { TRANSLATIONS } from "../../src/data/translations.js";
 import { STORIES } from "../../src/games/story-sequencer/storyData.js";
 
@@ -67,19 +68,58 @@ describe("Constitution Gate: Theological & Content Integrity (Article 1)", () =>
     });
   });
 
-  test("Article 1.4: Every level in a chapter must feature a unique character icon (0 duplicates per chapter)", () => {
+  test("Article 1.5: The buddy beside a verse is the person who wrote or spoke it", () => {
+    // This replaces the old per-chapter uniqueness rule, which had forced
+    // 88 of 120 verses to name someone who did not write them. Variety is
+    // the artwork's job; the face has to be true.
+    const wrong = [];
     CHAPTERS.forEach((chapter) => {
-      const seen = new Set();
-      const duplicates = [];
-      
-      chapter.verses.forEach((verse, idx) => {
-        if (seen.has(verse.character)) {
-          duplicates.push(`Level ${idx + 1}: ${verse.character}`);
+      chapter.verses.forEach((verse) => {
+        const author = authorOf(verse.ref);
+        expect(author, `${verse.ref} has no entry in authorship.js`).toBeTruthy();
+        if (verse.character !== author) {
+          wrong.push(`${verse.ref}: shows ${verse.character}, written by ${author}`);
         }
-        seen.add(verse.character);
       });
+    });
+    expect(wrong, `misattributed verses:\n${wrong.join("\n")}`).toEqual([]);
+  });
 
-      expect(duplicates.length, `Chapter ${chapter.id} (${chapter.title}) has duplicate characters: ${duplicates.join(", ")}`).toBe(0);
+  test("Article 1.5: A verse never names someone other than the buddy shown", () => {
+    // A hint that says "Paul wrote this" beside Timothy's face teaches the
+    // child the opposite of what the picture says
+    const NAMES = {
+      Paul: "paul", David: "david", John: "john", Solomon: "solomon", Matthew: "matthew",
+      Peter: "peter", James: "james", Luke: "luke", Mark: "mark", Moses: "moses",
+      Joshua: "joshua", Isaiah: "isaiah", Jeremiah: "jeremiah", Job: "job",
+      Micah: "micah", Nehemiah: "nehemiah",
+    };
+    const clashes = [];
+    CHAPTERS.forEach((chapter) => {
+      chapter.verses.forEach((verse) => {
+        const words = `${verse.hint} ${verse.cheer}`;
+        Object.entries(NAMES).forEach(([name, key]) => {
+          if (new RegExp(`\\b${name}\\b`).test(words) && key !== verse.character) {
+            clashes.push(`${verse.ref}: shows ${verse.character}, text says ${name}`);
+          }
+        });
+      });
+    });
+    expect(clashes, clashes.join("\n")).toEqual([]);
+  });
+
+  test("Article 1.5: Anonymous scripture is not given a borrowed name", () => {
+    // The unnamed psalms and Hebrews get a portrait like anyone else, but
+    // they must not be attributed to a person scripture does not name
+    const anonymous = CHAPTERS.flatMap((c) => c.verses).filter((v) =>
+      ["psalmist", "hebrews_writer", "chronicler", "sons_of_korah"].includes(v.character)
+    );
+    expect(anonymous.length).toBeGreaterThan(0);
+    anonymous.forEach((verse) => {
+      expect(
+        /^(The Psalmist|The Writer of Hebrews|The Chronicler|The Sons of Korah)$/.test(verse.name),
+        `${verse.ref} labels an anonymous writer as "${verse.name}"`
+      ).toBe(true);
     });
   });
 
