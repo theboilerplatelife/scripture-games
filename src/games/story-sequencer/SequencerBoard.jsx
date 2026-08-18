@@ -20,10 +20,14 @@ export function SequencerBoard({
   const [lastCheck, setLastCheck] = useState(null); // { results, correctCount, isComplete, total }
   const [hintActive, setHintActive] = useState(false);
   const lockRef = useRef(false);
+  // Where the page was scrolled when a swap started, so the view can be put
+  // back before the browser paints the new order
+  const scrollAnchorRef = useRef(null);
 
   // Two cards trade places — the whole interaction is tapping one card and
   // then the card it should swap with
   function swapEvents(a, b) {
+    scrollAnchorRef.current = window.scrollY;
     audio.playCardSnap(b);
     setEvents((prev) => {
       const next = [...prev];
@@ -54,6 +58,15 @@ export function SequencerBoard({
   // After a swap, slide both cards from where they were to where they now
   // are, so they visibly glide past each other instead of blinking
   useLayoutEffect(() => {
+    // Tapping the second card can shift the viewport: the browser re-anchors
+    // scrolling when content moves, and it pulls a focused card back into view
+    // when React moves its DOM node. Put the page back where it was.
+    const anchor = scrollAnchorRef.current;
+    if (anchor !== null) {
+      scrollAnchorRef.current = null;
+      if (window.scrollY !== anchor) window.scrollTo(0, anchor);
+    }
+
     const reduceMotion =
       typeof window.matchMedia === "function" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;

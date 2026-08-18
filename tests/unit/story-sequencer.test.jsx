@@ -182,6 +182,38 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     });
   });
 
+  test("a swap leaves the page scrolled exactly where it was", () => {
+    const story = STORIES[0];
+    const { container, unmount } = render(
+      <SequencerBoard story={story} seed={3} onBackToStories={vi.fn()} onComplete={vi.fn()} />
+    );
+    const scrollTo = vi.spyOn(window, "scrollTo").mockImplementation(() => {});
+    const cards = () => [...container.querySelectorAll(".ss-event-card")];
+
+    // The reader scrolled to 480 to find the partner card. The swap records
+    // that, then the browser shifts the view to 120 while the order changes —
+    // the board must put it back.
+    let read = 0;
+    Object.defineProperty(window, "scrollY", {
+      configurable: true,
+      get: () => (read++ === 0 ? 480 : 120),
+    });
+    tapCard(cards()[0]);
+    tapCard(cards()[1]);
+    expect(scrollTo).toHaveBeenCalledWith(0, 480);
+
+    // A swap the browser leaves alone must not scroll anything
+    scrollTo.mockClear();
+    Object.defineProperty(window, "scrollY", { configurable: true, value: 480 });
+    tapCard(cards()[2]);
+    tapCard(cards()[3]);
+    expect(scrollTo).not.toHaveBeenCalled();
+
+    Object.defineProperty(window, "scrollY", { configurable: true, value: 0 });
+    scrollTo.mockRestore();
+    unmount();
+  });
+
   test("swapped cards animate from their old positions, and hold still under reduced motion", () => {
     const story = STORIES[0];
 

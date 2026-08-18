@@ -167,6 +167,9 @@
 .ss-timeline-track {
   display: grid;
   grid-auto-rows: 1fr;
+  /* The board manages its own scroll position across a swap; the browser's
+     anchoring would fight it */
+  overflow-anchor: none;
   gap: 16px;
   width: 100%;
   max-width: 740px;
