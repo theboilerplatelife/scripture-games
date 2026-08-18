@@ -211,13 +211,17 @@
 /* 3-Column True Centered Topbar */
 .vb-topbar {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    "back  .     stars"
+    "title title title";
   align-items: center;
-  gap: 8px;
+  gap: 10px 8px;
   width: 100%;
 }
 
 .vb-topbar-left {
+  grid-area: back;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -225,6 +229,7 @@
 }
 
 .vb-topbar-center {
+  grid-area: title;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -232,6 +237,7 @@
 }
 
 .vb-topbar-right {
+  grid-area: stars;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -260,16 +266,6 @@
 
 /* Long chapter/deck titles: shrink the chip before it can collide with
    the back button or stars pill flanking it */
-@media (max-width: 520px) {
-  .vb-ref-chip {
-    font-size: 16px;
-    padding: 7px 12px 5px;
-  }
-  .vb-ref-trans-badge {
-    font-size: 13px;
-  }
-}
-
 .vb-ref-trans-badge {
   font-size: 14px;
   color: var(--slate-deep);
