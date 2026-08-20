@@ -197,6 +197,50 @@ describe("MemoryMatch orchestrator", () => {
     expect(screen.getByText("Memory Match")).toBeTruthy();
   });
 
+  test("opens on the screen the address bar names, and follows it when it changes", () => {
+    // A refresh or a shared link must land on the board, not on the deck list
+    const { rerender } = render(
+      <MemoryMatch
+        stars={{}}
+        onSaveStar={vi.fn()}
+        translation="ESV"
+        onBackToHub={vi.fn()}
+        onOpenSettings={vi.fn()}
+        route={{ game: "memory-match", a: 2, b: 1 }}
+        onNavigate={vi.fn()}
+      />
+    );
+    expect(screen.getByLabelText("Back to Match Modes"), "a deep link did not open the board").toBeTruthy();
+
+    // Back button: the route drops the mode, so the mode list comes back
+    rerender(
+      <MemoryMatch
+        stars={{}}
+        onSaveStar={vi.fn()}
+        translation="ESV"
+        onBackToHub={vi.fn()}
+        onOpenSettings={vi.fn()}
+        route={{ game: "memory-match", a: 2, b: null }}
+        onNavigate={vi.fn()}
+      />
+    );
+    expect(screen.getByLabelText("Back to Scripture Decks")).toBeTruthy();
+
+    // …and again to the deck list
+    rerender(
+      <MemoryMatch
+        stars={{}}
+        onSaveStar={vi.fn()}
+        translation="ESV"
+        onBackToHub={vi.fn()}
+        onOpenSettings={vi.fn()}
+        route={{ game: "memory-match", a: null, b: null }}
+        onNavigate={vi.fn()}
+      />
+    );
+    expect(screen.getByText("Memory Match")).toBeTruthy();
+  });
+
   test("win screen: replay, next mode, and deck modes", () => {
     render(
       <MemoryMatch

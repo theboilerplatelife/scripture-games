@@ -8,6 +8,7 @@ import { WinCard } from "./WinCard.jsx";
 import { CompletionCard } from "../../components/common/CompletionCard.jsx";
 import { useScrollToTop } from "../../components/common/useScrollToTop.js";
 import { isStarred, sumStars, nextUnfinished, OTHER_GAME_PREFIXES } from "../../utils/stars.js";
+import { useRouteSync } from "../../components/common/useRouteSync.js";
 import "./verse-builder.css";
 
 export function VerseBuilder({
@@ -16,6 +17,8 @@ export function VerseBuilder({
   translation,
   onBackToHub,
   onOpenSettings,
+  route,
+  onNavigate,
   initialChapterId = 1,
   initialLevelIdx = 0,
   initialScreen = "chapters",
@@ -32,6 +35,35 @@ export function VerseBuilder({
   const [lastResult, setLastResult] = useState({ earned: 0, prevBest: 0 });
 
   useScrollToTop(screen);
+
+  /* The lists and the board earn a URL; the win cards do not — a refresh
+     should put the player back on the level, not on a celebration. */
+  useRouteSync({
+    game: "verse-builder",
+    route,
+    navigate: onNavigate,
+    place:
+      screen === "chapters"
+        ? { a: null, b: null }
+        : screen === "levels"
+          ? { a: selectedChapterId, b: null }
+          : screen === "play"
+            ? { a: selectedChapterId, b: selectedLevelIdx + 1 }
+            : null,
+    apply: ({ a, b }) => {
+      if (a === null) {
+        setScreen("chapters");
+        return;
+      }
+      setSelectedChapterId(a);
+      if (b === null) {
+        setScreen("levels");
+        return;
+      }
+      setSelectedLevelIdx(b - 1);
+      setScreen("play");
+    },
+  });
 
   const currentChapter = CHAPTERS[selectedChapterId - 1];
   const currentVerse = currentChapter.verses[selectedLevelIdx];

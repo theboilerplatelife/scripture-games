@@ -149,6 +149,10 @@ describe("App Root & State Integration Tests", () => {
     expect(screen.getAllByText("Scripture Games").length).toBeGreaterThan(0);
   });
 
+  /* This one also guards the win card against the routing echo: the
+     browser delivers hashchange after navigate has already updated the
+     route, and re-applying that route puts the board back over the
+     celebration. Removing the value check in useRouteSync fails here. */
   test("saving star progress updates state and localStorage", () => {
     vi.useFakeTimers();
     render(<App />);

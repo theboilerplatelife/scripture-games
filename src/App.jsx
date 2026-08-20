@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useHashRoute, parseHash } from "./components/common/useHashRoute.js";
 import { audio, DEFAULT_BGM_VOL, DEFAULT_SFX_VOL } from "./audio/SoundEngine.js";
 import { DEFAULT_TRANSLATION } from "./data/translations.js";
 import { GameHub } from "./games/hub/GameHub.jsx";
@@ -17,7 +18,11 @@ const STORAGE_SFX_VOL_KEY = "scripture_games_sfx_vol_v1";
 
 export default function App() {
   // Global Navigation: "hub" | "verse-builder"
-  const [activeGame, setActiveGame] = useState("hub");
+  /* The address bar is where the player is: a refresh or the tablet's
+     back gesture used to drop them on the splash screen. */
+  const [route, navigate] = useHashRoute();
+  const activeGame = route.game;
+  const setActiveGame = (game) => navigate({ game });
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   useScrollToTop(activeGame);
@@ -143,7 +148,12 @@ export default function App() {
     setMusicOn((prev) => !prev);
   };
 
-  const [hasStarted, setHasStarted] = useState(false);
+  /* A link or a refresh that points into a game skips the splash: the
+     player has already started, and showing them the front door again
+     loses the place the URL just restored. */
+  const [hasStarted, setHasStarted] = useState(
+    () => parseHash(window.location.hash).game !== "hub"
+  );
 
   return (
     <div className="vb-root">
@@ -188,6 +198,8 @@ export default function App() {
               stars={stars}
               onSaveStar={handleSaveStar}
               translation={translation}
+              route={route}
+              onNavigate={navigate}
               onBackToHub={() => {
                 setActiveGame("hub");
               }}
@@ -205,6 +217,8 @@ export default function App() {
               stars={stars}
               onSaveStar={handleSaveStar}
               translation={translation}
+              route={route}
+              onNavigate={navigate}
               onBackToHub={() => {
                 setActiveGame("hub");
               }}
@@ -221,6 +235,8 @@ export default function App() {
               key={`ss-${resetCount}`}
               stars={stars}
               onSaveStars={handleSaveStar}
+              route={route}
+              onNavigate={navigate}
               onBackToHub={() => {
                 setActiveGame("hub");
               }}

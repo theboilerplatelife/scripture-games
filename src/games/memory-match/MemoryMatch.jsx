@@ -7,6 +7,7 @@ import { MemoryBoard } from "./MemoryBoard.jsx";
 import { MMWinCard } from "./MMWinCard.jsx";
 import { CompletionCard } from "../../components/common/CompletionCard.jsx";
 import { useScrollToTop } from "../../components/common/useScrollToTop.js";
+import { useRouteSync } from "../../components/common/useRouteSync.js";
 import { isStarred, starValue, sumStars, nextUnfinished } from "../../utils/stars.js";
 import "./memory-match.css";
 
@@ -20,6 +21,8 @@ export function MemoryMatch({
   translation,
   onBackToHub,
   onOpenSettings,
+  route,
+  onNavigate,
   initialChapterId = 1,
   initialModeIdx = 0,
   initialScreen = "chapters",
@@ -35,6 +38,35 @@ export function MemoryMatch({
   const [lastResult, setLastResult] = useState({ earned: 0, misses: 0, prevBest: 0, wasAlreadyComplete: false });
   // A fresh seed per board entry so replays deal different cards
   const [playSeed, setPlaySeed] = useState(() => initialSeed ?? randomBoardSeed());
+
+  /* The deck list, the mode list and the board earn a URL; the win cards
+     do not — a refresh should return the player to the board. */
+  useRouteSync({
+    game: "memory-match",
+    route,
+    navigate: onNavigate,
+    place:
+      screen === "chapters"
+        ? { a: null, b: null }
+        : screen === "modes"
+          ? { a: selectedChapterId, b: null }
+          : screen === "play"
+            ? { a: selectedChapterId, b: selectedModeIdx + 1 }
+            : null,
+    apply: ({ a, b }) => {
+      if (a === null) {
+        setScreen("chapters");
+        return;
+      }
+      setSelectedChapterId(a);
+      if (b === null) {
+        setScreen("modes");
+        return;
+      }
+      setSelectedModeIdx(b - 1);
+      setScreen("play");
+    },
+  });
 
   useScrollToTop(screen);
 

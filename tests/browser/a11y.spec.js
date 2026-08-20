@@ -395,6 +395,56 @@ test("controls are big enough for a child's finger", async ({ page }) => {
   expect(tooSmall, `controls under 44px:\n${tooSmall.join("\n")}`).toEqual([]);
 });
 
+test("the address bar follows the player, and brings them back", async ({ page }) => {
+  // Refreshing used to drop everyone on the splash screen. jsdom has no
+  // history and no reload, so this can only be checked in a browser.
+  await openHub(page);
+  await page.getByRole("button", { name: /Verse Builder/ }).click();
+  await page.getByRole("button", { name: /Little Seeds/ }).click();
+  await page.getByRole("button", { name: /1 Thessalonians/ }).first().click();
+  await expect(page).toHaveURL(/#\/verse-builder\/1\/1$/);
+
+  const historyLength = await page.evaluate(() => history.length);
+
+  await page.reload();
+  await expect(page.locator(".vb-strip")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Tap to Play and Start Game" })).toHaveCount(0);
+
+  // Back walks the screens the player came through, one press each
+  await page.goBack();
+  await expect(page).toHaveURL(/#\/verse-builder\/1$/);
+  await expect(page.getByRole("button", { name: /1 Thessalonians/ }).first()).toBeVisible();
+
+  await page.goBack();
+  await expect(page).toHaveURL(/#\/verse-builder$/);
+  await expect(page.getByRole("button", { name: /Little Seeds/ })).toBeVisible();
+
+  await page.goForward();
+  await expect(page.getByRole("button", { name: /1 Thessalonians/ }).first()).toBeVisible();
+
+  // No echo: following a route must not push entries of its own
+  const after = await page.evaluate(() => history.length);
+  expect(
+    after - historyLength,
+    "navigating back and forward left extra history entries behind"
+  ).toBeLessThanOrEqual(1);
+});
+
+test("a deep link into each game opens where it points", async ({ page }) => {
+  for (const [url, marker] of [
+    ["/#/verse-builder/2/3", ".vb-strip"],
+    ["/#/memory-match/1/1", ".mm-grid"],
+    ["/#/story-sequencer/1/3", ".ss-timeline-track"],
+  ]) {
+    await page.goto(url);
+    await expect(page.locator(marker), `${url} did not open its board`).toBeVisible();
+  }
+
+  // A link to a game that no longer exists lands on the hub, not a blank page
+  await page.goto("/#/not-a-game/9");
+  await expect(page.getByRole("button", { name: /Verse Builder/ })).toBeVisible();
+});
+
 test("nothing scrolls the page behind an open dialog", async ({ page }) => {
   await openHub(page);
   await page.getByLabel("Open Game Settings").click();

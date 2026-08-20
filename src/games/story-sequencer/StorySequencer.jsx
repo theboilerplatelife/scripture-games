@@ -8,6 +8,7 @@ import { StoryReaderModal } from "./StoryReaderModal.jsx";
 import { VOLUMES, STORIES, getStoryById, getVolumeStories } from "./storyData.js";
 import { CompletionCard } from "../../components/common/CompletionCard.jsx";
 import { useScrollToTop } from "../../components/common/useScrollToTop.js";
+import { useRouteSync } from "../../components/common/useRouteSync.js";
 import { isStarred, sumStars, nextUnfinished } from "../../utils/stars.js";
 import "./story-sequencer.css";
 
@@ -20,6 +21,8 @@ function randomBoardSeed() {
 export function StorySequencer({
   onBackToHub,
   onOpenSettings,
+  route,
+  onNavigate,
   stars = {},
   onSaveStars,
   initialSeed = null, // tests pin the deal; players get a fresh one per board
@@ -33,6 +36,35 @@ export function StorySequencer({
   // replay cannot re-run the celebration
   const [wasVolumeComplete, setWasVolumeComplete] = useState(false);
   const [readerStory, setReaderStory] = useState(null);
+
+  /* Volumes, stories and the board earn a URL; the win and volume-done
+     cards do not. */
+  useRouteSync({
+    game: "story-sequencer",
+    route,
+    navigate: onNavigate,
+    place:
+      screen === "volumes"
+        ? { a: null, b: null }
+        : screen === "stories"
+          ? { a: volumeId, b: null }
+          : screen === "play"
+            ? { a: volumeId, b: storyId }
+            : null,
+    apply: ({ a, b }) => {
+      if (a === null) {
+        setScreen("volumes");
+        return;
+      }
+      setVolumeId(a);
+      if (b === null) {
+        setScreen("stories");
+        return;
+      }
+      setStoryId(b);
+      setScreen("play");
+    },
+  });
 
   useEffect(() => {
     audio.setTrack("sequencer");

@@ -816,4 +816,31 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     fireEvent.click(screen.getByText("All Volume Stories →"));
     expect(screen.getByText(/Jacob's Ladder at Bethel/)).toBeTruthy();
   });
+
+  test("opens on the screen the address bar names, and follows it when it changes", () => {
+    // Refreshing on a story must return to that story's board
+    const props = {
+      stars: {},
+      onSaveStars: vi.fn(),
+      onBackToHub: vi.fn(),
+      onOpenSettings: vi.fn(),
+      onNavigate: vi.fn(),
+      initialSeed: 1,
+    };
+    const { rerender } = render(
+      <StorySequencer {...props} route={{ game: "story-sequencer", a: 1, b: 3 }} />
+    );
+    expect(
+      screen.getByRole("button", { name: "Check timeline order" }),
+      "a deep link did not open the board"
+    ).toBeTruthy();
+
+    // Back: the story drops away and the volume's story list returns
+    rerender(<StorySequencer {...props} route={{ game: "story-sequencer", a: 1, b: null }} />);
+    expect(screen.getAllByLabelText(/Play story/).length).toBeGreaterThan(0);
+
+    // Back again to the volume shelf
+    rerender(<StorySequencer {...props} route={{ game: "story-sequencer", a: null, b: null }} />);
+    expect(screen.getByText(/Foundations/)).toBeTruthy();
+  });
 });
