@@ -178,6 +178,52 @@ test("card artwork is visible even if its entrance animation never runs", async 
   expect(faded, "card scenes render blank without their entrance animation").toBe(0);
 });
 
+test("a dialog keeps the keyboard inside it and hands it back", async ({ page }) => {
+  // aria-modal="true" is a promise about behaviour, and axe can only see the
+  // attribute. Before this was enforced, Tab walked out of the settings
+  // dialog onto the game cards hidden behind it, and closing dropped focus
+  // on <body>.
+  await openHub(page);
+  await page.getByLabel("Open Game Settings").click();
+  await expect(page.getByText("⚙️ Game Settings")).toBeVisible();
+
+  const inDialog = () =>
+    page.evaluate(() => document.querySelector('[role="dialog"]').contains(document.activeElement));
+
+  expect(await inDialog(), "focus did not move into the dialog").toBe(true);
+
+  // Walk far enough to wrap around the whole dialog twice
+  for (let i = 0; i < 14; i += 1) {
+    await page.keyboard.press("Tab");
+    expect(await inDialog(), `Tab left the dialog after ${i + 1} presses`).toBe(true);
+  }
+  await page.keyboard.press("Shift+Tab");
+  expect(await inDialog(), "Shift+Tab left the dialog").toBe(true);
+
+  await page.keyboard.press("Escape");
+  const returned = await page.evaluate(() => document.activeElement?.getAttribute("aria-label"));
+  expect(returned, "focus was not handed back to the control that opened the dialog").toBe(
+    "Open Game Settings"
+  );
+});
+
+test("the win card, where the player actually ends up", async ({ page }) => {
+  // Every audit stopped at the play board, so the celebration screens —
+  // stars, best score, stamp, confetti — had never been checked at all.
+  await openHub(page);
+  await page.getByRole("button", { name: /Verse Builder/ }).click();
+  await page.getByRole("button", { name: /Little Seeds/ }).click();
+  await page.getByRole("button", { name: /1 Thessalonians/ }).first().click();
+
+  // "Pray without ceasing." — tapped in order, which wins the level
+  for (const word of ["Pray", "without", "ceasing."]) {
+    await page.getByRole("button", { name: `Place word ${word}` }).click();
+  }
+  // The win card shows the verse's own cheer line
+  await expect(page.locator(".vb-win-cheer")).toBeVisible({ timeout: 5000 });
+  await audit(page, "verse builder — win card");
+});
+
 test("no screen scrolls sideways on a tablet", async ({ page }) => {
   // Wide artwork, long references and four translations all push at the
   // page width. Sideways scroll is invisible in jsdom, which has no layout.

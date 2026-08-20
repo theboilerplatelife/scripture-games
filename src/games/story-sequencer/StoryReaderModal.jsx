@@ -1,10 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { audio } from "../../audio/SoundEngine.js";
 import { CardScene } from "../../art/CardScene.jsx";
 import { useScrollLock } from "../../components/common/useScrollLock.js";
+import { useDialogFocus } from "../../components/common/useDialogFocus.js";
 
 export function StoryReaderModal({ story, onClose }) {
+  const dialogRef = useRef(null);
   useScrollLock();
+  useDialogFocus(dialogRef);
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key === "Escape") onClose();
@@ -19,6 +22,7 @@ export function StoryReaderModal({ story, onClose }) {
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- stops backdrop dismissal when clicking inside the dialog */}
       <div
         className="ss-reader-card"
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="Storybook Reader"

@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { TRANSLATIONS } from "../../data/translations.js";
 import { useScrollLock } from "./useScrollLock.js";
+import { useDialogFocus } from "./useDialogFocus.js";
 import { audio, DEFAULT_BGM_VOL, DEFAULT_SFX_VOL } from "../../audio/SoundEngine.js";
 
 export function SettingsModal({
@@ -16,7 +17,9 @@ export function SettingsModal({
   onChangeSfxVol,
   onResetProgress,
 }) {
+  const dialogRef = useRef(null);
   useScrollLock(isOpen);
+  useDialogFocus(dialogRef, isOpen);
 
   // Keyboard users close with Escape (backdrop click stays as a
   // pointer-only convenience)
@@ -37,6 +40,7 @@ export function SettingsModal({
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- stops backdrop dismissal when clicking inside the dialog */}
       <div
         className="vb-modal-card"
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="vb-settings-title"
