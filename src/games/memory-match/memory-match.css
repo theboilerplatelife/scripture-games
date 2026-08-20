@@ -22,7 +22,10 @@
   font-family: inherit;
   color: inherit;
   clip-path: polygon(1% 4%, 40% 0%, 99% 3%, 100% 55%, 98% 97%, 55% 100%, 2% 96%);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.14);
+  /* clip-path clips box-shadow, so the paper's lift is a drop-shadow */
+  --lift:
+    drop-shadow(0 4px 10px rgba(0,0,0,0.14));
+  filter: var(--lift);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   display: flex;
   flex-direction: column;
@@ -166,7 +169,10 @@
   align-items: center;
   justify-content: center;
   clip-path: polygon(2% 5%, 50% 1%, 98% 4%, 100% 50%, 97% 96%, 45% 100%, 1% 95%);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.16);
+  /* clip-path clips box-shadow, so the paper's lift is a drop-shadow */
+  --lift:
+    drop-shadow(0 2px 6px rgba(0,0,0,0.16));
+  filter: var(--lift);
 }
 
 .mm-card-back {
@@ -216,7 +222,10 @@
   gap: 2px;
   text-align: center;
   clip-path: polygon(0.5% 8%, 30% 0%, 70% 5%, 99.5% 1%, 100% 88%, 65% 100%, 30% 94%, 0% 99%);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
+  /* clip-path clips box-shadow, so the paper's lift is a drop-shadow */
+  --lift:
+    drop-shadow(0 2px 6px rgba(0, 0, 0, 0.22));
+  filter: var(--lift);
 }
 
 .mm-caption-tape {

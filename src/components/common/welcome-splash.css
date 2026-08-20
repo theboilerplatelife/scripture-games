@@ -25,7 +25,11 @@
   width: 100%;
   padding: 36px 28px 30px;
   text-align: center;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25), 0 3px 8px rgba(0, 0, 0, 0.12);
+  /* clip-path clips box-shadow, so the paper's lift is a drop-shadow */
+  --lift:
+    drop-shadow(0 10px 26px rgba(0, 0, 0, 0.25))
+    drop-shadow(0 3px 8px rgba(0, 0, 0, 0.12));
+  filter: var(--lift);
   transform: rotate(-1deg);
   clip-path: polygon(1% 2%, 35% 0%, 75% 2%, 99% 0%, 100% 32%, 98% 70%, 100% 98%, 68% 100%, 30% 98%, 0% 100%, 1% 65%);
   box-sizing: border-box;
@@ -141,7 +145,10 @@
   padding: 14px 44px 12px;
   cursor: pointer;
   clip-path: polygon(2% 10%, 50% 0%, 98% 8%, 100% 85%, 55% 100%, 0% 92%);
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.22);
+  /* clip-path clips box-shadow, so the paper's lift is a drop-shadow */
+  --lift:
+    drop-shadow(0 5px 12px rgba(0, 0, 0, 0.22));
+  filter: var(--lift);
   transition: transform 0.15s ease, background 0.15s ease;
   display: inline-flex;
   align-items: center;

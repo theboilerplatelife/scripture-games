@@ -111,6 +111,21 @@ describe("Constitution Gate: Design System (Article 4)", () => {
     expect(dangling, `filters referenced but never defined:\n${dangling.join("\n")}`).toEqual([]);
   });
 
+  test("Article 4.1: a torn-paper element lifts with a filter, not a box-shadow", () => {
+    // clip-path clips the element's own box-shadow away, so a rule with both
+    // is painting a shadow nobody will ever see. The scrapbook look needs
+    // drop-shadow, which traces the torn edge instead of the box.
+    const offenders = [];
+    cssSources().forEach(({ name, css }) => {
+      [...css.matchAll(/([^{}]*)\{([^}]*)\}/g)].forEach(([, head, body]) => {
+        if (/clip-path/.test(body) && /box-shadow\s*:/.test(body)) {
+          offenders.push(`${name}: ${head.trim().split("\n").pop().trim()}`);
+        }
+      });
+    });
+    expect(offenders, `clipped elements still painting a box-shadow:\n${offenders.join("\n")}`).toEqual([]);
+  });
+
   test("Article 4.4: no class is defined in more than one stylesheet", () => {
     const definedIn = {};
     cssSources().forEach(({ name, css }) => {

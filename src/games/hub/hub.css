@@ -32,7 +32,10 @@
   box-sizing: border-box;
   transform: rotate(-1.5deg);
   clip-path: polygon(2% 4%, 30% 0%, 68% 3%, 98% 1%, 100% 30%, 97% 66%, 100% 96%, 60% 100%, 28% 97%, 0% 100%, 2% 60%);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+  /* clip-path clips box-shadow, so the paper's lift is a drop-shadow */
+  --lift:
+    drop-shadow(0 6px 16px rgba(0,0,0,0.18));
+  filter: var(--lift);
 }
 
 .hub-hero h1 {
@@ -97,7 +100,10 @@
   text-align: left;
   cursor: pointer;
   clip-path: polygon(1% 4%, 40% 0%, 99% 3%, 100% 55%, 98% 97%, 55% 100%, 2% 96%);
-  box-shadow: 0 5px 12px rgba(0,0,0,0.16);
+  /* clip-path clips box-shadow, so the paper's lift is a drop-shadow */
+  --lift:
+    drop-shadow(0 5px 12px rgba(0,0,0,0.16));
+  filter: var(--lift);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   display: flex;
   flex-direction: column;

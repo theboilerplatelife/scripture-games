@@ -356,7 +356,8 @@ input:focus-visible,
     drop-shadow(2px 0 0 var(--vermilion))
     drop-shadow(-2px 0 0 var(--vermilion))
     drop-shadow(0 2px 0 var(--vermilion))
-    drop-shadow(0 -2px 0 var(--vermilion));
+    drop-shadow(0 -2px 0 var(--vermilion))
+    var(--lift, none);
 }
 
 body {
@@ -421,7 +422,10 @@ body {
   align-items: center;
   gap: 6px;
   clip-path: polygon(3% 6%, 97% 2%, 100% 92%, 2% 98%);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+  /* clip-path clips box-shadow, so the paper's lift is a drop-shadow */
+  --lift:
+    drop-shadow(0 2px 6px rgba(0,0,0,0.18));
+  filter: var(--lift);
   transform: rotate(2deg);
   transition: transform 0.15s ease, background 0.15s ease;
   position: relative;
@@ -446,7 +450,10 @@ body {
   cursor: pointer;
   color: var(--ink-soft);
   clip-path: polygon(8% 2%, 95% 0%, 100% 90%, 4% 100%);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  /* clip-path clips box-shadow, so the paper's lift is a drop-shadow */
+  --lift:
+    drop-shadow(0 2px 5px rgba(0,0,0,0.15));
+  filter: var(--lift);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -468,7 +475,10 @@ body {
   padding: 10px 22px 8px;
   cursor: pointer;
   clip-path: polygon(2% 10%, 50% 0%, 98% 8%, 100% 85%, 55% 100%, 0% 92%);
-  box-shadow: 0 3px 7px rgba(0,0,0,0.2);
+  /* clip-path clips box-shadow, so the paper's lift is a drop-shadow */
+  --lift:
+    drop-shadow(0 3px 7px rgba(0,0,0,0.2));
+  filter: var(--lift);
   transition: transform 0.12s ease, background 0.15s ease;
 }
 .vb-btn:hover {
@@ -493,7 +503,10 @@ body {
   margin-top: 10px;
   transform: rotate(-1.5deg);
   clip-path: polygon(2% 4%, 30% 0%, 68% 3%, 98% 1%, 100% 30%, 97% 66%, 100% 96%, 60% 100%, 28% 97%, 0% 100%, 2% 60%);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+  /* clip-path clips box-shadow, so the paper's lift is a drop-shadow */
+  --lift:
+    drop-shadow(0 4px 10px rgba(0,0,0,0.18));
+  filter: var(--lift);
   text-align: center;
   max-width: 480px;
   width: 100%;
@@ -548,7 +561,10 @@ body {
   max-height: 90vh;
   overflow-y: auto;
   padding: 24px 22px 20px;
-  box-shadow: 0 10px 28px rgba(0,0,0,0.3);
+  /* clip-path clips box-shadow, so the paper's lift is a drop-shadow */
+  --lift:
+    drop-shadow(0 10px 28px rgba(0,0,0,0.3));
+  filter: var(--lift);
   clip-path: polygon(1% 2%, 99% 1%, 100% 98%, 1.5% 99%);
   transform: rotate(-0.5deg);
 }
