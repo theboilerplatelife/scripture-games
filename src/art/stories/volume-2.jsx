@@ -121,12 +121,12 @@ export const VOLUME_2 = {
     <>
       <Sky id={`a${uid}`} top={C.dawn} bottom={C.sand} />
       <Ridge y={78} sway={4} fill={C.sandDeep} />
-      <g fill={C.leaf}>
+      <g fill={C.leaf} className="art-sway" style={{ transformOrigin: "50% 100%" }}>
         <path d="M 24 80 q -4 -40 4 -52 q 8 14 4 52 Z" />
         <path d="M 40 80 q -3 -34 4 -44 q 7 12 3 44 Z" />
         <path d="M 234 80 q -4 -36 4 -48 q 8 14 4 48 Z" />
       </g>
-      <g transform="translate(136,86)">
+      <g transform="translate(136,86)" className="art-rock">
         <path d="M -40 0 q 5 30 40 30 q 35 0 40 -30 Z" fill={C.clothDeep} />
         <path d="M -40 0 h 80" stroke={C.wood} strokeWidth="6" strokeLinecap="round" />
         <g stroke={C.wood} strokeWidth="2.2" opacity="0.85">
@@ -142,13 +142,13 @@ export const VOLUME_2 = {
     <>
       <Sky id={`a${uid}`} top={C.dawn} bottom={C.noon} />
       <Water y={72} fill={C.deepWater} />
-      <g fill={C.leafDeep}>
+      <g fill={C.leafDeep} className="art-sway" style={{ transformOrigin: "50% 100%" }}>
         <path d="M 18 100 q -6 -50 6 -64 q 12 16 6 64 Z" />
         <path d="M 40 106 q -5 -44 5 -56 q 11 14 5 56 Z" />
         <path d="M 236 104 q -6 -46 6 -60 q 12 16 6 60 Z" />
         <path d="M 256 110 q -4 -38 4 -48 q 10 12 4 48 Z" />
       </g>
-      <g transform="translate(136,88)">
+      <g transform="translate(136,88)" className="art-rock">
         <path d="M -24 0 q 3 15 24 15 q 21 0 24 -15 Z" fill={C.clothDeep} />
         <path d="M -24 0 h 48" stroke={C.wood} strokeWidth="4" strokeLinecap="round" />
         <path d="M -18 6 h 36" stroke={C.wood} strokeWidth="1.6" opacity="0.8" />
@@ -162,14 +162,14 @@ export const VOLUME_2 = {
     <>
       <Sky id={`a${uid}`} top={C.noon} bottom={C.dawn} />
       <Water y={80} fill={C.water} />
-      <g fill={C.leafDeep} opacity="0.95">
+      <g fill={C.leafDeep} opacity="0.95" className="art-sway" style={{ transformOrigin: "50% 100%" }}>
         <path d="M 6 120 q -8 -70 6 -92 q 14 24 6 92 Z" />
         <path d="M 28 120 q -7 -62 5 -82 q 13 22 5 82 Z" />
         <path d="M 50 120 q -6 -52 4 -70 q 12 20 4 70 Z" />
         <path d="M 244 120 q -8 -66 6 -88 q 14 24 6 88 Z" />
         <path d="M 264 120 q -6 -56 4 -74 q 12 20 4 74 Z" />
       </g>
-      <g transform="translate(150,96) scale(0.7)">
+      <g transform="translate(150,96) scale(0.7)" className="art-rock">
         <path d="M -24 0 q 3 15 24 15 q 21 0 24 -15 Z" fill={C.clothDeep} />
         <path d="M -24 0 h 48" stroke={C.wood} strokeWidth="4" strokeLinecap="round" />
       </g>
@@ -192,11 +192,11 @@ export const VOLUME_2 = {
       <path d="M 86 94 L 122 94 L 122 102 L 78 102 Z" fill={C.stoneDeep} />
       <path d="M 78 102 L 122 102 L 122 110 L 70 110 Z" fill={C.stone} />
       <Water y={104} fill={C.deepWater} />
-      <g transform="translate(200,104) scale(0.75)">
+      <g transform="translate(200,104) scale(0.75)" className="art-rock">
         <path d="M -24 0 q 3 15 24 15 q 21 0 24 -15 Z" fill={C.clothDeep} />
         <path d="M -24 0 h 48" stroke={C.wood} strokeWidth="4" strokeLinecap="round" />
       </g>
-      <g fill={C.leafDeep}>
+      <g fill={C.leafDeep} className="art-sway" style={{ transformOrigin: "50% 100%" }}>
         <path d="M 244 106 q -5 -34 5 -44 q 11 12 5 44 Z" />
       </g>
       <Sun x={190} y={22} r={13} color={C.sun} ray={C.sunRay} />
@@ -243,17 +243,17 @@ export const VOLUME_2 = {
       <Sky id={`a${uid}`} top={C.night} bottom={C.ember} />
       <Glow id={`b${uid}`} x={136} y={92} r={96} color={C.flame} />
       <Ridge y={106} sway={5} fill={C.earthDeep} />
-      <g fill={C.leaf}>
+      <g fill={C.leaf} className="art-sway" style={{ transformOrigin: "bottom" }}>
         <ellipse cx="112" cy="96" rx="20" ry="16" />
         <ellipse cx="160" cy="94" rx="20" ry="16" />
         <ellipse cx="136" cy="86" rx="22" ry="16" />
       </g>
-      <g fill={C.flame}>
+      <g fill={C.flame} className="art-flicker">
         <path d="M 112 92 q -8 -14 0 -22 q 3 8 8 10 q 3 -6 0 -12 q 12 12 4 24 Z" />
         <path d="M 140 84 q -9 -16 0 -26 q 4 9 9 12 q 3 -7 0 -14 q 14 14 5 28 Z" />
         <path d="M 166 92 q -8 -14 0 -22 q 3 8 8 10 q 3 -6 0 -12 q 12 12 4 24 Z" />
       </g>
-      <g fill={C.flameBright}>
+      <g fill={C.flameBright} className="art-flicker">
         <path d="M 141 82 q -5 -9 0 -15 q 5 7 2 15 Z" />
         <path d="M 114 90 q -4 -8 0 -13 q 5 6 2 13 Z" />
       </g>
@@ -535,7 +535,7 @@ export const VOLUME_2 = {
         <rect x="-26" y="-18" width="52" height="24" rx="2" fill={C.gold} />
         <rect x="-30" y="-22" width="60" height="6" rx="2" fill={C.bronze} />
         <path d="M -44 -6 h 88" stroke={C.wood} strokeWidth="3" strokeLinecap="round" />
-        <path d="M -18 -22 q 8 -14 16 -2 q 8 -12 16 2 Z" fill={C.flameBright} />
+        <path d="M -18 -22 q 8 -14 16 -2 q 8 -12 16 2 Z" fill={C.flameBright} className="art-flicker" />
       </g>
       <g fill={C.clothDeep} opacity="0.9">
         <path d="M 60 96 q 6 -16 14 0 Z" /><path d="M 84 98 q 6 -14 12 0 Z" />
@@ -578,7 +578,7 @@ export const VOLUME_2 = {
         <path d="M 0 0 q 22 -8 34 -26 q 8 -12 14 -2 q -8 22 -30 34 Z" fill={C.bronze} />
         <path d="M 4 -2 q 18 -8 28 -22" stroke={C.gold} strokeWidth="2" fill="none" opacity="0.8" />
       </g>
-      <g fill="none" stroke={C.gold} strokeWidth="2.4" opacity="0.7">
+      <g fill="none" stroke={C.gold} strokeWidth="2.4" opacity="0.7" className="art-pulse">
         <path d="M 128 40 q 12 -10 24 0" /><path d="M 120 30 q 20 -16 40 0" /><path d="M 112 20 q 28 -22 56 0" />
       </g>
       <g fill={C.stoneShade} opacity="0.5">
@@ -589,7 +589,7 @@ export const VOLUME_2 = {
   "12-5": (uid) => (
     <>
       <Sky id={`a${uid}`} top={C.sand} bottom={C.dawn} />
-      <g fill={C.stoneShade} opacity="0.5">
+      <g fill={C.stoneShade} opacity="0.5" className="art-drift">
         <ellipse cx="136" cy="86" rx="120" ry="30" />
         <ellipse cx="60" cy="70" rx="42" ry="16" />
         <ellipse cx="212" cy="72" rx="40" ry="15" />

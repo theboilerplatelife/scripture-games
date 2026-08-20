@@ -11,7 +11,11 @@ export function CardScene({ scene, anchor }) {
   // reference cannot carry.
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
   const draw = SCENES[scene] || quietField;
-  return <Frame anchor={anchor}>{draw(uid)}</Frame>;
+  return (
+    <Frame anchor={anchor}>
+      <g className="art-scene-mount">{draw(uid)}</g>
+    </Frame>
+  );
 }
 
 /* Nothing should ever reach this — a gate fails if any card lacks a

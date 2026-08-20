@@ -451,7 +451,7 @@ export const VOLUME_4 = {
         <circle cx="-53" cy="-8" r="2" fill={C.ink} />
         <path d="M -66 6 q 16 6 30 2" stroke={C.darkWater} strokeWidth="2.4" fill="none" strokeLinecap="round" />
       </g>
-      <g fill={C.foam} opacity="0.7">
+      <g fill={C.foam} opacity="0.7" className="art-ripple">
         <circle cx="42" cy="30" r="3" /><circle cx="60" cy="20" r="2.2" /><circle cx="30" cy="16" r="1.8" />
       </g>
     </>
@@ -471,7 +471,7 @@ export const VOLUME_4 = {
       <g fill={C.gold} opacity="0.85">
         <circle cx="136" cy="106" r="4" />
       </g>
-      <g fill={C.foam} opacity="0.5">
+      <g fill={C.foam} opacity="0.5" className="art-ripple">
         <circle cx="44" cy="30" r="3" /><circle cx="60" cy="16" r="2" /><circle cx="222" cy="26" r="2.6" />
       </g>
     </>
@@ -490,7 +490,7 @@ export const VOLUME_4 = {
       <g stroke={C.stoneShade} strokeWidth="1.4" opacity="0.7">
         <path d="M 76 74 h 120 M 76 90 h 120" />
       </g>
-      <g fill={C.clothDeep}>
+      <g fill={C.clothDeep} className="art-breathe">
         <path d="M 30 116 q 6 -18 12 0 Z" /><path d="M 50 118 q 5 -16 11 0 Z" />
         <path d="M 216 116 q 6 -18 12 0 Z" /><path d="M 236 118 q 5 -16 11 0 Z" />
       </g>
@@ -605,7 +605,7 @@ export const VOLUME_4 = {
         <rect x="104" y="78" width="22" height="9" /><rect x="156" y="78" width="22" height="9" />
         <rect x="208" y="78" width="22" height="9" /><rect x="250" y="78" width="22" height="9" />
       </g>
-      <g fill={C.clothDeep}>
+      <g fill={C.clothDeep} className="art-breathe">
         <path d="M 26 78 q 6 -20 12 0 Z" /><path d="M 46 78 q 6 -18 12 0 Z" />
         <path d="M 78 78 q 6 -20 12 0 Z" /><path d="M 186 78 q 6 -20 12 0 Z" />
         <path d="M 206 78 q 6 -18 12 0 Z" /><path d="M 238 78 q 6 -20 12 0 Z" />

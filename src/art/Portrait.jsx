@@ -13,7 +13,7 @@ export function Portrait({ verseRef, size = 64 }) {
   const draw = PORTRAITS[`${key}#${verseRef}`] || PORTRAITS[key] || unknownWriter;
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" aria-hidden="true">
-      {draw()}
+      <g className="art-breathe">{draw()}</g>
     </svg>
   );
 }

@@ -261,7 +261,7 @@ export const VOLUME_3 = {
       </g>
       <g transform="translate(40,108)">
         <path d="M 0 0 q -3 -10 5 -10 q 8 0 5 10 Z" fill={C.bronze} />
-        <path d="M 5 -11 q -3 -7 0 -10 q 3 4 0 10 Z" fill={C.flame} />
+        <path d="M 5 -11 q -3 -7 0 -10 q 3 4 0 10 Z" fill={C.flame} className="art-flicker" />
       </g>
       <g stroke={C.star} strokeWidth="1.6" fill="none" opacity="0.5">
         <path d="M 214 74 q 10 -8 20 0" /><path d="M 206 62 q 18 -14 36 0" />
@@ -278,13 +278,13 @@ export const VOLUME_3 = {
         <path d="M 34 86 q 24 -20 48 0" />
         <path d="M 24 76 q 34 -28 68 0" />
       </g>
-      <g fill={C.clothDeep}>
+      <g fill={C.clothDeep} className="art-breathe">
         <path d="M 150 116 q 20 -14 44 -2 q -20 10 -44 2 Z" />
         <path d="M 158 110 q 18 -12 36 -1 q -18 8 -36 1 Z" fill={C.cloth} opacity="0.8" />
       </g>
       <g fill={C.bronze}>
         <path d="M 230 108 q -4 -12 6 -12 q 10 0 6 12 Z" />
-        <path d="M 236 94 q -4 -8 0 -12 q 4 5 0 12 Z" fill={C.flame} />
+        <path d="M 236 94 q -4 -8 0 -12 q 4 5 0 12 Z" fill={C.flame} className="art-flicker" />
       </g>
       <Glow id={`b${uid}`} x={236} y={100} r={44} color={C.flame} />
     </>
@@ -298,7 +298,7 @@ export const VOLUME_3 = {
         <path d="M 136 26 L 152 100" /><path d="M 136 26 L 186 96" />
       </g>
       <Ridge y={102} sway={4} fill={C.night} />
-      <g transform="translate(136,110)">
+      <g transform="translate(136,110)" className="art-breathe">
         <path d="M -30 0 q 26 -16 60 -2 q -26 12 -60 2 Z" fill={C.clothDeep} />
         <path d="M -20 -4 q 22 -12 44 -2 q -22 9 -44 2 Z" fill={C.cloth} opacity="0.8" />
       </g>
@@ -314,7 +314,7 @@ export const VOLUME_3 = {
       <Scroll x={112} y={92} scale={1.1} sheet={C.cloth} rod={C.wood} />
       <g fill={C.bronze}>
         <path d="M 44 116 q -5 -16 8 -16 q 13 0 8 16 Z" />
-        <path d="M 52 98 q -5 -10 0 -15 q 5 6 0 15 Z" fill={C.flame} />
+        <path d="M 52 98 q -5 -10 0 -15 q 5 6 0 15 Z" fill={C.flame} className="art-flicker" />
       </g>
       <Birds x={196} y={22} scale={0.9} color={C.stoneShade} />
       <Tuft x={240} y={114} scale={1.1} color={C.leaf} />
@@ -379,7 +379,7 @@ export const VOLUME_3 = {
         <path d="M 0 0 q 14 8 18 22" stroke={C.clothDeep} strokeWidth="3" fill="none" strokeLinecap="round" />
         <path d="M -6 0 q 6 -8 12 0 q -6 6 -12 0 Z" fill={C.earth} />
       </g>
-      <g stroke={C.foam} strokeWidth="2" fill="none" opacity="0.6" strokeLinecap="round">
+      <g stroke={C.foam} strokeWidth="2" fill="none" opacity="0.6" strokeLinecap="round" className="art-ripple">
         <path d="M 20 100 q 10 -5 20 0" /><path d="M 186 98 q 10 -5 20 0" />
       </g>
     </>
@@ -508,7 +508,7 @@ export const VOLUME_3 = {
       </g>
       <path d="M 0 116 q 44 -12 92 -18" stroke={C.sandDeep} strokeWidth="5" fill="none" strokeLinecap="round" opacity="0.8" />
       <path d="M 272 114 q -44 -12 -92 -16" stroke={C.sandDeep} strokeWidth="5" fill="none" strokeLinecap="round" opacity="0.8" />
-      <g fill={C.clothDeep}>
+      <g fill={C.clothDeep} className="art-breathe">
         <path d="M 30 108 q 6 -14 12 0 Z" /><path d="M 226 106 q 6 -14 12 0 Z" />
       </g>
     </>
@@ -523,7 +523,7 @@ export const VOLUME_3 = {
       <g fill={C.stoneDeep}>
         <rect x="104" y="86" width="64" height="12" rx="2" />
       </g>
-      <g fill={C.clothDeep} opacity="0.85">
+      <g fill={C.clothDeep} opacity="0.85" className="art-breathe">
         <path d="M 20 116 q 5 -14 10 0 Z" /><path d="M 40 118 q 5 -12 10 0 Z" />
         <path d="M 60 116 q 5 -14 10 0 Z" /><path d="M 200 116 q 5 -14 10 0 Z" />
         <path d="M 220 118 q 5 -12 10 0 Z" /><path d="M 240 116 q 5 -14 10 0 Z" />
@@ -545,7 +545,7 @@ export const VOLUME_3 = {
       <g fill="none" stroke={C.stoneShade} strokeWidth="2" opacity="0.5" strokeDasharray="4 5">
         <path d="M 120 78 q 18 -10 36 0" /><path d="M 112 66 q 26 -16 52 0" />
       </g>
-      <g fill={C.clothDeep}>
+      <g fill={C.clothDeep} className="art-breathe">
         <path d="M 176 116 q 6 -18 12 0 Z" /><path d="M 200 118 q 6 -16 12 0 Z" />
       </g>
     </>
@@ -565,7 +565,7 @@ export const VOLUME_3 = {
       </g>
       <Jar x={40} y={110} scale={1} body={C.earth} rim={C.earthDeep} />
       <Jar x={222} y={112} scale={1} body={C.earth} rim={C.earthDeep} />
-      <g stroke={C.water} strokeWidth="3" fill="none" strokeLinecap="round" opacity="0.9">
+      <g stroke={C.water} strokeWidth="3" fill="none" strokeLinecap="round" opacity="0.9" className="art-ripple">
         <path d="M 56 96 q 10 8 14 20" /><path d="M 224 98 q -10 8 -14 18" />
       </g>
     </>
@@ -579,7 +579,7 @@ export const VOLUME_3 = {
         <rect x="98" y="102" width="76" height="12" rx="2" />
         <rect x="108" y="92" width="56" height="10" rx="2" fill={C.stoneShade} />
       </g>
-      <g stroke={C.gold} strokeWidth="2" fill="none" opacity="0.65">
+      <g stroke={C.gold} strokeWidth="2" fill="none" opacity="0.65" className="art-drift">
         <path d="M 118 84 q 18 -12 36 0" /><path d="M 108 72 q 28 -20 56 0" />
         <path d="M 100 58 q 36 -26 72 0" />
       </g>
@@ -592,7 +592,7 @@ export const VOLUME_3 = {
     <>
       <Sky id={`a${uid}`} top={C.deepNight} bottom={C.flame} />
       <Glow id={`b${uid}`} x={136} y={96} r={128} color={C.flameBright} />
-      <path d="M 128 0 L 118 40 L 134 38 L 122 78 L 158 34 L 140 36 L 154 0 Z" fill={C.flameBright} opacity="0.95" />
+      <path d="M 128 0 L 118 40 L 134 38 L 122 78 L 158 34 L 140 36 L 154 0 Z" fill={C.flameBright} opacity="0.95" className="art-flicker" />
       <Ridge y={104} sway={4} fill={C.night} />
       <g fill={C.stoneDeep} opacity="0.7">
         <rect x="104" y="106" width="64" height="10" rx="2" />

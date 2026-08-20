@@ -20,7 +20,7 @@ export const VOLUME_6 = {
         <rect x="176" y="52" width="96" height="48" />
         <rect x="206" y="76" width="24" height="24" rx="2" fill={C.woodDeep} />
       </g>
-      <g fill={C.clothDeep}>
+      <g fill={C.clothDeep} className="art-breathe">
         <path d="M 60 112 q 3 -18 16 -18 q 5 -10 13 -2 q 11 0 11 12 q 0 8 -4 8 Z" />
         <path d="M 100 94 q 9 -3 10 -14 q 1 -7 6 -6 q 4 1 1 8 q -2 12 -9 16 Z" />
         <rect x="66" y="110" width="3.4" height="9" rx="1.6" />
@@ -41,7 +41,7 @@ export const VOLUME_6 = {
         <path d="M 108 100 q 20 -11 40 -2 q -20 9 -40 2 Z" fill={C.purple} />
         <path d="M 200 98 q 18 -10 36 -2 q -18 8 -36 2 Z" fill={C.leafDeep} />
       </g>
-      <g fill={C.clothDeep}>
+      <g fill={C.clothDeep} className="art-breathe">
         <path d="M 60 116 q 20 -12 40 -2 q -20 9 -40 2 Z" />
         <path d="M 156 118 q 18 -11 36 -2 q -18 8 -36 2 Z" fill={C.cloth} />
       </g>
@@ -52,7 +52,7 @@ export const VOLUME_6 = {
     <>
       <Sky id={`a${uid}`} top={C.daySky} bottom={C.grassLight} />
       <Ridge y={96} sway={6} fill={C.grass} />
-      <g fill={C.leaf}>
+      <g fill={C.leaf} className="art-ripple">
         <path d="M 30 118 q -18 -30 -2 -44 q 10 16 8 44 Z" />
         <path d="M 34 118 q 18 -32 4 -46 q -12 18 -10 46 Z" />
         <path d="M 100 116 q -20 -34 -2 -48 q 11 18 9 48 Z" />
@@ -62,7 +62,7 @@ export const VOLUME_6 = {
         <path d="M 246 116 q -20 -34 -2 -48 q 11 18 9 48 Z" />
         <path d="M 250 116 q 20 -36 4 -50 q -13 20 -11 50 Z" />
       </g>
-      <g fill={C.leafDeep} opacity="0.6">
+      <g fill={C.leafDeep} opacity="0.6" className="art-ripple">
         <path d="M 66 120 q -14 -24 -2 -34 q 8 12 6 34 Z" />
         <path d="M 212 120 q -14 -24 -2 -34 q 8 12 6 34 Z" />
       </g>
@@ -83,7 +83,7 @@ export const VOLUME_6 = {
       <Person x={86} y={118} scale={0.68} robe={C.purple} scarf={C.clothDeep} skin={C.clothDeep} />
       <Person x={186} y={118} scale={0.7} robe={C.leafDeep} scarf={C.cloth} skin={C.earth} />
       <Person x={232} y={118} scale={0.66} robe={C.clothDeep} scarf={C.crimson} skin={C.earth} />
-      <g fill={C.leaf}>
+      <g fill={C.leaf} className="art-ripple">
         <path d="M 130 112 q -14 -22 -2 -32 q 8 12 6 32 Z" />
         <path d="M 134 112 q 14 -24 2 -34 q -9 14 -7 34 Z" />
       </g>
@@ -103,7 +103,7 @@ export const VOLUME_6 = {
       </g>
       <path d="M 118 106 L 118 84 Q 136 66 154 84 L 154 106 Z" fill={C.woodDeep} />
       <Ridge y={110} sway={4} fill={C.sandDeep} />
-      <g fill={C.leaf}>
+      <g fill={C.leaf} className="art-ripple">
         <path d="M 60 118 q -12 -18 -2 -26 q 7 10 5 26 Z" />
         <path d="M 210 118 q 12 -20 2 -28 q -8 12 -6 28 Z" />
       </g>
@@ -158,7 +158,7 @@ export const VOLUME_6 = {
         <rect x="82" y="96" width="108" height="14" rx="3" />
         <rect x="88" y="88" width="96" height="8" rx="3" fill={C.stoneShade} />
       </g>
-      <g fill={C.cloth} opacity="0.9">
+      <g fill={C.cloth} opacity="0.9" className="art-breathe">
         <path d="M 96 88 q 20 -12 42 -2 q -20 8 -42 2 Z" />
         <path d="M 140 86 q 18 -10 36 -2 q -18 8 -36 2 Z" />
       </g>
@@ -309,7 +309,7 @@ export const VOLUME_6 = {
       <Person x={200} y={102} scale={0.72} robe={C.cloth} scarf={C.crimson} skin={C.clothDeep} />
       <g transform="translate(240,96)">
         <path d="M 0 0 q -5 -14 7 -14 q 12 0 7 14 Z" fill={C.bronze} />
-        <path d="M 7 -16 q -4 -9 0 -13 q 4 5 0 13 Z" fill={C.flame} />
+        <path d="M 7 -16 q -4 -9 0 -13 q 4 5 0 13 Z" fill={C.flame} className="art-flicker" />
       </g>
       <Glow id={`b${uid}`} x={246} y={96} r={44} color={C.flame} />
     </>
@@ -327,7 +327,7 @@ export const VOLUME_6 = {
         <path d="M 6 78 q 50 -16 100 0 q 50 16 100 0 q 30 -10 60 -2" />
         <path d="M 6 96 q 40 -12 80 0 q 40 12 80 0" />
       </g>
-      <g stroke={C.foam} strokeWidth="2" fill="none" opacity="0.6" strokeLinecap="round">
+      <g stroke={C.foam} strokeWidth="2" fill="none" opacity="0.6" strokeLinecap="round" className="art-ripple">
         <path d="M 20 44 q 30 -10 60 0" /><path d="M 180 68 q 30 -10 60 0" />
       </g>
     </>
@@ -357,7 +357,7 @@ export const VOLUME_6 = {
     <>
       <Sky id={`a${uid}`} top={C.dawn} bottom={C.sand} />
       <Ridge y={102} sway={5} fill={C.sandDeep} />
-      <g opacity="0.9">
+      <g opacity="0.9" className="art-breathe">
         <path d="M 20 30 q 16 -14 30 0 q -4 12 -16 11 l -8 8 l 0 -9 q -10 -2 -6 -10 Z" fill={C.crimson} />
         <path d="M 78 20 q 16 -14 30 0 q -4 12 -16 11 l -8 8 l 0 -9 q -10 -2 -6 -10 Z" fill={C.deepWater} />
         <path d="M 140 28 q 16 -14 30 0 q -4 12 -16 11 l -8 8 l 0 -9 q -10 -2 -6 -10 Z" fill={C.leaf} />
@@ -378,7 +378,7 @@ export const VOLUME_6 = {
         <rect x="108" y="96" width="56" height="10" rx="2" />
       </g>
       <Person x={136} y={96} scale={0.85} robe={C.purple} scarf={C.gold} skin={C.earth} />
-      <g fill={C.clothDeep}>
+      <g fill={C.clothDeep} className="art-breathe">
         <circle cx="30" cy="112" r="5" /><circle cx="54" cy="116" r="5" /><circle cx="78" cy="112" r="5" />
         <circle cx="194" cy="112" r="5" /><circle cx="218" cy="116" r="5" /><circle cx="242" cy="112" r="5" />
         <circle cx="42" cy="102" r="4.4" /><circle cx="230" cy="102" r="4.4" />
@@ -418,7 +418,7 @@ export const VOLUME_6 = {
         <path d="M 90 106 L 90 58 Q 136 20 182 58 L 182 106 L 176 106 L 176 60 Q 136 28 96 60 L 96 106 Z" />
       </g>
       <Ridge y={108} sway={3} fill={C.sandDeep} />
-      <g transform="translate(46,116)">
+      <g transform="translate(46,116)" className="art-breathe">
         <path d="M -20 2 q 3 -14 20 -14 q 17 0 20 14 Z" fill={C.clothDeep} />
         <circle cx="0" cy="-18" r="6.5" fill={C.earth} />
         <path d="M -7 -20 q 7 -9 14 0 q -7 4 -14 0 Z" fill={C.earthDeep} />
@@ -440,7 +440,7 @@ export const VOLUME_6 = {
       <Ridge y={98} sway={3} fill={C.sandDeep} />
       <Person x={78} y={116} scale={0.85} robe={C.purple} scarf={C.gold} skin={C.earth} />
       <Person x={116} y={116} scale={0.8} robe={C.clothDeep} scarf={C.cloth} skin={C.clothDeep} />
-      <g transform="translate(198,116)">
+      <g transform="translate(198,116)" className="art-breathe">
         <path d="M -20 2 q 3 -14 20 -14 q 17 0 20 14 Z" fill={C.clothDeep} />
         <circle cx="0" cy="-18" r="6.5" fill={C.earth} />
       </g>
@@ -514,7 +514,7 @@ export const VOLUME_6 = {
       </g>
       <circle cx="136" cy="34" r="26" fill={C.cloud} />
       <Ridge y={112} sway={4} fill={C.sandDeep} />
-      <g fill={C.storm} opacity="0.7">
+      <g fill={C.storm} opacity="0.7" className="art-breathe">
         <path d="M 100 118 q 22 -14 48 -2 q -22 10 -48 2 Z" />
       </g>
     </>
@@ -529,7 +529,7 @@ export const VOLUME_6 = {
         <path d="M 68 16 q 68 -40 136 0" />
       </g>
       <Ridge y={104} sway={4} fill={C.sandDeep} />
-      <g fill={C.storm}>
+      <g fill={C.storm} className="art-breathe">
         <path d="M 92 116 q 26 -16 56 -2 q -26 12 -56 2 Z" />
         <circle cx="86" cy="110" r="7" fill={C.earth} />
       </g>
@@ -565,7 +565,7 @@ export const VOLUME_6 = {
       </g>
       <Person x={116} y={118} scale={0.88} robe={C.cloth} scarf={C.crimson} skin={C.earth} />
       <Scroll x={148} y={92} scale={0.72} sheet={C.cloth} rod={C.wood} />
-      <g fill={C.clothDeep}>
+      <g fill={C.clothDeep} className="art-breathe">
         <circle cx="192" cy="112" r="5" /><circle cx="214" cy="116" r="5" /><circle cx="236" cy="112" r="5" />
       </g>
       <Dove x={44} y={20} scale={0.62} flip={1} />

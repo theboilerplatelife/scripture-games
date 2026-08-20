@@ -148,6 +148,13 @@ export default function App() {
   return (
     <div className="vb-root">
       <style>{globalCss}</style>
+      <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true">
+        <defs>
+          <filter id="diorama-shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="1.5" stdDeviation="1" floodColor="#1d2138" floodOpacity="0.4" />
+          </filter>
+        </defs>
+      </svg>
 
       {/* Screen 0: Tap to Play Welcome Screen */}
       {!hasStarted ? (
@@ -881,5 +888,120 @@ body {
   .vb-confetti span, .vb-slot.pop .vb-scrap, .vb-slot.shake .vb-scrap, .vb-scrap.writing, .vb-word-text.writing { animation: none !important; }
   .vb-pencil-writer { display: none !important; }
   .vb-scrap-btn, .vb-level-card, .vb-btn, .hub-game-card, .vb-chapter-card { transition: none !important; }
+  .art-twinkle, .art-flicker, .art-drift, .art-ripple, .art-scene-mount, .art-spin-slow, .art-pulse, .art-bob, .art-fall, .art-sway, .art-breathe, .art-rock, .art-camera-drift { animation: none !important; opacity: 1 !important; transform: none !important; }
+}
+
+/* ---- SVG Art Enhancements ---- */
+.art-twinkle {
+  animation: art-twinkle-anim 3s infinite alternate ease-in-out;
+}
+@keyframes art-twinkle-anim {
+  0% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+.art-flicker {
+  animation: art-flicker-anim 0.2s infinite alternate ease-in-out;
+  transform-origin: center;
+}
+@keyframes art-flicker-anim {
+  0% { opacity: 0.8; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1.02); }
+}
+
+.art-drift {
+  animation: art-drift-anim 12s infinite alternate linear;
+}
+@keyframes art-drift-anim {
+  0% { transform: translateX(-4px); }
+  100% { transform: translateX(4px); }
+}
+
+.art-ripple {
+  animation: art-ripple-anim 3s infinite alternate ease-in-out;
+}
+@keyframes art-ripple-anim {
+  0% { transform: translateX(-2px); }
+  100% { transform: translateX(2px); }
+}
+
+.art-scene-mount {
+  animation: art-scene-mount-anim 0.6s ease-out forwards;
+  opacity: 0;
+}
+@keyframes art-scene-mount-anim {
+  0% { opacity: 0; transform: translateY(4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.art-spin-slow {
+  animation: art-spin-slow-anim 40s infinite linear;
+  transform-origin: center;
+}
+@keyframes art-spin-slow-anim {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.art-pulse {
+  animation: art-pulse-anim 4s infinite alternate ease-in-out;
+}
+@keyframes art-pulse-anim {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.8; }
+}
+
+.art-bob {
+  animation: art-bob-anim 3s infinite alternate ease-in-out;
+}
+@keyframes art-bob-anim {
+  0% { transform: translateY(-2px); }
+  100% { transform: translateY(2px); }
+}
+
+.art-fall {
+  animation: art-fall-anim 0.8s infinite linear;
+}
+@keyframes art-fall-anim {
+  0% { transform: translateY(-10px); opacity: 0; }
+  20% { opacity: 0.6; }
+  80% { opacity: 0.6; }
+  100% { transform: translateY(15px); opacity: 0; }
+}
+
+.art-sway {
+  animation: art-sway-anim 4s infinite alternate ease-in-out;
+  transform-origin: 0 0;
+}
+@keyframes art-sway-anim {
+  0% { transform: rotate(-3deg); }
+  100% { transform: rotate(3deg); }
+}
+
+.art-breathe {
+  animation: art-breathe-anim 3.5s infinite alternate ease-in-out;
+  transform-origin: 0 0;
+}
+@keyframes art-breathe-anim {
+  0% { transform: scaleY(0.97); }
+  100% { transform: scaleY(1.02); }
+}
+
+.art-rock {
+  animation: art-rock-anim 6s infinite alternate ease-in-out;
+  transform-origin: 0 0;
+}
+@keyframes art-rock-anim {
+  0% { transform: rotate(-2.5deg); }
+  100% { transform: rotate(2.5deg); }
+}
+
+.art-camera-drift {
+  animation: art-camera-drift-anim 12s infinite alternate ease-in-out;
+  transform-origin: center;
+}
+@keyframes art-camera-drift-anim {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.05) translate(-2px, 1px); }
 }
 `;

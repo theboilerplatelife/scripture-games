@@ -73,7 +73,7 @@ export function GameIcon({ kind, size = 40 }) {
 
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true" className="hub-game-icon-svg">
-      {icons[kind] || icons.scissors}
+      <g className="art-bob">{icons[kind] || icons.scissors}</g>
     </svg>
   );
 }

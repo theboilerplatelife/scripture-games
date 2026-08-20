@@ -15,7 +15,7 @@ export const VOLUME_5 = {
     <>
       <Sky id={`a${uid}`} top={C.deepNight} bottom={C.night} />
       <Stars seed={83} count={20} size={1.5} />
-      <g fill={C.star}>
+      <g fill={C.star} className="art-twinkle">
         <circle cx="204" cy="20" r="4" />
         <path d="M 204 6 l 0 28 M 190 20 l 28 0 M 194 10 l 20 20 M 214 10 l -20 20" stroke={C.star} strokeWidth="1.4" opacity="0.7" />
       </g>
@@ -29,7 +29,7 @@ export const VOLUME_5 = {
         <rect x="196" y="76" width="5" height="6" /><rect x="244" y="78" width="5" height="6" />
       </g>
       <Ridge y={110} sway={5} fill={C.deepNight} />
-      <g fill={C.earthDeep}>
+      <g fill={C.earthDeep} className="art-breathe">
         <path d="M 40 112 q 2 -14 12 -14 q 4 -8 10 -1 q 8 0 8 9 q 0 6 -3 6 Z" />
         <path d="M 70 106 q 8 -3 9 -12 q 1 -6 5 -5 q 3 1 1 7 q -2 10 -8 14 Z" />
         <rect x="44" y="110" width="3" height="9" rx="1.4" /><rect x="58" y="110" width="3" height="9" rx="1.4" />
@@ -146,7 +146,7 @@ export const VOLUME_5 = {
       <Person x={88} y={90} scale={0.64} robe={C.purple} scarf={C.gold} skin={C.earth} />
       <Person x={120} y={92} scale={0.58} robe={C.crimson} scarf={C.clothDeep} skin={C.earth} />
       <Person x={150} y={90} scale={0.62} robe={C.clothDeep} scarf={C.earth} skin={C.clothDeep} />
-      <g stroke={C.foam} strokeWidth="2" fill="none" opacity="0.7" strokeLinecap="round">
+      <g stroke={C.foam} strokeWidth="2" fill="none" opacity="0.7" strokeLinecap="round" className="art-ripple">
         <path d="M 190 104 q 12 -6 24 0" /><path d="M 224 112 q 12 -6 24 0" />
         <path d="M 200 116 q 12 -6 24 0" />
       </g>
@@ -158,7 +158,7 @@ export const VOLUME_5 = {
       <Glow id={`b${uid}`} x={136} y={100} r={94} color={C.flameBright} />
       <Ridge y={80} sway={6} fill={C.grass} />
       <Water y={90} fill={C.water} />
-      <g stroke={C.foam} strokeWidth="2.4" fill="none" opacity="0.85" strokeLinecap="round">
+      <g stroke={C.foam} strokeWidth="2.4" fill="none" opacity="0.85" strokeLinecap="round" className="art-ripple">
         <path d="M 92 100 q 22 -10 44 0 q 22 10 44 0" />
         <path d="M 80 112 q 28 -12 56 0 q 28 12 56 0" />
       </g>
@@ -187,7 +187,7 @@ export const VOLUME_5 = {
       </g>
       <Dove x={116} y={86} scale={1.1} flip={1} />
       <Water y={100} fill={C.water} />
-      <g stroke={C.foam} strokeWidth="2" fill="none" opacity="0.7" strokeLinecap="round">
+      <g stroke={C.foam} strokeWidth="2" fill="none" opacity="0.7" strokeLinecap="round" className="art-ripple">
         <path d="M 60 110 q 12 -6 24 0" /><path d="M 190 112 q 12 -6 24 0" />
       </g>
     </>
@@ -236,7 +236,7 @@ export const VOLUME_5 = {
       <g transform="rotate(-18 136 96)">
         <Boat x={136} y={96} scale={1.05} hull={C.woodDeep} sail={C.clothDeep} />
       </g>
-      <g fill={C.foam} opacity="0.8">
+      <g fill={C.foam} opacity="0.8" className="art-ripple">
         <path d="M 30 92 q 16 -18 32 0 q -16 8 -32 0 Z" />
         <path d="M 210 96 q 16 -18 32 0 q -16 8 -32 0 Z" />
       </g>
@@ -269,7 +269,7 @@ export const VOLUME_5 = {
         <path d="M 24 44 q 26 -12 52 0" /><path d="M 196 42 q 26 -12 52 0" />
       </g>
       <path d="M 0 96 q 34 -10 68 0 q 34 10 68 0 q 34 -10 68 0 q 34 10 68 0 L 272 120 L 0 120 Z" fill={C.deepWater} />
-      <g stroke={C.foam} strokeWidth="2" fill="none" opacity="0.75" strokeLinecap="round">
+      <g stroke={C.foam} strokeWidth="2" fill="none" opacity="0.75" strokeLinecap="round" className="art-ripple">
         <path d="M 40 110 h 40" /><path d="M 150 114 h 46" />
       </g>
     </>
@@ -284,7 +284,7 @@ export const VOLUME_5 = {
         <ellipse cx="210" cy="102" rx="10" ry="18" />
       </g>
       <Boat x={92} y={100} scale={1} hull={C.night} sail={C.storm} />
-      <g stroke={C.foam} strokeWidth="1.6" fill="none" opacity="0.4">
+      <g stroke={C.foam} strokeWidth="1.6" fill="none" opacity="0.4" className="art-ripple">
         <path d="M 30 108 h 44" /><path d="M 140 114 h 52" /><path d="M 60 118 h 36" />
       </g>
     </>
@@ -406,7 +406,7 @@ export const VOLUME_5 = {
       <Peaks points="L 50 70 L 110 90 L 168 68 L 226 92 L 272 80" fill={C.stoneShade} />
       <Ridge y={98} sway={5} fill={C.sandDeep} />
       <path d="M 0 116 q 70 -14 140 -16 q 70 -2 132 -10" stroke={C.sand} strokeWidth="9" fill="none" opacity="0.9" strokeLinecap="round" />
-      <g transform="translate(120,108)">
+      <g transform="translate(120,108)" className="art-breathe">
         <path d="M -30 4 q 4 -12 30 -12 q 26 0 30 12 Z" fill={C.clothDeep} />
         <circle cx="-34" cy="-2" r="6" fill={C.earth} />
         <path d="M -40 -6 q 6 -8 12 0 q -6 4 -12 0 Z" fill={C.earthDeep} />
@@ -426,7 +426,7 @@ export const VOLUME_5 = {
       <path d="M 0 106 q 70 -8 140 -8 q 70 0 132 -4" stroke={C.sand} strokeWidth="10" fill="none" opacity="0.9" strokeLinecap="round" />
       <Person x={70} y={104} scale={0.66} robe={C.cloth} scarf={C.clothDeep} skin={C.earth} />
       <Person x={108} y={106} scale={0.62} robe={C.clothDeep} scarf={C.stoneShade} skin={C.earth} />
-      <g transform="translate(200,118)">
+      <g transform="translate(200,118)" className="art-breathe">
         <path d="M -26 2 q 4 -10 26 -10 q 22 0 26 10 Z" fill={C.clothDeep} />
         <circle cx="-30" cy="-3" r="5" fill={C.earth} />
       </g>
@@ -440,7 +440,7 @@ export const VOLUME_5 = {
       <Sky id={`a${uid}`} top={C.ember} bottom={C.sand} />
       <Glow id={`b${uid}`} x={136} y={102} r={78} color={C.dawn} />
       <Ridge y={96} sway={5} fill={C.sandDeep} />
-      <g transform="translate(96,116)">
+      <g transform="translate(96,116)" className="art-breathe">
         <path d="M -26 2 q 4 -10 26 -10 q 22 0 26 10 Z" fill={C.clothDeep} />
         <circle cx="-30" cy="-3" r="5.5" fill={C.earth} />
       </g>

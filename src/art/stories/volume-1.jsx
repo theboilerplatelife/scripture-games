@@ -18,7 +18,7 @@ export const VOLUME_1 = {
         </linearGradient>
       </defs>
       <rect width="272" height="120" fill={`url(#a${uid})`} />
-      <g fill={C.star} opacity="0.9">
+      <g fill={C.star} opacity="0.9" className="art-twinkle">
         <circle cx="18" cy="22" r="1.8" /><circle cx="44" cy="52" r="1.4" />
         <circle cx="30" cy="86" r="1.6" /><circle cx="62" cy="30" r="1.2" />
         <circle cx="74" cy="70" r="1.3" /><circle cx="12" cy="60" r="1.2" />
@@ -61,13 +61,13 @@ export const VOLUME_1 = {
       <Birds x={168} y={10} scale={1} color={C.stoneShade} />
       <Birds x={120} y={30} scale={0.7} color={C.stoneShade} />
       <Water y={62} fill={C.deepWater} />
-      <g fill={C.foam} opacity="0.9">
+      <g fill={C.foam} opacity="0.9" className="art-ripple">
         <path d="M 42 92 q 14 -9 26 0 q -12 8 -26 0 Z" />
         <path d="M 68 92 l 10 -6 l 0 12 Z" />
         <path d="M 150 106 q 11 -7 20 0 q -9 6 -20 0 Z" />
         <path d="M 170 106 l 8 -5 l 0 10 Z" />
       </g>
-      <g fill={C.water} opacity="0.8">
+      <g fill={C.water} opacity="0.8" className="art-ripple">
         <path d="M 208 80 q 12 -8 22 0 q -10 7 -22 0 Z" />
         <path d="M 230 80 l 9 -5 l 0 10 Z" />
       </g>
@@ -319,7 +319,7 @@ export const VOLUME_1 = {
         <rect x="30" y="86" width="44" height="22" rx="3" />
         <rect x="44" y="94" width="16" height="14" rx="2" fill={C.flame} />
       </g>
-      <path d="M 52 84 q -6 -12 2 -18 q 4 8 0 18 Z" fill={C.flameBright} opacity="0.8" />
+      <path d="M 52 84 q -6 -12 2 -18 q 4 8 0 18 Z" fill={C.flameBright} opacity="0.8" className="art-flicker" />
       <Jar x={112} y={110} scale={0.8} body={C.wood} rim={C.woodDeep} />
     </>
   ),
@@ -409,7 +409,7 @@ export const VOLUME_1 = {
       <Ridge y={104} sway={6} fill={C.grass} />
       <Tent x={26} y={110} scale={1.1} cloth={C.cloth} shade={C.clothDeep} />
       <Tent x={78} y={116} scale={0.9} cloth={C.cloth} shade={C.clothDeep} />
-      <g fill={C.clothDeep}>
+      <g fill={C.clothDeep} className="art-breathe">
         <ellipse cx="176" cy="98" rx="16" ry="9" />
         <path d="M 188 92 q 6 -20 12 -5" stroke={C.clothDeep} strokeWidth="5" fill="none" strokeLinecap="round" />
         <path d="M 168 92 q 4 -8 10 -4" fill={C.clothDeep} />
@@ -444,7 +444,7 @@ export const VOLUME_1 = {
       <Ridge y={106} sway={6} fill={C.deepNight} />
       <Tent x={20} y={116} scale={0.85} cloth={C.stoneShade} shade={C.stoneDeep} />
       <g>
-        <path d="M 228 112 q -6 -10 0 -16 q 6 6 0 16 Z" fill={C.flame} opacity="0.9" />
+        <path d="M 228 112 q -6 -10 0 -16 q 6 6 0 16 Z" fill={C.flame} opacity="0.9" className="art-flicker" />
         <ellipse cx="228" cy="114" rx="12" ry="3.5" fill={C.woodDeep} />
       </g>
     </>
@@ -461,7 +461,7 @@ export const VOLUME_1 = {
         <rect x="180" y="78" width="28" height="10" rx="2" />
       </g>
       <Flame x={194} y={78} scale={0.8} />
-      <g stroke={C.stoneShade} strokeWidth="2" fill="none" opacity="0.6" strokeLinecap="round">
+      <g stroke={C.stoneShade} strokeWidth="2" fill="none" opacity="0.6" strokeLinecap="round" className="art-drift">
         <path d="M 194 56 q -6 -10 2 -18 q 6 8 0 16" />
       </g>
       <Birds x={110} y={24} scale={0.9} color={C.stoneShade} />
@@ -482,7 +482,7 @@ export const VOLUME_1 = {
         <path d="M -20 8 q -4 -18 8 -20 q 14 -4 20 6 q 6 10 -4 14 Z" fill={C.stone} />
         <path d="M 0 -10 q 10 -2 12 6" stroke={C.cloud} strokeWidth="1.6" fill="none" opacity="0.5" />
       </g>
-      <g transform="translate(140,110)">
+      <g transform="translate(140,110)" className="art-breathe">
         <path d="M 0 0 q 24 -14 52 -2 q -24 10 -52 2 Z" fill={C.clothDeep} />
         <path d="M 8 -3 q 20 -10 40 -1 q -20 7 -40 1 Z" fill={C.cloth} opacity="0.8" />
       </g>
