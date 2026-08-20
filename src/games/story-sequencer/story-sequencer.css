@@ -208,8 +208,7 @@
     drop-shadow(2px 0 0 var(--vermilion))
     drop-shadow(-2px 0 0 var(--vermilion))
     drop-shadow(0 2px 0 var(--vermilion))
-    drop-shadow(0 -2px 0 var(--vermilion))
-    var(--lift, none);
+    drop-shadow(0 -2px 0 var(--vermilion));
 }
 
 @keyframes ssNudge {
@@ -266,13 +265,15 @@
   border: none;
   clip-path: polygon(1% 3%, 35% 0%, 70% 2%, 99% 0.5%, 100% 35%, 98.5% 70%, 100% 97%, 65% 100%, 30% 98%, 0% 100%, 1.5% 55%);
   padding: 0 16px 14px;
-  /* clip-path clips box-shadow, so the paper's lift is a drop-shadow */
+  /* One drop-shadow, and one only. This plus the selected card's outline
+     is what a swap can afford: the eight-shadow outline it used to carry
+     pushed frames to 880ms. */
   --lift:
-    drop-shadow(0 2px 5px rgba(0,0,0,0.12));
+    drop-shadow(0 2px 3px rgba(0,0,0,0.14));
   filter: var(--lift);
   cursor: pointer;
   transform: rotate(var(--rot, 0deg));
-  transition: transform 0.18s cubic-bezier(0.2, 0.9, 0.3, 1), filter 0.18s ease;
+  transition: transform 0.18s cubic-bezier(0.2, 0.9, 0.3, 1);
   overflow: hidden;
 }
 
@@ -289,16 +290,13 @@
   transform: rotate(0deg) scale(1.05) translateY(-6px);
   /* clip-path clips borders and box-shadow, so the highlighter outline is a
      drop-shadow stack — it traces the torn edge exactly */
+  /* Four shadows, not eight. The diagonal pass doubled the cost of every
+     frame the card moved through, for a corner or two of coverage. */
   filter:
-    drop-shadow(4px 0 0 var(--highlighter))
-    drop-shadow(-4px 0 0 var(--highlighter))
-    drop-shadow(0 4px 0 var(--highlighter))
-    drop-shadow(0 -4px 0 var(--highlighter))
-    drop-shadow(3px 3px 0 var(--highlighter))
-    drop-shadow(-3px 3px 0 var(--highlighter))
-    drop-shadow(3px -3px 0 var(--highlighter))
-    drop-shadow(-3px -3px 0 var(--highlighter))
-    drop-shadow(0 10px 14px rgba(0, 0, 0, 0.3));
+    drop-shadow(5px 0 0 var(--highlighter))
+    drop-shadow(-5px 0 0 var(--highlighter))
+    drop-shadow(0 5px 0 var(--highlighter))
+    drop-shadow(0 -5px 0 var(--highlighter));
 }
 
 /* The slot holding the picked-up card is ringed in highlighter, and raised so
@@ -322,8 +320,7 @@
   0% {
     filter:
       drop-shadow(2px 0 0 var(--gold-deep)) drop-shadow(-2px 0 0 var(--gold-deep))
-      drop-shadow(0 2px 0 var(--gold-deep)) drop-shadow(0 -2px 0 var(--gold-deep))
-      var(--lift, none);
+      drop-shadow(0 2px 0 var(--gold-deep)) drop-shadow(0 -2px 0 var(--gold-deep));
   }
   100% {
     filter:

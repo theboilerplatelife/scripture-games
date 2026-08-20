@@ -126,6 +126,21 @@ describe("Constitution Gate: Design System (Article 4)", () => {
     expect(offenders, `clipped elements still painting a box-shadow:\n${offenders.join("\n")}`).toEqual([]);
   });
 
+  test("Article 4.1: no filter stacks more than five shadows", () => {
+    // Each drop-shadow re-rasterises the whole element, and elements that
+    // move re-rasterise every frame. An eight-shadow outline on a card that
+    // also carried its own lift turned one tap in Story Sequencer into an
+    // 880ms frame — eight taps took nine seconds.
+    const offenders = [];
+    cssSources().forEach(({ name, css }) => {
+      [...css.matchAll(/filter:\s*([^;}]+)[;}]/g)].forEach(([, value]) => {
+        const shadows = (value.match(/drop-shadow\(/g) || []).length;
+        if (shadows > 5) offenders.push(`${name}: a filter with ${shadows} shadows`);
+      });
+    });
+    expect(offenders, offenders.join("\n")).toEqual([]);
+  });
+
   test("Article 4.4: no class is defined in more than one stylesheet", () => {
     const definedIn = {};
     cssSources().forEach(({ name, css }) => {
