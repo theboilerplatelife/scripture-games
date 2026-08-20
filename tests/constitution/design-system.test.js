@@ -37,6 +37,80 @@ describe("Constitution Gate: Design System (Article 4)", () => {
     );
   });
 
+  test("Article 4.3: every art animation can be switched off", () => {
+    // The artwork moves — stars twinkle, water ripples, cards drift. Every
+    // one of those classes has to appear in the reduced-motion block, or a
+    // child who asked the operating system to stop animations still gets
+    // them. Adding a new .art-* class and forgetting the block is the easy
+    // mistake this catches.
+    const appCode = fs.readFileSync(path.join(ROOT, "src/App.jsx"), "utf8");
+    const globalCss = appCode.slice(appCode.indexOf("const globalCss = `"));
+
+    const declared = [...globalCss.matchAll(/^\.(art-[a-z-]+)\s*\{/gm)].map((m) => m[1]);
+    expect(declared.length, "no .art-* animation classes found — has the block moved?").toBeGreaterThan(5);
+
+    const reducedBlock = globalCss.slice(globalCss.indexOf("prefers-reduced-motion"));
+    const missing = declared.filter((cls) => !reducedBlock.includes(`.${cls}`));
+    expect(missing, `art classes missing from the reduced-motion block: ${missing.join(", ")}`).toEqual([]);
+  });
+
+  test("Article 4.3: art animations move only transform and opacity", () => {
+    // Anything else — width, cx, fill — is laid out or painted every frame,
+    // which is what makes an animation cost real money on a cheap tablet
+    const appCode = fs.readFileSync(path.join(ROOT, "src/App.jsx"), "utf8");
+    const globalCss = appCode.slice(appCode.indexOf("const globalCss = `"));
+    const offenders = [];
+
+    [...globalCss.matchAll(/@keyframes\s+(art-[a-z-]+)\s*\{([\s\S]*?)\n\}/g)].forEach(([, name, body]) => {
+      [...body.matchAll(/([a-z-]+)\s*:/g)].forEach(([, prop]) => {
+        if (!["transform", "opacity"].includes(prop)) offenders.push(`${name} animates ${prop}`);
+      });
+    });
+
+    expect(offenders, offenders.join(", ")).toEqual([]);
+  });
+
+  test("Article 4.3: no art animation hides its element by default", () => {
+    // An entrance animation that sets opacity:0 on the element itself
+    // renders nothing at all wherever the animation does not run
+    const appCode = fs.readFileSync(path.join(ROOT, "src/App.jsx"), "utf8");
+    const globalCss = appCode.slice(appCode.indexOf("const globalCss = `"));
+    const hidden = [];
+
+    [...globalCss.matchAll(/^\.(art-[a-z-]+)\s*\{([^}]*)\}/gm)].forEach(([, name, body]) => {
+      if (/opacity\s*:\s*0\s*[;}]/.test(body)) hidden.push(name);
+    });
+
+    expect(hidden, `these start invisible and stay invisible without animation: ${hidden.join(", ")}`).toEqual([]);
+  });
+
+  test("Article 4.3: every filter the artwork references is actually defined", () => {
+    // The scenes point at a filter declared once in the app shell. A typo,
+    // or a scene rendered outside the shell, silently drops the effect.
+    const appCode = fs.readFileSync(path.join(ROOT, "src/App.jsx"), "utf8");
+    const defined = new Set([...appCode.matchAll(/<filter\s+id="([^"]+)"/g)].map((m) => m[1]));
+
+    const artFiles = [];
+    const walk = (dir) => {
+      fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (entry.name.endsWith(".jsx")) artFiles.push(full);
+      });
+    };
+    walk(path.join(ROOT, "src/art"));
+
+    const dangling = [];
+    artFiles.forEach((file) => {
+      const code = fs.readFileSync(file, "utf8");
+      [...code.matchAll(/filter="url\(#([a-z-]+)\)"/g)].forEach(([, id]) => {
+        if (!defined.has(id)) dangling.push(`${path.relative(ROOT, file)} -> #${id}`);
+      });
+    });
+
+    expect(dangling, `filters referenced but never defined:\n${dangling.join("\n")}`).toEqual([]);
+  });
+
   test("Article 4.4: no class is defined in more than one stylesheet", () => {
     const definedIn = {};
     cssSources().forEach(({ name, css }) => {

@@ -439,8 +439,10 @@ body {
   border: none;
   font-size: 22px;
   font-family: inherit;
-  width: 42px;
-  height: 42px;
+  /* 44px is the touch target a child's finger needs; a browser test holds
+     every visible control to it */
+  width: 44px;
+  height: 44px;
   cursor: pointer;
   color: var(--ink-soft);
   clip-path: polygon(8% 2%, 95% 0%, 100% 90%, 4% 100%);
@@ -925,9 +927,11 @@ body {
   100% { transform: translateX(2px); }
 }
 
+/* No base opacity: the keyframes hide the card only while the animation
+   is actually running. Setting opacity:0 here would leave every card
+   blank in any environment that does not run the animation. */
 .art-scene-mount {
   animation: art-scene-mount-anim 0.6s ease-out forwards;
-  opacity: 0;
 }
 @keyframes art-scene-mount-anim {
   0% { opacity: 0; transform: translateY(4px); }

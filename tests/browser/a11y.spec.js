@@ -130,6 +130,100 @@ test("a face-down card keeps its face hidden", async ({ page }) => {
   expect(faces.front, "the face must be turned away until the card is flipped").not.toBe(faces.back);
 });
 
+test("the artwork stops moving when the player asks it to", async ({ page }) => {
+  // The CSS gate checks every art class is listed in the reduced-motion
+  // block; only a real browser can confirm the animations actually stop —
+  // and that nothing is left invisible when they do.
+  const reduced = await page.context().browser().newContext({ reducedMotion: "reduce" });
+  const rm = await reduced.newPage();
+  await rm.goto("/");
+  await rm.getByRole("button", { name: "Tap to Play and Start Game" }).click();
+  await rm.getByRole("button", { name: /Memory Match/ }).click();
+  await rm.getByRole("button", { name: /Memory Match Deck 1/ }).click();
+  await rm.getByRole("button", { name: /Play Hint Hunt/ }).click();
+
+  const state = await rm.evaluate(() => {
+    const art = [...document.querySelectorAll('[class*="art-"]')];
+    return {
+      total: art.length,
+      moving: art.filter((el) => getComputedStyle(el).animationName !== "none").length,
+      invisible: art.filter((el) => Number(getComputedStyle(el).opacity) === 0).length,
+    };
+  });
+
+  expect(state.total, "no artwork on the board to check").toBeGreaterThan(10);
+  expect(state.moving, "artwork still animating under prefers-reduced-motion").toBe(0);
+  expect(state.invisible, "artwork left invisible once its animation was disabled").toBe(0);
+  await reduced.close();
+});
+
+test("card artwork is visible even if its entrance animation never runs", async ({ page }) => {
+  // A scene that starts at opacity 0 renders nothing wherever the animation
+  // does not run. Kill the animations outright and the cards must still show.
+  await page.addInitScript(() => {
+    const stop = document.createElement("style");
+    stop.textContent = "*, *::before, *::after { animation: none !important; }";
+    document.addEventListener("DOMContentLoaded", () => document.head.appendChild(stop));
+  });
+  await openHub(page);
+  await page.getByRole("button", { name: /Story Sequencer/ }).click();
+  await page.getByRole("button", { name: /Foundations/ }).first().click();
+  await page.getByRole("button", { name: /Play story 1/ }).click();
+
+  const faded = await page.evaluate(() =>
+    [...document.querySelectorAll('.mm-card-bg-ill [class*="art-"]')].filter(
+      (el) => Number(getComputedStyle(el).opacity) === 0
+    ).length
+  );
+  expect(faded, "card scenes render blank without their entrance animation").toBe(0);
+});
+
+test("no screen scrolls sideways on a tablet", async ({ page }) => {
+  // Wide artwork, long references and four translations all push at the
+  // page width. Sideways scroll is invisible in jsdom, which has no layout.
+  await page.setViewportSize({ width: 820, height: 1180 });
+  const screens = [
+    ["hub", async () => {}],
+    ["verse builder chapters", async () => page.getByRole("button", { name: /Verse Builder/ }).click()],
+    ["levels", async () => page.getByRole("button", { name: /Little Seeds/ }).click()],
+    ["play board", async () => page.getByRole("button", { name: /1 Thessalonians/ }).first().click()],
+  ];
+  await openHub(page);
+  for (const [name, go] of screens) {
+    await go();
+    const overflow = await page.evaluate(() => ({
+      doc: document.documentElement.scrollWidth,
+      win: window.innerWidth,
+      widest: [...document.querySelectorAll("*")]
+        .filter((el) => el.getBoundingClientRect().right > window.innerWidth + 1)
+        .map((el) => `${el.tagName.toLowerCase()}.${el.className?.baseVal ?? el.className}`)
+        .slice(0, 3),
+    }));
+    expect(
+      overflow.doc,
+      `${name} is ${overflow.doc - overflow.win}px wider than the screen: ${overflow.widest.join(", ")}`
+    ).toBeLessThanOrEqual(overflow.win + 1);
+  }
+});
+
+test("controls are big enough for a child's finger", async ({ page }) => {
+  // WCAG 2.5.8 asks for 24px; a game for small children on a tablet wants
+  // the 44px touch target. Only a laid-out page can tell us.
+  await page.setViewportSize({ width: 820, height: 1180 });
+  await openHub(page);
+  await page.getByRole("button", { name: /Verse Builder/ }).click();
+  await page.getByRole("button", { name: /Little Seeds/ }).click();
+
+  const tooSmall = await page.evaluate(() =>
+    [...document.querySelectorAll("button")]
+      .filter((el) => el.offsetParent !== null)
+      .map((el) => ({ label: (el.getAttribute("aria-label") || el.textContent || "").trim().slice(0, 30), r: el.getBoundingClientRect() }))
+      .filter(({ r }) => r.width < 44 || r.height < 44)
+      .map(({ label, r }) => `${label} (${Math.round(r.width)}x${Math.round(r.height)})`)
+  );
+  expect(tooSmall, `controls under 44px:\n${tooSmall.join("\n")}`).toEqual([]);
+});
+
 test("nothing scrolls the page behind an open dialog", async ({ page }) => {
   await openHub(page);
   await page.getByLabel("Open Game Settings").click();
