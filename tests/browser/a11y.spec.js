@@ -224,6 +224,131 @@ test("the win card, where the player actually ends up", async ({ page }) => {
   await audit(page, "verse builder — win card");
 });
 
+test("a level can be finished with the keyboard alone, and focus follows the win", async ({ page }) => {
+  // A keyboard trap or an unreachable control is invisible to axe: the
+  // markup is fine, the operation is not.
+  await openHub(page);
+  await page.getByRole("button", { name: /Verse Builder/ }).click();
+  await page.getByRole("button", { name: /Little Seeds/ }).click();
+  await page.getByRole("button", { name: /1 Thessalonians/ }).first().click();
+
+  const label = () =>
+    page.evaluate(() => document.activeElement?.getAttribute("aria-label") || "");
+
+  // "Pray without ceasing." — reached by Tab, placed with Enter
+  let placed = 0;
+  for (const word of ["Pray", "without", "ceasing."]) {
+    let found = false;
+    for (let i = 0; i < 30 && !found; i += 1) {
+      await page.keyboard.press("Tab");
+      if ((await label()) === `Place word ${word}`) {
+        await page.keyboard.press("Enter");
+        found = true;
+        placed += 1;
+      }
+    }
+    expect(found, `"${word}" could not be reached or placed with the keyboard`).toBe(true);
+  }
+  expect(placed).toBe(3);
+
+  await expect(page.locator(".vb-win-cheer")).toBeVisible({ timeout: 5000 });
+  const focusInWin = await page.evaluate(() =>
+    document.querySelector(".vb-win-card")?.contains(document.activeElement)
+  );
+  expect(focusInWin, "the win card arrived but focus was left behind on the board").toBe(true);
+});
+
+test("story cards can be reordered with the arrow keys", async ({ page }) => {
+  await openHub(page);
+  await page.getByRole("button", { name: /Story Sequencer/ }).click();
+  await page.getByRole("button", { name: /Foundations/ }).first().click();
+  await page.getByRole("button", { name: /Play story 1/ }).click();
+
+  // Reach the first card by Tab alone
+  let reached = false;
+  for (let i = 0; i < 25 && !reached; i += 1) {
+    await page.keyboard.press("Tab");
+    reached = await page.evaluate(() =>
+      (document.activeElement?.getAttribute("aria-label") || "").startsWith("Position")
+    );
+  }
+  expect(reached, "no story card is reachable with the keyboard").toBe(true);
+
+  // The label carries the card's place in the timeline; moving it down
+  // should raise that number by one, with focus riding along
+  const read = () =>
+    page.evaluate(() => {
+      const label = document.activeElement?.getAttribute("aria-label") || "";
+      const [, position] = label.match(/^Position (\d+)/) || [];
+      return { position: Number(position), card: label.slice(label.indexOf(":") + 1, 40) };
+    });
+
+  const before = await read();
+  await page.keyboard.press("ArrowDown");
+  const after = await read();
+
+  expect(after.position, "ArrowDown did not move the focused card down the timeline").toBe(
+    before.position + 1
+  );
+  expect(after.card, "focus did not travel with the card it moved").toBe(before.card);
+});
+
+test("memory match cards flip from the keyboard", async ({ page }) => {
+  await openHub(page);
+  await page.getByRole("button", { name: /Memory Match/ }).click();
+  await page.getByRole("button", { name: /Memory Match Deck 1/ }).click();
+  await page.getByRole("button", { name: /Play Hint Hunt/ }).click();
+
+  let flipped = false;
+  for (let i = 0; i < 25 && !flipped; i += 1) {
+    await page.keyboard.press("Tab");
+    const isCard = await page.evaluate(() =>
+      /^Card \d+: hidden/.test(document.activeElement?.getAttribute("aria-label") || "")
+    );
+    if (isCard) {
+      await page.keyboard.press("Enter");
+      flipped = true;
+    }
+  }
+  expect(flipped, "no face-down card could be reached and flipped with the keyboard").toBe(true);
+
+  // The label has to say what turned up, or the flip means nothing to a
+  // player who cannot see it
+  const revealed = await page.evaluate(() =>
+    document.activeElement?.getAttribute("aria-label") || ""
+  );
+  expect(revealed).not.toMatch(/hidden/);
+});
+
+test("high contrast mode keeps the interface readable", async ({ page }) => {
+  // Windows High Contrast replaces the palette wholesale. Text that relied
+  // on a custom background loses it, and a focus ring drawn with filters is
+  // not part of the system palette at all.
+  const hc = await page.context().browser().newContext({ forcedColors: "active" });
+  const hcPage = await hc.newPage();
+  await hcPage.goto("/");
+  await hcPage.getByRole("button", { name: "Tap to Play and Start Game" }).click();
+
+  const results = await new AxeBuilder({ page: hcPage })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  expect(
+    results.violations.map((v) => `${v.id} (${v.nodes.length})`),
+    "accessibility violations under forced colors"
+  ).toEqual([]);
+
+  await hcPage.keyboard.press("Tab");
+  const outline = await hcPage.evaluate(() => {
+    const s = getComputedStyle(document.activeElement);
+    return { style: s.outlineStyle, width: parseFloat(s.outlineWidth) };
+  });
+  expect(outline.style, "focus ring is not drawn with a real outline under forced colors").not.toBe(
+    "none"
+  );
+  expect(outline.width).toBeGreaterThanOrEqual(2);
+  await hc.close();
+});
+
 test("no screen scrolls sideways on a tablet", async ({ page }) => {
   // Wide artwork, long references and four translations all push at the
   // page width. Sideways scroll is invisible in jsdom, which has no layout.

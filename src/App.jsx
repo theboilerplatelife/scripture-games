@@ -893,6 +893,25 @@ body {
   .art-twinkle, .art-flicker, .art-drift, .art-ripple, .art-scene-mount, .art-spin-slow, .art-pulse, .art-bob, .art-fall, .art-sway, .art-breathe, .art-rock, .art-camera-drift { animation: none !important; opacity: 1 !important; transform: none !important; }
 }
 
+/* Windows High Contrast and friends replace the palette wholesale. The
+   focus ring here is drawn with drop-shadow filters, which the system
+   palette does not adopt, and the "coming soon" badge loses the
+   background that made its pale text readable — 1.02:1 against Canvas.
+   Both get real system colours instead. */
+@media (forced-colors: active) {
+  /* !important because the app's own focus rules are class-scoped and
+     would otherwise win over this one */
+  :focus-visible {
+    outline: 3px solid CanvasText !important;
+    outline-offset: 2px;
+  }
+  .hub-game-badge {
+    color: CanvasText;
+    background: Canvas;
+    border: 1px solid CanvasText;
+  }
+}
+
 /* ---- SVG Art Enhancements ---- */
 .art-twinkle {
   animation: art-twinkle-anim 3s infinite alternate ease-in-out;

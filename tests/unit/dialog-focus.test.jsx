@@ -2,6 +2,7 @@ import { describe, test, expect } from "vitest";
 import { useRef } from "react";
 import { render, fireEvent } from "@testing-library/react";
 import { useDialogFocus } from "../../src/components/common/useDialogFocus.js";
+import { useFocusOnAppear } from "../../src/components/common/useFocusOnAppear.js";
 
 /* The behaviour aria-modal="true" claims: focus moves in, Tab stays in,
    and focus goes back where it came from. */
@@ -111,5 +112,25 @@ describe("useDialogFocus", () => {
     const { unmount } = render(<Dialog />);
     delete document.activeElement;
     expect(() => unmount()).not.toThrow();
+  });
+});
+
+describe("useFocusOnAppear", () => {
+  function Card({ attach = true }) {
+    const ref = useRef(null);
+    useFocusOnAppear(ref);
+    return <div ref={attach ? ref : null} className="win">won</div>;
+  }
+
+  test("takes focus when the card arrives, so the keyboard comes with it", () => {
+    const { container } = render(<Card />);
+    const card = container.querySelector(".win");
+    expect(document.activeElement).toBe(card);
+    expect(card.getAttribute("tabindex")).toBe("-1");
+  });
+
+  test("does nothing when there is no element to focus", () => {
+    expect(() => render(<Card attach={false} />)).not.toThrow();
+    expect(document.activeElement).toBe(document.body);
   });
 });

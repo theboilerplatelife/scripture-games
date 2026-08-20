@@ -1,6 +1,8 @@
+import { useRef } from "react";
 import { Confetti } from "../../components/common/Confetti.jsx";
 import { WinStars, BestLine } from "../../components/common/WinParts.jsx";
 import { MODES } from "./matchData.js";
+import { useFocusOnAppear } from "../../components/common/useFocusOnAppear.js";
 
 export function MMWinCard({
   deck: deckObj,
@@ -16,12 +18,14 @@ export function MMWinCard({
   onBackToModes,
   onBackToDecks,
 }) {
+  const cardRef = useRef(null);
+  useFocusOnAppear(cardRef);
   const mode = MODES[modeIdx];
 
   return (
     <div className="vb-win-container">
       <Confetti />
-      <div className="vb-win-card">
+      <div ref={cardRef} className="vb-win-card">
         <span className="vb-tape vb-tape-top" />
 
         <div className="vb-win-topbar">

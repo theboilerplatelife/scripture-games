@@ -1,6 +1,8 @@
+import { useRef } from "react";
 import { Portrait } from "../../art/Portrait.jsx";
 import { Confetti } from "../../components/common/Confetti.jsx";
 import { WinStars, BestLine } from "../../components/common/WinParts.jsx";
+import { useFocusOnAppear } from "../../components/common/useFocusOnAppear.js";
 
 export function WinCard({
   verse,
@@ -15,12 +17,14 @@ export function WinCard({
   onBackToLevels,
   onBackToChapters,
 }) {
+  const cardRef = useRef(null);
+  useFocusOnAppear(cardRef);
   const verseText = verse.text[translation] || verse.text.ESV || verse.text.WEB;
 
   return (
     <div className="vb-win-container">
       <Confetti />
-      <div className="vb-win-card">
+      <div ref={cardRef} className="vb-win-card">
         <span className="vb-tape vb-tape-top" />
         
         <div className="vb-win-topbar">

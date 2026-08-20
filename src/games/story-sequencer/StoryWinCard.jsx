@@ -1,5 +1,7 @@
+import { useRef } from "react";
 import { Confetti } from "../../components/common/Confetti.jsx";
 import { Star } from "../../components/common/Star.jsx";
+import { useFocusOnAppear } from "../../components/common/useFocusOnAppear.js";
 import { audio } from "../../audio/SoundEngine.js";
 import { useScrollLock } from "../../components/common/useScrollLock.js";
 
@@ -16,6 +18,8 @@ export function StoryWinCard({
   hasNextStory,
   completesVolume = false,
 }) {
+  const cardRef = useRef(null);
+  useFocusOnAppear(cardRef);
   useScrollLock();
 
   // Hints and checks both count as tries in the tally the player sees
@@ -30,7 +34,7 @@ export function StoryWinCard({
   return (
     <div className="vb-win-overlay">
       <Confetti />
-      <div className="vb-win-card" role="dialog" aria-label="Story Completed">
+      <div ref={cardRef} className="vb-win-card" role="dialog" aria-label="Story Completed">
         <span className="vb-tape vb-tape-top" />
         <div className="vb-win-icon" aria-hidden="true">{story.icon}</div>
         <h2 className="vb-win-title">{getCheer()}</h2>
