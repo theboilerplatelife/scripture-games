@@ -269,6 +269,36 @@ describe("Who Am I? play", () => {
     expect(screen.getByText(/Solved after 2 clues/)).toBeTruthy();
   });
 
+  test("the round remembers a person met before, and what they were worth", () => {
+    /* The stars were saved all along — the round just never mentioned
+       them, so meeting someone again looked exactly like meeting them for
+       the first time. */
+    const roster = getCollectionCharacters(1);
+    const p = props({ stars: { [`wai-${roster[0].id}`]: 2, [`wai-${roster[2].id}`]: 3 } });
+    const { container } = render(<WhoAmI {...p} />);
+
+    // The strip above the clues marks who has already been met
+    expect(container.querySelectorAll(".wai-met-dot").length).toBe(roster.length);
+    expect(container.querySelectorAll(".wai-met-dot.met").length).toBe(2);
+    expect(screen.getByLabelText(`2 of ${roster.length} already met in this collection`)).toBeTruthy();
+
+    // Solving again shows the best this person has ever been worth
+    fireEvent.click(screen.getByRole("button", { name: /Another clue/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Another clue/ }));
+    fireEvent.click(screen.getByRole("button", { name: `Guess ${roster[0].name}` }));
+    expect(screen.getByText("Best: ⭐⭐")).toBeTruthy();
+    expect(screen.queryByText(/New best/)).toBeNull();
+  });
+
+  test("beating a previous best says so", () => {
+    const roster = getCollectionCharacters(1);
+    const p = props({ stars: { [`wai-${roster[0].id}`]: 1 } });
+    render(<WhoAmI {...p} />);
+    fireEvent.click(screen.getByRole("button", { name: `Guess ${roster[0].name}` }));
+    expect(screen.getByText("🎉 New best!")).toBeTruthy();
+    expect(p.onSaveStar).toHaveBeenCalledWith(`wai-${roster[0].id}`, 3);
+  });
+
   test("a worse run never overwrites a better one", () => {
     const character = firstOf();
     const p = props({ stars: { [`wai-${character.id}`]: 3 } });

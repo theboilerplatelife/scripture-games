@@ -7,13 +7,13 @@ import {
 } from "./whoAmIData.js";
 import { audio } from "../../audio/SoundEngine.js";
 import { Bust } from "../../art/portrait-kit.jsx";
-import { WinStars } from "../../components/common/WinParts.jsx";
+import { WinStars, BestLine } from "../../components/common/WinParts.jsx";
 import { Confetti } from "../../components/common/Confetti.jsx";
 import { CollectionSelect } from "./CollectionSelect.jsx";
 import { useScrollToTop } from "../../components/common/useScrollToTop.js";
 import { useFocusOnAppear } from "../../components/common/useFocusOnAppear.js";
 import { useRouteSync } from "../../components/common/useRouteSync.js";
-import { sumStars, groupStars } from "../../utils/stars.js";
+import { isStarred, sumStars, groupStars } from "../../utils/stars.js";
 import "./who-am-i.css";
 
 /* The seed picks the three wrong faces in each line-up, so a collection
@@ -47,7 +47,7 @@ export function WhoAmI({
   const [tried, setTried] = useState([]);
   const [lastWrong, setLastWrong] = useState(null);
   const [isRoundOver, setIsRoundOver] = useState(false);
-  const [lastEarned, setLastEarned] = useState(0);
+  const [lastResult, setLastResult] = useState({ earned: 0, prevBest: 0 });
   const timers = useRef([]);
   const revealRef = useRef(null);
 
@@ -136,6 +136,7 @@ export function WhoAmI({
   const choices = getRandomChoices(character.id, 4, seed + index, roster);
   const maxHints = character.hints.length;
   const bestSoFar = stars[`wai-${character.id}`] || 0;
+  const metCount = roster.filter((c) => isStarred(stars, `wai-${c.id}`)).length;
 
   function backToCollections() {
     audio.playButtonClick();
@@ -173,7 +174,7 @@ export function WhoAmI({
       const earned = starsForHintsUsed(hintsShown);
       setSolved(true);
       setLastWrong(null);
-      setLastEarned(earned);
+      setLastResult({ earned, prevBest: bestSoFar });
       audio.playStarChime(earned - 1);
       if (onSaveStar && earned > bestSoFar) onSaveStar(`wai-${character.id}`, earned);
       return;
@@ -256,9 +257,15 @@ export function WhoAmI({
           </div>
 
           <h2 className="wai-reveal-name">{character.name}</h2>
-          <WinStars earned={lastEarned} />
+          <WinStars earned={lastResult.earned} />
+          {/* The same line Verse Builder shows: meeting someone again used
+              to look identical to meeting them for the first time */}
+          <BestLine
+            best={Math.max(lastResult.prevBest, lastResult.earned)}
+            isNew={lastResult.earned > lastResult.prevBest}
+          />
           <p className="wai-reveal-earned">
-            {lastEarned === 3
+            {lastResult.earned === 3
               ? "Knew it from the very first clue!"
               : `Solved after ${hintsShown} clues.`}
           </p>
@@ -276,6 +283,21 @@ export function WhoAmI({
         </div>
       ) : (
         <div className="wai-board">
+          {/* Who in this collection has already been met. Every other game
+              keeps this on a level list; a round has no list, so it lives
+              here — otherwise the round forgets everything a child has
+              done and a face solved last week looks brand new. */}
+          <div className="wai-met" role="img" aria-label={`${metCount} of ${roster.length} already met in this collection`}>
+            {roster.map((person, i) => (
+              <span
+                key={person.id}
+                className={`wai-met-dot ${isStarred(stars, `wai-${person.id}`) ? "met" : ""} ${
+                  i === index ? "here" : ""
+                }`}
+              />
+            ))}
+          </div>
+
           <p className="wai-lead">Read the clues, then choose who is speaking.</p>
 
           <ol className="wai-clues">

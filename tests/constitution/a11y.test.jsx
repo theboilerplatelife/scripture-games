@@ -49,13 +49,28 @@ const noop = () => {};
    stylesheets lets every audited state be measured against the background
    it actually composites onto, ancestors and alpha included.
    ------------------------------------------------------------------ */
-const CSS_FILES = [
-  "src/games/hub/hub.css",
-  "src/games/verse-builder/verse-builder.css",
-  "src/games/memory-match/memory-match.css",
-  "src/games/story-sequencer/story-sequencer.css",
-  "src/components/common/welcome-splash.css",
-];
+/* Every stylesheet in the app, found rather than listed.
+
+   This was two hand-kept lists in this one file, and they drifted: the
+   state gate below knew about who-am-i.css while the contrast loader did
+   not, so for four games' worth of screens that game's text was measured
+   against the bare desk instead of the paper card it actually sits on —
+   which is the difference between 2.62:1 and passing.
+
+   Order does not matter: Article 4.4 forbids the same class in two
+   stylesheets, so nothing here can override anything else. */
+function everyStylesheet(dir) {
+  return fs
+    .readdirSync(dir, { withFileTypes: true })
+    .flatMap((entry) => {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) return everyStylesheet(full);
+      return entry.name.endsWith(".css") ? [full] : [];
+    })
+    .sort();
+}
+
+const CSS_FILES = everyStylesheet(path.resolve(__dirname, "../../src"));
 
 let DESK = [201, 160, 107, 1];
 
@@ -70,7 +85,7 @@ beforeAll(() => {
   const tokens = {};
   for (const m of globalCss.matchAll(/(--[\w-]+):\s*([^;]+);/g)) tokens[m[1]] = m[2].trim();
 
-  let css = [globalCss, ...CSS_FILES.map((f) => fs.readFileSync(path.join(root, f), "utf8"))].join("\n");
+  let css = [globalCss, ...CSS_FILES.map((f) => fs.readFileSync(f, "utf8"))].join("\n");
   // jsdom does not resolve custom properties, so fold them in first
   for (let pass = 0; pass < 3; pass += 1) {
     css = css.replace(/var\((--[\w-]+)(?:,\s*([^)]+))?\)/g, (all, name, fallback) =>
@@ -273,9 +288,19 @@ describe("Constitution Gate: Accessibility (Article 4.3)", () => {
     await expectAccessible(
       <WhoAmI onBackToHub={noop} onOpenSettings={noop} stars={{ "wai-noah": 3 }} />
     );
-    // …and a round in progress
+    // …and a round in progress, including one where people have already
+    // been met, which is what marks the strip above the clues
     await expectAccessible(
       <WhoAmI onBackToHub={noop} onOpenSettings={noop} initialScreen="play" initialSeed={3} />
+    );
+    await expectAccessible(
+      <WhoAmI
+        onBackToHub={noop}
+        onOpenSettings={noop}
+        initialScreen="play"
+        initialSeed={3}
+        stars={{ "wai-adam": 3, "wai-noah": 1 }}
+      />
     );
   });
 
@@ -423,14 +448,7 @@ describe("Constitution Gate: Accessibility (Article 4.3)", () => {
     // A screen audited only at rest hides what its interactions look like —
     // the sequencer's play board was never audited, and had nested buttons.
     // Any state the stylesheets define must appear in a rendered DOM above.
-    const cssFiles = [
-      "src/games/hub/hub.css",
-      "src/games/verse-builder/verse-builder.css",
-      "src/games/memory-match/memory-match.css",
-      "src/games/story-sequencer/story-sequencer.css",
-      "src/games/who-am-i/who-am-i.css",
-      "src/components/common/welcome-splash.css",
-    ].map((f) => fs.readFileSync(path.resolve(__dirname, "../..", f), "utf8"));
+    const cssFiles = CSS_FILES.map((f) => fs.readFileSync(f, "utf8"));
 
     const appCode = fs.readFileSync(path.resolve(__dirname, "../../src/App.jsx"), "utf8");
     cssFiles.push(appCode.slice(appCode.indexOf("const globalCss")));
