@@ -459,7 +459,7 @@ test("a deep link into each game opens where it points", async ({ page }) => {
     ["/#/verse-builder/2/3", ".vb-strip"],
     ["/#/memory-match/1/1", ".mm-grid"],
     ["/#/story-sequencer/1/3", ".ss-timeline-track"],
-    ["/#/who-am-i/3", ".wai-board"],
+    ["/#/who-am-i/3/4", ".wai-board"],
   ]) {
     await page.goto(url);
     await expect(page.locator(marker), `${url} did not open its board`).toBeVisible();

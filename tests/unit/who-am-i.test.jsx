@@ -1,6 +1,6 @@
 import { describe, test, expect, vi, afterEach } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
-import { WhoAmI, buildRound, randomRoundSeed } from "../../src/games/who-am-i/WhoAmI.jsx";
+import { WhoAmI, randomRoundSeed } from "../../src/games/who-am-i/WhoAmI.jsx";
 import {
   CHARACTERS,
   COLLECTIONS,
@@ -26,7 +26,7 @@ const props = (over = {}) => ({
 
 /* The character the seeded round opens on, so the tests can name the
    right answer without hard-coding a person. */
-const firstOf = (seed, collectionId = 1) => buildRound(seed, collectionId)[0];
+const firstOf = (collectionId = 1) => getCollectionCharacters(collectionId)[0];
 
 afterEach(() => {
   vi.useRealTimers();
@@ -88,16 +88,12 @@ describe("Who Am I? content", () => {
     });
   });
 
-  test("a round is one whole collection, dealt differently per seed", () => {
-    const size = COLLECTIONS[3].characterIds.length;
-    const a = buildRound(11, 4);
-    const b = buildRound(12, 4);
-    expect(a.length).toBe(size);
-    expect(a.every(Boolean)).toBe(true);
-    expect(new Set(a.map((c) => c.id)).size).toBe(size);
-    expect(a.map((c) => c.id)).not.toEqual(b.map((c) => c.id));
-    // and it is that collection's people, nobody else's
-    expect(a.map((c) => c.id).sort()).toEqual([...COLLECTIONS[3].characterIds].sort());
+  test("a round is one whole collection, in the order it lists them", () => {
+    /* Fixed, not shuffled: it is what lets "#/who-am-i/4/3" name the same
+       person on every visit. Freshness comes from the line-ups instead. */
+    const roster = getCollectionCharacters(4);
+    expect(roster.map((c) => c.id)).toEqual(COLLECTIONS[3].characterIds);
+    expect(roster.every(Boolean)).toBe(true);
   });
 
   test("round seeds vary", () => {
@@ -116,7 +112,7 @@ describe("Who Am I? play", () => {
 
   test("asking for another clue shows it, until there are none left", () => {
     render(<WhoAmI {...props()} />);
-    const character = firstOf(3);
+    const character = firstOf();
     for (let i = 2; i <= character.hints.length; i += 1) {
       fireEvent.click(screen.getByRole("button", { name: /Another clue/ }));
       expect(screen.getByText(`Clue ${i}`)).toBeTruthy();
@@ -128,7 +124,7 @@ describe("Who Am I? play", () => {
   test("a right answer reveals the person, the scripture, and three stars", () => {
     const p = props();
     render(<WhoAmI {...p} />);
-    const character = firstOf(3);
+    const character = firstOf();
 
     fireEvent.click(screen.getByRole("button", { name: `Guess ${character.name}` }));
 
@@ -142,7 +138,7 @@ describe("Who Am I? play", () => {
     vi.useFakeTimers();
     const p = props();
     render(<WhoAmI {...p} />);
-    const character = firstOf(3);
+    const character = firstOf();
     const wrong = screen
       .getAllByRole("button", { name: /^Guess / })
       .find((b) => b.getAttribute("aria-label") !== `Guess ${character.name}`);
@@ -160,7 +156,7 @@ describe("Who Am I? play", () => {
   test("a wrong answer on the last clue just clears itself", () => {
     vi.useFakeTimers();
     render(<WhoAmI {...props()} />);
-    const character = firstOf(3);
+    const character = firstOf();
     for (let i = 1; i < character.hints.length; i += 1) {
       fireEvent.click(screen.getByRole("button", { name: /Another clue/ }));
     }
@@ -177,7 +173,7 @@ describe("Who Am I? play", () => {
   test("stars drop by one for each clue spent", () => {
     const p = props();
     render(<WhoAmI {...p} />);
-    const character = firstOf(3);
+    const character = firstOf();
     fireEvent.click(screen.getByRole("button", { name: /Another clue/ }));
     fireEvent.click(screen.getByRole("button", { name: `Guess ${character.name}` }));
     expect(p.onSaveStar).toHaveBeenCalledWith(`wai-${character.id}`, 2);
@@ -185,7 +181,7 @@ describe("Who Am I? play", () => {
   });
 
   test("a worse run never overwrites a better one", () => {
-    const character = firstOf(3);
+    const character = firstOf();
     const p = props({ stars: { [`wai-${character.id}`]: 3 } });
     render(<WhoAmI {...p} />);
     fireEvent.click(screen.getByRole("button", { name: /Another clue/ }));
@@ -193,16 +189,22 @@ describe("Who Am I? play", () => {
     expect(p.onSaveStar).not.toHaveBeenCalled();
   });
 
-  test("counts how many of this round are already solved", () => {
-    const round = buildRound(3, 1);
-    const p = props({ stars: { [`wai-${round[1].id}`]: 2, [`wai-${round[2].id}`]: 1 } });
-    render(<WhoAmI {...p} />);
-    expect(screen.getByText("2 solved")).toBeTruthy();
+  test("the header shows where you are and what the clues have cost", () => {
+    // The same three slots every other board has: back, a taped chip
+    // naming the place, and the running cost on the right
+    const { container } = render(<WhoAmI {...props()} />);
+    expect(container.querySelector(".vb-topbar")).toBeTruthy();
+    expect(screen.getByText(`(1 of ${getCollectionCharacters(1).length})`)).toBeTruthy();
+    expect(container.querySelector(".vb-mist").className).toContain("hidden");
+
+    fireEvent.click(screen.getByRole("button", { name: /Another clue/ }));
+    expect(screen.getByText("clues ×1")).toBeTruthy();
+    expect(container.querySelector(".vb-mist").className).not.toContain("hidden");
   });
 
   test("plays without anywhere to save", () => {
     render(<WhoAmI {...props({ onSaveStar: undefined })} />);
-    const character = firstOf(3);
+    const character = firstOf();
     expect(() =>
       fireEvent.click(screen.getByRole("button", { name: `Guess ${character.name}` }))
     ).not.toThrow();
@@ -213,7 +215,7 @@ describe("Who Am I? play", () => {
     // refactor ever leaves the choices mounted, this is where it shows up.
     const p = props();
     const { container } = render(<WhoAmI {...p} />);
-    const character = firstOf(3);
+    const character = firstOf();
     const button = screen.getByRole("button", { name: `Guess ${character.name}` });
 
     fireEvent.click(button);
@@ -226,7 +228,7 @@ describe("Who Am I? play", () => {
 
   test("works through the whole collection to the finish card, then replays it", () => {
     render(<WhoAmI {...props()} />);
-    const round = buildRound(3, 1);
+    const round = getCollectionCharacters(1);
 
     round.forEach((character, i) => {
       fireEvent.click(screen.getByRole("button", { name: `Guess ${character.name}` }));
@@ -245,7 +247,7 @@ describe("Who Am I? play", () => {
 
   test("the finish card leads back to the collections", () => {
     render(<WhoAmI {...props()} />);
-    buildRound(3, 1).forEach((character, i, all) => {
+    getCollectionCharacters(1).forEach((character, i, all) => {
       fireEvent.click(screen.getByRole("button", { name: `Guess ${character.name}` }));
       fireEvent.click(
         screen.getByRole("button", {
@@ -258,11 +260,13 @@ describe("Who Am I? play", () => {
     expect(screen.getByRole("heading", { name: "Who Am I?" })).toBeTruthy();
   });
 
-  test("the back and settings controls are wired", () => {
+  test("the back control walks out the way the other games do", () => {
     const p = props();
     render(<WhoAmI {...p} />);
-    fireEvent.click(screen.getByLabelText("Open Game Settings"));
-    expect(p.onOpenSettings).toHaveBeenCalled();
+
+    /* No settings on a board: like Verse Builder, Memory Match and Story
+       Sequencer, the gear lives on the list screen. */
+    expect(screen.queryByLabelText(/Settings/)).toBeNull();
 
     // Back from a round goes to the collections, the way every other
     // game's board returns to its list — not straight out to the hub
@@ -274,16 +278,11 @@ describe("Who Am I? play", () => {
     expect(p.onBackToHub).toHaveBeenCalled();
   });
 
-  test("hides the settings control when the app does not offer one", () => {
-    render(<WhoAmI {...props({ onOpenSettings: undefined })} />);
-    expect(screen.queryByLabelText("Open Game Settings")).toBeNull();
-  });
-
   test("drops its pending timers when the player leaves", () => {
     vi.useFakeTimers();
     const p = props();
     const { unmount } = render(<WhoAmI {...p} />);
-    const character = firstOf(3);
+    const character = firstOf();
     const wrong = screen
       .getAllByRole("button", { name: /^Guess / })
       .find((b) => b.getAttribute("aria-label") !== `Guess ${character.name}`);
@@ -369,7 +368,7 @@ describe("Who Am I? collections", () => {
     fireEvent.click(screen.getByRole("button", { name: "Collection 2: Out of Egypt" }));
 
     expect(screen.getByText("Clue 1")).toBeTruthy();
-    expect(screen.getByText(`1 / ${COLLECTIONS[1].characterIds.length}`)).toBeTruthy();
+    expect(screen.getByText(`(1 of ${COLLECTIONS[1].characterIds.length})`)).toBeTruthy();
     expect(screen.getByText(/Out of Egypt/)).toBeTruthy();
   });
 
@@ -386,10 +385,26 @@ describe("Who Am I? deep links", () => {
     return navigate;
   };
 
-  test("a collection in the address bar opens that round", () => {
+  test("a collection in the address bar opens that round at its first mystery", () => {
     routed({ game: "who-am-i", a: 3, b: null });
-    expect(screen.getByText("Judges and Kings")).toBeTruthy();
+    expect(screen.getByText(/Judges and Kings/)).toBeTruthy();
     expect(screen.getByText("Clue 1")).toBeTruthy();
+    expect(screen.getByText(`(1 of ${COLLECTIONS[2].characterIds.length})`)).toBeTruthy();
+  });
+
+  test("a mystery number opens that same person every time", () => {
+    /* The whole reason the round is dealt in a fixed order: "#/who-am-i/3/4"
+       has to be the person it was yesterday, or the link is a lie. */
+    const fourth = getCollectionCharacters(3)[3];
+    routed({ game: "who-am-i", a: 3, b: 4 });
+    expect(screen.getByText(`(4 of ${COLLECTIONS[2].characterIds.length})`)).toBeTruthy();
+    expect(screen.getByText(fourth.hints[0])).toBeTruthy();
+  });
+
+  test("a mystery number past the end of the collection starts at the first", () => {
+    routed({ game: "who-am-i", a: 3, b: 99 });
+    expect(screen.getByText(`(1 of ${COLLECTIONS[2].characterIds.length})`)).toBeTruthy();
+    expect(screen.getByText(getCollectionCharacters(3)[0].hints[0])).toBeTruthy();
   });
 
   test("no collection in the address bar shows the list", () => {
@@ -402,10 +417,16 @@ describe("Who Am I? deep links", () => {
     expect(screen.getByRole("heading", { name: "Who Am I?" })).toBeTruthy();
   });
 
-  test("choosing a collection is announced to the address bar", () => {
+  test("choosing a collection, and moving through it, is announced", () => {
     const navigate = routed({ game: "who-am-i", a: null, b: null });
     fireEvent.click(screen.getByRole("button", { name: "Collection 1: In the Beginning" }));
-    expect(navigate).toHaveBeenCalledWith({ game: "who-am-i", a: 1, b: null });
+    expect(navigate).toHaveBeenCalledWith({ game: "who-am-i", a: 1, b: 1 });
+
+    // Each mystery gets its own entry, so Back steps through them
+    const first = getCollectionCharacters(1)[0];
+    fireEvent.click(screen.getByRole("button", { name: `Guess ${first.name}` }));
+    fireEvent.click(screen.getByRole("button", { name: /Next Mystery/ }));
+    expect(navigate).toHaveBeenCalledWith({ game: "who-am-i", a: 1, b: 2 });
   });
 
   test("another game's route is left alone", () => {

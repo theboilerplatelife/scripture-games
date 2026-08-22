@@ -9,59 +9,23 @@
    rendered in Arial at 2.5:1 contrast.
    ============================================================ */
 
+/* The board's container, built like .vb-play-container (540px) and
+   .mm-play-container (560px): a column, capped so a clue stays a readable
+   line rather than running the full width of a tablet. */
 .wai-screen {
   width: 100%;
-  max-width: 760px;
+  max-width: 640px;
   margin: 0 auto;
   padding: 0 14px 40px;
-}
-
-/* ---- Topbar: back, taped title, progress ---- */
-
-.wai-topbar {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 0 6px;
+  flex-direction: column;
 }
 
-.wai-title {
-  flex: 1;
-  text-align: center;
-  font-size: 20px;
-}
-
-.wai-topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.wai-progress {
-  font-family: "Patrick Hand", cursive;
-  font-size: 17px;
-  color: var(--ink);
-  background: var(--paper);
-  padding: 5px 12px;
-  border-radius: 12px;
-  clip-path: polygon(2% 8%, 60% 0%, 99% 6%, 100% 92%, 40% 100%, 1% 94%);
-}
-
-.wai-solved {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-family: "Patrick Hand", cursive;
-  font-size: 15px;
-  color: var(--ink);
-  background: var(--paper);
-  padding: 5px 10px;
-  border-radius: 12px;
-}
-
-.wai-solved-count {
-  white-space: nowrap;
-}
+/* The board header is the shared .vb-topbar the other three games use —
+   back, a taped .vb-ref-chip, and the cost-so-far chip on the right. This
+   game used to stretch the big .vb-title-card across the top instead,
+   which is the *page* title used on list screens, so its board sat under
+   a header no other board had. */
 
 /* ---- The clue board ---- */
 

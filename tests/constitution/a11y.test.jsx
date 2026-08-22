@@ -13,7 +13,8 @@ import { VerseBuilder } from "../../src/games/verse-builder/VerseBuilder.jsx";
 import { WinCard } from "../../src/games/verse-builder/WinCard.jsx";
 import { MemoryMatch } from "../../src/games/memory-match/MemoryMatch.jsx";
 import { MMWinCard } from "../../src/games/memory-match/MMWinCard.jsx";
-import { WhoAmI, buildRound } from "../../src/games/who-am-i/WhoAmI.jsx";
+import { WhoAmI } from "../../src/games/who-am-i/WhoAmI.jsx";
+import { getCollectionCharacters } from "../../src/games/who-am-i/whoAmIData.js";
 import { StorySequencer } from "../../src/games/story-sequencer/StorySequencer.jsx";
 import { StoryWinCard } from "../../src/games/story-sequencer/StoryWinCard.jsx";
 import { StoryReaderModal } from "../../src/games/story-sequencer/StoryReaderModal.jsx";
@@ -279,7 +280,7 @@ describe("Constitution Gate: Accessibility (Article 4.3)", () => {
   });
 
   test("who am i mid-play states", async () => {
-    const round = buildRound(3, 1);
+    const round = getCollectionCharacters(1);
     const answer = `[aria-label="Guess ${round[0].name}"]`;
     const playing = { onBackToHub: noop, initialScreen: "play", initialSeed: 3 };
 
