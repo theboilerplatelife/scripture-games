@@ -182,33 +182,35 @@ export function WhoAmI({
     }
   }
 
-  // The card at the end of a round stands on its own, like every other
-  // game's win card — no topbar over a celebration
+  /* The card at the end of a round stands on its own, like every other
+     game's win card — no topbar over a celebration, and no play container
+     around it. Nesting it inside .wai-screen left it sitting against that
+     column's left edge: .vb-win-container is a 500px box that the page
+     root centres, so anything narrower wrapped around it pulls the
+     celebration off-centre. */
   if (isRoundOver) {
     const collectionKeys = collection.characterIds.map((id) => `wai-${id}`);
     return (
-      <div className="wai-screen">
-        <div className="vb-win-container">
-          <Confetti />
-          <div className="vb-win-card" ref={revealRef}>
-            <span className="vb-tape vb-tape-top" />
-            <div className="wai-win-icon" aria-hidden="true">{collection.icon}</div>
-            <h2 className="wai-win-title">{collection.title} — all met!</h2>
-            <p className="vb-win-cheer">
-              You worked out every one of the {roster.length} people in this collection.
-            </p>
-            <p className="wai-win-count">
-              ⭐ {groupStars(stars, collectionKeys)} of {collectionKeys.length * 3} stars here ·{" "}
-              {sumStars(stars, { prefix: "wai-" })} in all
-            </p>
-            <div className="vb-win-btns">
-              <button className="vb-btn" onClick={backToCollections}>
-                Another Collection →
-              </button>
-              <button className="vb-btn ghost" onClick={replayRound}>
-                Play These Again
-              </button>
-            </div>
+      <div className="vb-win-container">
+        <Confetti />
+        <div className="vb-win-card" ref={revealRef}>
+          <span className="vb-tape vb-tape-top" />
+          <div className="wai-win-icon" aria-hidden="true">{collection.icon}</div>
+          <h2 className="wai-win-title">{collection.title} — all met!</h2>
+          <p className="vb-win-cheer">
+            You worked out every one of the {roster.length} people in this collection.
+          </p>
+          <p className="wai-win-count">
+            ⭐ {groupStars(stars, collectionKeys)} of {collectionKeys.length * 3} stars here ·{" "}
+            {sumStars(stars, { prefix: "wai-" })} in all
+          </p>
+          <div className="vb-win-btns">
+            <button className="vb-btn" onClick={backToCollections}>
+              Another Collection →
+            </button>
+            <button className="vb-btn ghost" onClick={replayRound}>
+              Play These Again
+            </button>
           </div>
         </div>
       </div>

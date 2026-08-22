@@ -246,6 +246,41 @@ test("the win card, where the player actually ends up", async ({ page }) => {
   // The win card shows the verse's own cheer line
   await expect(page.locator(".vb-win-cheer")).toBeVisible({ timeout: 5000 });
   await audit(page, "verse builder — win card");
+  await expectCentred(page, ".vb-win-card", "verse builder");
+});
+
+/* A celebration belongs in the middle of the page. Nothing else here can
+   see this: jsdom has no layout, and axe has no opinion about where a card
+   sits. Who Am I's finish card was a whole 70px off, because it was
+   wrapped in that game's play column and .vb-win-container is a 500px box
+   the page root centres — anything narrower around it pulls it left. */
+async function expectCentred(page, selector, label) {
+  const off = await page.evaluate((sel) => {
+    const card = document.querySelector(sel).getBoundingClientRect();
+    const root = document.querySelector(".vb-root").getBoundingClientRect();
+    return Math.abs((card.left + card.right) / 2 - (root.left + root.right) / 2);
+  }, selector);
+  expect(off, `${label}'s card sits ${off.toFixed(0)}px off the centre of the page`).toBeLessThan(4);
+}
+
+test("a finished collection is celebrated in the middle of the page", async ({ page }) => {
+  await openHub(page);
+  await page.getByRole("button", { name: /Who Am I/ }).click();
+  await page.getByRole("button", { name: /Collection 1/ }).click();
+
+  // Guess through each line-up until the right face lands, then move on
+  for (let mystery = 0; mystery < 6; mystery += 1) {
+    for (let guess = 0; guess < 4; guess += 1) {
+      await page.locator(".wai-choice").nth(guess).click();
+      if (await page.locator(".wai-reveal").isVisible().catch(() => false)) break;
+      await page.waitForTimeout(600);
+    }
+    await page.getByRole("button", { name: /Next Mystery|Finish Collection/ }).click();
+  }
+
+  await expect(page.getByText(/all met/)).toBeVisible();
+  await audit(page, "who am i — collection finished");
+  await expectCentred(page, ".vb-win-card", "who am i");
 });
 
 test("a level can be finished with the keyboard alone, and focus follows the win", async ({ page }) => {
