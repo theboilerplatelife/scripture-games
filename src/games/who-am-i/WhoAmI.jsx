@@ -91,7 +91,7 @@ export function WhoAmI({
   });
 
   useEffect(() => {
-    audio.setTrack("memory");
+    audio.setTrack("who-am-i");
   }, []);
 
   useScrollToTop(`${screen}-${collectionId}-${index}-${solved}-${isRoundOver}`);

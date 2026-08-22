@@ -984,7 +984,13 @@ export class SoundEngine {
       song = VERSE_BUILDER_TITLE_SONG;
     } else if (trackName === "verse-builder-play" || trackName === "verse" || trackName === "gameplay") {
       song = VERSE_BUILDER_PLAY_SONG;
-    } else if (trackName === "trivia-title" || trackName === "trivia") {
+    } else if (
+      trackName === "trivia-title" ||
+      trackName === "trivia" ||
+      trackName === "who-am-i" ||
+      trackName === "whoami" ||
+      trackName === "wai"
+    ) {
       song = TRIVIA_TITLE_SONG;
     } else if (trackName === "memory-title" || trackName === "memory") {
       song = MEMORY_TITLE_SONG;
