@@ -394,17 +394,29 @@ describe("Who Am I? collections", () => {
     expect(screen.getByText(/⭐ 0 of 108 mystery stars collected/)).toBeTruthy();
   });
 
-  test("a collection card counts who has been met, and says when all of them have", () => {
+  test("a finished collection is stamped the way every other card is", () => {
+    /* Verse Builder and Memory Match mark a finished card with the shared
+       rubber stamp — "✓ Complete", or "★ Perfect!" for every star — and
+       leave the call to action alone. This card used to say "✅ All Met —
+       Replay →" in the action slot, a third vocabulary that also lost the
+       difference between meeting everyone and knowing them all at once. */
     const first = COLLECTIONS[0];
     const partial = { [`wai-${first.characterIds[0]}`]: 3, [`wai-${first.characterIds[1]}`]: 1 };
     const { unmount } = render(<WhoAmI {...props({ initialScreen: undefined, stars: partial })} />);
-    expect(screen.getByText(`2 of ${first.characterIds.length} met`)).toBeTruthy();
+    expect(screen.queryByText(/Complete|Perfect/)).toBeNull();
     expect(screen.getAllByText("Start Round →").length).toBeGreaterThan(0);
     unmount();
 
+    // Every one met, but not from the first clue
+    const met = Object.fromEntries(first.characterIds.map((id) => [`wai-${id}`, 1]));
+    const complete = render(<WhoAmI {...props({ initialScreen: undefined, stars: met })} />);
+    expect(screen.getByText("✓ Complete")).toBeTruthy();
+    expect(screen.getAllByText("Start Round →").length).toBeGreaterThan(0);
+    complete.unmount();
+
     const all = Object.fromEntries(first.characterIds.map((id) => [`wai-${id}`, 3]));
     render(<WhoAmI {...props({ initialScreen: undefined, stars: all })} />);
-    expect(screen.getByText("✅ All Met — Replay →")).toBeTruthy();
+    expect(screen.getByText("★ Perfect!")).toBeTruthy();
   });
 
   test("picking a collection starts a round of exactly those people", () => {

@@ -2,6 +2,7 @@ import { audio } from "../../audio/SoundEngine.js";
 import { jitter } from "../../utils/random.js";
 import { COLLECTIONS } from "./whoAmIData.js";
 import { isStarred, sumStars, groupStars } from "../../utils/stars.js";
+import { CompletionStamp } from "../../components/common/CompletionStamp.jsx";
 
 /* The front door. Verse Builder opens on chapters, Memory Match on decks,
    Story Sequencer on volumes — this opens on collections, in the same
@@ -65,8 +66,10 @@ export function CollectionSelect({ collections = COLLECTIONS, stars, onSelectCol
           const keys = keysOf(collection);
           const earned = groupStars(stars, keys);
           const max = keys.length * 3;
-          const solved = keys.filter((key) => isStarred(stars, key)).length;
-          const complete = solved === keys.length;
+          /* The same two marks every other card carries: met them all, and
+             met them all from the first clue. */
+          const isComplete = keys.every((key) => isStarred(stars, key));
+          const isPerfect = earned === max;
 
           return (
             <button
@@ -85,6 +88,7 @@ export function CollectionSelect({ collections = COLLECTIONS, stars, onSelectCol
               aria-label={`Collection ${collection.id}: ${unlocked ? collection.title : "Locked"}`}
             >
               <span className="vb-tape vb-tape-top" />
+              <CompletionStamp complete={isComplete} perfect={isPerfect} />
               <div className="vb-chapter-header">
                 <span className="vb-chapter-num">Collection {collection.id}</span>
                 <span className="vb-chapter-stars">⭐ {earned}/{max}</span>
@@ -97,16 +101,11 @@ export function CollectionSelect({ collections = COLLECTIONS, stars, onSelectCol
                   ? collection.subtitle
                   : "Solve one mystery in the collection before this to unlock."}
               </p>
+              {/* What is inside, then the way in — the action does not
+                  change with progress, the stamp above carries that */}
               <div className="vb-chapter-meta">
-                {/* Solved, not stars: a child wants to know who is left to meet */}
-                <span>
-                  {unlocked && solved > 0
-                    ? `${solved} of ${keys.length} met`
-                    : `${keys.length} Mystery People`}
-                </span>
-                <span>
-                  {!unlocked ? "🔒 Locked" : complete ? "✅ All Met — Replay →" : "Start Round →"}
-                </span>
+                <span>{keys.length} Mystery People</span>
+                <span>{unlocked ? "Start Round →" : "🔒 Locked"}</span>
               </div>
             </button>
           );
