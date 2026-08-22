@@ -99,7 +99,10 @@ export function MMChapterSelect({
                 {unlocked ? deckObj.subtitle : "Earn at least 1 star in the previous deck to unlock."}
               </p>
               <div className="vb-chapter-meta">
-                <span>3 Match Modes</span>
+                {/* Counted, not spelled: this deck was designed with four
+                    modes and shipped with three, and a literal here would
+                    still be claiming four */}
+                <span>{MODES.length} Match Modes</span>
                 <span>{unlocked ? "Play →" : "🔒 Locked"}</span>
               </div>
             </button>
