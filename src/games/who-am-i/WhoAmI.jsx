@@ -10,10 +10,11 @@ import { Bust } from "../../art/portrait-kit.jsx";
 import { WinStars, BestLine } from "../../components/common/WinParts.jsx";
 import { Confetti } from "../../components/common/Confetti.jsx";
 import { CollectionSelect } from "./CollectionSelect.jsx";
+import { MysterySelect } from "./MysterySelect.jsx";
 import { useScrollToTop } from "../../components/common/useScrollToTop.js";
 import { useFocusOnAppear } from "../../components/common/useFocusOnAppear.js";
 import { useRouteSync } from "../../components/common/useRouteSync.js";
-import { isStarred, sumStars, groupStars } from "../../utils/stars.js";
+import { sumStars, groupStars } from "../../utils/stars.js";
 import "./who-am-i.css";
 
 /* The seed picks the three wrong faces in each line-up, so a collection
@@ -33,7 +34,7 @@ export function WhoAmI({
   initialScreen = "collections",
   initialCollectionId = 1,
 }) {
-  const [screen, setScreen] = useState(initialScreen); // "collections" | "play"
+  const [screen, setScreen] = useState(initialScreen); // "collections" | "mysteries" | "play"
   const [collectionId, setCollectionId] = useState(initialCollectionId);
   const [seed, setSeed] = useState(() => initialSeed ?? randomRoundSeed());
   const [index, setIndex] = useState(0);
@@ -54,7 +55,7 @@ export function WhoAmI({
   /* Move to a mystery. The seed is left alone: this runs when the address
      bar moves, and a Back into the mystery before should not deal that
      person a different line-up than the one they just left. */
-  function goTo(id, i) {
+  function goTo(id, i, next = "play") {
     setCollectionId(id);
     setIndex(i);
     setHintsShown(1);
@@ -63,13 +64,15 @@ export function WhoAmI({
     setTried([]);
     setLastWrong(null);
     setIsRoundOver(false);
-    setScreen("play");
+    setScreen(next);
   }
 
-  // Starting a round is the one move that reshuffles the line-ups
+  /* Opening a collection shows its people rather than dealing a question:
+     which of them have been met, and at how many stars. Reshuffling the
+     line-ups here means one deal per visit to a collection. */
   function openCollection(id) {
     setSeed(randomRoundSeed());
-    goTo(id, 0);
+    goTo(id, 0, "mysteries");
   }
 
   /* The collection list and each mystery earn a URL — "#/who-am-i/1/4" is
@@ -84,17 +87,20 @@ export function WhoAmI({
     place:
       screen === "collections"
         ? { a: null, b: null }
-        : isRoundOver
-          ? null
-          : { a: collectionId, b: index + 1 },
+        : screen === "mysteries"
+          ? { a: collectionId, b: null }
+          : isRoundOver
+            ? null
+            : { a: collectionId, b: index + 1 },
     apply: ({ a, b }) => {
       if (a === null || !getCollection(a)) {
         setScreen("collections");
         return;
       }
-      // A hand-typed mystery number outside the collection starts at its first
+      // A hand-typed mystery number outside the collection opens the list
       const count = getCollectionCharacters(a).length;
-      goTo(a, Number.isInteger(b) && b >= 1 && b <= count ? b - 1 : 0);
+      const valid = Number.isInteger(b) && b >= 1 && b <= count;
+      goTo(a, valid ? b - 1 : 0, valid ? "play" : "mysteries");
     },
   });
 
@@ -127,6 +133,20 @@ export function WhoAmI({
     );
   }
 
+  if (screen === "mysteries") {
+    return (
+      <MysterySelect
+        collectionId={collectionId}
+        stars={stars}
+        onSelectMystery={(i) => goTo(collectionId, i)}
+        onBackToCollections={() => {
+          audio.playButtonClick();
+          setScreen("collections");
+        }}
+      />
+    );
+  }
+
   const collection = getCollection(collectionId);
   /* The roster is the collection in the order it lists its people, not a
      shuffle: it is what makes the number in the address bar name the same
@@ -136,17 +156,19 @@ export function WhoAmI({
   const choices = getRandomChoices(character.id, 4, seed + index, roster);
   const maxHints = character.hints.length;
   const bestSoFar = stars[`wai-${character.id}`] || 0;
-  const metCount = roster.filter((c) => isStarred(stars, `wai-${c.id}`)).length;
 
-  function backToCollections() {
+  function backToMysteries() {
     audio.playButtonClick();
-    setScreen("collections");
+    setScreen("mysteries");
     setIsRoundOver(false);
   }
 
+  // Straight back to the first mystery with the line-ups redealt —
+  // openCollection() would land on the list instead of on a question
   function replayRound() {
     audio.playButtonClick();
-    openCollection(collectionId);
+    setSeed(randomRoundSeed());
+    goTo(collectionId, 0);
   }
 
   function revealNextHint() {
@@ -222,9 +244,11 @@ export function WhoAmI({
             ⭐ {groupStars(stars, collectionKeys)} of {collectionKeys.length * 3} stars here ·{" "}
             {sumStars(stars, { prefix: "wai-" })} in all
           </p>
+          {/* There is an album to go back to now, so the celebration
+              sends them to it rather than straight out of the game */}
           <div className="vb-win-btns">
-            <button className="vb-btn" onClick={backToCollections}>
-              Another Collection →
+            <button className="vb-btn" onClick={backToMysteries}>
+              See who you met →
             </button>
             <button className="vb-btn ghost" onClick={replayRound}>
               Play These Again
@@ -242,7 +266,7 @@ export function WhoAmI({
         position={index + 1}
         total={roster.length}
         cluesSpent={hintsShown - 1}
-        onBack={backToCollections}
+        onBack={backToMysteries}
       />
 
       {solved ? (
@@ -283,21 +307,6 @@ export function WhoAmI({
         </div>
       ) : (
         <div className="wai-board">
-          {/* Who in this collection has already been met. Every other game
-              keeps this on a level list; a round has no list, so it lives
-              here — otherwise the round forgets everything a child has
-              done and a face solved last week looks brand new. */}
-          <div className="wai-met" role="img" aria-label={`${metCount} of ${roster.length} already met in this collection`}>
-            {roster.map((person, i) => (
-              <span
-                key={person.id}
-                className={`wai-met-dot ${isStarred(stars, `wai-${person.id}`) ? "met" : ""} ${
-                  i === index ? "here" : ""
-                }`}
-              />
-            ))}
-          </div>
-
           <p className="wai-lead">Read the clues, then choose who is speaking.</p>
 
           <ol className="wai-clues">
@@ -363,7 +372,7 @@ function Topbar({ collection, position, total, cluesSpent, onBack }) {
   return (
     <div className="vb-topbar">
       <div className="vb-topbar-left">
-        <button className="vb-back" onClick={onBack} aria-label="Back to Collections">
+        <button className="vb-back" onClick={onBack} aria-label="Back to Mysteries">
           ←
         </button>
       </div>

@@ -97,6 +97,9 @@ test("who am i, through a clue, a wrong guess and a reveal", async ({ page }) =>
   await audit(page, "who am i — collections");
 
   await page.getByRole("button", { name: /Collection 1/ }).click();
+  await audit(page, "who am i — the people in a collection");
+
+  await page.getByRole("button", { name: /^Mystery 1/ }).click();
   await audit(page, "who am i — clues");
 
   await page.getByRole("button", { name: /Another clue/ }).click();
@@ -267,6 +270,7 @@ test("a finished collection is celebrated in the middle of the page", async ({ p
   await openHub(page);
   await page.getByRole("button", { name: /Who Am I/ }).click();
   await page.getByRole("button", { name: /Collection 1/ }).click();
+  await page.getByRole("button", { name: /^Mystery 1/ }).click();
 
   // Guess through each line-up until the right face lands, then move on
   for (let mystery = 0; mystery < 6; mystery += 1) {
@@ -494,10 +498,12 @@ test("a deep link into each game opens where it points", async ({ page }) => {
     ["/#/verse-builder/2/3", ".vb-strip"],
     ["/#/memory-match/1/1", ".mm-grid"],
     ["/#/story-sequencer/1/3", ".ss-timeline-track"],
+    ["/#/who-am-i/3", ".vb-level-card"],
     ["/#/who-am-i/3/4", ".wai-board"],
   ]) {
     await page.goto(url);
-    await expect(page.locator(marker), `${url} did not open its board`).toBeVisible();
+    // .first(): a list screen's marker matches every card on it
+    await expect(page.locator(marker).first(), `${url} did not open where it points`).toBeVisible();
   }
 
   // A link to a game that no longer exists lands on the hub, not a blank page

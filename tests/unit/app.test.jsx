@@ -146,6 +146,11 @@ describe("App Root & State Integration Tests", () => {
     fireEvent.click(screen.getByLabelText("Close Settings"));
 
     fireEvent.click(screen.getByRole("button", { name: "Collection 1: In the Beginning" }));
+
+    // The collection shows its people — met, and still a mystery — before
+    // any question is dealt
+    expect(screen.getAllByRole("button", { name: /^Mystery \d/ }).length).toBe(6);
+    fireEvent.click(screen.getAllByRole("button", { name: /^Mystery \d/ })[0]);
     expect(screen.getByText("Clue 1")).toBeTruthy();
 
     // A solved character banks a star under its own prefix
@@ -155,6 +160,7 @@ describe("App Root & State Integration Tests", () => {
     const waiKeys = Object.keys(saved).filter((k) => k.startsWith("wai-"));
     expect(waiKeys.length, "a guess should either bank a star or reveal another clue").toBeLessThanOrEqual(1);
 
+    fireEvent.click(screen.getByLabelText("Back to Mysteries"));
     fireEvent.click(screen.getByLabelText("Back to Collections"));
     fireEvent.click(screen.getByLabelText("Back to Game Hub"));
     expect(screen.getAllByText("Scripture Games").length).toBeGreaterThan(0);

@@ -288,19 +288,19 @@ describe("Constitution Gate: Accessibility (Article 4.3)", () => {
     await expectAccessible(
       <WhoAmI onBackToHub={noop} onOpenSettings={noop} stars={{ "wai-noah": 3 }} />
     );
-    // …and a round in progress, including one where people have already
-    // been met, which is what marks the strip above the clues
-    await expectAccessible(
-      <WhoAmI onBackToHub={noop} onOpenSettings={noop} initialScreen="play" initialSeed={3} />
-    );
+    // …the people in one collection, met and unmet…
     await expectAccessible(
       <WhoAmI
         onBackToHub={noop}
         onOpenSettings={noop}
-        initialScreen="play"
-        initialSeed={3}
+        initialScreen="mysteries"
         stars={{ "wai-adam": 3, "wai-noah": 1 }}
       />
+    );
+
+    // …and a round in progress
+    await expectAccessible(
+      <WhoAmI onBackToHub={noop} onOpenSettings={noop} initialScreen="play" initialSeed={3} />
     );
   });
 
