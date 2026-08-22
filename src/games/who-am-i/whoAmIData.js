@@ -5,6 +5,7 @@ export const CHARACTERS = [
   {
     id: "adam",
     name: "Adam",
+    traits: ["man", "patriarch"],
     hints: [
       "I was the very first person created by God.",
       "God formed me from the dust of the ground.",
@@ -17,6 +18,7 @@ export const CHARACTERS = [
   {
     id: "eve",
     name: "Eve",
+    traits: ["woman", "matriarch"],
     hints: [
       "I was the first woman in the world.",
       "God created me to be a helper and partner.",
@@ -29,6 +31,7 @@ export const CHARACTERS = [
   {
     id: "noah",
     name: "Noah",
+    traits: ["man", "patriarch"],
     hints: [
       "I lived in a time when the world was filled with wickedness.",
       "God told me to build a giant wooden boat.",
@@ -41,6 +44,7 @@ export const CHARACTERS = [
   {
     id: "abraham",
     name: "Abraham",
+    traits: ["man", "patriarch"],
     hints: [
       "God called me to leave my country and travel to a new land.",
       "My name means 'Father of many nations'.",
@@ -53,6 +57,7 @@ export const CHARACTERS = [
   {
     id: "sarah",
     name: "Sarah",
+    traits: ["woman", "matriarch"],
     hints: [
       "I traveled with my husband from Ur to Canaan.",
       "I laughed when three visitors said I would have a baby.",
@@ -65,6 +70,7 @@ export const CHARACTERS = [
   {
     id: "jacob",
     name: "Jacob",
+    traits: ["man", "patriarch"],
     hints: [
       "I had a twin brother named Esau.",
       "I had a dream about a ladder reaching up to heaven.",
@@ -77,6 +83,7 @@ export const CHARACTERS = [
   {
     id: "joseph",
     name: "Joseph",
+    traits: ["man", "patriarch", "leader"],
     hints: [
       "My father Jacob gave me a beautiful coat of many colors.",
       "My jealous brothers threw me into a pit.",
@@ -89,6 +96,7 @@ export const CHARACTERS = [
   {
     id: "moses",
     name: "Moses",
+    traits: ["man", "prophet", "leader"],
     hints: [
       "I was hidden in a papyrus basket in the river when I was a baby.",
       "God spoke to me from a burning bush.",
@@ -101,6 +109,7 @@ export const CHARACTERS = [
   {
     id: "miriam",
     name: "Miriam",
+    traits: ["woman", "prophet"],
     hints: [
       "I am the brave older sister of Moses and Aaron.",
       "I watched my baby brother float in a basket on the Nile River.",
@@ -113,6 +122,7 @@ export const CHARACTERS = [
   {
     id: "joshua",
     name: "Joshua",
+    traits: ["man", "leader", "soldier"],
     hints: [
       "I was Moses' helper and became the leader of Israel after him.",
       "I was one of the two spies who believed God would give us the Promised Land.",
@@ -125,6 +135,7 @@ export const CHARACTERS = [
   {
     id: "rahab",
     name: "Rahab",
+    traits: ["woman", "outsider"],
     hints: [
       "I lived in a house built into the city wall of Jericho.",
       "I hid two Israelite spies on my roof.",
@@ -137,6 +148,7 @@ export const CHARACTERS = [
   {
     id: "gideon",
     name: "Gideon",
+    traits: ["man", "judge", "soldier"],
     hints: [
       "An angel called me a 'mighty man of valor'.",
       "I tested God's promise with a fleece of wool.",
@@ -149,6 +161,7 @@ export const CHARACTERS = [
   {
     id: "samson",
     name: "Samson",
+    traits: ["man", "judge", "soldier"],
     hints: [
       "God gave me incredible, superhuman strength.",
       "I defeated a lion with my bare hands.",
@@ -161,6 +174,7 @@ export const CHARACTERS = [
   {
     id: "ruth",
     name: "Ruth",
+    traits: ["woman", "outsider"],
     hints: [
       "I was a Moabite woman who chose to follow the God of Israel.",
       "I told my mother-in-law Naomi, 'Where you go I will go.'",
@@ -173,6 +187,7 @@ export const CHARACTERS = [
   {
     id: "samuel",
     name: "Samuel",
+    traits: ["man", "prophet", "priest"],
     hints: [
       "My mother Hannah prayed for me and dedicated me to the Lord.",
       "I heard God calling my name in the night when I was a boy.",
@@ -185,6 +200,7 @@ export const CHARACTERS = [
   {
     id: "david",
     name: "David",
+    traits: ["man", "king", "soldier"],
     hints: [
       "I was a young shepherd boy who protected my sheep from a lion and a bear.",
       "I defeated a giant champion named Goliath with a sling and a stone.",
@@ -197,6 +213,7 @@ export const CHARACTERS = [
   {
     id: "solomon",
     name: "Solomon",
+    traits: ["man", "king", "writer"],
     hints: [
       "I was the son of King David.",
       "When God asked what I wanted, I asked for wisdom instead of riches.",
@@ -209,6 +226,7 @@ export const CHARACTERS = [
   {
     id: "elijah",
     name: "Elijah",
+    traits: ["man", "prophet", "miracle"],
     hints: [
       "I was a prophet who challenged the prophets of Baal on Mount Carmel.",
       "God sent fire from heaven to consume my water-soaked sacrifice.",
@@ -221,6 +239,7 @@ export const CHARACTERS = [
   {
     id: "elisha",
     name: "Elisha",
+    traits: ["man", "prophet", "miracle"],
     hints: [
       "I was plowing a field when Elijah threw his cloak over me.",
       "I asked for a double portion of Elijah's spirit.",
@@ -233,6 +252,7 @@ export const CHARACTERS = [
   {
     id: "naaman",
     name: "Naaman",
+    traits: ["man", "outsider", "soldier"],
     hints: [
       "I was a brave army commander, but I suffered from leprosy.",
       "A young servant girl told my wife about a prophet in Israel who could heal me.",
@@ -245,6 +265,7 @@ export const CHARACTERS = [
   {
     id: "esther",
     name: "Esther",
+    traits: ["woman", "queen", "exile"],
     hints: [
       "I was a young Jewish orphan raised by my cousin Mordecai.",
       "I was chosen for my beauty to become the Queen of Persia.",
@@ -257,6 +278,7 @@ export const CHARACTERS = [
   {
     id: "job",
     name: "Job",
+    traits: ["man", "sufferer"],
     hints: [
       "I was a very wealthy man who lost my flocks, my servants, and my children in one day.",
       "I lost my health and sat in ashes scraping my skin.",
@@ -269,6 +291,7 @@ export const CHARACTERS = [
   {
     id: "isaiah",
     name: "Isaiah",
+    traits: ["man", "prophet", "writer"],
     hints: [
       "I saw a vision of the LORD sitting upon a high and lofty throne.",
       "An angel touched my lips with a burning coal.",
@@ -281,6 +304,7 @@ export const CHARACTERS = [
   {
     id: "jeremiah",
     name: "Jeremiah",
+    traits: ["man", "prophet", "writer"],
     hints: [
       "I was known as the 'weeping prophet' because of my sorrow for Jerusalem.",
       "God told me He knew me before I was formed in my mother's womb.",
@@ -293,6 +317,7 @@ export const CHARACTERS = [
   {
     id: "daniel",
     name: "Daniel",
+    traits: ["man", "prophet", "exile"],
     hints: [
       "I was taken captive to Babylon as a young man.",
       "I purposed in my heart not to defile myself with the king's rich food.",
@@ -305,6 +330,7 @@ export const CHARACTERS = [
   {
     id: "jonah",
     name: "Jonah",
+    traits: ["man", "prophet"],
     hints: [
       "God told me to preach to the city of Nineveh.",
       "I ran away and boarded a ship heading for Tarshish.",
@@ -317,6 +343,7 @@ export const CHARACTERS = [
   {
     id: "mary",
     name: "Mary",
+    traits: ["woman", "mother"],
     hints: [
       "The angel Gabriel visited me in Nazareth.",
       "I was told I would have a baby by the Holy Spirit.",
@@ -329,6 +356,7 @@ export const CHARACTERS = [
   {
     id: "john_baptist",
     name: "John the Baptist",
+    traits: ["man", "prophet"],
     hints: [
       "My clothes were made of camel's hair, and I ate locusts and wild honey.",
       "I was a voice crying in the wilderness: 'Prepare the way of the Lord!'",
@@ -341,6 +369,7 @@ export const CHARACTERS = [
   {
     id: "peter",
     name: "Peter",
+    traits: ["man", "apostle", "fisherman"],
     hints: [
       "My brother Andrew and I were fishermen when Jesus called us to be fishers of men.",
       "I stepped out of a boat and walked on water toward Jesus.",
@@ -353,6 +382,7 @@ export const CHARACTERS = [
   {
     id: "john",
     name: "John",
+    traits: ["man", "apostle", "writer", "fisherman"],
     hints: [
       "I was a fisherman along with my brother James.",
       "I was known as the disciple whom Jesus loved.",
@@ -365,6 +395,7 @@ export const CHARACTERS = [
   {
     id: "matthew",
     name: "Matthew",
+    traits: ["man", "apostle", "writer"],
     hints: [
       "I was sitting at my tax collector's booth when Jesus said, 'Follow Me.'",
       "I threw a great banquet at my house for Jesus and my friends.",
@@ -377,6 +408,7 @@ export const CHARACTERS = [
   {
     id: "luke",
     name: "Luke",
+    traits: ["man", "writer"],
     hints: [
       "I was a beloved physician and a companion of Paul.",
       "I was not one of the original twelve disciples.",
@@ -389,6 +421,7 @@ export const CHARACTERS = [
   {
     id: "paul",
     name: "Paul",
+    traits: ["man", "apostle", "writer"],
     hints: [
       "I used to persecute the early church under the name Saul.",
       "A blinding light from heaven knocked me to the ground on the road to Damascus.",
@@ -401,6 +434,7 @@ export const CHARACTERS = [
   {
     id: "stephen",
     name: "Stephen",
+    traits: ["man", "martyr"],
     hints: [
       "I was chosen as one of the first seven deacons to help serve food to widows.",
       "I did great wonders and signs among the people.",
@@ -413,6 +447,7 @@ export const CHARACTERS = [
   {
     id: "nehemiah",
     name: "Nehemiah",
+    traits: ["man", "leader", "exile"],
     hints: [
       "I was a cupbearer to the King of Persia.",
       "I wept when I heard the walls of Jerusalem were broken down.",
@@ -425,6 +460,7 @@ export const CHARACTERS = [
   {
     id: "micah",
     name: "Micah",
+    traits: ["man", "prophet", "writer"],
     hints: [
       "I was a prophet from a small town called Moresheth.",
       "I prophesied during the reigns of Jotham, Ahaz, and Hezekiah.",
@@ -510,6 +546,13 @@ export function getCollectionCharacters(id) {
   return collection.characterIds.map((cid) => CHARACTERS.find((c) => c.id === cid));
 }
 
+/* How easily two people could be mistaken for one another: the traits
+   they share. It is what makes a wrong answer worth considering — Elijah
+   beside Elisha, Gideon beside Samson, Ruth beside Rahab. */
+function confusability(a, b) {
+  return a.traits.filter((t) => b.traits.includes(t)).length;
+}
+
 /* Four names to choose from: the right one and three others.
 
    The others come from the collection being played, not the whole cast.
@@ -519,13 +562,40 @@ export function getCollectionCharacters(id) {
    together. Every collection holds at least four, which is what keeps the
    line-up full.
 
+   But a collection alone cannot make a question hard. Six people leave
+   five candidates for three places, so "pick three of the collection"
+   barely chooses at all: "I was the first woman" came up beside Noah,
+   Abraham and Jacob, and the only other woman on the board was the
+   answer. The clue went unread.
+
+   So a wrong answer has to share something with the right one. The
+   collection is preferred and outsiders fill in behind it — which is why
+   Eve stands with Sarah, Ruth and Miriam rather than three patriarchs,
+   and Ruth stands with Rahab. There are two more candidates than places,
+   so the same person does not face the same three faces forever.
+
    The seed is not optional. shuffle() swaps through jitter(seed, …), and
    without a seed every index computes NaN — which returned an array whose
    last entry was undefined, so players only ever saw three choices. */
 export function getRandomChoices(correctId, count = 4, seed = 1, pool = CHARACTERS) {
-  const others = pool.filter((c) => c.id !== correctId);
-  const picked = shuffle(others, seed).slice(0, count - 1);
   const correct = CHARACTERS.find((c) => c.id === correctId);
+  const wanted = count - 1;
+
+  const plausible = (list) =>
+    shuffle(list, seed)
+      .filter((c) => c.id !== correctId && confusability(correct, c) > 0)
+      .map((c) => ({ c, score: confusability(correct, c) }))
+      .sort((x, y) => y.score - x.score)
+      .map((entry) => entry.c);
+
+  const local = plausible(pool);
+  const elsewhere = plausible(CHARACTERS).filter((c) => !local.includes(c));
+
+  /* Everyone carries "man" or "woman", so the cast can always fill a
+     line-up — which is why there is no give-up branch here. The gate on
+     the traits table is what keeps that true. */
+  const shortlist = [...local, ...elsewhere].slice(0, wanted + 2);
+  const picked = shuffle(shortlist, seed + 3).slice(0, wanted);
   return shuffle([...picked, correct], seed + 7);
 }
 

@@ -58,22 +58,66 @@ describe("Who Am I? content", () => {
     expect(starsForHintsUsed(4)).toBe(1);
   });
 
-  test("the line-up is drawn from the collection being played", () => {
-    // Otherwise the theme gives the answer away: a clue about Esau next to
-    // Daniel needs no reading at all
+  test("every character carries traits, from a fixed vocabulary", () => {
+    /* The line-up is built from these. The gender trait is load-bearing:
+       getRandomChoices has no give-up branch because every character is a
+       man or a woman, so the cast can always fill four places. */
+    const VOCABULARY = [
+      "man", "woman", "patriarch", "matriarch", "prophet", "priest", "judge",
+      "king", "queen", "leader", "soldier", "apostle", "writer", "outsider",
+      "exile", "miracle", "mother", "martyr", "sufferer", "fisherman",
+    ];
+    CHARACTERS.forEach((c) => {
+      expect(Array.isArray(c.traits), `${c.name} has no traits`).toBe(true);
+      expect(
+        c.traits.filter((t) => t === "man" || t === "woman").length,
+        `${c.name} must be exactly one of man/woman`
+      ).toBe(1);
+      c.traits.forEach((t) => {
+        expect(VOCABULARY, `${c.name} has an unknown trait "${t}"`).toContain(t);
+      });
+    });
+  });
+
+  test("every wrong answer has something in common with the right one", () => {
+    /* Otherwise the clue goes unread: "I was the first woman" beside three
+       patriarchs answers itself. A decoy has to be worth considering. */
     COLLECTIONS.forEach((collection) => {
       const pool = getCollectionCharacters(collection.id);
       pool.forEach((c, i) => {
         const choices = getRandomChoices(c.id, 4, i + 1, pool);
         expect(choices.length, `${collection.title} cannot fill a line-up`).toBe(4);
-        choices.forEach((choice) => {
-          expect(
-            collection.characterIds.includes(choice.id),
-            `${choice.name} is not in ${collection.title}`
-          ).toBe(true);
-        });
+        choices
+          .filter((choice) => choice.id !== c.id)
+          .forEach((choice) => {
+            const shared = choice.traits.filter((t) => c.traits.includes(t));
+            expect(
+              shared.length,
+              `${choice.name} shares nothing with ${c.name} — nothing to weigh up`
+            ).toBeGreaterThan(0);
+          });
       });
     });
+  });
+
+  test("the collection is preferred, and only widened when it cannot fill the line-up", () => {
+    // Prophets and Miracles holds seven people who are alike, so it never
+    // needs to borrow; In the Beginning has one other woman, so Eve must
+    const prophets = getCollectionCharacters(4);
+    prophets.forEach((c, i) => {
+      getRandomChoices(c.id, 4, i + 1, prophets).forEach((choice) => {
+        expect(
+          COLLECTIONS[3].characterIds,
+          `${choice.name} was borrowed although the prophets could fill the line-up`
+        ).toContain(choice.id);
+      });
+    });
+
+    const genesis = getCollectionCharacters(1);
+    const eve = genesis.find((c) => c.id === "eve");
+    const forEve = getRandomChoices(eve.id, 4, 5, genesis);
+    expect(forEve.every((c) => c.traits.includes("woman"))).toBe(true);
+    expect(forEve.some((c) => !COLLECTIONS[0].characterIds.includes(c.id))).toBe(true);
   });
 
   test("a line-up is four real people, including the right one", () => {
