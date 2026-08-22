@@ -6,6 +6,7 @@ import { GameHub } from "./games/hub/GameHub.jsx";
 import { VerseBuilder } from "./games/verse-builder/VerseBuilder.jsx";
 import { MemoryMatch } from "./games/memory-match/MemoryMatch.jsx";
 import { StorySequencer } from "./games/story-sequencer/StorySequencer.jsx";
+import { WhoAmI } from "./games/who-am-i/WhoAmI.jsx";
 import { SettingsModal } from "./components/common/SettingsModal.jsx";
 import { WelcomeSplash } from "./components/common/WelcomeSplash.jsx";
 import { useScrollToTop } from "./components/common/useScrollToTop.js";
@@ -237,6 +238,22 @@ export default function App() {
               onSaveStars={handleSaveStar}
               route={route}
               onNavigate={navigate}
+              onBackToHub={() => {
+                setActiveGame("hub");
+              }}
+              onOpenSettings={() => {
+                audio.playSettingsChime();
+                setIsSettingsOpen(true);
+              }}
+            />
+          )}
+
+          {/* Screen 5: Who Am I Game */}
+          {activeGame === "who-am-i" && (
+            <WhoAmI
+              key={`wai-${resetCount}`}
+              stars={stars}
+              onSaveStar={handleSaveStar}
               onBackToHub={() => {
                 setActiveGame("hub");
               }}

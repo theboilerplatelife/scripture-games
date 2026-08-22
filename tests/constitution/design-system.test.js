@@ -19,6 +19,7 @@ function cssSources() {
     "src/games/verse-builder/verse-builder.css",
     "src/games/memory-match/memory-match.css",
     "src/games/story-sequencer/story-sequencer.css",
+    "src/games/who-am-i/who-am-i.css",
     "src/components/common/welcome-splash.css",
   ];
   return [
@@ -139,6 +140,41 @@ describe("Constitution Gate: Design System (Article 4)", () => {
       });
     });
     expect(offenders, offenders.join("\n")).toEqual([]);
+  });
+
+  test("Article 4.4: every token a stylesheet uses is actually defined", () => {
+    // A var() that resolves to nothing fails silently: the colour is simply
+    // not applied. Who Am I shipped with thirteen invented tokens
+    // (--color-paper, --color-ink and eleven more), so its buttons rendered
+    // in Arial at 2.5:1 — and the contrast gate could not see it, because
+    // an undefined custom property has no colour to measure.
+    const defined = new Set();
+    cssSources().forEach(({ css }) => {
+      for (const m of css.matchAll(/(--[a-zA-Z0-9-]+)\s*:/g)) defined.add(m[1]);
+    });
+    // Some tokens are handed in at runtime — a chapter's colour, a card's
+    // rotation — so a component setting one counts as defining it
+    const walk = (dir) => {
+      fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (entry.name.endsWith(".jsx")) {
+          const code = fs.readFileSync(full, "utf8");
+          for (const m of code.matchAll(/"(--[a-zA-Z0-9-]+)"\s*:/g)) defined.add(m[1]);
+        }
+      });
+    };
+    walk(path.join(ROOT, "src"));
+
+    const missing = [];
+    cssSources().forEach(({ name, css }) => {
+      // var(--x, fallback) cannot fail silently, so only bare uses count
+      for (const m of css.matchAll(/var\(\s*(--[a-zA-Z0-9-]+)\s*\)/g)) {
+        if (!defined.has(m[1])) missing.push(`${name}: ${m[1]}`);
+      }
+    });
+
+    expect([...new Set(missing)], `tokens used but never defined:\n${[...new Set(missing)].join("\n")}`).toEqual([]);
   });
 
   test("Article 4.4: no class is defined in more than one stylesheet", () => {

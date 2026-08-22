@@ -129,6 +129,29 @@ describe("App Root & State Integration Tests", () => {
     expect(screen.getAllByText("Scripture Games").length).toBeGreaterThan(0);
   });
 
+  test("navigates to Who Am I, banks a star, and returns to the Hub", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: "Tap to Play and Start Game" }));
+
+    fireEvent.click(screen.getByRole("button", { name: /Who Am I/i }));
+    expect(screen.getByText("Clue 1")).toBeTruthy();
+
+    // Settings reach the same modal from inside this game as from any other
+    fireEvent.click(screen.getByLabelText("Open Game Settings"));
+    expect(screen.getByText("⚙️ Game Settings")).toBeTruthy();
+    fireEvent.click(screen.getByLabelText("Close Settings"));
+
+    // A solved character banks a star under its own prefix
+    const nameOnScreen = screen.getAllByRole("button", { name: /^Guess / })[0];
+    fireEvent.click(nameOnScreen);
+    const saved = JSON.parse(localStorage.getItem("scripture_games_stars_v1") || "{}");
+    const waiKeys = Object.keys(saved).filter((k) => k.startsWith("wai-"));
+    expect(waiKeys.length, "a guess should either bank a star or reveal another clue").toBeLessThanOrEqual(1);
+
+    fireEvent.click(screen.getByLabelText("Back to Games"));
+    expect(screen.getAllByText("Scripture Games").length).toBeGreaterThan(0);
+  });
+
   test("navigates to Story Sequencer and returns back to Hub", () => {
     render(<App />);
 

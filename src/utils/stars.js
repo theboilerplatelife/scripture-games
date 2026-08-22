@@ -6,7 +6,9 @@
 // Star keys are namespaced per game inside one storage map: Verse Builder
 // uses bare "{chapter}-{level}" keys, so every OTHER game's prefix must be
 // excluded from its totals. Add new games' prefixes here.
-export const OTHER_GAME_PREFIXES = ["mm-", "ss-"];
+/* Verse Builder has no prefix of its own, so it counts by exclusion: every
+   other game's keys must be listed here or its totals quietly inflate. */
+export const OTHER_GAME_PREFIXES = ["mm-", "ss-", "wai-"];
 
 // A key counts as starred only for a positive numeric value — corrupt
 // or foreign values must never unlock or count anything.

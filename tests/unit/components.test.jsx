@@ -121,13 +121,15 @@ describe("Common Components Tests", () => {
     );
 
     expect(screen.getByText("Scripture Games")).toBeTruthy();
-    expect(screen.getByText(/3 games ready/)).toBeTruthy();
+    expect(screen.getByText(/4 games ready/)).toBeTruthy();
+    expect(screen.getByText(/648/), "the hub total must count the fourth game").toBeTruthy();
     expect(screen.getByText(/Total Stars/i)).toBeTruthy();
 
     // Per-game star pills are prefix-filtered from the shared stars map
     expect(screen.getByText("⭐ 3 / 360 Stars")).toBeTruthy();
     expect(screen.getByText("⭐ 2 / 72 Stars")).toBeTruthy();
-    expect(screen.getByText("⭐ 0 / 108 Stars")).toBeTruthy();
+    // Story Sequencer and Who Am I both hold 108: 36 stories, 36 characters
+    expect(screen.getAllByText("⭐ 0 / 108 Stars").length).toBe(2);
     // Hub chip shows the combined figure
     expect(screen.getByText("5")).toBeTruthy();
 
@@ -137,6 +139,8 @@ describe("Common Components Tests", () => {
     expect(handleOpenSettings).toHaveBeenCalled();
 
     // Select each live game
+    fireEvent.click(screen.getByRole("button", { name: /Who Am I/i }));
+    expect(handleSelectGame).toHaveBeenCalledWith("who-am-i");
     fireEvent.click(screen.getByRole("button", { name: /Verse Builder/i }));
     expect(handleSelectGame).toHaveBeenCalledWith("verse-builder");
     fireEvent.click(screen.getByRole("button", { name: /Memory Match/i }));

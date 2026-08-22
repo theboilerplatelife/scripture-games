@@ -5,6 +5,7 @@ import { PORTRAITS, ARMOUR_POSES } from "../../src/art/portraits.jsx";
 import { PEOPLE } from "../../src/art/portrait-kit.jsx";
 import { CHAPTERS } from "../../src/data/chapters.js";
 import { authorOf, portraitOf } from "../../src/data/authorship.js";
+import { CHARACTERS as WHO_AM_I_CHARACTERS } from "../../src/games/who-am-i/whoAmIData.js";
 
 const ALL_VERSES = CHAPTERS.flatMap((chapter) => chapter.verses);
 
@@ -68,7 +69,9 @@ describe("verse portraits", () => {
   test("every person drawn is a writer some verse actually has", () => {
     // An unused person in the kit is a face nobody will ever see
     const needed = new Set(ALL_VERSES.map((verse) => authorOf(verse.ref)));
+    const whoAmIPeople = new Set(WHO_AM_I_CHARACTERS.map(c => c.id));
     Object.keys(PEOPLE).forEach((person) => {
+      if (whoAmIPeople.has(person)) return;
       expect(needed.has(person), `${person} is drawn but writes nothing in the app`).toBe(true);
     });
     needed.forEach((person) => {

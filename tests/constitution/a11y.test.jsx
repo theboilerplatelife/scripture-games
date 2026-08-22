@@ -13,6 +13,7 @@ import { VerseBuilder } from "../../src/games/verse-builder/VerseBuilder.jsx";
 import { WinCard } from "../../src/games/verse-builder/WinCard.jsx";
 import { MemoryMatch } from "../../src/games/memory-match/MemoryMatch.jsx";
 import { MMWinCard } from "../../src/games/memory-match/MMWinCard.jsx";
+import { WhoAmI, buildRound } from "../../src/games/who-am-i/WhoAmI.jsx";
 import { StorySequencer } from "../../src/games/story-sequencer/StorySequencer.jsx";
 import { StoryWinCard } from "../../src/games/story-sequencer/StoryWinCard.jsx";
 import { StoryReaderModal } from "../../src/games/story-sequencer/StoryReaderModal.jsx";
@@ -265,6 +266,33 @@ describe("Constitution Gate: Accessibility (Article 4.3)", () => {
     );
   });
 
+  test("who am i screens", async () => {
+    await expectAccessible(
+      <WhoAmI onBackToHub={noop} />
+    );
+  });
+
+  test("who am i mid-play states", async () => {
+    const round = buildRound(3);
+    const answer = `[aria-label="Guess ${round[0].name}"]`;
+
+    // A wrong answer is a state like any other: audited with its colour on,
+    // not just the resting screen
+    const wrong = render(<WhoAmI onBackToHub={noop} initialSeed={3} />);
+    const notTheAnswer = [...wrong.container.querySelectorAll(".wai-choice")].find(
+      (b) => !b.matches(answer)
+    );
+    fireEvent.click(notTheAnswer);
+    await auditDom(wrong.container);
+    wrong.unmount();
+
+    // …and the reveal, and the card at the end of a round
+    const solved = render(<WhoAmI onBackToHub={noop} initialSeed={3} />);
+    fireEvent.click(solved.container.querySelector(answer));
+    await auditDom(solved.container);
+    solved.unmount();
+  });
+
   test("story sequencer screens", async () => {
     const props = {
       stars: { "ss-1": 2 },
@@ -392,6 +420,7 @@ describe("Constitution Gate: Accessibility (Article 4.3)", () => {
       "src/games/verse-builder/verse-builder.css",
       "src/games/memory-match/memory-match.css",
       "src/games/story-sequencer/story-sequencer.css",
+      "src/games/who-am-i/who-am-i.css",
       "src/components/common/welcome-splash.css",
     ].map((f) => fs.readFileSync(path.resolve(__dirname, "../..", f), "utf8"));
 

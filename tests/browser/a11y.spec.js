@@ -91,6 +91,27 @@ test("memory match, through a flipped pair", async ({ page }) => {
   await audit(page, "memory match — two cards face up");
 });
 
+test("who am i, through a clue, a wrong guess and a reveal", async ({ page }) => {
+  await openHub(page);
+  await page.getByRole("button", { name: /Who Am I/ }).click();
+  await audit(page, "who am i — clues");
+
+  await page.getByRole("button", { name: /Another clue/ }).click();
+  await audit(page, "who am i — second clue");
+
+  // Guess through the line-up until one lands, auditing the wrong state on
+  // the way — colour alone is what a wrong answer changes
+  const names = page.locator(".wai-choice");
+  for (let i = 0; i < 4; i += 1) {
+    await names.nth(i).click();
+    if (await page.locator(".wai-reveal").isVisible().catch(() => false)) break;
+    await audit(page, "who am i — wrong answer");
+    await page.waitForTimeout(600);
+  }
+  await expect(page.locator(".wai-reveal")).toBeVisible();
+  await audit(page, "who am i — reveal");
+});
+
 test("story sequencer, through selection, hint and a checked order", async ({ page }) => {
   await openHub(page);
   await page.getByRole("button", { name: /Story Sequencer/ }).click();

@@ -11,7 +11,7 @@ import { useCallback, useEffect, useState } from "react";
    served offline from a service worker: "#/..." needs no server rewrite
    and no Netlify redirect rule to survive a hard refresh. */
 
-const GAMES = ["hub", "verse-builder", "memory-match", "story-sequencer"];
+const GAMES = ["hub", "verse-builder", "memory-match", "story-sequencer", "who-am-i"];
 
 /* "#/verse-builder/3/5" -> { game: "verse-builder", a: 3, b: 5 } */
 export function parseHash(hash) {

@@ -3,7 +3,8 @@ import { audio } from "../../audio/SoundEngine.js";
 import { CHAPTERS } from "../../data/chapters.js";
 import { DECKS, MODES } from "../memory-match/matchData.js";
 import { STORIES } from "../story-sequencer/storyData.js";
-import { sumStars } from "../../utils/stars.js";
+import { CHARACTERS } from "../who-am-i/whoAmIData.js";
+import { sumStars, OTHER_GAME_PREFIXES } from "../../utils/stars.js";
 import { GameIcon } from "./GameIcon.jsx";
 import "./hub.css";
 
@@ -22,12 +23,14 @@ export function GameHub({
   const vbMaxStars = CHAPTERS.length * 8 * 3; // 360
   const mmMaxStars = DECKS.length * MODES.length * 3; // 72
   const ssMaxStars = STORIES.length * 3; // 108
-  const totalMaxStars = vbMaxStars + mmMaxStars + ssMaxStars; // 540
+  const waiMaxStars = CHARACTERS.length * 3; // 108
+  const totalMaxStars = vbMaxStars + mmMaxStars + ssMaxStars + waiMaxStars; // 648
 
-  const vbStars = sumStars(allStars, { excludePrefix: ["mm-", "ss-"] });
+  const vbStars = sumStars(allStars, { excludePrefix: OTHER_GAME_PREFIXES });
   const mmStars = sumStars(allStars, { prefix: "mm-" });
   const ssStars = sumStars(allStars, { prefix: "ss-" });
-  const totalEarnedStars = vbStars + mmStars + ssStars;
+  const waiStars = sumStars(allStars, { prefix: "wai-" });
+  const totalEarnedStars = vbStars + mmStars + ssStars + waiStars;
 
   return (
     <div className="hub-root">
@@ -57,7 +60,7 @@ export function GameHub({
 
       <div className="hub-stats-bar">
         <div className="hub-stat-chip">
-          ✂️ <strong>3 games ready</strong> · 3 on the way
+          ✂️ <strong>4 games ready</strong> · 2 on the way
         </div>
         <div className="hub-stat-chip">
           ⭐ <strong>{totalEarnedStars}</strong> / {totalMaxStars} Total Stars Earned
@@ -153,14 +156,18 @@ export function GameHub({
         </button>
 
         {/* Game 4: Who Am I? */}
-        <div
-          className="hub-game-card disabled"
+        <button
+          className="hub-game-card"
+          onClick={() => {
+            audio.playButtonClick();
+            onSelectGame("who-am-i");
+          }}
           style={{ "--rot": "1.2deg" }}
         >
           <span className="vb-tape vb-tape-top" />
           <div className="hub-card-header">
             <span className="hub-game-icon"><GameIcon kind="magnifier" /></span>
-            <span className="hub-game-badge coming-soon">Coming Soon</span>
+            <span className="hub-game-badge">Ready to Play</span>
           </div>
           <h2 className="hub-game-title">Who Am I?</h2>
           <div className="hub-card-pills">
@@ -171,10 +178,10 @@ export function GameHub({
             Solve progressive scripture clues one at a time to uncover Bible heroes and unlock their full story!
           </p>
           <div className="hub-game-meta">
-            <span>Character Mysteries</span>
-            <span className="hub-dev-note">In Development</span>
+            <span>⭐ {waiStars} / {waiMaxStars} Stars</span>
+            <span className="hub-play-btn">Play Now →</span>
           </div>
-        </div>
+        </button>
 
         {/* Game 5: Sword Drill */}
         <div
