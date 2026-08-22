@@ -1,28 +1,35 @@
 import { useEffect, useRef, useState } from "react";
-import { CHARACTERS, getRandomChoices, starsForHintsUsed } from "./whoAmIData.js";
+import {
+  getCollection,
+  getCollectionCharacters,
+  getRandomChoices,
+  starsForHintsUsed,
+} from "./whoAmIData.js";
 import { shuffle } from "../../utils/random.js";
 import { audio } from "../../audio/SoundEngine.js";
 import { Bust } from "../../art/portrait-kit.jsx";
 import { Star } from "../../components/common/Star.jsx";
 import { WinStars } from "../../components/common/WinParts.jsx";
 import { Confetti } from "../../components/common/Confetti.jsx";
+import { CollectionSelect } from "./CollectionSelect.jsx";
 import { useScrollToTop } from "../../components/common/useScrollToTop.js";
 import { useFocusOnAppear } from "../../components/common/useFocusOnAppear.js";
-import { isStarred, sumStars } from "../../utils/stars.js";
+import { useRouteSync } from "../../components/common/useRouteSync.js";
+import { isStarred, sumStars, groupStars } from "../../utils/stars.js";
 import "./who-am-i.css";
-
-const ROUND_LENGTH = 10;
 
 export function randomRoundSeed() {
   return Math.floor(Math.random() * 100000) + 1;
 }
 
-/* Ten characters for one round. The seed matters: shuffle() drives its
-   swaps through jitter(seed, …), so calling it without one makes every
-   index NaN — the deck came back in its original order every session and
-   one of the four answer choices came back undefined. */
-export function buildRound(seed) {
-  return shuffle(CHARACTERS, seed).slice(0, ROUND_LENGTH);
+/* One collection's characters, dealt in a different order each time.
+
+   The seed matters: shuffle() drives its swaps through jitter(seed, …),
+   so calling it without one makes every index NaN — the deck came back in
+   its original order every session and one of the four answer choices
+   came back undefined. */
+export function buildRound(seed, collectionId) {
+  return shuffle(getCollectionCharacters(collectionId), seed);
 }
 
 export function WhoAmI({
@@ -30,10 +37,16 @@ export function WhoAmI({
   onSaveStar,
   onBackToHub,
   onOpenSettings,
+  route,
+  onNavigate,
   initialSeed,
+  initialScreen = "collections",
+  initialCollectionId = 1,
 }) {
+  const [screen, setScreen] = useState(initialScreen); // "collections" | "play"
+  const [collectionId, setCollectionId] = useState(initialCollectionId);
   const [seed, setSeed] = useState(() => initialSeed ?? randomRoundSeed());
-  const [deck, setDeck] = useState(() => buildRound(initialSeed ?? randomRoundSeed()));
+  const [deck, setDeck] = useState(() => buildRound(initialSeed ?? randomRoundSeed(), initialCollectionId));
   const [index, setIndex] = useState(0);
   const [hintsShown, setHintsShown] = useState(1);
   const [solved, setSolved] = useState(false);
@@ -43,11 +56,28 @@ export function WhoAmI({
   const timers = useRef([]);
   const revealRef = useRef(null);
 
+  /* The collection list and the round earn a URL; the round-over card
+     does not, so a refresh puts the player back on the round rather than
+     on a celebration they have already had. */
+  useRouteSync({
+    game: "who-am-i",
+    route,
+    navigate: onNavigate,
+    place: screen === "collections" ? { a: null, b: null } : isRoundOver ? null : { a: collectionId, b: null },
+    apply: ({ a }) => {
+      if (a === null || !getCollection(a)) {
+        setScreen("collections");
+        return;
+      }
+      openCollection(a);
+    },
+  });
+
   useEffect(() => {
     audio.setTrack("memory");
   }, []);
 
-  useScrollToTop(`${index}-${solved}-${isRoundOver}`);
+  useScrollToTop(`${screen}-${collectionId}-${index}-${solved}-${isRoundOver}`);
   useFocusOnAppear(revealRef);
 
   /* A wrong guess schedules the next clue. Without this, leaving the game
@@ -61,22 +91,45 @@ export function WhoAmI({
     timers.current.push(setTimeout(fn, ms));
   }
 
-  const character = deck[index];
-  const choices = getRandomChoices(character.id, 4, seed + index);
-  const maxHints = character.hints.length;
-  const bestSoFar = stars[`wai-${character.id}`] || 0;
-  const alreadySolved = deck.filter((c) => isStarred(stars, `wai-${c.id}`)).length;
-
-  function startRound() {
-    const nextSeed = randomRoundSeed();
-    audio.playButtonClick();
+  function openCollection(id, { seed: nextSeed = randomRoundSeed() } = {}) {
+    setCollectionId(id);
     setSeed(nextSeed);
-    setDeck(buildRound(nextSeed));
+    setDeck(buildRound(nextSeed, id));
     setIndex(0);
     setHintsShown(1);
     setSolved(false);
     setWrongId(null);
     setIsRoundOver(false);
+    setScreen("play");
+  }
+
+  if (screen === "collections") {
+    return (
+      <CollectionSelect
+        stars={stars}
+        onSelectCollection={(id) => openCollection(id)}
+        onBackToHub={onBackToHub}
+        onOpenSettings={onOpenSettings}
+      />
+    );
+  }
+
+  const collection = getCollection(collectionId);
+  const character = deck[index];
+  const choices = getRandomChoices(character.id, 4, seed + index, deck);
+  const maxHints = character.hints.length;
+  const bestSoFar = stars[`wai-${character.id}`] || 0;
+  const alreadySolved = deck.filter((c) => isStarred(stars, `wai-${c.id}`)).length;
+
+  function backToCollections() {
+    audio.playButtonClick();
+    setScreen("collections");
+    setIsRoundOver(false);
+  }
+
+  function replayRound() {
+    audio.playButtonClick();
+    openCollection(collectionId);
   }
 
   function revealNextHint() {
@@ -125,27 +178,29 @@ export function WhoAmI({
   }
 
   if (isRoundOver) {
+    const collectionKeys = collection.characterIds.map((id) => `wai-${id}`);
     return (
       <div className="wai-screen">
-        <Topbar onBackToHub={onBackToHub} onOpenSettings={onOpenSettings} />
+        <Topbar collection={collection} onBack={backToCollections} onOpenSettings={onOpenSettings} />
         <div className="vb-win-container">
           <Confetti />
           <div className="vb-win-card" ref={revealRef}>
             <span className="vb-tape vb-tape-top" />
-            <div className="wai-win-icon" aria-hidden="true">🔍</div>
-            <h2 className="wai-win-title">Ten mysteries solved!</h2>
+            <div className="wai-win-icon" aria-hidden="true">{collection.icon}</div>
+            <h2 className="wai-win-title">{collection.title} — all met!</h2>
             <p className="vb-win-cheer">
-              You met {deck.length} people from the Bible and worked out every one.
+              You worked out every one of the {deck.length} people in this collection.
             </p>
             <p className="wai-win-count">
-              ⭐ {sumStars(stars, { prefix: "wai-" })} stars from {CHARACTERS.length} characters
+              ⭐ {groupStars(stars, collectionKeys)} of {collectionKeys.length * 3} stars here ·{" "}
+              {sumStars(stars, { prefix: "wai-" })} in all
             </p>
             <div className="vb-win-btns">
-              <button className="vb-btn" onClick={startRound}>
-                New Ten →
+              <button className="vb-btn" onClick={backToCollections}>
+                Another Collection →
               </button>
-              <button className="vb-btn ghost" onClick={onBackToHub}>
-                Back to Games
+              <button className="vb-btn ghost" onClick={replayRound}>
+                Play These Again
               </button>
             </div>
           </div>
@@ -157,7 +212,8 @@ export function WhoAmI({
   return (
     <div className="wai-screen">
       <Topbar
-        onBackToHub={onBackToHub}
+        collection={collection}
+        onBack={backToCollections}
         onOpenSettings={onOpenSettings}
         progress={`${index + 1} / ${deck.length}`}
         solved={alreadySolved}
@@ -190,7 +246,7 @@ export function WhoAmI({
           </blockquote>
 
           <button className="vb-btn" onClick={handleNext}>
-            {index + 1 >= deck.length ? "Finish Round →" : "Next Mystery →"}
+            {index + 1 >= deck.length ? "Finish Collection →" : "Next Mystery →"}
           </button>
         </div>
       ) : (
@@ -241,15 +297,15 @@ export function WhoAmI({
   );
 }
 
-function Topbar({ onBackToHub, onOpenSettings, progress, solved }) {
+function Topbar({ collection, onBack, onOpenSettings, progress, solved }) {
   return (
     <div className="wai-topbar">
-      <button className="vb-back" onClick={onBackToHub} aria-label="Back to Games">
+      <button className="vb-back" onClick={onBack} aria-label="Back to Collections">
         ←
       </button>
 
       <div className="vb-title-card wai-title">
-        <span aria-hidden="true">🔍</span> Who Am I?
+        <span aria-hidden="true">{collection.icon}</span> {collection.title}
       </div>
 
       <div className="wai-topbar-right">

@@ -267,18 +267,25 @@ describe("Constitution Gate: Accessibility (Article 4.3)", () => {
   });
 
   test("who am i screens", async () => {
+    // The collection list the game opens on…
+    await expectAccessible(<WhoAmI onBackToHub={noop} onOpenSettings={noop} />);
     await expectAccessible(
-      <WhoAmI onBackToHub={noop} />
+      <WhoAmI onBackToHub={noop} onOpenSettings={noop} stars={{ "wai-noah": 3 }} />
+    );
+    // …and a round in progress
+    await expectAccessible(
+      <WhoAmI onBackToHub={noop} onOpenSettings={noop} initialScreen="play" initialSeed={3} />
     );
   });
 
   test("who am i mid-play states", async () => {
-    const round = buildRound(3);
+    const round = buildRound(3, 1);
     const answer = `[aria-label="Guess ${round[0].name}"]`;
+    const playing = { onBackToHub: noop, initialScreen: "play", initialSeed: 3 };
 
     // A wrong answer is a state like any other: audited with its colour on,
     // not just the resting screen
-    const wrong = render(<WhoAmI onBackToHub={noop} initialSeed={3} />);
+    const wrong = render(<WhoAmI {...playing} />);
     const notTheAnswer = [...wrong.container.querySelectorAll(".wai-choice")].find(
       (b) => !b.matches(answer)
     );
@@ -287,7 +294,7 @@ describe("Constitution Gate: Accessibility (Article 4.3)", () => {
     wrong.unmount();
 
     // …and the reveal, and the card at the end of a round
-    const solved = render(<WhoAmI onBackToHub={noop} initialSeed={3} />);
+    const solved = render(<WhoAmI {...playing} />);
     fireEvent.click(solved.container.querySelector(answer));
     await auditDom(solved.container);
     solved.unmount();

@@ -3,23 +3,30 @@ import { render, screen, fireEvent, act } from "@testing-library/react";
 import { WhoAmI, buildRound, randomRoundSeed } from "../../src/games/who-am-i/WhoAmI.jsx";
 import {
   CHARACTERS,
+  COLLECTIONS,
+  getCollection,
+  getCollectionCharacters,
   getRandomChoices,
   starsForHintsUsed,
 } from "../../src/games/who-am-i/whoAmIData.js";
 import { PEOPLE } from "../../src/art/portrait-kit.jsx";
 
+/* The play tests start on the board; the game itself opens on the
+   collection list, which has its own describe block below. */
 const props = (over = {}) => ({
   stars: {},
   onSaveStar: vi.fn(),
   onBackToHub: vi.fn(),
   onOpenSettings: vi.fn(),
   initialSeed: 3,
+  initialScreen: "play",
+  initialCollectionId: 1,
   ...over,
 });
 
 /* The character the seeded round opens on, so the tests can name the
    right answer without hard-coding a person. */
-const firstOf = (seed) => buildRound(seed)[0];
+const firstOf = (seed, collectionId = 1) => buildRound(seed, collectionId)[0];
 
 afterEach(() => {
   vi.useRealTimers();
@@ -51,6 +58,24 @@ describe("Who Am I? content", () => {
     expect(starsForHintsUsed(4)).toBe(1);
   });
 
+  test("the line-up is drawn from the collection being played", () => {
+    // Otherwise the theme gives the answer away: a clue about Esau next to
+    // Daniel needs no reading at all
+    COLLECTIONS.forEach((collection) => {
+      const pool = getCollectionCharacters(collection.id);
+      pool.forEach((c, i) => {
+        const choices = getRandomChoices(c.id, 4, i + 1, pool);
+        expect(choices.length, `${collection.title} cannot fill a line-up`).toBe(4);
+        choices.forEach((choice) => {
+          expect(
+            collection.characterIds.includes(choice.id),
+            `${choice.name} is not in ${collection.title}`
+          ).toBe(true);
+        });
+      });
+    });
+  });
+
   test("a line-up is four real people, including the right one", () => {
     // The seed is what makes this true: without it every index computes
     // NaN and the last choice comes back undefined
@@ -63,13 +88,16 @@ describe("Who Am I? content", () => {
     });
   });
 
-  test("a round is ten different people, and a different ten per seed", () => {
-    const a = buildRound(11);
-    const b = buildRound(12);
-    expect(a.length).toBe(10);
+  test("a round is one whole collection, dealt differently per seed", () => {
+    const size = COLLECTIONS[3].characterIds.length;
+    const a = buildRound(11, 4);
+    const b = buildRound(12, 4);
+    expect(a.length).toBe(size);
     expect(a.every(Boolean)).toBe(true);
-    expect(new Set(a.map((c) => c.id)).size).toBe(10);
+    expect(new Set(a.map((c) => c.id)).size).toBe(size);
     expect(a.map((c) => c.id)).not.toEqual(b.map((c) => c.id));
+    // and it is that collection's people, nobody else's
+    expect(a.map((c) => c.id).sort()).toEqual([...COLLECTIONS[3].characterIds].sort());
   });
 
   test("round seeds vary", () => {
@@ -166,7 +194,7 @@ describe("Who Am I? play", () => {
   });
 
   test("counts how many of this round are already solved", () => {
-    const round = buildRound(3);
+    const round = buildRound(3, 1);
     const p = props({ stars: { [`wai-${round[1].id}`]: 2, [`wai-${round[2].id}`]: 1 } });
     render(<WhoAmI {...p} />);
     expect(screen.getByText("2 solved")).toBeTruthy();
@@ -196,21 +224,38 @@ describe("Who Am I? play", () => {
     expect(screen.queryAllByRole("button", { name: /^Guess / }).length).toBe(0);
   });
 
-  test("works through ten mysteries to the round card, then starts a new ten", () => {
+  test("works through the whole collection to the finish card, then replays it", () => {
     render(<WhoAmI {...props()} />);
-    const round = buildRound(3);
+    const round = buildRound(3, 1);
 
     round.forEach((character, i) => {
       fireEvent.click(screen.getByRole("button", { name: `Guess ${character.name}` }));
       fireEvent.click(
-        screen.getByRole("button", { name: i === round.length - 1 ? /Finish Round/ : /Next Mystery/ })
+        screen.getByRole("button", {
+          name: i === round.length - 1 ? /Finish Collection/ : /Next Mystery/,
+        })
       );
     });
 
-    expect(screen.getByRole("heading", { name: /Ten mysteries solved/ })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: /In the Beginning — all met/ })).toBeTruthy();
 
-    fireEvent.click(screen.getByRole("button", { name: /New Ten/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Play These Again/ }));
     expect(screen.getByText("Clue 1")).toBeTruthy();
+  });
+
+  test("the finish card leads back to the collections", () => {
+    render(<WhoAmI {...props()} />);
+    buildRound(3, 1).forEach((character, i, all) => {
+      fireEvent.click(screen.getByRole("button", { name: `Guess ${character.name}` }));
+      fireEvent.click(
+        screen.getByRole("button", {
+          name: i === all.length - 1 ? /Finish Collection/ : /Next Mystery/,
+        })
+      );
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /Another Collection/ }));
+    expect(screen.getByRole("heading", { name: "Who Am I?" })).toBeTruthy();
   });
 
   test("the back and settings controls are wired", () => {
@@ -218,7 +263,14 @@ describe("Who Am I? play", () => {
     render(<WhoAmI {...p} />);
     fireEvent.click(screen.getByLabelText("Open Game Settings"));
     expect(p.onOpenSettings).toHaveBeenCalled();
-    fireEvent.click(screen.getByLabelText("Back to Games"));
+
+    // Back from a round goes to the collections, the way every other
+    // game's board returns to its list — not straight out to the hub
+    fireEvent.click(screen.getByLabelText("Back to Collections"));
+    expect(p.onBackToHub).not.toHaveBeenCalled();
+    expect(screen.getByRole("heading", { name: "Who Am I?" })).toBeTruthy();
+
+    fireEvent.click(screen.getByLabelText("Back to Game Hub"));
     expect(p.onBackToHub).toHaveBeenCalled();
   });
 
@@ -243,8 +295,122 @@ describe("Who Am I? play", () => {
   });
 
   test("starts somewhere random when the app does not pick a seed", () => {
-    // Ten characters, four choices, and no seed handed in
     render(<WhoAmI {...props({ initialSeed: undefined })} />);
     expect(screen.getAllByRole("button", { name: /^Guess / }).length).toBe(4);
+  });
+});
+
+describe("Who Am I? collections", () => {
+  test("every character belongs to exactly one collection", () => {
+    const ids = COLLECTIONS.flatMap((c) => c.characterIds);
+    expect(ids.length).toBe(CHARACTERS.length);
+    expect(new Set(ids).size).toBe(CHARACTERS.length);
+    ids.forEach((id) => {
+      expect(CHARACTERS.some((c) => c.id === id), `${id} is in no collection`).toBe(true);
+    });
+  });
+
+  test("every collection has a title, a blurb, and enough people for a round", () => {
+    COLLECTIONS.forEach((c) => {
+      expect(c.title).toBeTruthy();
+      expect(c.subtitle).toBeTruthy();
+      expect(c.icon).toBeTruthy();
+      // Four faces are shown per question, so a round needs at least four
+      expect(c.characterIds.length).toBeGreaterThanOrEqual(4);
+    });
+  });
+
+  test("an unknown collection has no people rather than throwing", () => {
+    expect(getCollection(99)).toBeUndefined();
+    expect(getCollectionCharacters(99)).toEqual([]);
+    expect(getCollectionCharacters(1).length).toBe(COLLECTIONS[0].characterIds.length);
+  });
+
+  test("the game opens on the collections, not on a question", () => {
+    render(<WhoAmI {...props({ initialScreen: undefined })} />);
+    expect(screen.getByRole("heading", { name: "Who Am I?" })).toBeTruthy();
+    expect(screen.queryByText("Clue 1")).toBeNull();
+    expect(screen.getAllByRole("button", { name: /^Collection \d/ }).length).toBe(COLLECTIONS.length);
+  });
+
+  test("only the first collection is open until a mystery is solved", () => {
+    const { unmount } = render(<WhoAmI {...props({ initialScreen: undefined })} />);
+    expect(screen.getByRole("button", { name: "Collection 1: In the Beginning" }).disabled).toBe(false);
+    expect(screen.getByRole("button", { name: "Collection 2: Locked" }).disabled).toBe(true);
+    unmount();
+
+    // One star anywhere in collection 1 opens collection 2
+    render(<WhoAmI {...props({ initialScreen: undefined, stars: { "wai-noah": 2 } })} />);
+    expect(screen.getByRole("button", { name: "Collection 2: Out of Egypt" }).disabled).toBe(false);
+    expect(screen.getByRole("button", { name: "Collection 3: Locked" }).disabled).toBe(true);
+  });
+
+  test("a corrupt star value neither unlocks nor counts", () => {
+    render(<WhoAmI {...props({ initialScreen: undefined, stars: { "wai-noah": "three" } })} />);
+    expect(screen.getByRole("button", { name: "Collection 2: Locked" }).disabled).toBe(true);
+    expect(screen.getByText(/⭐ 0 of 108 mystery stars collected/)).toBeTruthy();
+  });
+
+  test("a collection card counts who has been met, and says when all of them have", () => {
+    const first = COLLECTIONS[0];
+    const partial = { [`wai-${first.characterIds[0]}`]: 3, [`wai-${first.characterIds[1]}`]: 1 };
+    const { unmount } = render(<WhoAmI {...props({ initialScreen: undefined, stars: partial })} />);
+    expect(screen.getByText(`2 of ${first.characterIds.length} met`)).toBeTruthy();
+    expect(screen.getAllByText("Start Round →").length).toBeGreaterThan(0);
+    unmount();
+
+    const all = Object.fromEntries(first.characterIds.map((id) => [`wai-${id}`, 3]));
+    render(<WhoAmI {...props({ initialScreen: undefined, stars: all })} />);
+    expect(screen.getByText("✅ All Met — Replay →")).toBeTruthy();
+  });
+
+  test("picking a collection starts a round of exactly those people", () => {
+    render(<WhoAmI {...props({ initialScreen: undefined, stars: { "wai-noah": 3 } })} />);
+    fireEvent.click(screen.getByRole("button", { name: "Collection 2: Out of Egypt" }));
+
+    expect(screen.getByText("Clue 1")).toBeTruthy();
+    expect(screen.getByText(`1 / ${COLLECTIONS[1].characterIds.length}`)).toBeTruthy();
+    expect(screen.getByText(/Out of Egypt/)).toBeTruthy();
+  });
+
+  test("the hub settings control is hidden when the app offers none", () => {
+    render(<WhoAmI {...props({ initialScreen: undefined, onOpenSettings: undefined })} />);
+    expect(screen.queryByLabelText("Settings")).toBeNull();
+  });
+});
+
+describe("Who Am I? deep links", () => {
+  const routed = (route) => {
+    const navigate = vi.fn();
+    render(<WhoAmI {...props({ initialScreen: undefined, route, onNavigate: navigate })} />);
+    return navigate;
+  };
+
+  test("a collection in the address bar opens that round", () => {
+    routed({ game: "who-am-i", a: 3, b: null });
+    expect(screen.getByText("Judges and Kings")).toBeTruthy();
+    expect(screen.getByText("Clue 1")).toBeTruthy();
+  });
+
+  test("no collection in the address bar shows the list", () => {
+    routed({ game: "who-am-i", a: null, b: null });
+    expect(screen.getByRole("heading", { name: "Who Am I?" })).toBeTruthy();
+  });
+
+  test("a hand-typed collection that does not exist falls back to the list", () => {
+    routed({ game: "who-am-i", a: 42, b: null });
+    expect(screen.getByRole("heading", { name: "Who Am I?" })).toBeTruthy();
+  });
+
+  test("choosing a collection is announced to the address bar", () => {
+    const navigate = routed({ game: "who-am-i", a: null, b: null });
+    fireEvent.click(screen.getByRole("button", { name: "Collection 1: In the Beginning" }));
+    expect(navigate).toHaveBeenCalledWith({ game: "who-am-i", a: 1, b: null });
+  });
+
+  test("another game's route is left alone", () => {
+    const navigate = routed({ game: "verse-builder", a: 2, b: 1 });
+    expect(screen.getByRole("heading", { name: "Who Am I?" })).toBeTruthy();
+    expect(navigate).not.toHaveBeenCalled();
   });
 });

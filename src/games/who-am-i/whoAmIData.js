@@ -436,13 +436,94 @@ export const CHARACTERS = [
   }
 ];
 
+/* ---------- Collections ----------
+
+   Every other game opens on a chooser — chapters, decks, volumes — and
+   this one used to deal ten characters at random the moment you arrived.
+   The six collections below are that missing front door.
+
+   They are grouped by where a person stands in the story, not by how many
+   fit evenly: sizes run 5 to 7 because Elijah belongs with the prophets
+   and Gideon with the judges, and shuffling either one to square the grid
+   would teach a child something untrue. The one grouping made by theme
+   rather than era says so in its title. */
+export const COLLECTIONS = [
+  {
+    id: 1,
+    title: "In the Beginning",
+    subtitle: "The first families, from the garden to the promise",
+    icon: "🌱",
+    color: "#5c8a3a",
+    characterIds: ["adam", "eve", "noah", "abraham", "sarah", "jacob"],
+  },
+  {
+    id: 2,
+    title: "Out of Egypt",
+    subtitle: "Slavery, rescue, and the long road to the promised land",
+    icon: "🏜️",
+    color: "#b08d57",
+    characterIds: ["joseph", "moses", "miriam", "joshua", "rahab"],
+  },
+  {
+    id: 3,
+    title: "Judges and Kings",
+    subtitle: "Rescuers, a shepherd king, and the throne of Israel",
+    icon: "👑",
+    color: "#d9a441",
+    characterIds: ["gideon", "samson", "ruth", "samuel", "david", "solomon"],
+  },
+  {
+    id: 4,
+    title: "Prophets and Miracles",
+    subtitle: "Messengers with news that nobody wanted to hear",
+    icon: "🔥",
+    color: "#d94f30",
+    characterIds: ["elijah", "elisha", "naaman", "isaiah", "jeremiah", "micah", "jonah"],
+  },
+  {
+    id: 5,
+    title: "Faithful in Hard Places",
+    subtitle: "Six who held on to God when holding on cost them something",
+    icon: "🕯️",
+    color: "#8a6bbf",
+    characterIds: ["job", "esther", "daniel", "nehemiah", "mary", "john_baptist"],
+  },
+  {
+    id: 6,
+    title: "The Church Begins",
+    subtitle: "The first followers, telling the world what they had seen",
+    icon: "✉️",
+    color: "#3a86ff",
+    characterIds: ["peter", "john", "matthew", "luke", "paul", "stephen"],
+  },
+];
+
+export function getCollection(id) {
+  return COLLECTIONS.find((c) => c.id === id);
+}
+
+/* The characters of one collection, in the order the collection lists
+   them. An unknown id is a hand-typed URL, not a bug: no characters. */
+export function getCollectionCharacters(id) {
+  const collection = getCollection(id);
+  if (!collection) return [];
+  return collection.characterIds.map((cid) => CHARACTERS.find((c) => c.id === cid));
+}
+
 /* Four names to choose from: the right one and three others.
+
+   The others come from the collection being played, not the whole cast.
+   Offering Daniel as an answer inside "In the Beginning" gave the round
+   away — a child can rule him out without reading the clue — and made the
+   collection look like a label rather than a group of people who belong
+   together. Every collection holds at least four, which is what keeps the
+   line-up full.
 
    The seed is not optional. shuffle() swaps through jitter(seed, …), and
    without a seed every index computes NaN — which returned an array whose
    last entry was undefined, so players only ever saw three choices. */
-export function getRandomChoices(correctId, count = 4, seed = 1) {
-  const others = CHARACTERS.filter((c) => c.id !== correctId);
+export function getRandomChoices(correctId, count = 4, seed = 1, pool = CHARACTERS) {
+  const others = pool.filter((c) => c.id !== correctId);
   const picked = shuffle(others, seed).slice(0, count - 1);
   const correct = CHARACTERS.find((c) => c.id === correctId);
   return shuffle([...picked, correct], seed + 7);

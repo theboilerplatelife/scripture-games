@@ -134,12 +134,19 @@ describe("App Root & State Integration Tests", () => {
     fireEvent.click(screen.getByRole("button", { name: "Tap to Play and Start Game" }));
 
     fireEvent.click(screen.getByRole("button", { name: /Who Am I/i }));
-    expect(screen.getByText("Clue 1")).toBeTruthy();
+
+    // Like every other game, this one opens on a chooser rather than
+    // dealing a question the moment the player arrives
+    expect(screen.getByText(/Pick a collection/)).toBeTruthy();
+    expect(screen.queryByText("Clue 1")).toBeNull();
 
     // Settings reach the same modal from inside this game as from any other
-    fireEvent.click(screen.getByLabelText("Open Game Settings"));
+    fireEvent.click(screen.getByLabelText("Settings"));
     expect(screen.getByText("⚙️ Game Settings")).toBeTruthy();
     fireEvent.click(screen.getByLabelText("Close Settings"));
+
+    fireEvent.click(screen.getByRole("button", { name: "Collection 1: In the Beginning" }));
+    expect(screen.getByText("Clue 1")).toBeTruthy();
 
     // A solved character banks a star under its own prefix
     const nameOnScreen = screen.getAllByRole("button", { name: /^Guess / })[0];
@@ -148,7 +155,8 @@ describe("App Root & State Integration Tests", () => {
     const waiKeys = Object.keys(saved).filter((k) => k.startsWith("wai-"));
     expect(waiKeys.length, "a guess should either bank a star or reveal another clue").toBeLessThanOrEqual(1);
 
-    fireEvent.click(screen.getByLabelText("Back to Games"));
+    fireEvent.click(screen.getByLabelText("Back to Collections"));
+    fireEvent.click(screen.getByLabelText("Back to Game Hub"));
     expect(screen.getAllByText("Scripture Games").length).toBeGreaterThan(0);
   });
 

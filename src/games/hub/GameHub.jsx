@@ -171,14 +171,15 @@ export function GameHub({
           </div>
           <h2 className="hub-game-title">Who Am I?</h2>
           <div className="hub-card-pills">
-            <span className="hub-pill">🔍 Clue Deduction</span>
-            <span className="hub-pill">👑 Bible Heroes</span>
+            <span className="hub-pill highlight">⭐ {waiStars} / {waiMaxStars} Stars</span>
+            <span className="hub-pill">🔍 6 Collections · 36 People</span>
+            <span className="hub-pill">👑 Clue Deduction</span>
           </div>
           <p className="hub-game-desc">
             Solve progressive scripture clues one at a time to uncover Bible heroes and unlock their full story!
           </p>
           <div className="hub-game-meta">
-            <span>⭐ {waiStars} / {waiMaxStars} Stars</span>
+            <span>36 Mystery Characters</span>
             <span className="hub-play-btn">Play Now →</span>
           </div>
         </button>

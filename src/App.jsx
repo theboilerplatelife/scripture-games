@@ -254,6 +254,8 @@ export default function App() {
               key={`wai-${resetCount}`}
               stars={stars}
               onSaveStar={handleSaveStar}
+              route={route}
+              onNavigate={navigate}
               onBackToHub={() => {
                 setActiveGame("hub");
               }}
