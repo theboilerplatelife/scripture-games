@@ -99,7 +99,7 @@ export function ChapterSelect({
                 {unlocked ? chap.subtitle : "Earn at least 1 star in the previous chapter to unlock."}
               </p>
               <div className="vb-chapter-meta">
-                <span>8 Verses</span>
+                <span>{chap.verses.length} Verses</span>
                 <span>{unlocked ? "Explore →" : "🔒 Locked"}</span>
               </div>
             </button>

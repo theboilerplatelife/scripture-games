@@ -19,6 +19,26 @@ describe("Story Sequencer Components & Gameplay Loop", () => {
     vi.clearAllMocks();
   });
 
+  test("VolumeSelect stamps a finished volume like every other card", () => {
+    /* Verse Builder, Memory Match and Who Am I all mark a finished card
+       with the shared stamp; this one silently did not. Nothing asserted
+       it, which is how it stayed missing. */
+    const volume1 = [1, 2, 3, 4, 5, 6];
+    const met = Object.fromEntries(volume1.map((id) => [`ss-${id}`, 1]));
+    const { unmount } = render(
+      <VolumeSelect stars={met} onSelectVolume={vi.fn()} onBackToHub={vi.fn()} onOpenSettings={vi.fn()} />
+    );
+    expect(screen.getByText("✓ Complete")).toBeTruthy();
+    expect(screen.queryByText("★ Perfect!")).toBeNull();
+    unmount();
+
+    const all = Object.fromEntries(volume1.map((id) => [`ss-${id}`, 3]));
+    render(
+      <VolumeSelect stars={all} onSelectVolume={vi.fn()} onBackToHub={vi.fn()} onOpenSettings={vi.fn()} />
+    );
+    expect(screen.getByText("★ Perfect!")).toBeTruthy();
+  });
+
   test("VolumeSelect renders all 6 volumes and calculates unlocked state", () => {
     const onSelectVolume = vi.fn();
     const onBackToHub = vi.fn();

@@ -1,6 +1,8 @@
 import { audio } from "../../audio/SoundEngine.js";
 import { jitter } from "../../utils/random.js";
 import { VOLUMES, getVolumeStories } from "./storyData.js";
+import { isStarred } from "../../utils/stars.js";
+import { CompletionStamp } from "../../components/common/CompletionStamp.jsx";
 
 export function VolumeSelect({
   onSelectVolume,
@@ -71,8 +73,12 @@ export function VolumeSelect({
       <div className="vb-chapters-grid">
         {VOLUMES.map((vol, idx) => {
           const unlocked = isVolumeUnlocked(idx);
+          const stories = getVolumeStories(vol.id);
           const volStars = getVolumeStars(vol);
-          const maxVolStars = 6 * 3; // 18
+          const maxVolStars = stories.length * 3; // 18
+          // The same rubber stamp the other games' cards carry
+          const isComplete = stories.every((s) => isStarred(stars, `ss-${s.id}`));
+          const isPerfect = volStars === maxVolStars;
 
           return (
             <button
@@ -91,6 +97,7 @@ export function VolumeSelect({
               aria-label={`Volume ${vol.id}: ${unlocked ? vol.title : "Locked"}`}
             >
               <span className="vb-tape vb-tape-top" />
+              <CompletionStamp complete={isComplete} perfect={isPerfect} />
               <div className="vb-chapter-header">
                 <span className="vb-chapter-num">Volume {vol.id}</span>
                 <span className="vb-chapter-stars">⭐ {volStars}/{maxVolStars}</span>
@@ -102,7 +109,7 @@ export function VolumeSelect({
                 {unlocked ? vol.subtitle : "Earn at least 1 star in the previous volume to unlock."}
               </p>
               <div className="vb-chapter-meta">
-                <span>6 Bible Stories</span>
+                <span>{stories.length} Bible Stories</span>
                 <span>{unlocked ? "Open Volume →" : "🔒 Locked"}</span>
               </div>
             </button>

@@ -99,7 +99,7 @@ export function CollectionSelect({ collections = COLLECTIONS, stars, onSelectCol
               <p className="vb-chapter-sub">
                 {unlocked
                   ? collection.subtitle
-                  : "Solve one mystery in the collection before this to unlock."}
+                  : "Earn at least 1 star in the previous collection to unlock."}
               </p>
               {/* What is inside, then the way in — the action does not
                   change with progress, the stamp above carries that */}
