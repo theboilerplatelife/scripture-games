@@ -3,6 +3,7 @@ import { CHAPTERS } from "../../data/chapters.js";
 import { jitter } from "../../utils/random.js";
 import { isStarred, groupStars, sumStars, OTHER_GAME_PREFIXES } from "../../utils/stars.js";
 import { CompletionStamp } from "../../components/common/CompletionStamp.jsx";
+import { progressCardLabel } from "../../components/common/progressCardLabel.js";
 
 export function ChapterSelect({
   onSelectChapter,
@@ -81,6 +82,10 @@ export function ChapterSelect({
               className={`vb-chapter-card ${unlocked ? "" : "locked"}`}
               style={{ "--rot": `${jitter(chap.id, 1, -2, 2)}deg`, "--chap": chap.color, "--chap-tape": `${chap.color}8c` }}
               disabled={!unlocked}
+              aria-label={progressCardLabel({
+                noun: "Chapter", id: chap.id, title: chap.title,
+                unlocked, complete: isComplete, perfect: isPerfect,
+              })}
               onClick={() => {
                 audio.playButtonClick();
                 onSelectChapter(chap.id);
@@ -100,7 +105,7 @@ export function ChapterSelect({
               </p>
               <div className="vb-chapter-meta">
                 <span>{chap.verses.length} Verses</span>
-                <span>{unlocked ? "Explore →" : "🔒 Locked"}</span>
+                <span>{unlocked ? "Choose a verse →" : "🔒 Locked"}</span>
               </div>
             </button>
           );

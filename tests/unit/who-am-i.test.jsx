@@ -404,14 +404,14 @@ describe("Who Am I? collections", () => {
     const partial = { [`wai-${first.characterIds[0]}`]: 3, [`wai-${first.characterIds[1]}`]: 1 };
     const { unmount } = render(<WhoAmI {...props({ initialScreen: undefined, stars: partial })} />);
     expect(screen.queryByText(/Complete|Perfect/)).toBeNull();
-    expect(screen.getAllByText("Start Round →").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Start a round →").length).toBeGreaterThan(0);
     unmount();
 
     // Every one met, but not from the first clue
     const met = Object.fromEntries(first.characterIds.map((id) => [`wai-${id}`, 1]));
     const complete = render(<WhoAmI {...props({ initialScreen: undefined, stars: met })} />);
     expect(screen.getByText("✓ Complete")).toBeTruthy();
-    expect(screen.getAllByText("Start Round →").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Start a round →").length).toBeGreaterThan(0);
     complete.unmount();
 
     const all = Object.fromEntries(first.characterIds.map((id) => [`wai-${id}`, 3]));

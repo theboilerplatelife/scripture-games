@@ -3,6 +3,7 @@ import { jitter } from "../../utils/random.js";
 import { COLLECTIONS } from "./whoAmIData.js";
 import { isStarred, sumStars, groupStars } from "../../utils/stars.js";
 import { CompletionStamp } from "../../components/common/CompletionStamp.jsx";
+import { progressCardLabel } from "../../components/common/progressCardLabel.js";
 
 /* The front door. Verse Builder opens on chapters, Memory Match on decks,
    Story Sequencer on volumes — this opens on collections, in the same
@@ -85,7 +86,10 @@ export function CollectionSelect({ collections = COLLECTIONS, stars, onSelectCol
                 audio.playButtonClick();
                 onSelectCollection(collection.id);
               }}
-              aria-label={`Collection ${collection.id}: ${unlocked ? collection.title : "Locked"}`}
+              aria-label={progressCardLabel({
+                noun: "Collection", id: collection.id, title: collection.title,
+                unlocked, complete: isComplete, perfect: isPerfect,
+              })}
             >
               <span className="vb-tape vb-tape-top" />
               <CompletionStamp complete={isComplete} perfect={isPerfect} />
@@ -105,7 +109,7 @@ export function CollectionSelect({ collections = COLLECTIONS, stars, onSelectCol
                   change with progress, the stamp above carries that */}
               <div className="vb-chapter-meta">
                 <span>{keys.length} Mystery People</span>
-                <span>{unlocked ? "Start Round →" : "🔒 Locked"}</span>
+                <span>{unlocked ? "Start a round →" : "🔒 Locked"}</span>
               </div>
             </button>
           );

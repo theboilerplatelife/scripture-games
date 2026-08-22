@@ -3,6 +3,7 @@ import { jitter } from "../../utils/random.js";
 import { VOLUMES, getVolumeStories } from "./storyData.js";
 import { isStarred } from "../../utils/stars.js";
 import { CompletionStamp } from "../../components/common/CompletionStamp.jsx";
+import { progressCardLabel } from "../../components/common/progressCardLabel.js";
 
 export function VolumeSelect({
   onSelectVolume,
@@ -94,7 +95,10 @@ export function VolumeSelect({
                 audio.playButtonClick();
                 onSelectVolume(vol.id);
               }}
-              aria-label={`Volume ${vol.id}: ${unlocked ? vol.title : "Locked"}`}
+              aria-label={progressCardLabel({
+                noun: "Volume", id: vol.id, title: vol.title,
+                unlocked, complete: isComplete, perfect: isPerfect,
+              })}
             >
               <span className="vb-tape vb-tape-top" />
               <CompletionStamp complete={isComplete} perfect={isPerfect} />
@@ -110,7 +114,7 @@ export function VolumeSelect({
               </p>
               <div className="vb-chapter-meta">
                 <span>{stories.length} Bible Stories</span>
-                <span>{unlocked ? "Open Volume →" : "🔒 Locked"}</span>
+                <span>{unlocked ? "Choose a story →" : "🔒 Locked"}</span>
               </div>
             </button>
           );

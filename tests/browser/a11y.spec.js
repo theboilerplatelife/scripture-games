@@ -78,7 +78,7 @@ test("memory match, through a flipped pair", async ({ page }) => {
   await page.getByRole("button", { name: /Memory Match/ }).click();
   await audit(page, "memory match — decks");
 
-  await page.getByRole("button", { name: /Memory Match Deck 1/ }).click();
+  await page.getByRole("button", { name: /Deck 1/ }).click();
   await audit(page, "memory match — modes");
 
   await page.getByRole("button", { name: /Play Hint Hunt/ }).click();
@@ -141,7 +141,7 @@ test("a face-down card keeps its face hidden", async ({ page }) => {
   // collapsing: if both faces point at the viewer the whole board sits open
   await openHub(page);
   await page.getByRole("button", { name: /Memory Match/ }).click();
-  await page.getByRole("button", { name: /Memory Match Deck 1/ }).click();
+  await page.getByRole("button", { name: /Deck 1/ }).click();
   await page.getByRole("button", { name: /Play Verse Finder/ }).click();
 
   const card = page.locator(".mm-card").first();
@@ -163,7 +163,7 @@ test("the artwork stops moving when the player asks it to", async ({ page }) => 
   await rm.goto("/");
   await rm.getByRole("button", { name: "Tap to Play and Start Game" }).click();
   await rm.getByRole("button", { name: /Memory Match/ }).click();
-  await rm.getByRole("button", { name: /Memory Match Deck 1/ }).click();
+  await rm.getByRole("button", { name: /Deck 1/ }).click();
   await rm.getByRole("button", { name: /Play Hint Hunt/ }).click();
 
   const state = await rm.evaluate(() => {
@@ -355,7 +355,7 @@ test("story cards can be reordered with the arrow keys", async ({ page }) => {
 test("memory match cards flip from the keyboard", async ({ page }) => {
   await openHub(page);
   await page.getByRole("button", { name: /Memory Match/ }).click();
-  await page.getByRole("button", { name: /Memory Match Deck 1/ }).click();
+  await page.getByRole("button", { name: /Deck 1/ }).click();
   await page.getByRole("button", { name: /Play Hint Hunt/ }).click();
 
   let flipped = false;

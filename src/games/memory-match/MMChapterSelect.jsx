@@ -3,6 +3,7 @@ import { jitter } from "../../utils/random.js";
 import { DECKS, MODES } from "./matchData.js";
 import { isStarred, groupStars, sumStars } from "../../utils/stars.js";
 import { CompletionStamp } from "../../components/common/CompletionStamp.jsx";
+import { progressCardLabel } from "../../components/common/progressCardLabel.js";
 
 export function MMChapterSelect({
   onSelectChapter, // or onSelectDeck
@@ -84,7 +85,10 @@ export function MMChapterSelect({
                 audio.playButtonClick();
                 onSelectChapter(deckObj.id);
               }}
-              aria-label={`Memory Match Deck ${deckObj.id}: ${unlocked ? deckObj.title : "Locked"}${isComplete ? " (completed)" : ""}`}
+              aria-label={progressCardLabel({
+                noun: "Deck", id: deckObj.id, title: deckObj.title,
+                unlocked, complete: isComplete, perfect: isPerfect,
+              })}
             >
               <span className="vb-tape vb-tape-top" />
               <CompletionStamp complete={isComplete} perfect={isPerfect} />
@@ -103,7 +107,7 @@ export function MMChapterSelect({
                     modes and shipped with three, and a literal here would
                     still be claiming four */}
                 <span>{MODES.length} Match Modes</span>
-                <span>{unlocked ? "Play →" : "🔒 Locked"}</span>
+                <span>{unlocked ? "Choose a mode →" : "🔒 Locked"}</span>
               </div>
             </button>
           );

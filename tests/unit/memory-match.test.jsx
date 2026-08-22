@@ -23,9 +23,9 @@ describe("Memory Match screens", () => {
     );
 
     // Deck 1 open, Deck 2 locked
-    fireEvent.click(screen.getByLabelText(/Memory Match Deck 1:/));
+    fireEvent.click(screen.getByLabelText(/Deck 1:/));
     expect(onSelectChapter).toHaveBeenCalledWith(1);
-    expect(screen.getByLabelText("Memory Match Deck 2: Locked").disabled).toBe(true);
+    expect(screen.getByLabelText("Deck 2: Locked").disabled).toBe(true);
 
     fireEvent.click(screen.getByLabelText("Back to Game Hub"));
     expect(onBackToHub).toHaveBeenCalled();
@@ -42,7 +42,7 @@ describe("Memory Match screens", () => {
         onOpenSettings={onOpenSettings}
       />
     );
-    expect(screen.getByLabelText(/Memory Match Deck 2: (?!Locked)/).disabled).toBe(false);
+    expect(screen.getByLabelText(/Deck 2: (?!Locked)/).disabled).toBe(false);
     expect(screen.getByText(/3 of 72 memory stars collected/)).toBeTruthy();
 
     // No stamp until every mode of the deck has a star
@@ -59,7 +59,7 @@ describe("Memory Match screens", () => {
       />
     );
     expect(screen.getByText("✓ Complete")).toBeTruthy();
-    expect(screen.getByLabelText(/Memory Match Deck 1: .*\(completed\)/)).toBeTruthy();
+    expect(screen.getByLabelText(/Deck 1: .*\(completed\)/)).toBeTruthy();
 
     // A flawless 9/9 deck upgrades to the Perfect stamp
     rerender(
@@ -189,7 +189,7 @@ describe("MemoryMatch orchestrator", () => {
       />
     );
 
-    fireEvent.click(screen.getByLabelText(/Memory Match Deck 1:/));
+    fireEvent.click(screen.getByLabelText(/Deck 1:/));
     fireEvent.click(screen.getByLabelText("Play Hint Hunt"));
     expect(screen.getByLabelText("Back to Match Modes")).toBeTruthy();
     fireEvent.click(screen.getByLabelText("Back to Match Modes"));
@@ -277,7 +277,7 @@ describe("MemoryMatch orchestrator", () => {
     );
     fireEvent.click(screen.getByText("Deck Select"));
     expect(screen.getByText("Memory Match")).toBeTruthy();
-    expect(screen.getByLabelText(/Memory Match Deck 1:/)).toBeTruthy();
+    expect(screen.getByLabelText(/Deck 1:/)).toBeTruthy();
   });
 
   test("win card's own back button returns to mode select", () => {
