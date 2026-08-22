@@ -145,8 +145,15 @@
   transform: scale(0.98);
 }
 
-.wai-choice.wrong {
+/* Already guessed this mystery. It stays for the whole question so a
+   child can see what they have ruled out — and does not guess the same
+   face twice, which the flash-and-forget version let them do. */
+.wai-choice.tried {
   background: var(--tint-vermilion);
+}
+
+/* The moment of being wrong, over in 400ms */
+.wai-choice.wrong {
   animation: waiShake 0.4s ease;
 }
 
@@ -264,7 +271,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .wai-choice,
-  .wai-choice.wrong {
+  .wai-choice.wrong,
+  .wai-choice.tried {
     animation: none !important;
     transition: none !important;
   }

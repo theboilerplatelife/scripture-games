@@ -39,7 +39,13 @@ export function WhoAmI({
   const [index, setIndex] = useState(0);
   const [hintsShown, setHintsShown] = useState(1);
   const [solved, setSolved] = useState(false);
-  const [wrongId, setWrongId] = useState(null);
+  /* Three separate things, because they last for three different lengths
+     of time: the shake is over in a moment, the faces already tried stay
+     marked for the whole mystery, and what just happened stays on screen
+     until the child does something else. */
+  const [shakeId, setShakeId] = useState(null);
+  const [tried, setTried] = useState([]);
+  const [lastWrong, setLastWrong] = useState(null);
   const [isRoundOver, setIsRoundOver] = useState(false);
   const [lastEarned, setLastEarned] = useState(0);
   const timers = useRef([]);
@@ -53,7 +59,9 @@ export function WhoAmI({
     setIndex(i);
     setHintsShown(1);
     setSolved(false);
-    setWrongId(null);
+    setShakeId(null);
+    setTried([]);
+    setLastWrong(null);
     setIsRoundOver(false);
     setScreen("play");
   }
@@ -142,6 +150,8 @@ export function WhoAmI({
 
   function revealNextHint() {
     audio.playButtonClick();
+    // Asking for a clue is the child moving on from the last guess
+    setLastWrong(null);
     setHintsShown((shown) => Math.min(shown + 1, maxHints));
   }
 
@@ -162,24 +172,31 @@ export function WhoAmI({
     if (choiceId === character.id) {
       const earned = starsForHintsUsed(hintsShown);
       setSolved(true);
-      setWrongId(null);
+      setLastWrong(null);
       setLastEarned(earned);
       audio.playStarChime(earned - 1);
       if (onSaveStar && earned > bestSoFar) onSaveStar(`wai-${character.id}`, earned);
       return;
     }
 
+    const choice = choices.find((c) => c.id === choiceId);
+    const clueFollows = hintsShown < maxHints;
+
     audio.playWrongAnswer();
-    setWrongId(choiceId);
+    setShakeId(choiceId);
+    setTried((already) => [...already, choiceId]);
+    /* Sticky: this used to clear itself after half a second, which is not
+       long enough for a child to read "Not Abraham. Here is another clue."
+       — the sentence flashed and the clue list changed underneath them
+       with no explanation. It stays now until they guess again, ask for a
+       clue, or move on. */
+    setLastWrong({ name: choice.name, clueFollows });
+
     // A wrong guess costs a clue, which is what keeps the stars honest
-    if (hintsShown < maxHints) {
-      later(() => {
-        setHintsShown((shown) => Math.min(shown + 1, maxHints));
-        setWrongId(null);
-      }, 500);
-    } else {
-      later(() => setWrongId(null), 800);
+    if (clueFollows) {
+      later(() => setHintsShown((shown) => Math.min(shown + 1, maxHints)), 500);
     }
+    later(() => setShakeId(null), 600);
   }
 
   /* The card at the end of a round stands on its own, like every other
@@ -278,13 +295,30 @@ export function WhoAmI({
             <p className="wai-more-none">That&rsquo;s every clue — take your best guess!</p>
           )}
 
+          {/* Spoken feedback: a colour change tells a screen reader nothing,
+              and the clue that follows a wrong guess arrives unannounced */}
+          <p className="wai-feedback" role="status" aria-live="polite">
+            {/* Only promise a clue when one is actually coming: on the
+                last clue this used to say "Here is another clue" and none
+                ever arrived */}
+            {lastWrong
+              ? `Not ${lastWrong.name}. ${
+                  lastWrong.clueFollows ? "Here is another clue." : "That was the last clue — look again."
+                }`
+              : ""}
+          </p>
+
           <div className="wai-choices">
             {choices.map((choice) => (
               <button
                 key={choice.id}
-                className={`wai-choice ${wrongId === choice.id ? "wrong" : ""}`}
+                className={`wai-choice ${shakeId === choice.id ? "wrong" : ""} ${
+                  tried.includes(choice.id) ? "tried" : ""
+                }`}
                 onClick={() => handleGuess(choice.id)}
-                aria-label={`Guess ${choice.name}`}
+                aria-label={
+                  tried.includes(choice.id) ? `Guess ${choice.name} (already tried)` : `Guess ${choice.name}`
+                }
               >
                 <svg width="52" height="52" viewBox="0 0 100 100" aria-hidden="true">
                   <Bust person={choice.id} />
@@ -294,11 +328,6 @@ export function WhoAmI({
             ))}
           </div>
 
-          {/* Spoken feedback: a colour change tells a screen reader nothing,
-              and the clue that follows a wrong guess arrives unannounced */}
-          <p className="wai-feedback" role="status" aria-live="polite">
-            {wrongId ? `Not ${choices.find((c) => c.id === wrongId)?.name}. Here is another clue.` : ""}
-          </p>
         </div>
       )}
     </div>

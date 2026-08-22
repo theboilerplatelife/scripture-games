@@ -178,7 +178,10 @@ describe("Who Am I? play", () => {
     expect(p.onSaveStar).toHaveBeenCalledWith(`wai-${character.id}`, 3);
   });
 
-  test("a wrong answer says so out loud and hands over another clue", () => {
+  test("a wrong answer says so out loud, and the message waits to be read", () => {
+    /* It used to clear itself after half a second — not long enough for a
+       child to read it, and the clue list changed underneath them with no
+       explanation left on screen. */
     vi.useFakeTimers();
     const p = props();
     render(<WhoAmI {...p} />);
@@ -189,15 +192,35 @@ describe("Who Am I? play", () => {
 
     fireEvent.click(wrong);
     // Spoken, not just coloured
-    expect(screen.getByRole("status").textContent).toMatch(/^Not /);
+    expect(screen.getByRole("status").textContent).toMatch(/^Not .*Here is another clue\./);
 
-    act(() => vi.advanceTimersByTime(500));
+    act(() => vi.advanceTimersByTime(5000));
     expect(screen.getByText("Clue 2")).toBeTruthy();
-    expect(screen.getByRole("status").textContent).toBe("");
+    expect(
+      screen.getByRole("status").textContent,
+      "the message left before it could be read"
+    ).toMatch(/^Not /);
     expect(p.onSaveStar).not.toHaveBeenCalled();
   });
 
-  test("a wrong answer on the last clue just clears itself", () => {
+  test("asking for the next clue clears the last guess's message", () => {
+    vi.useFakeTimers();
+    render(<WhoAmI {...props()} />);
+    const character = firstOf();
+    const wrong = screen
+      .getAllByRole("button", { name: /^Guess / })
+      .find((b) => b.getAttribute("aria-label") !== `Guess ${character.name}`);
+
+    fireEvent.click(wrong);
+    act(() => vi.advanceTimersByTime(1000));
+    expect(screen.getByRole("status").textContent).toMatch(/^Not /);
+
+    fireEvent.click(screen.getByRole("button", { name: /Another clue/ }));
+    expect(screen.getByRole("status").textContent).toBe("");
+  });
+
+  test("a wrong answer on the last clue does not promise a clue that never comes", () => {
+    // The message said "Here is another clue" whether or not one followed
     vi.useFakeTimers();
     render(<WhoAmI {...props()} />);
     const character = firstOf();
@@ -209,9 +232,31 @@ describe("Who Am I? play", () => {
       .find((b) => b.getAttribute("aria-label") !== `Guess ${character.name}`);
 
     fireEvent.click(wrong);
-    expect(screen.getByRole("status").textContent).toMatch(/^Not /);
-    act(() => vi.advanceTimersByTime(800));
-    expect(screen.getByRole("status").textContent).toBe("");
+    const said = screen.getByRole("status").textContent;
+    expect(said).toMatch(/^Not /);
+    expect(said, "promised a clue with none left to give").not.toMatch(/another clue/);
+    expect(said).toMatch(/last clue/);
+  });
+
+  test("a face already guessed stays marked for the rest of the mystery", () => {
+    vi.useFakeTimers();
+    const { container } = render(<WhoAmI {...props()} />);
+    const character = firstOf();
+    const wrong = screen
+      .getAllByRole("button", { name: /^Guess / })
+      .find((b) => b.getAttribute("aria-label") !== `Guess ${character.name}`);
+
+    fireEvent.click(wrong);
+    expect(wrong.className).toContain("wrong"); // shaking
+    act(() => vi.advanceTimersByTime(2000));
+    expect(wrong.className, "the shake outlived its welcome").not.toContain("wrong");
+    expect(wrong.className, "nothing shows this face was already tried").toContain("tried");
+    expect(wrong.getAttribute("aria-label")).toMatch(/already tried/);
+
+    // …and the marks go with the mystery
+    fireEvent.click(screen.getByRole("button", { name: `Guess ${character.name}` }));
+    fireEvent.click(screen.getByRole("button", { name: /Next Mystery/ }));
+    expect(container.querySelectorAll(".wai-choice.tried").length).toBe(0);
   });
 
   test("stars drop by one for each clue spent", () => {
